@@ -1,0 +1,93 @@
+---
+interface Props {
+  inverse?: boolean;
+  compact?: boolean;
+}
+
+const { inverse = false, compact = false } = Astro.props;
+---
+
+<a
+  class:list={['brand-mark', { 'brand-mark--inverse': inverse, 'brand-mark--compact': compact }]}
+  href="/"
+  aria-label="Trinity Laboratories home"
+>
+  <span class="brand-mark__symbol" aria-hidden="true">
+    <span></span><span></span><span></span>
+  </span>
+  <span class="brand-mark__type">
+    <strong>Trinity Laboratories</strong>
+    <small>Research • Development • Operations</small>
+  </span>
+</a>
+
+<style>
+  .brand-mark {
+    --mark-ink: #11161d;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.78rem;
+    color: var(--mark-ink);
+    text-decoration: none;
+    min-width: 0;
+  }
+
+  .brand-mark--inverse {
+    --mark-ink: #f4f3ed;
+  }
+
+  .brand-mark__symbol {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(2, 0.83rem);
+    grid-template-rows: repeat(2, 0.72rem);
+    gap: 0.12rem;
+    width: 1.78rem;
+    height: 1.56rem;
+    flex: 0 0 auto;
+  }
+
+  .brand-mark__symbol span {
+    display: block;
+    background: #0b56c7;
+    clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  }
+
+  .brand-mark__symbol span:first-child {
+    grid-column: 1 / 3;
+    justify-self: center;
+    width: 0.83rem;
+  }
+
+  .brand-mark__type {
+    display: grid;
+    gap: 0.14rem;
+    min-width: 0;
+  }
+
+  .brand-mark strong {
+    font-size: 0.92rem;
+    line-height: 1;
+    letter-spacing: -0.025em;
+    white-space: nowrap;
+  }
+
+  .brand-mark small {
+    border-top: 1px solid #1671ef;
+    padding-top: 0.2rem;
+    font: 500 0.48rem/1 var(--font-mono, monospace);
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .brand-mark--compact small {
+    display: none;
+  }
+
+  @media (max-width: 28rem) {
+    .brand-mark__type small {
+      display: none;
+    }
+  }
+</style>

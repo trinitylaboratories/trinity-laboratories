@@ -1,0 +1,39 @@
+<div class="tirn-title">
+  <a href="/records/" aria-label="TIRN records gateway home">
+    <strong>TIRN</strong>
+    <span>Records Gateway</span>
+  </a>
+  <div class="tirn-session">
+    <span class="tirn-session__condition">Condition WHITE</span>
+    <span data-session-state>Guest / Unverified</span>
+    <button type="button" data-session-terminate>Terminate</button>
+  </div>
+</div>
+
+<script>
+  const state = document.querySelector<HTMLElement>('[data-session-state]');
+  const terminate = document.querySelector<HTMLButtonElement>('[data-session-terminate]');
+
+  const updateSession = () => {
+    let accepted: boolean;
+    try {
+      accepted = sessionStorage.getItem('tirn-session') === 'accepted';
+    } catch {
+      accepted = false;
+    }
+    if (state) {
+      state.textContent = accepted ? 'Session Accepted' : 'Guest / Unverified';
+      state.dataset.accepted = String(accepted);
+    }
+  };
+
+  updateSession();
+  terminate?.addEventListener('click', () => {
+    try {
+      sessionStorage.removeItem('tirn-session');
+    } catch {
+      // The indicator is optional and does not gate record access.
+    }
+    updateSession();
+  });
+</script>

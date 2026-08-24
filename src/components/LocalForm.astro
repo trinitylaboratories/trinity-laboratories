@@ -1,0 +1,55 @@
+---
+interface Props {
+  kind: 'contact' | 'careers';
+  submitLabel: string;
+  successMessage: string;
+}
+
+const { kind, submitLabel, successMessage } = Astro.props;
+---
+
+<form class="local-form" data-local-form={kind} novalidate autocomplete="off">
+  <fieldset disabled data-form-fields>
+    <slot />
+    <div class="local-form__actions">
+      <button class="button button--dark" type="submit">{submitLabel}</button>
+      <span class="local-form__protocol">Local terminal protocol</span>
+    </div>
+  </fieldset>
+  <p
+    class="local-form__status"
+    role="status"
+    aria-live="polite"
+    data-form-status
+    data-success={successMessage}
+  >
+    Terminal initialization required.
+  </p>
+</form>
+
+<script>
+  import { simulatedFormResult } from '../lib/local-protocol';
+
+  document.querySelectorAll<HTMLFormElement>('[data-local-form]').forEach((form) => {
+    const fields = form.querySelector<HTMLFieldSetElement>('[data-form-fields]');
+    const status = form.querySelector<HTMLElement>('[data-form-status]');
+    if (!fields || !status) return;
+
+    fields.disabled = false;
+    status.textContent = 'Terminal ready. Required fields are marked.';
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const result = simulatedFormResult(form.checkValidity(), status.dataset.success);
+      if (!result.accepted) {
+        form.reportValidity();
+        status.textContent = result.message;
+        return;
+      }
+
+      if (result.reset) form.reset();
+      status.textContent = result.message;
+      status.dataset.state = result.state;
+    });
+  });
+</script>

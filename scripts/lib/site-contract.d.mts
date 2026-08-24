@@ -1,0 +1,15 @@
+export const PRODUCTION_ORIGIN: 'https://trinitylaboratories.org';
+export const PRODUCTION_HOST: 'trinitylaboratories.org';
+export const CORE_ROUTES: readonly string[];
+export const FORM_IDS: readonly string[];
+export const FORM_ROUTES: readonly string[];
+export const SECURITY_RECORD_ROUTES: readonly string[];
+export const RECORD_ROUTES: readonly string[];
+export const SITE_ROUTES: readonly string[];
+export const LOCAL_FORM_ROUTES: readonly string[];
+export const GATEWAY_ROUTE: '/employee-access/';
+export const REQUIRED_GATEWAY_HOOKS: readonly string[];
+export const REQUIRED_SESSION_HOOKS: readonly string[];
+export function canonicalUrl(route: string): string;
+export function normalizeRoute(route: string): string;
+export function routeToOutputPath(route: string): string;

@@ -1,0 +1,11 @@
+_IgnoreThis/
+.tools/
+.astro/
+coverage/
+dist/
+node_modules/
+playwright-report/
+test-results/
+package-lock.json
+public/downloads/
+public/media/

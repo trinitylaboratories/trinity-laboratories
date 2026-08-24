@@ -1,0 +1,74 @@
+---
+import CorporateLayout from '../layouts/CorporateLayout.astro';
+import LocalForm from '../components/LocalForm.astro';
+import PageHero from '../components/PageHero.astro';
+---
+
+<CorporateLayout
+  title="Careers"
+  description="Research and technical disciplines represented across Trinity Laboratories."
+  active="careers"
+>
+  <PageHero
+    eyebrow="Careers"
+    title="Work where method matters."
+    intro="Trinity Laboratories brings research, engineering, field practice, safety, and technical records into the same operating environment."
+    index="TL / CAREERS"
+  />
+
+  <section class="section" data-reveal>
+    <div class="section__heading">
+      <p class="section-label">Disciplines</p>
+      <h2>Careful specialists. Collaborative programs.</h2>
+      <p>
+        Areas of interest include laboratory research, instrumentation, environmental analysis,
+        applied physics, field operations, safety systems, prototype evaluation, and technical
+        documentation.
+      </p>
+    </div>
+    <p class="prose-large">
+      Strong work is precise in its own discipline and legible to the people who depend on it next.
+    </p>
+  </section>
+
+  <section class="section" data-reveal>
+    <div class="section__heading">
+      <p class="section-label">Interest registry</p>
+      <h2>Register a professional interest.</h2>
+      <p>Use the institutional terminal below to record your area of work.</p>
+    </div>
+    <LocalForm
+      kind="careers"
+      submitLabel="Register interest"
+      successMessage="REGISTRY ENTRY ACCEPTED. TERMINAL CLEARED."
+    >
+      <label for="career-name"
+        >Full name <input id="career-name" type="text" required autocomplete="off" /></label
+      >
+      <label for="career-email"
+        >Email address <input id="career-email" type="email" required autocomplete="off" /></label
+      >
+      <label for="career-discipline"
+        >Discipline <input id="career-discipline" type="text" required autocomplete="off" /></label
+      >
+      <label for="career-area"
+        >Capability area
+        <select id="career-area" required>
+          <option value="">Select an area</option>
+          <option>Advanced Materials</option><option>Industrial Instrumentation</option><option
+            >Environmental Analysis</option
+          >
+          <option>Applied Physics</option><option>Field Sampling and Geological Research</option
+          ><option>Laboratory Safety Systems</option>
+          <option>Prototype Evaluation</option><option>Contract Research</option><option
+            >Technical Records</option
+          >
+        </select>
+      </label>
+      <label for="career-statement" data-wide
+        >Short statement <textarea id="career-statement" required minlength="20" autocomplete="off"
+        ></textarea></label
+      >
+    </LocalForm>
+  </section>
+</CorporateLayout>

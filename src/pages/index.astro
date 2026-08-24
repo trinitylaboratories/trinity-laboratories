@@ -1,0 +1,276 @@
+---
+import CorporateLayout from '../layouts/CorporateLayout.astro';
+import MediaFrame from '../components/MediaFrame.astro';
+
+const capabilities = [
+  'Advanced Materials',
+  'Industrial Instrumentation',
+  'Environmental Analysis',
+  'Applied Physics',
+  'Field Sampling & Geological Research',
+  'Laboratory Safety Systems',
+  'Prototype Evaluation',
+  'Contract Research',
+];
+---
+
+<CorporateLayout
+  title="Trinity Laboratories"
+  description="Applied research, instrumentation, and field systems for complex operating environments."
+>
+  <section class="home-hero">
+    <div class="home-hero__grid" aria-hidden="true"></div>
+    <div class="home-hero__media" data-hero-media>
+      <MediaFrame
+        aspect="square"
+        alt="Reserved hero photography field with Trinity identity geometry"
+        label="Hero photography pending"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </div>
+    <div class="home-hero__copy">
+      <p class="eyebrow">Trinity Laboratories // Institutional profile</p>
+      <h1>Trinity<br />Laboratories</h1>
+      <p class="home-hero__statement">Applied research for complex environments.</p>
+      <div class="button-row">
+        <a class="button button--primary" href="/research/">Review capabilities</a>
+        <a class="button" href="/publications/">Public record</a>
+      </div>
+    </div>
+    <div class="home-hero__register">
+      <span>TL / PUBLIC RELEASE</span>
+      <span>System revision 01</span>
+      <span>Condition WHITE</span>
+    </div>
+  </section>
+
+  <section class="section" data-reveal>
+    <div class="section__heading">
+      <p class="section-label">01 / Institutional scope</p>
+      <h2>Research that moves between laboratory and field.</h2>
+      <p>
+        Trinity Laboratories brings experimental work, measurement systems, operational planning,
+        and technical documentation into one controlled research practice.
+      </p>
+    </div>
+    <div class="editorial-grid">
+      <p class="prose-large">
+        Work begins with a measurable question and ends with evidence that can withstand practical
+        conditions.
+      </p>
+      <div>
+        <p>
+          Programs are organized around clear test boundaries, calibrated instruments, reproducible
+          records, and reviewable operating procedures.
+        </p>
+        <a class="button" href="/about/">Institutional approach</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--dark" data-reveal>
+    <div class="section__heading">
+      <p class="section-label">02 / Research capabilities</p>
+      <h2>Eight connected areas of applied work.</h2>
+      <p>
+        Disciplines are presented separately for clarity and coordinated when a program crosses
+        material, environmental, instrument, or field boundaries.
+      </p>
+    </div>
+    <ol class="ruled-list capability-list">
+      {
+        capabilities.map((capability, index) => (
+          <li>
+            <>
+              <small>{String(index + 1).padStart(2, '0')}</small>
+              <strong>{capability}</strong>
+              <span aria-hidden="true">↗</span>
+            </>
+          </li>
+        ))
+      }
+    </ol>
+    <div class="button-row"><a class="button" href="/research/">Open research index</a></div>
+  </section>
+
+  <section class="section" data-reveal>
+    <div class="section__heading">
+      <p class="section-label">03 / Operating environments</p>
+      <h2>Built for observation, control, and transfer.</h2>
+      <p>
+        Laboratory, instrumentation, environmental, and field settings are treated as one continuous
+        evidence chain.
+      </p>
+    </div>
+    <MediaFrame
+      aspect="wide"
+      alt="Reserved institutional photography field"
+      label="Institutional photography pending"
+      caption="Facility and field documentation system"
+      credit="TL Media Registry"
+    />
+    <div class="button-row"><a class="button" href="/facilities/">Review environments</a></div>
+  </section>
+
+  <section class="section" data-reveal>
+    <div class="section__heading">
+      <p class="section-label">04 / Careers</p>
+      <h2>Build careful work into the record.</h2>
+      <p>
+        Review current areas of interest and use the local inquiry form to prepare an introduction
+        without transmitting personal information.
+      </p>
+    </div>
+    <div class="button-row">
+      <a class="button button--primary" href="/careers/">View careers</a>
+    </div>
+  </section>
+
+  <section class="section closing" data-reveal>
+    <p class="section-label">05 / Public interface</p>
+    <h2>Records available for review. Programs open to inquiry.</h2>
+    <div class="button-row">
+      <a class="button button--primary" href="/publications/">Browse publications</a>
+      <a class="button" href="/contact/">Contact Trinity</a>
+      <a class="button" href="/employee-access/">Employee access</a>
+    </div>
+  </section>
+</CorporateLayout>
+
+<style>
+  .home-hero {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    min-height: calc(100svh - 7.3rem);
+    overflow: hidden;
+    align-items: end;
+    padding: clamp(3.5rem, 8vw, 8rem) var(--page-gutter) clamp(3rem, 7vw, 6rem);
+    background: #e8e5dc;
+  }
+
+  .home-hero::after {
+    position: absolute;
+    z-index: -1;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 0.45rem;
+    background: var(--blue);
+    content: '';
+    animation: line-in 1.1s cubic-bezier(0.22, 1, 0.36, 1) both;
+    transform-origin: left;
+  }
+
+  .home-hero__copy,
+  .home-hero__register {
+    position: relative;
+    z-index: 2;
+    width: min(100%, var(--content-max));
+    margin-inline: auto;
+  }
+
+  .home-hero h1 {
+    max-width: 9ch;
+    margin: 1rem 0 0;
+    font-size: clamp(4.5rem, 12vw, 11rem);
+    font-weight: 520;
+    letter-spacing: -0.075em;
+    line-height: 0.77;
+    animation: hero-in 800ms 120ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .home-hero__statement {
+    max-width: 30rem;
+    margin: 2.4rem 0 0;
+    font-size: clamp(1.1rem, 2vw, 1.55rem);
+  }
+
+  .home-hero__register {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1.5rem;
+    margin-top: 3rem;
+    font: 400 0.64rem/1.2 var(--font-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .home-hero__grid {
+    position: absolute;
+    z-index: -2;
+    inset: 0;
+    opacity: 0.18;
+    background-image:
+      linear-gradient(rgba(8, 43, 96, 0.5) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(8, 43, 96, 0.5) 1px, transparent 1px);
+    background-size: 5rem 5rem;
+    mask-image: linear-gradient(90deg, transparent 5%, #000 65%);
+  }
+
+  .home-hero__media {
+    position: absolute;
+    z-index: -1;
+    top: 7%;
+    right: calc(-1.5 * var(--page-gutter));
+    width: min(39vw, 42rem);
+    opacity: 0.9;
+    filter: drop-shadow(0 1.7rem 2.5rem rgba(8, 43, 96, 0.2));
+  }
+
+  .home-hero__media :global(.media-frame__field) {
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+  }
+
+  .capability-list {
+    max-width: calc(var(--content-max) - 2 * var(--page-gutter));
+  }
+
+  .closing h2 {
+    max-width: 18ch;
+    margin: 1rem 0 2rem;
+    font-size: clamp(2.8rem, 7vw, 7rem);
+    font-weight: 500;
+    letter-spacing: -0.055em;
+    line-height: 0.95;
+  }
+
+  @keyframes hero-in {
+    from {
+      opacity: 0;
+      transform: translateY(2.5rem);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes line-in {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+
+  @media (max-width: 52rem) {
+    .home-hero {
+      min-height: calc(100svh - 6.5rem);
+    }
+
+    .home-hero__media {
+      top: 4%;
+      right: -18%;
+      width: 74vw;
+      opacity: 0.42;
+    }
+
+    .home-hero__register {
+      justify-content: flex-start;
+      flex-wrap: wrap;
+    }
+  }
+</style>

@@ -1,0 +1,129 @@
+---
+import CorporateLayout from '../layouts/CorporateLayout.astro';
+import PageHero from '../components/PageHero.astro';
+
+const capabilities = [
+  [
+    '01',
+    'Advanced Materials',
+    'Characterization, controlled evaluation, and performance comparison under defined operating conditions.',
+  ],
+  [
+    '02',
+    'Industrial Instrumentation',
+    'Measurement systems, calibrated assemblies, and interfaces designed for reliable technical observation.',
+  ],
+  [
+    '03',
+    'Environmental Analysis',
+    'Sampling and analytical methods for changing physical and environmental conditions.',
+  ],
+  [
+    '04',
+    'Applied Physics',
+    'Experimental investigation of physical behavior with an emphasis on measurable, reproducible effects.',
+  ],
+  [
+    '05',
+    'Field Sampling & Geological Research',
+    'Structured collection, custody, and interpretation of material gathered outside the laboratory.',
+  ],
+  [
+    '06',
+    'Laboratory Safety Systems',
+    'Access, containment, operating condition, and response systems integrated with research practice.',
+  ],
+  [
+    '07',
+    'Prototype Evaluation',
+    'Controlled testing of early instruments, assemblies, and technical processes against defined criteria.',
+  ],
+  [
+    '08',
+    'Contract Research',
+    'Scoped multidisciplinary studies built around an agreed question, method, and reporting standard.',
+  ],
+];
+---
+
+<CorporateLayout
+  title="Research"
+  description="Eight connected applied research capabilities at Trinity Laboratories."
+  active="research"
+>
+  <PageHero
+    eyebrow="Research capabilities"
+    title="One evidence chain. Eight areas of work."
+    intro="Programs can remain within one discipline or combine laboratory, instrumentation, environmental, and field methods."
+    index="TL / RESEARCH"
+  />
+
+  <section class="section capability-index" data-reveal>
+    <ol>
+      {
+        capabilities.map(([index, title, copy]) => (
+          <li>
+            <small>{index}</small>
+            <h2>{title}</h2>
+            <p>{copy}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="section section--dark" data-reveal>
+    <div class="section__heading">
+      <p class="section-label">Program method</p>
+      <h2>Methods are selected for the question—not the department.</h2>
+      <p>
+        Cross-disciplinary work is governed by a single operating record, with explicit handoffs
+        between collection, testing, analysis, and review.
+      </p>
+    </div>
+    <div class="button-row"><a class="button" href="/contact/">Submit an inquiry</a></div>
+  </section>
+</CorporateLayout>
+
+<style>
+  .capability-index ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--ink);
+  }
+
+  .capability-index li {
+    display: grid;
+    grid-template-columns: 4rem minmax(16rem, 1fr) minmax(16rem, 0.8fr);
+    gap: clamp(1rem, 4vw, 4rem);
+    align-items: baseline;
+    padding: clamp(1.5rem, 3vw, 2.75rem) 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .capability-index small {
+    font-family: var(--font-mono);
+  }
+
+  .capability-index h2 {
+    margin: 0;
+    font-size: clamp(1.5rem, 3vw, 3rem);
+    font-weight: 500;
+    letter-spacing: -0.035em;
+  }
+
+  .capability-index p {
+    margin: 0;
+    color: var(--muted);
+  }
+
+  @media (max-width: 46rem) {
+    .capability-index li {
+      grid-template-columns: 2.5rem 1fr;
+    }
+    .capability-index p {
+      grid-column: 2;
+    }
+  }
+</style>

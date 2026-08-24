@@ -1,0 +1,87 @@
+---
+import CorporateLayout from '../layouts/CorporateLayout.astro';
+import PageHero from '../components/PageHero.astro';
+
+const forms = [
+  'TL-101',
+  'TL-220',
+  'TL-340',
+  'TL-470',
+  'TL-590',
+  'TL-P110',
+  'TL-P365',
+  'TL-O205',
+  'TL-N310',
+  'TL-N480',
+  'TL-SOP-720',
+  'TL-SOP-760',
+  'TL-SOP-890',
+  'TL-X510',
+  'TL-X595',
+];
+---
+
+<CorporateLayout
+  title="Publications"
+  description="Publicly released institutional security references and form templates."
+  active="publications"
+>
+  <PageHero
+    eyebrow="Public record"
+    title="Released references and working forms."
+    intro="Selected institutional records are available as searchable transcriptions with source-document downloads."
+    index="TL / PUBLICATIONS"
+  />
+
+  <section class="section" data-reveal>
+    <div class="section__heading">
+      <p class="section-label">Security references</p>
+      <h2>Two systems, documented separately.</h2>
+      <p>
+        Information classification defines handling eligibility. Physical access defines entry
+        conditions. Neither substitutes for explicit program permission.
+      </p>
+    </div>
+    <ul class="ruled-list">
+      <li>
+        <small>01</small><strong>TL-SEC-04 — Information Classification System</strong><a
+          href="/records/security/information-classification/">Open ↗</a
+        >
+      </li>
+      <li>
+        <small>02</small><strong>TL-SEC-001 — Physical Access Classification</strong><a
+          href="/records/security/physical-access/">Open ↗</a
+        >
+      </li>
+      <li>
+        <small>03</small><strong>Endorsements and Facility Conditions</strong><a
+          href="/records/security/endorsements-and-conditions/">Open ↗</a
+        >
+      </li>
+    </ul>
+  </section>
+
+  <section class="section section--dark" data-reveal>
+    <div class="section__heading">
+      <p class="section-label">Forms library</p>
+      <h2>Fifteen controlled templates.</h2>
+      <p>
+        Legacy markings are preserved and shown beside their normalized TL classification values.
+      </p>
+    </div>
+    <ol class="ruled-list">
+      {
+        forms.map((id, index) => (
+          <li>
+            <>
+              <small>{String(index + 1).padStart(2, '0')}</small>
+              <strong>{id}</strong>
+              <a href={`/records/forms/${id.toLowerCase()}/`}>Open ↗</a>
+            </>
+          </li>
+        ))
+      }
+    </ol>
+    <div class="button-row"><a class="button" href="/records/forms/">Open forms library</a></div>
+  </section>
+</CorporateLayout>

@@ -1,0 +1,136 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: Validate, test, and build
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      CI: 'true'
+      PUBLIC_INDEXABLE: 'true'
+      SITE_DEPLOYMENT_ENV: production
+      PLAYWRIGHT_BROWSERS_PATH: .tools/ms-playwright
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Install checksum-pinned Gitleaks CLI
+        shell: bash
+        run: |
+          mkdir -p .tools/gitleaks
+          curl --fail --silent --show-error --location --retry 3 --retry-all-errors \
+            --output .tools/gitleaks/gitleaks.tar.gz \
+            https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz
+          echo '551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb  .tools/gitleaks/gitleaks.tar.gz' \
+            | sha256sum --check --strict
+          tar -xzf .tools/gitleaks/gitleaks.tar.gz -C .tools/gitleaks gitleaks
+
+      - name: Scan complete Git history for secrets
+        run: .tools/gitleaks/gitleaks git . --redact --no-banner --log-opts='--all'
+
+      - name: Set up Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install locked dependencies without lifecycle scripts
+        run: npm ci --ignore-scripts
+
+      - name: Validate repository, assets, and record metadata
+        run: |
+          npm run validate:repo
+          npm run validate:assets
+          npm run validate:content
+
+      - name: Check formatting and Astro types
+        run: |
+          npm run format:check
+          npm run lint
+          npm run check
+
+      - name: Run unit coverage gate
+        run: npm run test:unit:coverage
+
+      - name: Build and validate non-indexable pull request output
+        if: github.event_name == 'pull_request'
+        run: |
+          npm run build:preview
+          npm run prepare:deploy -- --environment preview
+          npm run validate:dist
+          npm run validate:site -- --environment preview
+
+      - name: Build and validate production output
+        run: |
+          npm run build:production
+          npm run prepare:deploy:production
+          npm run validate:dist
+          npm run validate:site
+
+      - name: Check external links in documentation and built HTML
+        uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2.9.0
+        with:
+          args: >-
+            --verbose --no-progress --max-retries 2 --timeout 20
+            --accept 200,204,206,429
+            --exclude '^https://(?:www\.)?trinitylaboratories\.org'
+            './*.md' './docs/**/*.md' './src/content/**/*.md' './dist/**/*.html'
+          fail: true
+          jobSummary: true
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Run browser acceptance suite
+        run: npm run test:e2e
+
+      - name: Upload browser diagnostics on failure
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: playwright-diagnostics
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: ignore
+          retention-days: 7
+
+  bootstrap-windows:
+    name: Verify isolated Windows bootstrap
+    runs-on: windows-latest
+    timeout-minutes: 25
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+
+      - name: Bootstrap checksum-verified project-local Node
+        shell: pwsh
+        run: |
+          . ./scripts/bootstrap.ps1
+          & ./.tools/node/node.exe --version
+          & ./.tools/node/npm.cmd --version
+
+      - name: Install dependencies with the project-local npm
+        shell: pwsh
+        run: '& ./.tools/node/npm.cmd ci --ignore-scripts'
+
+      - name: Run a project-local repository policy check
+        shell: pwsh
+        run: '& ./.tools/node/node.exe scripts/validate-repository.mjs'

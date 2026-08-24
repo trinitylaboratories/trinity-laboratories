@@ -1,0 +1,41 @@
+---
+import CorporateLayout from '../layouts/CorporateLayout.astro';
+---
+
+<CorporateLayout
+  title="Record Not Found"
+  description="The requested Trinity Laboratories record is unavailable."
+  indexable={false}
+>
+  <section class="section missing">
+    <p class="section-label">HTTP 404 / Record absent</p>
+    <h1>Requested record not found.</h1>
+    <p>The address does not correspond to an available public or institutional record.</p>
+    <div class="button-row">
+      <a class="button button--primary" href="/">Return to public index</a><a
+        class="button"
+        href="/records/">Open TIRN</a
+      >
+    </div>
+  </section>
+</CorporateLayout>
+
+<style>
+  .missing {
+    min-height: 65svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .missing h1 {
+    max-width: 11ch;
+    margin: 1rem 0;
+    font-size: clamp(3.5rem, 9vw, 8rem);
+    font-weight: 500;
+    letter-spacing: -0.06em;
+    line-height: 0.95;
+  }
+  .missing > p:not(.section-label) {
+    max-width: 34rem;
+  }
+</style>

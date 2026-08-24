@@ -1,0 +1,67 @@
+---
+interface Source {
+  srcset: string;
+  type?: string;
+  media?: string;
+}
+
+interface Props {
+  src?: string;
+  sources?: Source[];
+  alt?: string;
+  caption?: string;
+  credit?: string;
+  aspect?: 'wide' | 'landscape' | 'square' | 'portrait';
+  focalPoint?: string;
+  label?: string;
+  loading?: 'eager' | 'lazy';
+  fetchpriority?: 'high' | 'low' | 'auto';
+}
+
+const {
+  src,
+  sources = [],
+  alt = '',
+  caption,
+  credit,
+  aspect = 'landscape',
+  focalPoint = '50% 50%',
+  label = 'Media reserved',
+  loading = 'lazy',
+  fetchpriority = 'auto',
+} = Astro.props;
+---
+
+<figure class:list={['media-frame', `media-frame--${aspect}`, { 'media-frame--empty': !src }]}>
+  {
+    src ? (
+      <picture>
+        {sources.map((source) => (
+          <source {...source} />
+        ))}
+        <img
+          src={src}
+          alt={alt}
+          loading={loading}
+          fetchpriority={fetchpriority}
+          decoding="async"
+          style={`object-position:${focalPoint}`}
+        />
+      </picture>
+    ) : (
+      <div class="media-frame__field" role="img" aria-label={alt || label}>
+        <span class="media-frame__triangle" aria-hidden="true" />
+        <span class="media-frame__grid" aria-hidden="true" />
+        <small>{label}</small>
+      </div>
+    )
+  }
+  {
+    (caption || credit) && (
+      <figcaption>
+        <span>{caption}</span>
+        {credit && <small>{credit}</small>}
+      </figcaption>
+    )
+  }
+</figure>

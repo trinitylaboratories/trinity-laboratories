@@ -1,0 +1,70 @@
+---
+import BrandMark from './BrandMark.astro';
+
+interface Props {
+  active?: string;
+}
+
+const { active = '' } = Astro.props;
+const primary = [
+  ['About', '/about/', 'about'],
+  ['Research', '/research/', 'research'],
+  ['Facilities', '/facilities/', 'facilities'],
+  ['Publications', '/publications/', 'publications'],
+  ['Careers', '/careers/', 'careers'],
+  ['Contact', '/contact/', 'contact'],
+] as const;
+---
+
+<header class="site-header" data-site-header>
+  <div class="site-header__utility">
+    <span>Institutional network // public release</span>
+    <a href="/employee-access/">Employee Access <span aria-hidden="true">→</span></a>
+  </div>
+  <div class="site-header__main">
+    <BrandMark />
+    <button
+      class="site-header__toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="primary-navigation"
+      data-nav-toggle
+    >
+      <span>Menu</span><i aria-hidden="true"></i>
+    </button>
+    <nav id="primary-navigation" aria-label="Primary" data-nav>
+      {
+        primary.map(([label, href, key]) => (
+          <a href={href} aria-current={active === key ? 'page' : undefined}>
+            {label}
+          </a>
+        ))
+      }
+    </nav>
+  </div>
+</header>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('[data-nav-toggle]');
+  const nav = document.querySelector<HTMLElement>('[data-nav]');
+
+  toggle?.addEventListener('click', () => {
+    const open = toggle.getAttribute('aria-expanded') === 'true';
+    toggle.setAttribute('aria-expanded', String(!open));
+    nav?.toggleAttribute('data-open', !open);
+  });
+
+  nav?.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => {
+      toggle?.setAttribute('aria-expanded', 'false');
+      nav.removeAttribute('data-open');
+    });
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape' || toggle?.getAttribute('aria-expanded') !== 'true') return;
+    toggle.setAttribute('aria-expanded', 'false');
+    nav?.removeAttribute('data-open');
+    toggle.focus();
+  });
+</script>
