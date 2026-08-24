@@ -22,12 +22,14 @@ describe('deployment policy', () => {
     expect(headers).toContain("form-action 'none'");
     expect(headers).toContain('Referrer-Policy: no-referrer');
     expect(headers).toContain('X-Content-Type-Options: nosniff');
-    expect(headers).toContain("script-src 'self'");
+    expect(headers).toContain("script-src 'self' 'wasm-unsafe-eval'");
     expect(headers).toContain("font-src 'self'");
     expect(headers).toContain("img-src 'self'");
     expect(headers).not.toContain('data:');
     expect(headers).not.toMatch(/script-src[^;]*unsafe-inline/);
-    expect(headers).not.toContain('unsafe-eval');
+    const scriptDirective = headers.match(/script-src [^;\n]+/)?.[0].split(/\s+/);
+    expect(scriptDirective).toContain("'wasm-unsafe-eval'");
+    expect(scriptDirective).not.toContain("'unsafe-eval'");
     expect(globalHeaders).not.toMatch(/^\s*X-Robots-Tag:/m);
     expect(headers).toMatch(/workers\.dev\/\*\n\s+X-Robots-Tag: noindex/);
   });
