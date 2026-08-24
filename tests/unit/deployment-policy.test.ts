@@ -125,6 +125,15 @@ describe('deployment policy', () => {
         {
           WORKERS_CI: '1',
           WORKERS_CI_BRANCH: 'main',
+        },
+        detached,
+      ),
+    ).toEqual({ args: ['deploy'], environment: 'production' });
+    expect(
+      deploymentCommand(
+        {
+          WORKERS_CI: '1',
+          WORKERS_CI_BRANCH: 'main',
           WORKERS_CI_COMMIT_SHA: cleanMain.head,
         },
         detached,
