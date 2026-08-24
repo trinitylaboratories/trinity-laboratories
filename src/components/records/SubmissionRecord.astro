@@ -1,0 +1,146 @@
+---
+import { publicationDisclosureMode, type SubmissionRecordData } from '../../lib/submission-schema';
+import ControlledRecord from './ControlledRecord.astro';
+import ControlledSection from './ControlledSection.astro';
+import RecordHeader from './RecordHeader.astro';
+
+interface Props {
+  submission: SubmissionRecordData;
+}
+
+const { submission } = Astro.props;
+const recordMode = publicationDisclosureMode(submission.publicationState);
+const controlSummary =
+  recordMode === 'authorize'
+    ? 'This report requires an active staff session and the displayed information authorization.'
+    : recordMode === 'withheld'
+      ? 'Only catalog metadata for this report is present in the published system.'
+      : undefined;
+---
+
+<article class="submission-record" data-record-id={submission.recordId}>
+  <RecordHeader
+    recordId={submission.recordId}
+    formId={submission.formId}
+    status={submission.status}
+    revision={submission.revision}
+    effectiveDate={submission.effectiveDate}
+    controllingOffice={submission.controllingOffice}
+    publicationState={submission.publicationState}
+    information={submission.information}
+    physicalAccess={submission.physicalAccess}
+    facilityCondition={submission.facilityCondition}
+    summary={submission.summary}
+    tags={submission.tags}
+  />
+
+  {
+    recordMode === 'withheld' ? (
+      <ControlledRecord
+        id={`${submission.recordId.toLowerCase()}-record`}
+        recordId={submission.recordId}
+        title={submission.title}
+        summary={controlSummary}
+        mode="withheld"
+        requiredLevel={submission.information.level}
+        program={submission.information.program}
+        compartment={submission.information.compartment}
+      />
+    ) : (
+      <ControlledRecord
+        id={`${submission.recordId.toLowerCase()}-record`}
+        recordId={submission.recordId}
+        title={submission.title}
+        summary={controlSummary}
+        mode={recordMode}
+        requiredLevel={submission.information.level}
+        program={submission.information.program}
+        compartment={submission.information.compartment}
+      >
+        <div class="submission-record__sections">
+          {submission.sections.map((section) =>
+            section.disclosure.mode === 'withheld' ? (
+              <ControlledSection
+                id={section.id}
+                title={section.title}
+                summary={section.summary}
+                mode="withheld"
+              />
+            ) : section.disclosure.mode === 'authorize' ? (
+              <div data-pagefind-ignore>
+                <ControlledSection
+                  id={section.id}
+                  title={section.title}
+                  summary={section.summary}
+                  mode="authorize"
+                  requiredLevel={section.disclosure.requiredLevel}
+                  program={section.disclosure.program}
+                  compartment={section.disclosure.compartment}
+                >
+                  <p>{section.body}</p>
+                </ControlledSection>
+              </div>
+            ) : (
+              <ControlledSection
+                id={section.id}
+                title={section.title}
+                summary={section.summary}
+                mode="open"
+              >
+                <p>{section.body}</p>
+              </ControlledSection>
+            ),
+          )}
+        </div>
+      </ControlledRecord>
+    )
+  }
+
+  <footer class="submission-record__relations">
+    <h2>Related records</h2>
+    <ul>
+      {submission.relatedRecords.map((recordId) => <li>{recordId}</li>)}
+    </ul>
+    <p>
+      Related identifiers are catalog references. Their presence does not confer information or
+      physical-access authority.
+    </p>
+  </footer>
+</article>
+
+<style>
+  .submission-record__sections {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .submission-record__relations {
+    margin-top: 3rem;
+    border-top: 1px solid #aeb2b4;
+    padding-top: 1.25rem;
+  }
+
+  .submission-record__relations h2 {
+    margin: 0 0 0.75rem;
+    border: 0;
+    padding: 0;
+    font-size: 1.15rem;
+  }
+
+  .submission-record__relations ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    margin: 0;
+    padding: 0;
+    color: #083f85;
+    font: 400 0.76rem/1.4 var(--sl-font-mono);
+    list-style: none;
+  }
+
+  .submission-record__relations p {
+    margin: 0.75rem 0 0;
+    color: #59636d;
+    font-size: 0.8rem;
+  }
+</style>

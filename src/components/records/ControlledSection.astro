@@ -1,0 +1,287 @@
+---
+import AuthorizationDialog from './AuthorizationDialog.astro';
+import type { DisclosureMode, TirnLevel } from '../../lib/tirn-access';
+
+interface Props {
+  id: string;
+  title: string;
+  mode?: DisclosureMode;
+  requiredLevel?: TirnLevel;
+  program?: string;
+  compartment?: string;
+  summary?: string;
+}
+
+const {
+  id,
+  title,
+  mode = 'open',
+  requiredLevel = 'TL-3',
+  program,
+  compartment,
+  summary = 'Controlled section content is not displayed in the current view.',
+} = Astro.props;
+const headingId = `${id}-heading`;
+---
+
+<section
+  class="tirn-controlled tirn-controlled--section"
+  data-controlled-section={id}
+  data-controlled-root
+  data-mode={mode}
+  data-required-level={requiredLevel}
+  data-program={program}
+  data-compartment={compartment}
+  aria-labelledby={headingId}
+>
+  <header class="tirn-controlled__header">
+    <p>{mode === 'open' ? 'Released section' : `${requiredLevel} controlled section`}</p>
+    <h2 id={headingId} tabindex="-1" data-controlled-heading>{title}</h2>
+  </header>
+
+  {
+    mode === 'open' && (
+      <div class="tirn-controlled__content" data-controlled-content>
+        <slot />
+      </div>
+    )
+  }
+
+  {
+    mode === 'authorize' && (
+      <>
+        <div class="tirn-controlled__lock" data-controlled-locked data-pagefind-ignore>
+          <div class="tirn-controlled__redactions" aria-hidden="true">
+            <>
+              <span />
+              <span />
+              <span />
+            </>
+          </div>
+          <div>
+            <strong>Controlled content omitted from current view</strong>
+            <p>{summary}</p>
+            <p class="tirn-controlled__requirements">
+              Required: {requiredLevel}
+              {program ? ` / ${program}` : ''}
+              {compartment ? ` / ${compartment}` : ''} · Need-to-know
+            </p>
+            <AuthorizationDialog
+              id={id}
+              requiredLevel={requiredLevel}
+              program={program}
+              compartment={compartment}
+              triggerLabel="Authorize section"
+            />
+          </div>
+        </div>
+        <div class="tirn-controlled__content" data-controlled-content data-pagefind-ignore hidden>
+          <p class="tirn-controlled__released-note">Temporary authorization active.</p>
+          <slot />
+        </div>
+      </>
+    )
+  }
+
+  {
+    mode === 'withheld' && (
+      <div class="tirn-controlled__lock" data-controlled-withheld data-pagefind-ignore>
+        <div class="tirn-controlled__redactions" aria-hidden="true">
+          <>
+            <span />
+            <span />
+            <span />
+          </>
+        </div>
+        <div>
+          <strong>Content withheld from this publication</strong>
+          <p>{summary}</p>
+          <p class="tirn-controlled__requirements">
+            Required: {requiredLevel}
+            {program ? ` / ${program}` : ''}
+            {compartment ? ` / ${compartment}` : ''} · Separate source record required
+          </p>
+        </div>
+      </div>
+    )
+  }
+</section>
+
+<script>
+  import {
+    accessAllows,
+    resolveTirnAccess,
+    TIRN_ACCESS_CHANGE_EVENT,
+    TIRN_GRANT_STORAGE_KEY,
+    TIRN_SESSION_STORAGE_KEY,
+    type TirnLevel,
+  } from '../../lib/tirn-access';
+
+  const readSessionValue = (key: string) => {
+    try {
+      return sessionStorage.getItem(key);
+    } catch {
+      return null;
+    }
+  };
+
+  const refreshControlledSection = (root: HTMLElement, moveFocus = false) => {
+    if (root.dataset.mode !== 'authorize') return;
+    const state = resolveTirnAccess(
+      readSessionValue(TIRN_SESSION_STORAGE_KEY),
+      readSessionValue(TIRN_GRANT_STORAGE_KEY),
+      Date.now(),
+    );
+    const requiredLevel = (root.dataset.requiredLevel || 'TL-3') as TirnLevel;
+    const hasAdditionalControl = Boolean(root.dataset.program || root.dataset.compartment);
+    const authorized = !hasAdditionalControl && accessAllows(state, requiredLevel);
+    const wasAuthorized = root.dataset.accessState === 'authorized';
+    const locked = root.querySelector<HTMLElement>('[data-controlled-locked]');
+    const content = root.querySelector<HTMLElement>('[data-controlled-content]');
+
+    root.dataset.accessState = authorized ? 'authorized' : 'locked';
+    if (locked) locked.hidden = authorized;
+    if (content) content.hidden = !authorized;
+    if (moveFocus && authorized && !wasAuthorized) {
+      root.querySelector<HTMLElement>('[data-controlled-heading]')?.focus();
+    }
+  };
+
+  document.querySelectorAll<HTMLElement>('[data-controlled-section]').forEach((root) => {
+    refreshControlledSection(root);
+  });
+  window.addEventListener(TIRN_ACCESS_CHANGE_EVENT, () => {
+    document.querySelectorAll<HTMLElement>('[data-controlled-section]').forEach((root) => {
+      refreshControlledSection(root, true);
+    });
+  });
+  window.setInterval(() => {
+    document.querySelectorAll<HTMLElement>('[data-controlled-section]').forEach((root) => {
+      refreshControlledSection(root);
+    });
+  }, 1000);
+</script>
+
+<style>
+  .tirn-controlled {
+    margin-block: 1.5rem;
+    border-block: 1px solid #7f8b96;
+    background: #fff;
+    color: #17212b;
+  }
+
+  .tirn-controlled__header {
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid #c8ced4;
+    background: #e8ecef;
+  }
+
+  .tirn-controlled__header p,
+  .tirn-controlled__header h2 {
+    margin: 0;
+  }
+
+  .tirn-controlled__header p {
+    margin-bottom: 0.2rem;
+    color: #4e5d6a;
+    font: 500 0.6rem/1.2 var(--font-mono, monospace);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .tirn-controlled__header h2 {
+    color: #17283b;
+    font-size: 1.05rem;
+    font-weight: 650;
+  }
+
+  .tirn-controlled__lock {
+    display: grid;
+    grid-template-columns: minmax(9rem, 0.45fr) minmax(0, 1.55fr);
+    gap: clamp(1rem, 3vw, 2.5rem);
+    align-items: start;
+    padding: clamp(1rem, 3vw, 1.6rem);
+    background: #f7f8f8;
+  }
+
+  .tirn-controlled__lock[hidden] {
+    display: none;
+  }
+
+  .tirn-controlled__redactions {
+    display: grid;
+    gap: 0.55rem;
+    padding-top: 0.2rem;
+  }
+
+  .tirn-controlled__redactions span {
+    display: block;
+    height: 0.76rem;
+    background: #18232d;
+  }
+
+  .tirn-controlled__redactions span:nth-child(2) {
+    width: 74%;
+  }
+
+  .tirn-controlled__redactions span:nth-child(3) {
+    width: 91%;
+  }
+
+  .tirn-controlled__lock strong {
+    color: #1b2c3d;
+    font-size: 0.9rem;
+  }
+
+  .tirn-controlled__lock p {
+    margin: 0.35rem 0 0.8rem;
+    font-size: 0.78rem;
+  }
+
+  .tirn-controlled__requirements {
+    color: #4c5a67;
+    font: 500 0.62rem/1.45 var(--font-mono, monospace) !important;
+    letter-spacing: 0.035em;
+    text-transform: uppercase;
+  }
+
+  .tirn-controlled__content {
+    padding: clamp(1rem, 3vw, 1.6rem);
+  }
+
+  .tirn-controlled__content[hidden] {
+    display: none;
+  }
+
+  .tirn-controlled__content :global(p:first-child) {
+    margin-top: 0;
+  }
+
+  .tirn-controlled__released-note {
+    margin: 0 0 1rem;
+    border-left: 3px solid #246443;
+    padding: 0.55rem 0.7rem;
+    background: #e8f2ec;
+    color: #1f563b;
+    font: 600 0.62rem/1.3 var(--font-mono, monospace);
+    letter-spacing: 0.045em;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 36rem) {
+    .tirn-controlled__lock {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media print {
+    .tirn-controlled__lock,
+    .tirn-controlled__released-note {
+      display: none !important;
+    }
+
+    .tirn-controlled__content:not([hidden]) {
+      display: block;
+    }
+  }
+</style>

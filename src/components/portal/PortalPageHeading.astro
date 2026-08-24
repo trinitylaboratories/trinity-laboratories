@@ -1,0 +1,17 @@
+---
+interface Props {
+  path: string;
+  title: string;
+  description: string;
+}
+
+const { path, title, description } = Astro.props;
+---
+
+<header class="portal-page-heading">
+  <div>
+    <p class="portal-page-heading__path">{path}</p>
+    <h1>{title}</h1>
+  </div>
+  <p>{description}</p>
+</header>

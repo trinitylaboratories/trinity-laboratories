@@ -13,11 +13,13 @@ import {
   FORM_IDS,
   GATEWAY_ROUTE,
   LOCAL_FORM_ROUTES,
+  NOINDEX_ROUTES,
   PRODUCTION_ORIGIN,
   RECORD_ROUTES,
   REQUIRED_GATEWAY_HOOKS,
   REQUIRED_SESSION_HOOKS,
   routeToOutputPath,
+  SITEMAP_ROUTES,
   SITE_ROUTES,
 } from './lib/site-contract.mjs';
 
@@ -82,8 +84,18 @@ export function validateHtmlPage(html, route, { environment = 'production' } = {
     errors.push(`${route}: canonical must be ${canonicalUrl(route)}`);
   }
   const robotsContent = getAttribute(robotsTag ?? '', 'content') ?? '';
-  if (environment === 'production' && /\bnoindex\b/i.test(robotsContent)) {
-    errors.push(`${route}: production HTML must not contain a noindex meta directive`);
+  if (
+    environment === 'production' &&
+    NOINDEX_ROUTES.includes(route) &&
+    !/\bnoindex\b/i.test(robotsContent)
+  ) {
+    errors.push(`${route}: controlled production HTML must contain a noindex meta directive`);
+  } else if (
+    environment === 'production' &&
+    !NOINDEX_ROUTES.includes(route) &&
+    /\bnoindex\b/i.test(robotsContent)
+  ) {
+    errors.push(`${route}: released production HTML must not contain a noindex meta directive`);
   } else if (environment === 'preview' && !/\bnoindex\b/i.test(robotsContent)) {
     errors.push(`${route}: preview HTML must contain a noindex meta directive`);
   }
@@ -138,7 +150,8 @@ export function validateForms(html, route) {
 
     if (
       hasAttribute(openingTag, 'data-local-form') ||
-      hasAttribute(openingTag, 'data-gateway-form')
+      hasAttribute(openingTag, 'data-gateway-form') ||
+      hasAttribute(openingTag, 'data-authorization-form')
     ) {
       if (hasAttribute(openingTag, 'action')) {
         errors.push(`${route}: local-only forms must omit the action attribute`);
@@ -264,10 +277,15 @@ export function extractSitemapLocations(source) {
 export function validateSitemapDocuments(documents) {
   const locations = new Set(documents.flatMap(extractSitemapLocations));
   const errors = [];
-  for (const route of SITE_ROUTES) {
+  for (const route of SITEMAP_ROUTES) {
     const canonical = canonicalUrl(route);
     if (!locations.has(canonical))
       errors.push(`Sitemap is missing required canonical URL: ${canonical}`);
+  }
+  for (const route of NOINDEX_ROUTES) {
+    const canonical = canonicalUrl(route);
+    if (locations.has(canonical))
+      errors.push(`Sitemap must exclude controlled canonical URL: ${canonical}`);
   }
   return errors;
 }

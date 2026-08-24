@@ -50,7 +50,7 @@ test('gateway controls complete their core path using only the keyboard', async 
   await page.keyboard.type(code);
   await page.keyboard.press('Tab');
   await page.keyboard.press('Enter');
-  await page.waitForURL((url) => url.pathname === '/records/');
+  await page.waitForURL((url) => url.pathname === '/portal/');
 });
 
 test('reduced-motion preference removes reveal transitions', async ({ page }) => {

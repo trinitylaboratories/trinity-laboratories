@@ -109,7 +109,7 @@ test('gateway retains only an opaque session flag and clears it on termination',
   await page.locator('#badge-id').fill(rawBadge);
   await page.locator('#terminal-code').fill(rawCode);
   await Promise.all([
-    page.waitForURL((url) => url.pathname === '/records/'),
+    page.waitForURL((url) => url.pathname === '/portal/'),
     page.getByRole('button', { name: /establish session/i }).click(),
   ]);
 

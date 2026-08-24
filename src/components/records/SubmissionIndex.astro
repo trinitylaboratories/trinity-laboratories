@@ -1,0 +1,121 @@
+---
+import { submissionHref, type SubmissionRecordData } from '../../lib/submission-schema';
+
+interface SubmissionEntryLike {
+  data: SubmissionRecordData;
+}
+
+interface Props {
+  submissions: SubmissionEntryLike[];
+  emptyMessage?: string;
+}
+
+const { submissions, emptyMessage = 'No completed reports are available in this register.' } =
+  Astro.props;
+const ordered = [...submissions].sort(
+  (left: SubmissionEntryLike, right: SubmissionEntryLike) =>
+    right.data.effectiveDate.localeCompare(left.data.effectiveDate) ||
+    left.data.recordId.localeCompare(right.data.recordId),
+);
+---
+
+{
+  ordered.length === 0 ? (
+    <p class="submission-index__empty">{emptyMessage}</p>
+  ) : (
+    <div class="submission-index">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Record</th>
+            <th scope="col">Title</th>
+            <th scope="col">Information</th>
+            <th scope="col">Publication</th>
+            <th scope="col">Effective</th>
+          </tr>
+        </thead>
+        <tbody>
+          {ordered.map(({ data }) => (
+            <tr>
+              <td class="submission-index__id">
+                <a href={submissionHref(data.recordId)}>{data.recordId}</a>
+              </td>
+              <td>
+                <strong>{data.title}</strong>
+                <span>{data.summary}</span>
+              </td>
+              <td>{data.information.level}</td>
+              <td data-state={data.publicationState}>{data.publicationState}</td>
+              <td>
+                <time datetime={data.effectiveDate}>{data.effectiveDate}</time>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
+<style>
+  .submission-index {
+    width: 100%;
+    overflow-x: auto;
+    border-block: 1px solid #aeb2b4;
+  }
+
+  .submission-index table {
+    min-width: 46rem;
+    margin: 0;
+    border: 0;
+  }
+
+  .submission-index th,
+  .submission-index td {
+    border-inline: 0;
+  }
+
+  .submission-index th:first-child,
+  .submission-index td:first-child {
+    padding-left: 0.75rem;
+  }
+
+  .submission-index th:last-child,
+  .submission-index td:last-child {
+    padding-right: 0.75rem;
+  }
+
+  .submission-index td strong,
+  .submission-index td span {
+    display: block;
+  }
+
+  .submission-index td span {
+    max-width: 32rem;
+    margin-top: 0.25rem;
+    color: #59636d;
+    font-size: 0.78rem;
+    line-height: 1.45;
+  }
+
+  .submission-index__id,
+  .submission-index td:nth-child(3),
+  .submission-index td:nth-child(4),
+  .submission-index td:nth-child(5) {
+    font-family: var(--sl-font-mono);
+    font-size: 0.72rem;
+    white-space: nowrap;
+  }
+
+  .submission-index td[data-state='controlled'],
+  .submission-index td[data-state='withheld'] {
+    color: #7a280f;
+    text-transform: uppercase;
+  }
+
+  .submission-index__empty {
+    border-block: 1px solid #aeb2b4;
+    padding: 1.25rem 0;
+    color: #4f5963;
+  }
+</style>

@@ -32,9 +32,12 @@ const REQUIRED_PACKAGE_SCRIPTS = Object.freeze([
   'check',
   'test:unit',
   'test:e2e',
+  'record-desk',
+  'record-desk:validate',
   'validate:repo',
   'validate:assets',
   'validate:content',
+  'validate:submissions',
   'validate:dist',
   'validate:site',
   'prepare:deploy',
@@ -42,6 +45,7 @@ const REQUIRED_PACKAGE_SCRIPTS = Object.freeze([
 
 const FORBIDDEN_TRACKED_SEGMENTS = Object.freeze([
   '/_IgnoreThis/',
+  '/.authoring/',
   '/.astro/',
   '/.cache/',
   '/.wrangler/',
@@ -49,6 +53,7 @@ const FORBIDDEN_TRACKED_SEGMENTS = Object.freeze([
   '/dist/',
   '/node_modules/',
   '/output/',
+  '/.playwright-cli/',
   '/playwright-report/',
   '/test-results/',
 ]);
@@ -234,7 +239,14 @@ export function validatePackageManifest(manifest, fileName = 'package.json') {
       errors.push(`${fileName}: ${script} must use the clean-path-aware Astro wrapper`);
     }
   }
-  for (const command of ['build', 'prepare:deploy', 'validate:dist', 'validate:site']) {
+  for (const command of [
+    'record-desk:validate',
+    'validate:submissions',
+    'build',
+    'prepare:deploy',
+    'validate:dist',
+    'validate:site',
+  ]) {
     if (!String(manifest.scripts?.['cf:build'] ?? '').includes(`npm run ${command}`)) {
       errors.push(`${fileName}: cf:build must run ${command}`);
     }
@@ -513,7 +525,14 @@ export async function validateRepository(projectRoot = process.cwd()) {
       .split(/\r?\n/)
       .map((line) => line.trim().replace(/^\//, ''))
       .filter((line) => line && !line.startsWith('#'));
-    for (const pattern of ['_IgnoreThis/', 'node_modules/', 'dist/', 'coverage/']) {
+    for (const pattern of [
+      '_IgnoreThis/',
+      '.authoring/',
+      '.playwright-cli/',
+      'node_modules/',
+      'dist/',
+      'coverage/',
+    ]) {
       if (!patterns.includes(pattern)) {
         errors.push(`.gitignore: missing required pattern '${pattern}'`);
       }

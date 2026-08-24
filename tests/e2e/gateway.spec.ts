@@ -27,14 +27,14 @@ test('employee gateway issues and verifies a browser-local terminal code', async
   await form.locator('#badge-id').fill('TL-TEST-01');
   await form.locator('#terminal-code').fill(code);
   await Promise.all([
-    page.waitForURL((url) => url.pathname === '/records/'),
+    page.waitForURL((url) => url.pathname === '/portal/'),
     form.getByRole('button', { name: /establish session/i }).click(),
   ]);
 
-  await expect(page.locator('[data-session-state]')).toHaveText(/session accepted/i);
+  await expect(page.locator('[data-session-state]')).toHaveText(/staff \/ tl-2 base/i);
   expect(await page.evaluate(() => sessionStorage.getItem('tirn-session'))).toBe('accepted');
   await page.locator('[data-session-terminate]').click();
-  await expect(page.locator('[data-session-state]')).toHaveText(/guest \/ unverified/i);
+  await expect(page.locator('[data-session-state]')).toHaveText(/guest \/ released access/i);
   expect(await page.evaluate(() => sessionStorage.getItem('tirn-session'))).toBeNull();
   expect(nonReadRequests).toEqual([]);
 });

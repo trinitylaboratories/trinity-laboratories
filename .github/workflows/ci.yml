@@ -52,11 +52,13 @@ jobs:
       - name: Install locked dependencies without lifecycle scripts
         run: npm ci --ignore-scripts
 
-      - name: Validate repository, assets, and record metadata
+      - name: Validate repository, assets, records, and authoring schemas
         run: |
           npm run validate:repo
           npm run validate:assets
           npm run validate:content
+          npm run record-desk:validate
+          npm run validate:submissions
 
       - name: Check formatting and Astro types
         run: |
@@ -90,6 +92,7 @@ jobs:
             --accept 200,204,206,429
             --root-dir "$(pwd)/dist"
             --exclude '^https://(?:www\.)?trinitylaboratories\.org'
+            --exclude '^http://127\.0\.0\.1:4319/'
             './*.md' './docs/**/*.md' './src/content/**/*.md' './dist/**/*.html'
           fail: true
           jobSummary: true

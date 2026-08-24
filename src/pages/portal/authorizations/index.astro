@@ -1,0 +1,98 @@
+---
+import PortalPageHeading from '../../../components/portal/PortalPageHeading.astro';
+import SessionSummary from '../../../components/portal/SessionSummary.astro';
+import ControlledRecord from '../../../components/records/ControlledRecord.astro';
+import ControlledSection from '../../../components/records/ControlledSection.astro';
+import PortalLayout from '../../../layouts/PortalLayout.astro';
+---
+
+<PortalLayout
+  title="Authorizations"
+  description="Review TIRN eligibility, establish a temporary TL-3 training grant, and inspect controlled presentation states."
+  active="authorizations"
+>
+  <PortalPageHeading
+    path="Staff Services / Authorizations"
+    title="Authorizations"
+    description="Evaluate temporary information access without changing physical authority, endorsements, or facility permissions."
+  />
+
+  <div class="portal-workspace">
+    <div class="portal-workspace__primary">
+      <section class="portal-section" aria-labelledby="authorization-principle-heading">
+        <p class="portal-section__label">Access principle</p>
+        <h2 id="authorization-principle-heading">Eligibility is not permission</h2>
+        <p>
+          The base staff session establishes TL-2 information eligibility. A qualifying credential
+          may establish a temporary TL-3 training grant for the controlled examples below. Program,
+          compartment, physical, and need-to-know requirements remain independent.
+        </p>
+        <div class="portal-callout">
+          Temporary grants expire after 15 minutes and are removed when the staff session is
+          terminated. The authorization credential is issued out-of-band and is not published in the
+          site repository.
+        </div>
+      </section>
+
+      <ControlledSection
+        id="handling-acknowledgment"
+        title="Controlled handling acknowledgment"
+        mode="authorize"
+        requiredLevel="TL-3"
+        summary="A temporary TL-3 grant and affirmed need-to-know are required to display this section."
+      >
+        <p>
+          Use controlled material only for the stated working purpose. Do not copy it into an
+          unrelated record, browser address, message field, or public submission package.
+        </p>
+        <p>
+          Relinquish the elevated grant when review is complete. Closing the browser tab also ends
+          the page-memory portion of the authorization sequence.
+        </p>
+      </ControlledSection>
+
+      <ControlledRecord
+        id="training-record-three"
+        recordId="TL-TRN-003"
+        title="Controlled-record handling exercise"
+        mode="authorize"
+        requiredLevel="TL-3"
+        summary="This neutral training record demonstrates whole-record authorization."
+      >
+        <p><strong>Purpose:</strong> Confirm whole-record display and relocking behavior.</p>
+        <ol>
+          <li>Verify that the temporary authorization indicator is visible.</li>
+          <li>Review only the information required for the current exercise.</li>
+          <li>Use “Relinquish TL-3” to return the record to its omitted state.</li>
+        </ol>
+        <p>
+          No operational event, facility, person, or active program is represented by this exercise.
+        </p>
+      </ControlledRecord>
+
+      <ControlledSection
+        id="separate-source-example"
+        title="Separately controlled source example"
+        mode="withheld"
+        requiredLevel="TL-4"
+        program="PROGRAM AUTHORIZATION"
+        compartment="COMPARTMENT AUTHORIZATION"
+        summary="No source body is present in the repository or published page."
+      />
+    </div>
+
+    <aside class="portal-workspace__aside" aria-label="Current access context">
+      <SessionSummary />
+      <section class="portal-section" aria-labelledby="authorization-results-heading">
+        <p class="portal-section__label">Evaluation results</p>
+        <h2 id="authorization-results-heading">Possible outcomes</h2>
+        <dl class="portal-summary">
+          <div><dt>TL-0–TL-2</dt><dd>Base staff session</dd></div>
+          <div><dt>TL-3</dt><dd>Temporary training grant</dd></div>
+          <div><dt>TL-4 and above</dt><dd>Separate grant required</dd></div>
+          <div><dt>Withheld body</dt><dd>Not present in site</dd></div>
+        </dl>
+      </section>
+    </aside>
+  </div>
+</PortalLayout>

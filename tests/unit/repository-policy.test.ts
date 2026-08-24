@@ -100,9 +100,12 @@ jobs:
         'check',
         'test:unit',
         'test:e2e',
+        'record-desk',
+        'record-desk:validate',
         'validate:repo',
         'validate:assets',
         'validate:content',
+        'validate:submissions',
         'validate:dist',
         'validate:site',
         'prepare:deploy',
@@ -114,7 +117,7 @@ jobs:
     requiredScripts.preview = 'node scripts/run-astro.mjs preview';
     requiredScripts.sync = 'node scripts/run-astro.mjs sync';
     requiredScripts['cf:build'] =
-      'npm run build && npm run prepare:deploy && npm run validate:dist && npm run validate:site';
+      'npm run record-desk:validate && npm run validate:submissions && npm run build && npm run prepare:deploy && npm run validate:dist && npm run validate:site';
     requiredScripts['cf:deploy'] = 'node scripts/deploy-site.mjs';
     requiredScripts['cf:install'] = 'node scripts/install-locked.mjs';
     expect(

@@ -1,0 +1,183 @@
+---
+import BrandMark from '../components/BrandMark.astro';
+import '../styles/global.css';
+import '../styles/portal.css';
+
+interface Props {
+  title: string;
+  description: string;
+  active?: 'home' | 'authorizations' | 'forms' | 'help';
+}
+
+const { title, description, active } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://trinitylaboratories.org');
+const fullTitle = `${title} | TIRN Staff Services`;
+const navItems = [
+  { id: 'home', href: '/portal/', label: 'Staff home' },
+  { id: 'authorizations', href: '/portal/authorizations/', label: 'Authorizations' },
+  { id: 'forms', href: '/portal/forms/', label: 'Forms' },
+  { id: 'help', href: '/portal/help/', label: 'Help' },
+] as const;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/media/brand/trinity-icon.png" />
+    <meta name="theme-color" content="#10243b" />
+    <title>{fullTitle}</title>
+    <script is:inline>
+      document.documentElement.dataset.jsEnabled = '';
+    </script>
+  </head>
+  <body class="portal-page" data-portal-session="initializing">
+    <a class="skip-link" href="#portal-main">Skip to staff content</a>
+
+    <header class="portal-header">
+      <div class="portal-header__utility">
+        <span>Trinity Institutional Records Network</span>
+        <span>Condition <strong>WHITE</strong> · Staff services node</span>
+      </div>
+      <div class="portal-header__identity">
+        <div class="portal-header__brand">
+          <BrandMark compact />
+          <span>Staff Services</span>
+        </div>
+        <div class="portal-header__session" aria-live="polite">
+          <span>Session</span>
+          <strong data-portal-session-state data-session-state>Checking local session</strong>
+        </div>
+      </div>
+      <nav class="portal-nav" aria-label="Staff services">
+        <div class="portal-nav__links">
+          {
+            navItems.map((item) => (
+              <a href={item.href} aria-current={active === item.id ? 'page' : undefined}>
+                {item.label}
+              </a>
+            ))
+          }
+          <a href="/records/">Records network</a>
+        </div>
+        <div class="portal-nav__session-actions">
+          <button type="button" data-revoke-grant hidden>Relinquish TL-3</button>
+          <button type="button" data-terminate-session data-session-terminate
+            >Terminate session</button
+          >
+        </div>
+      </nav>
+    </header>
+
+    <aside class="portal-session-warning" data-session-warning hidden>
+      <strong>Unverified session.</strong>{' '}
+      Released resources remain available. <a href="/employee-access/">Return to Employee Access</a
+      >{' '}
+      to establish the base TL-2 staff session.
+    </aside>
+
+    <main id="portal-main" class="portal-main" data-pagefind-ignore><slot /></main>
+
+    <footer class="portal-footer">
+      <span>TIRN · Staff Services</span>
+      <span>Information eligibility and physical authority are evaluated independently.</span>
+      <a href="/portal/help/">Access help</a>
+    </footer>
+
+    <script>
+      import {
+        formatGrantRemaining,
+        parseElevatedGrant,
+        resolveTirnAccess,
+        TIRN_ACCESS_CHANGE_EVENT,
+        TIRN_GRANT_STORAGE_KEY,
+        TIRN_SESSION_STORAGE_KEY,
+      } from '../lib/tirn-access';
+
+      const sessionState = document.querySelector<HTMLElement>('[data-portal-session-state]');
+      const warning = document.querySelector<HTMLElement>('[data-session-warning]');
+      const terminate = document.querySelector<HTMLButtonElement>('[data-terminate-session]');
+      const revoke = document.querySelector<HTMLButtonElement>('[data-revoke-grant]');
+
+      const readStoredValue = (key: string) => {
+        try {
+          return sessionStorage.getItem(key);
+        } catch {
+          return null;
+        }
+      };
+
+      const removeStoredValue = (key: string) => {
+        try {
+          sessionStorage.removeItem(key);
+        } catch {
+          // Storage is only used for the current theatrical session state.
+        }
+      };
+
+      const refreshPortalChrome = () => {
+        const now = Date.now();
+        const storedGrant = readStoredValue(TIRN_GRANT_STORAGE_KEY);
+        const grant = parseElevatedGrant(storedGrant, now);
+        if (storedGrant && !grant) removeStoredValue(TIRN_GRANT_STORAGE_KEY);
+
+        const state = resolveTirnAccess(
+          readStoredValue(TIRN_SESSION_STORAGE_KEY),
+          grant ? storedGrant : null,
+          now,
+        );
+        document.body.dataset.portalSession = state.session;
+        if (warning) warning.hidden = state.session === 'staff';
+        if (revoke) revoke.hidden = !state.grant;
+
+        if (sessionState) {
+          sessionState.textContent = state.grant
+            ? `Staff / ${state.grant.level} temporary · ${formatGrantRemaining(state.grant.expiresAt, now)}`
+            : state.session === 'staff'
+              ? 'Staff / TL-2 base'
+              : 'Guest / released access';
+        }
+        document.querySelectorAll<HTMLElement>('[data-portal-summary-session]').forEach((node) => {
+          node.textContent =
+            state.session === 'staff' ? 'Staff session accepted' : 'Guest / unverified';
+        });
+        document.querySelectorAll<HTMLElement>('[data-portal-base-level]').forEach((node) => {
+          node.textContent = state.baseLevel;
+        });
+        document.querySelectorAll<HTMLElement>('[data-portal-current-level]').forEach((node) => {
+          node.textContent = state.effectiveLevel;
+        });
+        document.querySelectorAll<HTMLElement>('[data-portal-grant-summary]').forEach((node) => {
+          node.textContent = state.grant
+            ? `${state.grant.level} / ${state.grant.scope} / ${formatGrantRemaining(state.grant.expiresAt, now)}`
+            : 'None';
+        });
+      };
+
+      const announceAccessChange = () => {
+        window.dispatchEvent(new CustomEvent(TIRN_ACCESS_CHANGE_EVENT));
+        refreshPortalChrome();
+      };
+
+      terminate?.addEventListener('click', () => {
+        removeStoredValue(TIRN_GRANT_STORAGE_KEY);
+        removeStoredValue(TIRN_SESSION_STORAGE_KEY);
+        announceAccessChange();
+        warning?.querySelector<HTMLAnchorElement>('a')?.focus();
+      });
+
+      revoke?.addEventListener('click', () => {
+        removeStoredValue(TIRN_GRANT_STORAGE_KEY);
+        announceAccessChange();
+      });
+
+      window.addEventListener(TIRN_ACCESS_CHANGE_EVENT, refreshPortalChrome);
+      refreshPortalChrome();
+      window.setInterval(refreshPortalChrome, 1000);
+    </script>
+  </body>
+</html>

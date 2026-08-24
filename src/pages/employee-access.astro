@@ -4,16 +4,16 @@ import CorporateLayout from '../layouts/CorporateLayout.astro';
 
 <CorporateLayout
   title="Employee Access"
-  description="Trinity Institutional Records Network access terminal."
+  description="Trinity Laboratories staff systems access terminal."
   class="access-page"
 >
   <section class="access-shell">
     <div class="access-shell__identity">
       <p class="eyebrow">Institutional systems</p>
-      <h1>TIRN</h1>
-      <p>Trinity Institutional Records Network</p>
+      <h1>STAFF</h1>
+      <p>Trinity Laboratories Institutional Systems</p>
       <dl>
-        <div><dt>Node</dt><dd>Records Gateway</dd></div>
+        <div><dt>Node</dt><dd>Employee Services Gateway</dd></div>
         <div><dt>Condition</dt><dd>WHITE</dd></div>
         <div><dt>Interface</dt><dd>Available</dd></div>
       </dl>
@@ -145,8 +145,8 @@ import CorporateLayout from '../layouts/CorporateLayout.astro';
     } catch {
       // Storage is only a cosmetic session indicator; records remain public.
     }
-    if (status) status.textContent = 'SESSION ACCEPTED. OPENING RECORDS GATEWAY.';
-    window.setTimeout(() => window.location.assign('/records/'), 180);
+    if (status) status.textContent = 'SESSION ACCEPTED. OPENING STAFF SERVICES.';
+    window.setTimeout(() => window.location.assign('/portal/'), 180);
   });
 </script>
 

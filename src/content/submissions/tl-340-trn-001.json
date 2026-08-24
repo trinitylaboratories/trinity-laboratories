@@ -1,0 +1,48 @@
+{
+  "recordId": "TL-340-TRN-001",
+  "formId": "TL-340",
+  "title": "Access-Control Training Assessment",
+  "recordType": "completed-report",
+  "recordFamily": "research",
+  "status": "active",
+  "revision": "1.0",
+  "effectiveDate": "2026-08-24",
+  "controllingOffice": "Information Security & Records Division",
+  "publicationState": "controlled",
+  "information": {
+    "level": "TL-3"
+  },
+  "facilityCondition": "WHITE",
+  "tags": ["training", "access-control", "records-handling", "tl-340"],
+  "summary": "A neutral training record used to verify controlled-record handling and section-level disclosure behavior.",
+  "relatedRecords": ["TL-340", "TL-SEC-04", "TL-SEC-001"],
+  "sections": [
+    {
+      "id": "exercise-scope",
+      "title": "Exercise scope",
+      "summary": "Approved context for the training record.",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "This record describes a records-handling exercise only. It does not represent a person, facility, client, incident, research subject, or live operation."
+    },
+    {
+      "id": "evaluation-criteria",
+      "title": "Evaluation criteria",
+      "summary": "Controlled training guidance available to an authorized session.",
+      "disclosure": {
+        "mode": "authorize",
+        "requiredLevel": "TL-3"
+      },
+      "body": "The exercise is complete when the operator distinguishes information classification from physical access authority, verifies need-to-know before disclosure, and terminates the elevated session after review."
+    },
+    {
+      "id": "review-annotation",
+      "title": "Review annotation",
+      "summary": "The annotation is intentionally omitted from the published artifact.",
+      "disclosure": {
+        "mode": "withheld"
+      }
+    }
+  ]
+}

@@ -1,0 +1,3077 @@
+{
+  "schemaVersion": 1,
+  "templates": [
+    {
+      "templateId": "TL-101",
+      "title": "Routine Research & Technical Activity Record",
+      "family": "research",
+      "informationLevel": "TL-1",
+      "legacy": {
+        "level": "I",
+        "label": "GENERAL"
+      },
+      "sourcePath": "src/content/docs/records/forms/tl-101.md",
+      "sections": [
+        {
+          "id": "record-identification",
+          "title": "RECORD IDENTIFICATION",
+          "fields": [
+            {
+              "id": "project-study-title",
+              "label": "Project / Study Title",
+              "kind": "text"
+            },
+            {
+              "id": "department-unit",
+              "label": "Department / Unit",
+              "kind": "text"
+            },
+            {
+              "id": "principal-researcher",
+              "label": "Principal Researcher",
+              "kind": "text"
+            },
+            {
+              "id": "supporting-personnel",
+              "label": "Supporting Personnel",
+              "kind": "text"
+            },
+            {
+              "id": "facility-room",
+              "label": "Facility / Room",
+              "kind": "text"
+            },
+            {
+              "id": "date-opened",
+              "label": "Date Opened",
+              "kind": "text"
+            },
+            {
+              "id": "target-completion",
+              "label": "Target Completion",
+              "kind": "text"
+            },
+            {
+              "id": "related-work-order-file-no",
+              "label": "Related Work Order / File No.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "purpose-scope",
+          "title": "PURPOSE & SCOPE",
+          "fields": [
+            {
+              "id": "research-question-objective",
+              "label": "Research Question / Objective",
+              "kind": "text"
+            },
+            {
+              "id": "expected-practical-use",
+              "label": "Expected Practical Use",
+              "kind": "text"
+            },
+            {
+              "id": "prior-work-referenced",
+              "label": "Prior Work Referenced",
+              "kind": "text"
+            },
+            {
+              "id": "normal-operating-assumptions",
+              "label": "Normal Operating Assumptions",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "materials-equipment",
+          "title": "MATERIALS & EQUIPMENT",
+          "fields": [
+            {
+              "id": "equipment-asset-ids",
+              "label": "Equipment / Asset IDs",
+              "kind": "text"
+            },
+            {
+              "id": "samples-materials",
+              "label": "Samples / Materials",
+              "kind": "text"
+            },
+            {
+              "id": "calibration-control-standard",
+              "label": "Calibration / Control Standard",
+              "kind": "text"
+            },
+            {
+              "id": "required-ppe-safety-controls",
+              "label": "Required PPE / Safety Controls",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "procedure-results",
+          "title": "PROCEDURE & RESULTS",
+          "fields": [
+            {
+              "id": "procedure-method-no",
+              "label": "Procedure / Method No.",
+              "kind": "text"
+            },
+            {
+              "id": "control-baseline",
+              "label": "Control / Baseline",
+              "kind": "text"
+            },
+            {
+              "id": "measurement-interval",
+              "label": "Measurement Interval",
+              "kind": "text"
+            },
+            {
+              "id": "deviation-from-method",
+              "label": "Deviation From Method",
+              "kind": "text"
+            },
+            {
+              "id": "result-summary",
+              "label": "Result Summary",
+              "kind": "text"
+            },
+            {
+              "id": "disposition",
+              "label": "Disposition",
+              "kind": "choice",
+              "options": ["Continue", "Repeat", "Archive", "Refer"]
+            },
+            {
+              "id": "observations-technician-notes",
+              "label": "Observations / Technician Notes",
+              "kind": "longtext",
+              "rows": 5
+            },
+            {
+              "id": "researcher-reviewer-signatures-dates",
+              "label": "Researcher / Reviewer Signatures & Dates",
+              "kind": "longtext",
+              "rows": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "templateId": "TL-220",
+      "title": "Controlled Experimental Study Record",
+      "family": "research",
+      "informationLevel": "TL-2",
+      "legacy": {
+        "level": "II",
+        "label": "CONTROLLED"
+      },
+      "sourcePath": "src/content/docs/records/forms/tl-220.md",
+      "sections": [
+        {
+          "id": "administrative-control",
+          "title": "ADMINISTRATIVE CONTROL",
+          "fields": [
+            {
+              "id": "project-code",
+              "label": "Project Code",
+              "kind": "text"
+            },
+            {
+              "id": "study-title",
+              "label": "Study Title",
+              "kind": "text"
+            },
+            {
+              "id": "sponsoring-division",
+              "label": "Sponsoring Division",
+              "kind": "text"
+            },
+            {
+              "id": "principal-investigator",
+              "label": "Principal Investigator",
+              "kind": "text"
+            },
+            {
+              "id": "authorized-personnel-roster-ref",
+              "label": "Authorized Personnel Roster Ref.",
+              "kind": "text"
+            },
+            {
+              "id": "laboratory-bay",
+              "label": "Laboratory / Bay",
+              "kind": "text"
+            },
+            {
+              "id": "start-date-time",
+              "label": "Start Date / Time",
+              "kind": "text"
+            },
+            {
+              "id": "shift-supervisor",
+              "label": "Shift Supervisor",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "experimental-basis",
+          "title": "EXPERIMENTAL BASIS",
+          "fields": [
+            {
+              "id": "hypothesis",
+              "label": "Hypothesis",
+              "kind": "text"
+            },
+            {
+              "id": "control-condition",
+              "label": "Control Condition",
+              "kind": "text"
+            },
+            {
+              "id": "test-condition-s",
+              "label": "Test Condition(s)",
+              "kind": "text"
+            },
+            {
+              "id": "acceptance-failure-criteria",
+              "label": "Acceptance / Failure Criteria",
+              "kind": "text"
+            },
+            {
+              "id": "known-hazards",
+              "label": "Known Hazards",
+              "kind": "text"
+            },
+            {
+              "id": "containment-isolation-required",
+              "label": "Containment / Isolation Required",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "specimen-accountability",
+          "title": "SPECIMEN ACCOUNTABILITY",
+          "fields": [
+            {
+              "id": "specimen-article-id",
+              "label": "Specimen / Article ID",
+              "kind": "text"
+            },
+            {
+              "id": "source-custodian",
+              "label": "Source / Custodian",
+              "kind": "text"
+            },
+            {
+              "id": "quantity-received",
+              "label": "Quantity Received",
+              "kind": "text"
+            },
+            {
+              "id": "seal-container-condition",
+              "label": "Seal / Container Condition",
+              "kind": "text"
+            },
+            {
+              "id": "chain-of-custody-ref",
+              "label": "Chain-of-Custody Ref.",
+              "kind": "text"
+            },
+            {
+              "id": "return-destruction-requirement",
+              "label": "Return / Destruction Requirement",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "instrumentation-incident-control",
+          "title": "INSTRUMENTATION & INCIDENT CONTROL",
+          "fields": [
+            {
+              "id": "instrumentation-serial-nos",
+              "label": "Instrumentation / Serial Nos.",
+              "kind": "text"
+            },
+            {
+              "id": "calibration-verified",
+              "label": "Calibration Verified",
+              "kind": "choice",
+              "options": ["Yes", "No"]
+            },
+            {
+              "id": "environmental-conditions",
+              "label": "Environmental Conditions",
+              "kind": "text"
+            },
+            {
+              "id": "recording-systems",
+              "label": "Recording Systems",
+              "kind": "choice",
+              "options": ["Video", "Audio", "Telemetry", "Manual"]
+            },
+            {
+              "id": "unexpected-response",
+              "label": "Unexpected Response",
+              "kind": "choice",
+              "options": ["No", "Yes"]
+            },
+            {
+              "id": "escalation-recommended",
+              "label": "Escalation Recommended",
+              "kind": "choice",
+              "options": ["No", "Level III review"]
+            },
+            {
+              "id": "chronological-observation-log",
+              "label": "Chronological Observation Log",
+              "kind": "longtext",
+              "rows": 6
+            },
+            {
+              "id": "investigator-supervisor-approval",
+              "label": "Investigator / Supervisor Approval",
+              "kind": "longtext",
+              "rows": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "templateId": "TL-340",
+      "title": "Restricted Phenomena Assessment Record",
+      "family": "research",
+      "informationLevel": "TL-3",
+      "legacy": {
+        "level": "III",
+        "label": "RESTRICTED"
+      },
+      "sourcePath": "src/content/docs/records/forms/tl-340.md",
+      "sections": [
+        {
+          "id": "case-intake",
+          "title": "CASE INTAKE",
+          "fields": [
+            {
+              "id": "phenomenon-case-designator",
+              "label": "Phenomenon / Case Designator",
+              "kind": "text"
+            },
+            {
+              "id": "originating-report-no",
+              "label": "Originating Report No.",
+              "kind": "text"
+            },
+            {
+              "id": "date-time-first-verified",
+              "label": "Date / Time First Verified",
+              "kind": "text"
+            },
+            {
+              "id": "location",
+              "label": "Location",
+              "kind": "text"
+            },
+            {
+              "id": "reporting-source-class",
+              "label": "Reporting Source Class",
+              "kind": "text"
+            },
+            {
+              "id": "assigned-case-lead",
+              "label": "Assigned Case Lead",
+              "kind": "text"
+            },
+            {
+              "id": "initial-credibility",
+              "label": "Initial Credibility",
+              "kind": "choice",
+              "options": ["Unverified", "Probable", "Confirmed"]
+            },
+            {
+              "id": "external-exposure",
+              "label": "External Exposure",
+              "kind": "choice",
+              "options": ["None", "Limited", "Significant"]
+            }
+          ]
+        },
+        {
+          "id": "observed-properties",
+          "title": "OBSERVED PROPERTIES",
+          "fields": [
+            {
+              "id": "physical-description",
+              "label": "Physical Description",
+              "kind": "text"
+            },
+            {
+              "id": "apparent-mechanism",
+              "label": "Apparent Mechanism",
+              "kind": "text"
+            },
+            {
+              "id": "measured-emission-energy",
+              "label": "Measured Emission / Energy",
+              "kind": "text"
+            },
+            {
+              "id": "behavioral-pattern",
+              "label": "Behavioral Pattern",
+              "kind": "text"
+            },
+            {
+              "id": "trigger-activation-condition",
+              "label": "Trigger / Activation Condition",
+              "kind": "text"
+            },
+            {
+              "id": "termination-condition",
+              "label": "Termination Condition",
+              "kind": "text"
+            },
+            {
+              "id": "known-science-fit",
+              "label": "Known-Science Fit",
+              "kind": "choice",
+              "options": ["Consistent", "Partial", "No adequate model"]
+            }
+          ]
+        },
+        {
+          "id": "containment-exposure",
+          "title": "CONTAINMENT & EXPOSURE",
+          "fields": [
+            {
+              "id": "current-containment-method",
+              "label": "Current Containment Method",
+              "kind": "text"
+            },
+            {
+              "id": "integrity",
+              "label": "Integrity",
+              "kind": "choice",
+              "options": ["Stable", "Degraded", "Unknown"]
+            },
+            {
+              "id": "minimum-safe-distance",
+              "label": "Minimum Safe Distance",
+              "kind": "text"
+            },
+            {
+              "id": "personnel-exposure-limit",
+              "label": "Personnel Exposure Limit",
+              "kind": "text"
+            },
+            {
+              "id": "recovery-transport-method",
+              "label": "Recovery / Transport Method",
+              "kind": "text"
+            },
+            {
+              "id": "human-effects",
+              "label": "Human Effects",
+              "kind": "text"
+            },
+            {
+              "id": "cognitive-perceptual-effects",
+              "label": "Cognitive / Perceptual Effects",
+              "kind": "text"
+            },
+            {
+              "id": "post-exposure-interview",
+              "label": "Post-Exposure Interview",
+              "kind": "choice",
+              "options": ["No", "Yes"]
+            }
+          ]
+        },
+        {
+          "id": "classification-review",
+          "title": "CLASSIFICATION REVIEW",
+          "fields": [
+            {
+              "id": "conventional-explanation-exhausted",
+              "label": "Conventional Explanation Exhausted",
+              "kind": "choice",
+              "options": ["No", "Yes"]
+            },
+            {
+              "id": "evidence-replicated",
+              "label": "Evidence Replicated",
+              "kind": "choice",
+              "options": ["No", "Partial", "Yes"]
+            },
+            {
+              "id": "recommended-status",
+              "label": "Recommended Status",
+              "kind": "choice",
+              "options": ["Close", "Monitor", "Contain", "Escalate"]
+            },
+            {
+              "id": "public-explanation-cover-category",
+              "label": "Public Explanation / Cover Category",
+              "kind": "text"
+            },
+            {
+              "id": "next-review-date",
+              "label": "Next Review Date",
+              "kind": "text"
+            },
+            {
+              "id": "detailed-observation-event-sequence",
+              "label": "Detailed Observation / Event Sequence",
+              "kind": "longtext",
+              "rows": 7
+            },
+            {
+              "id": "case-lead-security-division-approval",
+              "label": "Case Lead / Security / Division Approval",
+              "kind": "longtext",
+              "rows": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "templateId": "TL-470",
+      "title": "Special Access Anomalous Research Protocol",
+      "family": "research",
+      "informationLevel": "TL-4",
+      "legacy": {
+        "level": "IV",
+        "label": "SPECIAL ACCESS"
+      },
+      "sourcePath": "src/content/docs/records/forms/tl-470.md",
+      "sections": [
+        {
+          "id": "compartment-control",
+          "title": "COMPARTMENT CONTROL",
+          "fields": [
+            {
+              "id": "program-compartment",
+              "label": "Program / Compartment",
+              "kind": "text"
+            },
+            {
+              "id": "anomaly-designation",
+              "label": "Anomaly Designation",
+              "kind": "text"
+            },
+            {
+              "id": "case-controller",
+              "label": "Case Controller",
+              "kind": "text"
+            },
+            {
+              "id": "authorized-team-codes",
+              "label": "Authorized Team Codes",
+              "kind": "text"
+            },
+            {
+              "id": "document-copy-no",
+              "label": "Document Copy No.",
+              "kind": "text"
+            },
+            {
+              "id": "secure-storage-location",
+              "label": "Secure Storage Location",
+              "kind": "text"
+            },
+            {
+              "id": "two-person-rule",
+              "label": "Two-Person Rule",
+              "kind": "choice",
+              "options": ["No", "Yes"]
+            }
+          ]
+        },
+        {
+          "id": "anomalous-baseline",
+          "title": "ANOMALOUS BASELINE",
+          "fields": [
+            {
+              "id": "baseline-reality-control-description",
+              "label": "Baseline Reality / Control Description",
+              "kind": "text"
+            },
+            {
+              "id": "first-known-divergence",
+              "label": "First Known Divergence",
+              "kind": "text"
+            },
+            {
+              "id": "persistence",
+              "label": "Persistence",
+              "kind": "choice",
+              "options": ["Transient", "Cyclic", "Continuous", "Unknown"]
+            },
+            {
+              "id": "spatial-boundary",
+              "label": "Spatial Boundary",
+              "kind": "text"
+            },
+            {
+              "id": "temporal-boundary",
+              "label": "Temporal Boundary",
+              "kind": "text"
+            },
+            {
+              "id": "observer-dependence",
+              "label": "Observer Dependence",
+              "kind": "choice",
+              "options": ["None", "Suspected", "Confirmed"]
+            },
+            {
+              "id": "instrumentation-agreement",
+              "label": "Instrumentation Agreement",
+              "kind": "choice",
+              "options": ["Full", "Partial", "Conflicting"]
+            }
+          ]
+        },
+        {
+          "id": "interaction-protocol",
+          "title": "INTERACTION PROTOCOL",
+          "fields": [
+            {
+              "id": "permitted-contact-stimulus",
+              "label": "Permitted Contact / Stimulus",
+              "kind": "text"
+            },
+            {
+              "id": "prohibited-contact-stimulus",
+              "label": "Prohibited Contact / Stimulus",
+              "kind": "text"
+            },
+            {
+              "id": "maximum-exposure-window",
+              "label": "Maximum Exposure Window",
+              "kind": "text"
+            },
+            {
+              "id": "abort-conditions",
+              "label": "Abort Conditions",
+              "kind": "text"
+            },
+            {
+              "id": "remote-isolation-method",
+              "label": "Remote Isolation Method",
+              "kind": "text"
+            },
+            {
+              "id": "recovery-team-standby",
+              "label": "Recovery Team Standby",
+              "kind": "choice",
+              "options": ["No", "Yes"]
+            },
+            {
+              "id": "recall-phrase-verification-question",
+              "label": "Recall Phrase / Verification Question",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "irregular-event-metrics",
+          "title": "IRREGULAR EVENT METRICS",
+          "fields": [
+            {
+              "id": "uncommanded-change",
+              "label": "Uncommanded Change",
+              "kind": "text"
+            },
+            {
+              "id": "mass-volume-discrepancy",
+              "label": "Mass / Volume Discrepancy",
+              "kind": "text"
+            },
+            {
+              "id": "clock-timestamp-disagreement",
+              "label": "Clock / Timestamp Disagreement",
+              "kind": "text"
+            },
+            {
+              "id": "recording-discontinuity",
+              "label": "Recording Discontinuity",
+              "kind": "text"
+            },
+            {
+              "id": "personnel-memory-disagreement",
+              "label": "Personnel Memory Disagreement",
+              "kind": "text"
+            },
+            {
+              "id": "duplicate-missing-object-count",
+              "label": "Duplicate / Missing Object Count",
+              "kind": "text"
+            },
+            {
+              "id": "language-symbol-emergence",
+              "label": "Language / Symbol Emergence",
+              "kind": "text"
+            },
+            {
+              "id": "causal-sequence-violation",
+              "label": "Causal Sequence Violation",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "post-test-reconciliation",
+          "title": "POST-TEST RECONCILIATION",
+          "fields": [
+            {
+              "id": "all-personnel-accounted-for",
+              "label": "All Personnel Accounted For",
+              "kind": "choice",
+              "options": ["Yes", "No"]
+            },
+            {
+              "id": "all-articles-accounted-for",
+              "label": "All Articles Accounted For",
+              "kind": "choice",
+              "options": ["Yes", "No"]
+            },
+            {
+              "id": "timeline-reconciled",
+              "label": "Timeline Reconciled",
+              "kind": "choice",
+              "options": ["Yes", "No", "Impossible"]
+            },
+            {
+              "id": "exposure-interviews-complete",
+              "label": "Exposure Interviews Complete",
+              "kind": "choice",
+              "options": ["Yes", "No"]
+            },
+            {
+              "id": "escalation",
+              "label": "Escalation",
+              "kind": "choice",
+              "options": ["Maintain IV", "Suspend", "Level V referral"]
+            },
+            {
+              "id": "minute-by-minute-event-record",
+              "label": "Minute-by-Minute Event Record",
+              "kind": "longtext",
+              "rows": 8
+            },
+            {
+              "id": "witness-disagreement-impossible-observation-notes",
+              "label": "Witness Disagreement / Impossible Observation Notes",
+              "kind": "longtext",
+              "rows": 4
+            },
+            {
+              "id": "controller-security-custodian-director-authorization",
+              "label": "Controller / Security Custodian / Director Authorization",
+              "kind": "longtext",
+              "rows": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "templateId": "TL-590",
+      "title": "Directorate Exception & Nonstandard Reality Event Record",
+      "family": "research",
+      "informationLevel": "TL-5",
+      "legacy": {
+        "level": "V",
+        "label": "DIRECTORATE EYES ONLY"
+      },
+      "sourcePath": "src/content/docs/records/forms/tl-590.md",
+      "sections": [
+        {
+          "id": "directorate-authorization",
+          "title": "DIRECTORATE AUTHORIZATION",
+          "fields": [
+            {
+              "id": "event-asset-designation",
+              "label": "Event / Asset Designation",
+              "kind": "text"
+            },
+            {
+              "id": "directorate-file-no",
+              "label": "Directorate File No.",
+              "kind": "text"
+            },
+            {
+              "id": "authorizing-director",
+              "label": "Authorizing Director",
+              "kind": "text"
+            },
+            {
+              "id": "primary-custodian",
+              "label": "Primary Custodian",
+              "kind": "text"
+            },
+            {
+              "id": "authorized-readers",
+              "label": "Authorized Readers",
+              "kind": "text"
+            },
+            {
+              "id": "copy-page-control-no",
+              "label": "Copy / Page Control No.",
+              "kind": "text"
+            },
+            {
+              "id": "opened-date-time",
+              "label": "Opened Date / Time",
+              "kind": "text"
+            },
+            {
+              "id": "mandatory-return-date-time",
+              "label": "Mandatory Return Date / Time",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "reason-for-exception-handling",
+          "title": "REASON FOR EXCEPTION HANDLING",
+          "fields": [
+            {
+              "id": "normal-classification-inadequate-because",
+              "label": "Normal Classification Inadequate Because",
+              "kind": "text"
+            },
+            {
+              "id": "information-hazard-suspected",
+              "label": "Information Hazard Suspected",
+              "kind": "choice",
+              "options": ["No", "Yes", "Unknown"]
+            },
+            {
+              "id": "knowledge-alters-event",
+              "label": "Knowledge Alters Event",
+              "kind": "choice",
+              "options": ["No", "Suspected", "Confirmed"]
+            },
+            {
+              "id": "record-exhibits-irregularity",
+              "label": "Record Exhibits Irregularity",
+              "kind": "choice",
+              "options": ["No", "Yes"]
+            },
+            {
+              "id": "external-disclosure-consequence",
+              "label": "External Disclosure Consequence",
+              "kind": "text"
+            },
+            {
+              "id": "personnel-excluded-from-briefing",
+              "label": "Personnel Excluded From Briefing",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "reality-identity-integrity",
+          "title": "REALITY / IDENTITY INTEGRITY",
+          "fields": [
+            {
+              "id": "pre-exposure-identity-verification",
+              "label": "Pre-Exposure Identity Verification",
+              "kind": "text"
+            },
+            {
+              "id": "post-exposure-identity-verification",
+              "label": "Post-Exposure Identity Verification",
+              "kind": "text"
+            },
+            {
+              "id": "biometric-physical-match",
+              "label": "Biometric / Physical Match",
+              "kind": "choice",
+              "options": ["Match", "Variance", "Not reliable"]
+            },
+            {
+              "id": "personal-history-continuity",
+              "label": "Personal History Continuity",
+              "kind": "choice",
+              "options": ["Intact", "Disputed", "Incomplete"]
+            },
+            {
+              "id": "number-of-personnel-entering",
+              "label": "Number of Personnel Entering",
+              "kind": "text"
+            },
+            {
+              "id": "number-of-personnel-exiting",
+              "label": "Number of Personnel Exiting",
+              "kind": "text"
+            },
+            {
+              "id": "unrecognized-personnel-present",
+              "label": "Unrecognized Personnel Present",
+              "kind": "choice",
+              "options": ["No", "Yes"]
+            },
+            {
+              "id": "names-records-changed-during-event",
+              "label": "Names / Records Changed During Event",
+              "kind": "choice",
+              "options": ["No", "Yes"]
+            }
+          ]
+        },
+        {
+          "id": "record-reliability",
+          "title": "RECORD RELIABILITY",
+          "fields": [
+            {
+              "id": "independent-record-sets",
+              "label": "Independent Record Sets",
+              "kind": "text"
+            },
+            {
+              "id": "records-agree",
+              "label": "Records Agree",
+              "kind": "choice",
+              "options": ["Yes", "Partially", "No"]
+            },
+            {
+              "id": "missing-time-interval",
+              "label": "Missing Time Interval",
+              "kind": "text"
+            },
+            {
+              "id": "future-dated-pre-event-data",
+              "label": "Future-Dated / Pre-Event Data",
+              "kind": "text"
+            },
+            {
+              "id": "unrecordable-observation",
+              "label": "Unrecordable Observation",
+              "kind": "text"
+            },
+            {
+              "id": "do-not-reproduce-field-image-phrase",
+              "label": "Do Not Reproduce Field / Image / Phrase",
+              "kind": "text"
+            },
+            {
+              "id": "safe-summary-permitted",
+              "label": "Safe Summary Permitted",
+              "kind": "choice",
+              "options": ["No", "Yes — attach Directorate wording"]
+            }
+          ]
+        },
+        {
+          "id": "termination-suppression",
+          "title": "TERMINATION & SUPPRESSION",
+          "fields": [
+            {
+              "id": "event-terminated",
+              "label": "Event Terminated",
+              "kind": "choice",
+              "options": ["No", "Yes", "Indeterminate"]
+            },
+            {
+              "id": "containment-state",
+              "label": "Containment State",
+              "kind": "choice",
+              "options": ["Stable", "Temporary", "Failed", "Not applicable"]
+            },
+            {
+              "id": "evidence-retained",
+              "label": "Evidence Retained",
+              "kind": "text"
+            },
+            {
+              "id": "evidence-destroyed-rendered-inert",
+              "label": "Evidence Destroyed / Rendered Inert",
+              "kind": "text"
+            },
+            {
+              "id": "external-records-recovered",
+              "label": "External Records Recovered",
+              "kind": "text"
+            },
+            {
+              "id": "follow-up-contact-prohibited-until",
+              "label": "Follow-Up Contact Prohibited Until",
+              "kind": "text"
+            },
+            {
+              "id": "final-directorate-disposition",
+              "label": "Final Directorate Disposition",
+              "kind": "choice",
+              "options": ["Archive", "Indefinite watch", "Seal", "No further record"]
+            },
+            {
+              "id": "primary-narrative-record-only-directly-verified-facts",
+              "label": "Primary Narrative — Record Only Directly Verified Facts",
+              "kind": "longtext",
+              "rows": 9
+            },
+            {
+              "id": "contradictions-that-must-remain-unresolved",
+              "label": "Contradictions That Must Remain Unresolved",
+              "kind": "longtext",
+              "rows": 5
+            },
+            {
+              "id": "custodian-witness-directorate-signatures",
+              "label": "Custodian / Witness / Directorate Signatures",
+              "kind": "longtext",
+              "rows": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "templateId": "TL-N310",
+      "title": "Emergency Condition Notice",
+      "family": "notice",
+      "informationLevel": "TL-3",
+      "legacy": {
+        "level": "III",
+        "label": "RESTRICTED"
+      },
+      "sourcePath": "src/content/docs/records/forms/tl-n310.md",
+      "sections": [
+        {
+          "id": "emergency-identification",
+          "title": "EMERGENCY IDENTIFICATION",
+          "fields": [
+            {
+              "id": "notice-no",
+              "label": "Notice No.",
+              "kind": "text"
+            },
+            {
+              "id": "facility-sector",
+              "label": "Facility / Sector",
+              "kind": "text"
+            },
+            {
+              "id": "condition-declared",
+              "label": "Condition Declared",
+              "kind": "text"
+            },
+            {
+              "id": "declared-date-time",
+              "label": "Declared Date / Time",
+              "kind": "text"
+            },
+            {
+              "id": "declaring-authority",
+              "label": "Declaring Authority",
+              "kind": "text"
+            },
+            {
+              "id": "incident-case-ref",
+              "label": "Incident / Case Ref.",
+              "kind": "text"
+            },
+            {
+              "id": "current-status",
+              "label": "Current Status",
+              "kind": "fixed",
+              "fixedValue": "Active / Stabilized / Recovery"
+            }
+          ]
+        },
+        {
+          "id": "immediate-instructions",
+          "title": "IMMEDIATE INSTRUCTIONS",
+          "fields": [
+            {
+              "id": "personnel-action",
+              "label": "Personnel Action",
+              "kind": "fixed",
+              "fixedValue": "Shelter / Evacuate / Hold Position / Report"
+            },
+            {
+              "id": "restricted-areas",
+              "label": "Restricted Areas",
+              "kind": "text"
+            },
+            {
+              "id": "assembly-accountability-point",
+              "label": "Assembly / Accountability Point",
+              "kind": "text"
+            },
+            {
+              "id": "protective-equipment",
+              "label": "Protective Equipment",
+              "kind": "text"
+            },
+            {
+              "id": "communications-channel-extension",
+              "label": "Communications Channel / Extension",
+              "kind": "text"
+            },
+            {
+              "id": "do-not-use-do-not-approach",
+              "label": "Do Not Use / Do Not Approach",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "hazard-information",
+          "title": "HAZARD INFORMATION",
+          "fields": [
+            {
+              "id": "known-hazard",
+              "label": "Known Hazard",
+              "kind": "text"
+            },
+            {
+              "id": "suspected-hazard",
+              "label": "Suspected Hazard",
+              "kind": "text"
+            },
+            {
+              "id": "observable-warning-signs",
+              "label": "Observable Warning Signs",
+              "kind": "text"
+            },
+            {
+              "id": "safe-distance-barrier",
+              "label": "Safe Distance / Barrier",
+              "kind": "text"
+            },
+            {
+              "id": "medical-decontamination-direction",
+              "label": "Medical / Decontamination Direction",
+              "kind": "text"
+            },
+            {
+              "id": "if-personnel-are-missing",
+              "label": "If Personnel Are Missing",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "termination",
+          "title": "TERMINATION",
+          "fields": [
+            {
+              "id": "all-clear-authority",
+              "label": "All-Clear Authority",
+              "kind": "text"
+            },
+            {
+              "id": "notice-removal-authorized-by",
+              "label": "Notice Removal Authorized By",
+              "kind": "text"
+            },
+            {
+              "id": "post-incident-report-ref",
+              "label": "Post-Incident Report Ref.",
+              "kind": "text"
+            },
+            {
+              "id": "final-time-cleared",
+              "label": "Final Time Cleared",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "updates-time-issuer-change",
+          "title": "UPDATES - TIME / ISSUER / CHANGE",
+          "fields": [
+            {
+              "id": "updates-time-issuer-change",
+              "label": "UPDATES - TIME / ISSUER / CHANGE",
+              "kind": "longtext",
+              "rows": 6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "templateId": "TL-N480",
+      "title": "Anomalous Emergency Action Notice",
+      "family": "notice",
+      "informationLevel": "TL-4",
+      "legacy": {
+        "level": "IV",
+        "label": "SPECIAL ACCESS"
+      },
+      "sourcePath": "src/content/docs/records/forms/tl-n480.md",
+      "sections": [
+        {
+          "id": "event-control",
+          "title": "EVENT CONTROL",
+          "fields": [
+            {
+              "id": "event-designation",
+              "label": "Event Designation",
+              "kind": "text"
+            },
+            {
+              "id": "affected-compartment",
+              "label": "Affected Compartment",
+              "kind": "text"
+            },
+            {
+              "id": "first-alarm-time",
+              "label": "First Alarm Time",
+              "kind": "text"
+            },
+            {
+              "id": "confirmed-by",
+              "label": "Confirmed By",
+              "kind": "text"
+            },
+            {
+              "id": "command-post",
+              "label": "Command Post",
+              "kind": "text"
+            },
+            {
+              "id": "current-containment-state",
+              "label": "Current Containment State",
+              "kind": "fixed",
+              "fixedValue": "Holding / Degraded / Failed / Unknown"
+            }
+          ]
+        },
+        {
+          "id": "personnel-instructions",
+          "title": "PERSONNEL INSTRUCTIONS",
+          "fields": [
+            {
+              "id": "primary-action",
+              "label": "Primary Action",
+              "kind": "fixed",
+              "fixedValue": "Withdraw / Seal area / Remain still / Avoid observation / Other"
+            },
+            {
+              "id": "do-not-acknowledge-respond-to",
+              "label": "Do Not Acknowledge / Respond To",
+              "kind": "text"
+            },
+            {
+              "id": "identity-verification-method",
+              "label": "Identity Verification Method",
+              "kind": "text"
+            },
+            {
+              "id": "approved-route",
+              "label": "Approved Route",
+              "kind": "text"
+            },
+            {
+              "id": "prohibited-route-door-lift",
+              "label": "Prohibited Route / Door / Lift",
+              "kind": "text"
+            },
+            {
+              "id": "buddy-two-person-rule",
+              "label": "Buddy / Two-Person Rule",
+              "kind": "fixed",
+              "fixedValue": "Mandatory / Suspended by command"
+            }
+          ]
+        },
+        {
+          "id": "irregular-conditions",
+          "title": "IRREGULAR CONDITIONS",
+          "fields": [
+            {
+              "id": "clock-time-disagreement",
+              "label": "Clock / Time Disagreement",
+              "kind": "fixed",
+              "fixedValue": "Ignore local clocks / Report"
+            },
+            {
+              "id": "unrecognized-voice-person",
+              "label": "Unrecognized Voice / Person",
+              "kind": "text"
+            },
+            {
+              "id": "duplicate-personnel-procedure",
+              "label": "Duplicate Personnel Procedure",
+              "kind": "text"
+            },
+            {
+              "id": "unexpected-room-corridor",
+              "label": "Unexpected Room / Corridor",
+              "kind": "text"
+            },
+            {
+              "id": "recording-failure-procedure",
+              "label": "Recording Failure Procedure",
+              "kind": "text"
+            },
+            {
+              "id": "if-instructions-conflict",
+              "label": "If Instructions Conflict",
+              "kind": "fixed",
+              "fixedValue": "Follow latest physically signed command-post order unless countermanded by Directorate authority."
+            }
+          ]
+        },
+        {
+          "id": "recovery-accountability",
+          "title": "RECOVERY & ACCOUNTABILITY",
+          "fields": [
+            {
+              "id": "expected-headcount",
+              "label": "Expected Headcount",
+              "kind": "text"
+            },
+            {
+              "id": "recovered-headcount",
+              "label": "Recovered Headcount",
+              "kind": "text"
+            },
+            {
+              "id": "unaccounted-personnel",
+              "label": "Unaccounted Personnel",
+              "kind": "text"
+            },
+            {
+              "id": "objects-samples-missing",
+              "label": "Objects / Samples Missing",
+              "kind": "text"
+            },
+            {
+              "id": "quarantine-location",
+              "label": "Quarantine Location",
+              "kind": "text"
+            },
+            {
+              "id": "all-clear-phrase-code",
+              "label": "All-Clear Phrase / Code",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "emergency-updates-record-exact-wording",
+          "title": "EMERGENCY UPDATES - RECORD EXACT WORDING",
+          "fields": [
+            {
+              "id": "emergency-updates-record-exact-wording",
+              "label": "EMERGENCY UPDATES - RECORD EXACT WORDING",
+              "kind": "longtext",
+              "rows": 7
+            }
+          ]
+        },
+        {
+          "id": "incident-commander-security-controller",
+          "title": "INCIDENT COMMANDER / SECURITY CONTROLLER",
+          "fields": [
+            {
+              "id": "incident-commander-security-controller",
+              "label": "INCIDENT COMMANDER / SECURITY CONTROLLER",
+              "kind": "longtext",
+              "rows": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "templateId": "TL-O205",
+      "title": "Temporary Operational Order",
+      "family": "operations",
+      "informationLevel": "TL-2",
+      "legacy": {
+        "level": "II",
+        "label": "CONTROLLED"
+      },
+      "sourcePath": "src/content/docs/records/forms/tl-o205.md",
+      "sections": [
+        {
+          "id": "order-control",
+          "title": "ORDER CONTROL",
+          "fields": [
+            {
+              "id": "order-no",
+              "label": "Order No.",
+              "kind": "text"
+            },
+            {
+              "id": "issuing-division",
+              "label": "Issuing Division",
+              "kind": "text"
+            },
+            {
+              "id": "effective-date-time",
+              "label": "Effective Date / Time",
+              "kind": "text"
+            },
+            {
+              "id": "expiration-date-time",
+              "label": "Expiration Date / Time",
+              "kind": "text"
+            },
+            {
+              "id": "issuing-authority",
+              "label": "Issuing Authority",
+              "kind": "text"
+            },
+            {
+              "id": "supersedes-modifies",
+              "label": "Supersedes / Modifies",
+              "kind": "text"
+            },
+            {
+              "id": "distribution",
+              "label": "Distribution",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "purpose",
+          "title": "PURPOSE",
+          "fields": [
+            {
+              "id": "operational-requirement",
+              "label": "Operational Requirement",
+              "kind": "text"
+            },
+            {
+              "id": "affected-project-facility",
+              "label": "Affected Project / Facility",
+              "kind": "text"
+            },
+            {
+              "id": "reason-temporary-action-is-required",
+              "label": "Reason Temporary Action Is Required",
+              "kind": "text"
+            },
+            {
+              "id": "desired-end-state",
+              "label": "Desired End State",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "directed-actions",
+          "title": "DIRECTED ACTIONS",
+          "fields": [
+            {
+              "id": "personnel-affected",
+              "label": "Personnel Affected",
+              "kind": "text"
+            },
+            {
+              "id": "areas-systems-affected",
+              "label": "Areas / Systems Affected",
+              "kind": "text"
+            },
+            {
+              "id": "required-action",
+              "label": "Required Action",
+              "kind": "text"
+            },
+            {
+              "id": "prohibited-action",
+              "label": "Prohibited Action",
+              "kind": "text"
+            },
+            {
+              "id": "reporting-interval",
+              "label": "Reporting Interval",
+              "kind": "text"
+            },
+            {
+              "id": "log-record-to-maintain",
+              "label": "Log / Record To Maintain",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "authority-termination",
+          "title": "AUTHORITY & TERMINATION",
+          "fields": [
+            {
+              "id": "exceptions-authorized-by",
+              "label": "Exceptions Authorized By",
+              "kind": "text"
+            },
+            {
+              "id": "automatic-termination-condition",
+              "label": "Automatic Termination Condition",
+              "kind": "text"
+            },
+            {
+              "id": "extension-requires",
+              "label": "Extension Requires",
+              "kind": "text"
+            },
+            {
+              "id": "closeout-report-due",
+              "label": "Closeout Report Due",
+              "kind": "text"
+            },
+            {
+              "id": "order-status",
+              "label": "Order Status",
+              "kind": "fixed",
+              "fixedValue": "Active / Extended / Cancelled / Completed"
+            }
+          ]
+        },
+        {
+          "id": "special-instructions-shift-notes",
+          "title": "SPECIAL INSTRUCTIONS / SHIFT NOTES",
+          "fields": [
+            {
+              "id": "special-instructions-shift-notes",
+              "label": "SPECIAL INSTRUCTIONS / SHIFT NOTES",
+              "kind": "longtext",
+              "rows": 5
+            }
+          ]
+        },
+        {
+          "id": "issuer-receiving-supervisor-acknowledgment",
+          "title": "ISSUER / RECEIVING SUPERVISOR ACKNOWLEDGMENT",
+          "fields": [
+            {
+              "id": "issuer-receiving-supervisor-acknowledgment",
+              "label": "ISSUER / RECEIVING SUPERVISOR ACKNOWLEDGMENT",
+              "kind": "longtext",
+              "rows": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "templateId": "TL-P110",
+      "title": "Personnel Research Assignment Record",
+      "family": "personnel",
+      "informationLevel": "TL-1",
+      "legacy": {
+        "level": "I",
+        "label": "GENERAL"
+      },
+      "sourcePath": "src/content/docs/records/forms/tl-p110.md",
+      "sections": [
+        {
+          "id": "employee-identification",
+          "title": "EMPLOYEE IDENTIFICATION",
+          "fields": [
+            {
+              "id": "employee-name",
+              "label": "Employee Name",
+              "kind": "text"
+            },
+            {
+              "id": "employee-badge-no",
+              "label": "Employee / Badge No.",
+              "kind": "text"
+            },
+            {
+              "id": "division-department",
+              "label": "Division / Department",
+              "kind": "text"
+            },
+            {
+              "id": "position-classification",
+              "label": "Position / Classification",
+              "kind": "text"
+            },
+            {
+              "id": "immediate-supervisor",
+              "label": "Immediate Supervisor",
+              "kind": "text"
+            },
+            {
+              "id": "primary-facility",
+              "label": "Primary Facility",
+              "kind": "text"
+            },
+            {
+              "id": "date-assigned",
+              "label": "Date Assigned",
+              "kind": "text"
+            },
+            {
+              "id": "expected-release-date",
+              "label": "Expected Release Date",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "research-assignment",
+          "title": "RESEARCH ASSIGNMENT",
+          "fields": [
+            {
+              "id": "project-work-order",
+              "label": "Project / Work Order",
+              "kind": "text"
+            },
+            {
+              "id": "assigned-function",
+              "label": "Assigned Function",
+              "kind": "text"
+            },
+            {
+              "id": "required-equipment-qualification",
+              "label": "Required Equipment Qualification",
+              "kind": "text"
+            },
+            {
+              "id": "required-safety-training",
+              "label": "Required Safety Training",
+              "kind": "text"
+            },
+            {
+              "id": "normal-work-hours-shift",
+              "label": "Normal Work Hours / Shift",
+              "kind": "text"
+            },
+            {
+              "id": "authorized-work-areas",
+              "label": "Authorized Work Areas",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "access-accountability",
+          "title": "ACCESS & ACCOUNTABILITY",
+          "fields": [
+            {
+              "id": "keys-credentials-issued",
+              "label": "Keys / Credentials Issued",
+              "kind": "text"
+            },
+            {
+              "id": "equipment-locker-assignment",
+              "label": "Equipment / Locker Assignment",
+              "kind": "text"
+            },
+            {
+              "id": "files-authorized",
+              "label": "Files Authorized",
+              "kind": "text"
+            },
+            {
+              "id": "escort-requirement",
+              "label": "Escort Requirement",
+              "kind": "fixed",
+              "fixedValue": "None / Required"
+            },
+            {
+              "id": "after-hours-access",
+              "label": "After-Hours Access",
+              "kind": "fixed",
+              "fixedValue": "No / Yes"
+            },
+            {
+              "id": "property-return-verified",
+              "label": "Property Return Verified",
+              "kind": "fixed",
+              "fixedValue": "Pending / Complete"
+            }
+          ]
+        },
+        {
+          "id": "supervisor-review",
+          "title": "SUPERVISOR REVIEW",
+          "fields": [
+            {
+              "id": "performance-conduct-notes",
+              "label": "Performance / Conduct Notes",
+              "kind": "text"
+            },
+            {
+              "id": "assignment-status",
+              "label": "Assignment Status",
+              "kind": "fixed",
+              "fixedValue": "Active / Extended / Reassigned / Closed"
+            },
+            {
+              "id": "final-supervisor",
+              "label": "Final Supervisor",
+              "kind": "text"
+            },
+            {
+              "id": "personnel-office-review",
+              "label": "Personnel Office Review",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "employee-acknowledgment-supervisor-signature-dates",
+          "title": "EMPLOYEE ACKNOWLEDGMENT / SUPERVISOR SIGNATURE / DATES",
+          "fields": [
+            {
+              "id": "employee-acknowledgment-supervisor-signature-dates",
+              "label": "EMPLOYEE ACKNOWLEDGMENT / SUPERVISOR SIGNATURE / DATES",
+              "kind": "longtext",
+              "rows": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "templateId": "TL-P365",
+      "title": "Restricted Personnel Exposure & Fitness Record",
+      "family": "personnel",
+      "informationLevel": "TL-3",
+      "legacy": {
+        "level": "III",
+        "label": "RESTRICTED"
+      },
+      "sourcePath": "src/content/docs/records/forms/tl-p365.md",
+      "sections": [
+        {
+          "id": "subject-identification",
+          "title": "SUBJECT IDENTIFICATION",
+          "fields": [
+            {
+              "id": "employee-subject-name",
+              "label": "Employee / Subject Name",
+              "kind": "text"
+            },
+            {
+              "id": "badge-no",
+              "label": "Badge No.",
+              "kind": "text"
+            },
+            {
+              "id": "assigned-division",
+              "label": "Assigned Division",
+              "kind": "text"
+            },
+            {
+              "id": "case-phenomenon-ref",
+              "label": "Case / Phenomenon Ref.",
+              "kind": "text"
+            },
+            {
+              "id": "exposure-date-time",
+              "label": "Exposure Date / Time",
+              "kind": "text"
+            },
+            {
+              "id": "exposure-location",
+              "label": "Exposure Location",
+              "kind": "text"
+            },
+            {
+              "id": "witness-team-lead",
+              "label": "Witness / Team Lead",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "exposure-characterization",
+          "title": "EXPOSURE CHARACTERIZATION",
+          "fields": [
+            {
+              "id": "exposure-route",
+              "label": "Exposure Route",
+              "kind": "fixed",
+              "fixedValue": "Visual / Auditory / Physical / Environmental / Unknown"
+            },
+            {
+              "id": "estimated-duration",
+              "label": "Estimated Duration",
+              "kind": "text"
+            },
+            {
+              "id": "protective-equipment-used",
+              "label": "Protective Equipment Used",
+              "kind": "text"
+            },
+            {
+              "id": "immediate-physical-effects",
+              "label": "Immediate Physical Effects",
+              "kind": "text"
+            },
+            {
+              "id": "immediate-cognitive-perceptual-effects",
+              "label": "Immediate Cognitive / Perceptual Effects",
+              "kind": "text"
+            },
+            {
+              "id": "memory-gap-reported",
+              "label": "Memory Gap Reported",
+              "kind": "fixed",
+              "fixedValue": "No / Yes"
+            },
+            {
+              "id": "unusual-dream-recall-reported",
+              "label": "Unusual Dream / Recall Reported",
+              "kind": "fixed",
+              "fixedValue": "No / Yes"
+            }
+          ]
+        },
+        {
+          "id": "post-exposure-fitness",
+          "title": "POST-EXPOSURE FITNESS",
+          "fields": [
+            {
+              "id": "orientation-to-person-place-date",
+              "label": "Orientation to Person / Place / Date",
+              "kind": "fixed",
+              "fixedValue": "Normal / Variance"
+            },
+            {
+              "id": "identity-verification",
+              "label": "Identity Verification",
+              "kind": "fixed",
+              "fixedValue": "Confirmed / Requires review"
+            },
+            {
+              "id": "baseline-interview-comparison",
+              "label": "Baseline Interview Comparison",
+              "kind": "text"
+            },
+            {
+              "id": "medical-observation-ref",
+              "label": "Medical Observation Ref.",
+              "kind": "text"
+            },
+            {
+              "id": "return-to-duty",
+              "label": "Return to Duty",
+              "kind": "fixed",
+              "fixedValue": "Approved / Restricted / Denied"
+            },
+            {
+              "id": "recheck-interval",
+              "label": "Recheck Interval",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "security-disposition",
+          "title": "SECURITY DISPOSITION",
+          "fields": [
+            {
+              "id": "debrief-completed",
+              "label": "Debrief Completed",
+              "kind": "fixed",
+              "fixedValue": "Yes / No"
+            },
+            {
+              "id": "temporary-access-suspension",
+              "label": "Temporary Access Suspension",
+              "kind": "fixed",
+              "fixedValue": "No / Yes"
+            },
+            {
+              "id": "personal-notes-recordings-collected",
+              "label": "Personal Notes / Recordings Collected",
+              "kind": "fixed",
+              "fixedValue": "N/A / Yes"
+            },
+            {
+              "id": "further-monitoring",
+              "label": "Further Monitoring",
+              "kind": "text"
+            },
+            {
+              "id": "case-lead-approval",
+              "label": "Case Lead Approval",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "subject-statement-use-subject-s-own-words-where-possible",
+          "title": "SUBJECT STATEMENT - USE SUBJECT'S OWN WORDS WHERE POSSIBLE",
+          "fields": [
+            {
+              "id": "subject-statement-use-subject-s-own-words-where-possible",
+              "label": "SUBJECT STATEMENT - USE SUBJECT'S OWN WORDS WHERE POSSIBLE",
+              "kind": "longtext",
+              "rows": 5
+            }
+          ]
+        },
+        {
+          "id": "examiner-security-supervisor-signatures",
+          "title": "EXAMINER / SECURITY / SUPERVISOR SIGNATURES",
+          "fields": [
+            {
+              "id": "examiner-security-supervisor-signatures",
+              "label": "EXAMINER / SECURITY / SUPERVISOR SIGNATURES",
+              "kind": "longtext",
+              "rows": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "templateId": "TL-SOP-720",
+      "title": "SOP Outline — Remote Field Expedition",
+      "family": "procedure",
+      "informationLevel": "TL-2",
+      "legacy": {
+        "level": "II",
+        "label": "CONTROLLED"
+      },
+      "sourcePath": "src/content/docs/records/forms/tl-sop-720.md",
+      "sections": [
+        {
+          "id": "document-control",
+          "title": "DOCUMENT CONTROL",
+          "fields": [
+            {
+              "id": "sop-title",
+              "label": "SOP Title",
+              "kind": "text"
+            },
+            {
+              "id": "expedition-site",
+              "label": "Expedition / Site",
+              "kind": "text"
+            },
+            {
+              "id": "revision",
+              "label": "Revision",
+              "kind": "text"
+            },
+            {
+              "id": "prepared-by",
+              "label": "Prepared By",
+              "kind": "text"
+            },
+            {
+              "id": "reviewed-by",
+              "label": "Reviewed By",
+              "kind": "text"
+            },
+            {
+              "id": "effective-date",
+              "label": "Effective Date",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "1-purpose-scope",
+          "title": "1. PURPOSE & SCOPE",
+          "fields": [
+            {
+              "id": "mission-objective",
+              "label": "Mission Objective",
+              "kind": "text"
+            },
+            {
+              "id": "geographic-environmental-scope",
+              "label": "Geographic / Environmental Scope",
+              "kind": "text"
+            },
+            {
+              "id": "exclusions",
+              "label": "Exclusions",
+              "kind": "text"
+            },
+            {
+              "id": "success-criteria",
+              "label": "Success Criteria",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "2-roles-responsibilities",
+          "title": "2. ROLES & RESPONSIBILITIES",
+          "fields": [
+            {
+              "id": "expedition-lead",
+              "label": "Expedition Lead",
+              "kind": "text"
+            },
+            {
+              "id": "safety-lead",
+              "label": "Safety Lead",
+              "kind": "text"
+            },
+            {
+              "id": "technical-lead",
+              "label": "Technical Lead",
+              "kind": "text"
+            },
+            {
+              "id": "communications-logistics",
+              "label": "Communications / Logistics",
+              "kind": "text"
+            },
+            {
+              "id": "local-liaison-cover-function",
+              "label": "Local Liaison / Cover Function",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "3-pre-deployment-requirements",
+          "title": "3. PRE-DEPLOYMENT REQUIREMENTS",
+          "fields": [
+            {
+              "id": "permits-property-access",
+              "label": "Permits / Property Access",
+              "kind": "text"
+            },
+            {
+              "id": "weather-terrain-review",
+              "label": "Weather / Terrain Review",
+              "kind": "text"
+            },
+            {
+              "id": "medical-fitness-requirements",
+              "label": "Medical / Fitness Requirements",
+              "kind": "text"
+            },
+            {
+              "id": "equipment-checklist-ref",
+              "label": "Equipment Checklist Ref.",
+              "kind": "text"
+            },
+            {
+              "id": "calibration-sample-containers",
+              "label": "Calibration / Sample Containers",
+              "kind": "text"
+            },
+            {
+              "id": "emergency-contacts-extraction",
+              "label": "Emergency Contacts / Extraction",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "4-field-procedure",
+          "title": "4. FIELD PROCEDURE",
+          "fields": [
+            {
+              "id": "arrival-site-control",
+              "label": "Arrival / Site Control",
+              "kind": "text"
+            },
+            {
+              "id": "survey-pattern",
+              "label": "Survey Pattern",
+              "kind": "text"
+            },
+            {
+              "id": "sampling-method",
+              "label": "Sampling Method",
+              "kind": "text"
+            },
+            {
+              "id": "photography-mapping-standard",
+              "label": "Photography / Mapping Standard",
+              "kind": "text"
+            },
+            {
+              "id": "chain-of-custody",
+              "label": "Chain of Custody",
+              "kind": "text"
+            },
+            {
+              "id": "daily-check-in-no-contact-threshold",
+              "label": "Daily Check-In / No-Contact Threshold",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "5-contingencies-closeout",
+          "title": "5. CONTINGENCIES & CLOSEOUT",
+          "fields": [
+            {
+              "id": "severe-weather",
+              "label": "Severe Weather",
+              "kind": "text"
+            },
+            {
+              "id": "vehicle-communications-failure",
+              "label": "Vehicle / Communications Failure",
+              "kind": "text"
+            },
+            {
+              "id": "civilian-contact",
+              "label": "Civilian Contact",
+              "kind": "text"
+            },
+            {
+              "id": "injury-medical-evacuation",
+              "label": "Injury / Medical Evacuation",
+              "kind": "text"
+            },
+            {
+              "id": "site-restoration",
+              "label": "Site Restoration",
+              "kind": "text"
+            },
+            {
+              "id": "return-debrief-sample-intake",
+              "label": "Return / Debrief / Sample Intake",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "procedure-steps-sequence",
+          "title": "PROCEDURE STEPS / SEQUENCE",
+          "fields": [
+            {
+              "id": "procedure-steps-sequence",
+              "label": "PROCEDURE STEPS / SEQUENCE",
+              "kind": "longtext",
+              "rows": 7
+            }
+          ]
+        },
+        {
+          "id": "revision-notes-approval",
+          "title": "REVISION NOTES / APPROVAL",
+          "fields": [
+            {
+              "id": "revision-notes-approval",
+              "label": "REVISION NOTES / APPROVAL",
+              "kind": "longtext",
+              "rows": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "templateId": "TL-SOP-760",
+      "title": "SOP Outline — Controlled High-Risk Experiment",
+      "family": "procedure",
+      "informationLevel": "TL-3",
+      "legacy": {
+        "level": "III",
+        "label": "RESTRICTED"
+      },
+      "sourcePath": "src/content/docs/records/forms/tl-sop-760.md",
+      "sections": [
+        {
+          "id": "document-control",
+          "title": "DOCUMENT CONTROL",
+          "fields": [
+            {
+              "id": "experiment-program",
+              "label": "Experiment / Program",
+              "kind": "text"
+            },
+            {
+              "id": "sop-revision",
+              "label": "SOP Revision",
+              "kind": "text"
+            },
+            {
+              "id": "principal-investigator",
+              "label": "Principal Investigator",
+              "kind": "text"
+            },
+            {
+              "id": "safety-officer",
+              "label": "Safety Officer",
+              "kind": "text"
+            },
+            {
+              "id": "facility-chamber",
+              "label": "Facility / Chamber",
+              "kind": "text"
+            },
+            {
+              "id": "authorization-window",
+              "label": "Authorization Window",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "1-objective-scientific-basis",
+          "title": "1. OBJECTIVE & SCIENTIFIC BASIS",
+          "fields": [
+            {
+              "id": "research-objective",
+              "label": "Research Objective",
+              "kind": "text"
+            },
+            {
+              "id": "known-mechanism-theory",
+              "label": "Known Mechanism / Theory",
+              "kind": "text"
+            },
+            {
+              "id": "control-condition",
+              "label": "Control Condition",
+              "kind": "text"
+            },
+            {
+              "id": "expected-range",
+              "label": "Expected Range",
+              "kind": "text"
+            },
+            {
+              "id": "stop-failure-criteria",
+              "label": "Stop / Failure Criteria",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "2-personnel-facility",
+          "title": "2. PERSONNEL & FACILITY",
+          "fields": [
+            {
+              "id": "minimum-staffing",
+              "label": "Minimum Staffing",
+              "kind": "text"
+            },
+            {
+              "id": "required-qualifications",
+              "label": "Required Qualifications",
+              "kind": "text"
+            },
+            {
+              "id": "observation-team",
+              "label": "Observation Team",
+              "kind": "text"
+            },
+            {
+              "id": "medical-fire-recovery-standby",
+              "label": "Medical / Fire / Recovery Standby",
+              "kind": "text"
+            },
+            {
+              "id": "room-isolation",
+              "label": "Room Isolation",
+              "kind": "text"
+            },
+            {
+              "id": "adjacent-operations-to-suspend",
+              "label": "Adjacent Operations To Suspend",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "3-test-article-instrumentation",
+          "title": "3. TEST ARTICLE & INSTRUMENTATION",
+          "fields": [
+            {
+              "id": "article-specimen-id",
+              "label": "Article / Specimen ID",
+              "kind": "text"
+            },
+            {
+              "id": "storage-transfer",
+              "label": "Storage / Transfer",
+              "kind": "text"
+            },
+            {
+              "id": "instrumentation",
+              "label": "Instrumentation",
+              "kind": "text"
+            },
+            {
+              "id": "independent-recording",
+              "label": "Independent Recording",
+              "kind": "text"
+            },
+            {
+              "id": "calibration",
+              "label": "Calibration",
+              "kind": "text"
+            },
+            {
+              "id": "post-test-disposition",
+              "label": "Post-Test Disposition",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "4-execution",
+          "title": "4. EXECUTION",
+          "fields": [
+            {
+              "id": "pre-test-brief",
+              "label": "Pre-Test Brief",
+              "kind": "text"
+            },
+            {
+              "id": "baseline-recording",
+              "label": "Baseline Recording",
+              "kind": "text"
+            },
+            {
+              "id": "activation-exposure-sequence",
+              "label": "Activation / Exposure Sequence",
+              "kind": "text"
+            },
+            {
+              "id": "measurement-intervals",
+              "label": "Measurement Intervals",
+              "kind": "text"
+            },
+            {
+              "id": "abort-procedure",
+              "label": "Abort Procedure",
+              "kind": "text"
+            },
+            {
+              "id": "re-entry-criteria",
+              "label": "Re-entry Criteria",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "5-incident-data-integrity",
+          "title": "5. INCIDENT & DATA INTEGRITY",
+          "fields": [
+            {
+              "id": "unexpected-energy-motion",
+              "label": "Unexpected Energy / Motion",
+              "kind": "text"
+            },
+            {
+              "id": "personnel-exposure",
+              "label": "Personnel Exposure",
+              "kind": "text"
+            },
+            {
+              "id": "equipment-disagreement",
+              "label": "Equipment Disagreement",
+              "kind": "text"
+            },
+            {
+              "id": "loss-of-recording",
+              "label": "Loss of Recording",
+              "kind": "text"
+            },
+            {
+              "id": "chain-of-custody-breach",
+              "label": "Chain-of-Custody Breach",
+              "kind": "text"
+            },
+            {
+              "id": "mandatory-escalation-threshold",
+              "label": "Mandatory Escalation Threshold",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "detailed-procedure-steps",
+          "title": "DETAILED PROCEDURE STEPS",
+          "fields": [
+            {
+              "id": "detailed-procedure-steps",
+              "label": "DETAILED PROCEDURE STEPS",
+              "kind": "longtext",
+              "rows": 8
+            }
+          ]
+        },
+        {
+          "id": "hazard-analysis-approval-signatures",
+          "title": "HAZARD ANALYSIS / APPROVAL SIGNATURES",
+          "fields": [
+            {
+              "id": "hazard-analysis-approval-signatures",
+              "label": "HAZARD ANALYSIS / APPROVAL SIGNATURES",
+              "kind": "longtext",
+              "rows": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "templateId": "TL-SOP-890",
+      "title": "SOP Outline — Anomalous Site Expedition & Recovery",
+      "family": "procedure",
+      "informationLevel": "TL-4",
+      "legacy": {
+        "level": "IV",
+        "label": "SPECIAL ACCESS"
+      },
+      "sourcePath": "src/content/docs/records/forms/tl-sop-890.md",
+      "sections": [
+        {
+          "id": "document-control",
+          "title": "DOCUMENT CONTROL",
+          "fields": [
+            {
+              "id": "site-event-designation",
+              "label": "Site / Event Designation",
+              "kind": "text"
+            },
+            {
+              "id": "compartment",
+              "label": "Compartment",
+              "kind": "text"
+            },
+            {
+              "id": "revision",
+              "label": "Revision",
+              "kind": "text"
+            },
+            {
+              "id": "expedition-commander",
+              "label": "Expedition Commander",
+              "kind": "text"
+            },
+            {
+              "id": "security-controller",
+              "label": "Security Controller",
+              "kind": "text"
+            },
+            {
+              "id": "director-authorization",
+              "label": "Director Authorization",
+              "kind": "text"
+            },
+            {
+              "id": "field-copy-no",
+              "label": "Field Copy No.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "1-mission-definition",
+          "title": "1. MISSION DEFINITION",
+          "fields": [
+            {
+              "id": "primary-objective",
+              "label": "Primary Objective",
+              "kind": "text"
+            },
+            {
+              "id": "secondary-objective",
+              "label": "Secondary Objective",
+              "kind": "text"
+            },
+            {
+              "id": "what-must-not-be-attempted",
+              "label": "What Must Not Be Attempted",
+              "kind": "text"
+            },
+            {
+              "id": "maximum-on-site-duration",
+              "label": "Maximum On-Site Duration",
+              "kind": "text"
+            },
+            {
+              "id": "abort-threshold",
+              "label": "Abort Threshold",
+              "kind": "text"
+            },
+            {
+              "id": "acceptable-equipment-sample-loss",
+              "label": "Acceptable Equipment / Sample Loss",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "2-entry-baseline",
+          "title": "2. ENTRY BASELINE",
+          "fields": [
+            {
+              "id": "known-site-geometry",
+              "label": "Known Site Geometry",
+              "kind": "text"
+            },
+            {
+              "id": "expected-personnel-count",
+              "label": "Expected Personnel Count",
+              "kind": "text"
+            },
+            {
+              "id": "synchronized-time-source",
+              "label": "Synchronized Time Source",
+              "kind": "text"
+            },
+            {
+              "id": "identity-challenge-response",
+              "label": "Identity Challenge / Response",
+              "kind": "text"
+            },
+            {
+              "id": "reference-photographs-maps",
+              "label": "Reference Photographs / Maps",
+              "kind": "text"
+            },
+            {
+              "id": "baseline-environmental-readings",
+              "label": "Baseline Environmental Readings",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "3-movement-observation",
+          "title": "3. MOVEMENT & OBSERVATION",
+          "fields": [
+            {
+              "id": "team-formation",
+              "label": "Team Formation",
+              "kind": "text"
+            },
+            {
+              "id": "marking-breadcrumb-method",
+              "label": "Marking / Breadcrumb Method",
+              "kind": "text"
+            },
+            {
+              "id": "doors-openings-not-to-cross",
+              "label": "Doors / Openings Not To Cross",
+              "kind": "text"
+            },
+            {
+              "id": "observation-restrictions",
+              "label": "Observation Restrictions",
+              "kind": "text"
+            },
+            {
+              "id": "if-route-changes-behind-team",
+              "label": "If Route Changes Behind Team",
+              "kind": "text"
+            },
+            {
+              "id": "if-team-member-is-encountered-twice",
+              "label": "If Team Member Is Encountered Twice",
+              "kind": "text"
+            },
+            {
+              "id": "if-radio-reports-impossible-location",
+              "label": "If Radio Reports Impossible Location",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "4-recovery-sampling",
+          "title": "4. RECOVERY & SAMPLING",
+          "fields": [
+            {
+              "id": "permitted-samples",
+              "label": "Permitted Samples",
+              "kind": "text"
+            },
+            {
+              "id": "prohibited-samples",
+              "label": "Prohibited Samples",
+              "kind": "text"
+            },
+            {
+              "id": "remote-handling",
+              "label": "Remote Handling",
+              "kind": "text"
+            },
+            {
+              "id": "container-seal",
+              "label": "Container / Seal",
+              "kind": "text"
+            },
+            {
+              "id": "sample-count-verification",
+              "label": "Sample Count Verification",
+              "kind": "text"
+            },
+            {
+              "id": "if-sample-count-changes",
+              "label": "If Sample Count Changes",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "5-withdrawal-reconciliation",
+          "title": "5. WITHDRAWAL & RECONCILIATION",
+          "fields": [
+            {
+              "id": "normal-withdrawal-trigger",
+              "label": "Normal Withdrawal Trigger",
+              "kind": "text"
+            },
+            {
+              "id": "emergency-withdrawal-trigger",
+              "label": "Emergency Withdrawal Trigger",
+              "kind": "text"
+            },
+            {
+              "id": "headcount-verification",
+              "label": "Headcount Verification",
+              "kind": "text"
+            },
+            {
+              "id": "clock-recording-comparison",
+              "label": "Clock / Recording Comparison",
+              "kind": "text"
+            },
+            {
+              "id": "memory-witness-comparison",
+              "label": "Memory / Witness Comparison",
+              "kind": "text"
+            },
+            {
+              "id": "quarantine-debrief",
+              "label": "Quarantine / Debrief",
+              "kind": "text"
+            },
+            {
+              "id": "field-copy-return",
+              "label": "Field Copy Return",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "expedition-procedure-numbered-sequence",
+          "title": "EXPEDITION PROCEDURE - NUMBERED SEQUENCE",
+          "fields": [
+            {
+              "id": "expedition-procedure-numbered-sequence",
+              "label": "EXPEDITION PROCEDURE - NUMBERED SEQUENCE",
+              "kind": "longtext",
+              "rows": 9
+            }
+          ]
+        },
+        {
+          "id": "known-irregularities-forbidden-actions",
+          "title": "KNOWN IRREGULARITIES / FORBIDDEN ACTIONS",
+          "fields": [
+            {
+              "id": "known-irregularities-forbidden-actions",
+              "label": "KNOWN IRREGULARITIES / FORBIDDEN ACTIONS",
+              "kind": "longtext",
+              "rows": 5
+            }
+          ]
+        },
+        {
+          "id": "commander-controller-director-approval",
+          "title": "COMMANDER / CONTROLLER / DIRECTOR APPROVAL",
+          "fields": [
+            {
+              "id": "commander-controller-director-approval",
+              "label": "COMMANDER / CONTROLLER / DIRECTOR APPROVAL",
+              "kind": "longtext",
+              "rows": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "templateId": "TL-X510",
+      "title": "Executive Directive",
+      "family": "executive",
+      "informationLevel": "TL-4",
+      "legacy": {
+        "level": "IV",
+        "label": "SPECIAL ACCESS"
+      },
+      "sourcePath": "src/content/docs/records/forms/tl-x510.md",
+      "sections": [
+        {
+          "id": "directive-control",
+          "title": "DIRECTIVE CONTROL",
+          "fields": [
+            {
+              "id": "directive-no",
+              "label": "Directive No.",
+              "kind": "text"
+            },
+            {
+              "id": "issuing-executive",
+              "label": "Issuing Executive",
+              "kind": "text"
+            },
+            {
+              "id": "effective-date",
+              "label": "Effective Date",
+              "kind": "text"
+            },
+            {
+              "id": "program-division",
+              "label": "Program / Division",
+              "kind": "text"
+            },
+            {
+              "id": "recipients",
+              "label": "Recipients",
+              "kind": "text"
+            },
+            {
+              "id": "review-date",
+              "label": "Review Date",
+              "kind": "text"
+            },
+            {
+              "id": "prior-directive-affected",
+              "label": "Prior Directive Affected",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "executive-determination",
+          "title": "EXECUTIVE DETERMINATION",
+          "fields": [
+            {
+              "id": "matter-requiring-direction",
+              "label": "Matter Requiring Direction",
+              "kind": "text"
+            },
+            {
+              "id": "basis-for-determination",
+              "label": "Basis for Determination",
+              "kind": "text"
+            },
+            {
+              "id": "operational-research-priority",
+              "label": "Operational / Research Priority",
+              "kind": "text"
+            },
+            {
+              "id": "resources-authorized",
+              "label": "Resources Authorized",
+              "kind": "text"
+            },
+            {
+              "id": "resources-withheld",
+              "label": "Resources Withheld",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "directive",
+          "title": "DIRECTIVE",
+          "fields": [
+            {
+              "id": "action-required",
+              "label": "Action Required",
+              "kind": "text"
+            },
+            {
+              "id": "responsible-office",
+              "label": "Responsible Office",
+              "kind": "text"
+            },
+            {
+              "id": "completion-standard",
+              "label": "Completion Standard",
+              "kind": "text"
+            },
+            {
+              "id": "reporting-requirement",
+              "label": "Reporting Requirement",
+              "kind": "text"
+            },
+            {
+              "id": "disclosure-limit",
+              "label": "Disclosure Limit",
+              "kind": "text"
+            },
+            {
+              "id": "deviation-authority",
+              "label": "Deviation Authority",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "oversight",
+          "title": "OVERSIGHT",
+          "fields": [
+            {
+              "id": "progress-review-by",
+              "label": "Progress Review By",
+              "kind": "text"
+            },
+            {
+              "id": "audit-inspection-requirement",
+              "label": "Audit / Inspection Requirement",
+              "kind": "text"
+            },
+            {
+              "id": "termination-renewal-condition",
+              "label": "Termination / Renewal Condition",
+              "kind": "text"
+            },
+            {
+              "id": "final-disposition-authority",
+              "label": "Final Disposition Authority",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "executive-remarks-limitations",
+          "title": "EXECUTIVE REMARKS / LIMITATIONS",
+          "fields": [
+            {
+              "id": "executive-remarks-limitations",
+              "label": "EXECUTIVE REMARKS / LIMITATIONS",
+              "kind": "longtext",
+              "rows": 5
+            }
+          ]
+        },
+        {
+          "id": "executive-signature-security-authentication",
+          "title": "EXECUTIVE SIGNATURE / SECURITY AUTHENTICATION",
+          "fields": [
+            {
+              "id": "executive-signature-security-authentication",
+              "label": "EXECUTIVE SIGNATURE / SECURITY AUTHENTICATION",
+              "kind": "longtext",
+              "rows": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "templateId": "TL-X595",
+      "title": "Directorate Executive Order",
+      "family": "executive",
+      "informationLevel": "TL-5",
+      "legacy": {
+        "level": "V",
+        "label": "DIRECTORATE EYES ONLY"
+      },
+      "sourcePath": "src/content/docs/records/forms/tl-x595.md",
+      "sections": [
+        {
+          "id": "order-authentication",
+          "title": "ORDER AUTHENTICATION",
+          "fields": [
+            {
+              "id": "executive-order-no",
+              "label": "Executive Order No.",
+              "kind": "text"
+            },
+            {
+              "id": "director-directorate-panel",
+              "label": "Director / Directorate Panel",
+              "kind": "text"
+            },
+            {
+              "id": "date-time-issued",
+              "label": "Date / Time Issued",
+              "kind": "text"
+            },
+            {
+              "id": "controlled-copy-no",
+              "label": "Controlled Copy No.",
+              "kind": "text"
+            },
+            {
+              "id": "custodian",
+              "label": "Custodian",
+              "kind": "text"
+            },
+            {
+              "id": "named-recipients-only",
+              "label": "Named Recipients Only",
+              "kind": "text"
+            },
+            {
+              "id": "return-destruction-date",
+              "label": "Return / Destruction Date",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "finding",
+          "title": "FINDING",
+          "fields": [
+            {
+              "id": "condition-event",
+              "label": "Condition / Event",
+              "kind": "text"
+            },
+            {
+              "id": "why-normal-authority-is-insufficient",
+              "label": "Why Normal Authority Is Insufficient",
+              "kind": "text"
+            },
+            {
+              "id": "known-consequence-of-delay",
+              "label": "Known Consequence of Delay",
+              "kind": "text"
+            },
+            {
+              "id": "known-consequence-of-disclosure",
+              "label": "Known Consequence of Disclosure",
+              "kind": "text"
+            },
+            {
+              "id": "assumptions-directorate-accepts-as-fact",
+              "label": "Assumptions Directorate Accepts As Fact",
+              "kind": "text"
+            },
+            {
+              "id": "facts-that-must-not-be-reinvestigated",
+              "label": "Facts That Must Not Be Reinvestigated",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "order",
+          "title": "ORDER",
+          "fields": [
+            {
+              "id": "action-authorized",
+              "label": "Action Authorized",
+              "kind": "text"
+            },
+            {
+              "id": "action-required",
+              "label": "Action Required",
+              "kind": "text"
+            },
+            {
+              "id": "action-explicitly-forbidden",
+              "label": "Action Explicitly Forbidden",
+              "kind": "text"
+            },
+            {
+              "id": "personnel-facilities-subject-to-order",
+              "label": "Personnel / Facilities Subject To Order",
+              "kind": "text"
+            },
+            {
+              "id": "records-to-be-sealed-segregated",
+              "label": "Records To Be Sealed / Segregated",
+              "kind": "text"
+            },
+            {
+              "id": "external-explanation-if-required",
+              "label": "External Explanation If Required",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "id": "exceptional-authority",
+          "title": "EXCEPTIONAL AUTHORITY",
+          "fields": [
+            {
+              "id": "normal-procedure-suspended",
+              "label": "Normal Procedure Suspended",
+              "kind": "text"
+            },
+            {
+              "id": "duration-of-suspension",
+              "label": "Duration of Suspension",
+              "kind": "text"
+            },
+            {
+              "id": "only-authority-permitted-to-countermand",
+              "label": "Only Authority Permitted To Countermand",
+              "kind": "text"
+            },
+            {
+              "id": "if-named-authority-cannot-be-verified",
+              "label": "If Named Authority Cannot Be Verified",
+              "kind": "text"
+            },
+            {
+              "id": "if-order-text-changes-between-readings",
+              "label": "If Order Text Changes Between Readings",
+              "kind": "fixed",
+              "fixedValue": "Stop execution; isolate document; notify Directorate custodian without reproducing altered text."
+            }
+          ]
+        },
+        {
+          "id": "closure",
+          "title": "CLOSURE",
+          "fields": [
+            {
+              "id": "completion-evidence-required",
+              "label": "Completion Evidence Required",
+              "kind": "text"
+            },
+            {
+              "id": "surviving-records",
+              "label": "Surviving Records",
+              "kind": "text"
+            },
+            {
+              "id": "personnel-debrief-reassignment",
+              "label": "Personnel Debrief / Reassignment",
+              "kind": "text"
+            },
+            {
+              "id": "final-status",
+              "label": "Final Status",
+              "kind": "fixed",
+              "fixedValue": "Executed / Partial / Superseded / Sealed"
+            }
+          ]
+        },
+        {
+          "id": "directorate-addendum-handwritten-entry-only",
+          "title": "DIRECTORATE ADDENDUM - HANDWRITTEN ENTRY ONLY",
+          "fields": [
+            {
+              "id": "directorate-addendum-handwritten-entry-only",
+              "label": "DIRECTORATE ADDENDUM - HANDWRITTEN ENTRY ONLY",
+              "kind": "longtext",
+              "rows": 5
+            }
+          ]
+        },
+        {
+          "id": "director-custodian-authentication",
+          "title": "DIRECTOR / CUSTODIAN AUTHENTICATION",
+          "fields": [
+            {
+              "id": "director-custodian-authentication",
+              "label": "DIRECTOR / CUSTODIAN AUTHENTICATION",
+              "kind": "longtext",
+              "rows": 2
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

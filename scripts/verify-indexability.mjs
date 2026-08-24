@@ -1,6 +1,11 @@
 import { isMain, optionalString, parseArgs, printErrors } from './lib/cli.mjs';
 import { assertDeploymentEnvironment } from './lib/deployment-policy.mjs';
-import { canonicalUrl, PRODUCTION_ORIGIN, SITE_ROUTES } from './lib/site-contract.mjs';
+import {
+  canonicalUrl,
+  NOINDEX_ROUTES,
+  PRODUCTION_ORIGIN,
+  SITE_ROUTES,
+} from './lib/site-contract.mjs';
 
 const REQUEST_TIMEOUT_MS = 15_000;
 
@@ -59,8 +64,19 @@ export async function verifyIndexability({
     }
 
     const robotsHeader = response.headers.get('x-robots-tag') ?? '';
-    if (environment === 'production' && /\bnoindex\b/i.test(robotsHeader)) {
-      errors.push(`${route}: production response has X-Robots-Tag noindex`);
+    if (
+      environment === 'production' &&
+      NOINDEX_ROUTES.includes(route) &&
+      !/\bnoindex\b/i.test(robotsHeader)
+    ) {
+      errors.push(`${route}: controlled production response is missing X-Robots-Tag noindex`);
+    }
+    if (
+      environment === 'production' &&
+      !NOINDEX_ROUTES.includes(route) &&
+      /\bnoindex\b/i.test(robotsHeader)
+    ) {
+      errors.push(`${route}: released production response has X-Robots-Tag noindex`);
     }
     if (environment === 'preview' && !/\bnoindex\b/i.test(robotsHeader)) {
       errors.push(`${route}: preview response is missing X-Robots-Tag noindex`);
@@ -68,8 +84,19 @@ export async function verifyIndexability({
 
     const html = await response.text();
     const metaRobots = findMetaRobots(html);
-    if (environment === 'production' && /\bnoindex\b/i.test(metaRobots ?? '')) {
-      errors.push(`${route}: production HTML has a noindex meta directive`);
+    if (
+      environment === 'production' &&
+      NOINDEX_ROUTES.includes(route) &&
+      !/\bnoindex\b/i.test(metaRobots ?? '')
+    ) {
+      errors.push(`${route}: controlled production HTML is missing a noindex meta directive`);
+    }
+    if (
+      environment === 'production' &&
+      !NOINDEX_ROUTES.includes(route) &&
+      /\bnoindex\b/i.test(metaRobots ?? '')
+    ) {
+      errors.push(`${route}: released production HTML has a noindex meta directive`);
     }
     if (environment === 'preview' && !/\bnoindex\b/i.test(metaRobots ?? '')) {
       errors.push(`${route}: preview HTML is missing a noindex meta directive`);

@@ -3,9 +3,12 @@ import {
   canonicalUrl,
   FORM_IDS,
   FORM_ROUTES,
+  NOINDEX_ROUTES,
+  PORTAL_ROUTES,
   PRODUCTION_ORIGIN,
   RECORD_ROUTES,
   routeToOutputPath,
+  SITEMAP_ROUTES,
   SITE_ROUTES,
 } from '../../scripts/lib/site-contract.mjs';
 
@@ -27,5 +30,14 @@ describe('site contract', () => {
   it('maps trailing-slash routes to static output files', () => {
     expect(routeToOutputPath('/')).toBe('index.html');
     expect(routeToOutputPath('/records/forms/tl-101/')).toBe('records/forms/tl-101/index.html');
+  });
+
+  it('keeps staff and controlled-record routes outside the public sitemap contract', () => {
+    expect(PORTAL_ROUTES).toHaveLength(4);
+    expect(NOINDEX_ROUTES).toContain('/records/reports/tl-340-trn-001/');
+    for (const route of NOINDEX_ROUTES) {
+      expect(SITE_ROUTES).toContain(route);
+      expect(SITEMAP_ROUTES).not.toContain(route);
+    }
   });
 });

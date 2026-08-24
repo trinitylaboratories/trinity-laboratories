@@ -1,10 +1,14 @@
 export const PRODUCTION_ORIGIN: 'https://trinitylaboratories.org';
 export const PRODUCTION_HOST: 'trinitylaboratories.org';
 export const CORE_ROUTES: readonly string[];
+export const PORTAL_ROUTES: readonly string[];
+export const CONTROLLED_RECORD_ROUTES: readonly string[];
 export const FORM_IDS: readonly string[];
 export const FORM_ROUTES: readonly string[];
 export const SECURITY_RECORD_ROUTES: readonly string[];
 export const RECORD_ROUTES: readonly string[];
+export const SITEMAP_ROUTES: readonly string[];
+export const NOINDEX_ROUTES: readonly string[];
 export const SITE_ROUTES: readonly string[];
 export const LOCAL_FORM_ROUTES: readonly string[];
 export const GATEWAY_ROUTE: '/employee-access/';
