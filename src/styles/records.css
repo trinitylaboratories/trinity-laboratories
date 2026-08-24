@@ -249,6 +249,18 @@ site-search button {
   border-radius: 0 !important;
 }
 
+.isMobile a[aria-current='true']::after {
+  width: 1rem;
+  background: transparent;
+  color: var(--sl-color-text-accent);
+  content: '✓';
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
 @media (max-width: 55rem) {
   .sl-markdown-content table {
     table-layout: fixed;
