@@ -88,6 +88,7 @@ jobs:
           args: >-
             --verbose --no-progress --max-retries 2 --timeout 20
             --accept 200,204,206,429
+            --root-dir "$(pwd)/dist"
             --exclude '^https://(?:www\.)?trinitylaboratories\.org'
             './*.md' './docs/**/*.md' './src/content/**/*.md' './dist/**/*.html'
           fail: true
