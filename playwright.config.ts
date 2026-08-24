@@ -50,7 +50,7 @@ export default defineConfig({
     ? undefined
     : {
         command:
-          'npm run build && npm run prepare:deploy -- --environment production --dist dist && npm run preview -- --host 127.0.0.1 --port 4321',
+          'npm run build && npm run prepare:deploy -- --environment production --dist dist && npm run preview:cloudflare',
         env: {
           ...process.env,
           PUBLIC_INDEXABLE: 'true',

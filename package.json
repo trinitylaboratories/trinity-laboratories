@@ -17,6 +17,7 @@
     "build:production": "cross-env PUBLIC_INDEXABLE=true node scripts/build-site.mjs",
     "build:preview": "cross-env PUBLIC_INDEXABLE=false node scripts/build-site.mjs",
     "preview": "node scripts/run-astro.mjs preview",
+    "preview:cloudflare": "wrangler dev --local --port 4321",
     "sync": "node scripts/run-astro.mjs sync",
     "check": "node scripts/run-astro.mjs check",
     "lint": "eslint . --max-warnings=0",

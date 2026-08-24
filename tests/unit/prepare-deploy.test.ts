@@ -35,7 +35,7 @@ describe('prepareDeploy', () => {
     expect(result.removed).toEqual([]);
     expect(await readFile(path.join(root, 'robots.txt'), 'utf8')).toContain('Allow: /');
     const headers = await readFile(path.join(root, '_headers'), 'utf8');
-    expect(headers).toMatch(/script-src 'self' 'sha256-[A-Za-z0-9+/]+=+'/);
+    expect(headers).toMatch(/script-src 'self' 'wasm-unsafe-eval' 'sha256-[A-Za-z0-9+/]+=+'/);
     expect(headers).not.toMatch(/script-src[^;]*unsafe-inline/);
     expect(await readFile(path.join(root, 'sitemap-index.xml'), 'utf8')).toContain('sitemapindex');
   });

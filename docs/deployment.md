@@ -95,6 +95,19 @@ https://www.trinitylaboratories.org/records/?q=sample
 → https://trinitylaboratories.org/records/?q=sample
 ```
 
+## Analytics boundary
+
+Do not enable Cloudflare Web Analytics, Browser Insights, or Real User Monitoring (RUM) for this
+zone. Cloudflare may enable RUM automatically for free-plan zones, which injects a
+`static.cloudflareinsights.com` beacon into otherwise static HTML responses. In **Domain → Speed →
+Real user monitoring**, select **Disable completely** and confirm that the dashboard reports RUM is
+disabled for the zone.
+
+After changing this setting, verify a fresh browser context loads the corporate site, TIRN search,
+and a search result without a `data-cf-beacon` script, a `cloudflareinsights.com` request, or a POST
+to `/cdn-cgi/rum`. Cloudflare edge request counts are an infrastructure property; no client-side
+analytics, beacon, or visitor-storage feature is part of this site.
+
 ## GitHub protection checklist
 
 Protect `main` in the repository settings:
@@ -119,7 +132,8 @@ For production, verify:
 3. `www` redirects once to the same path and query at the apex;
 4. canonical URLs, sitemap, and `robots.txt` use the apex;
 5. public pages, `/employee-access/`, `/records/`, search, downloads, and the custom 404 work; and
-6. the employee gateway makes no request containing entered values and stores only its generic local
+6. a fresh browser context loads no analytics beacon or third-party request; and
+7. the employee gateway makes no request containing entered values and stores only its generic local
    session flag.
 
 ## Rollback

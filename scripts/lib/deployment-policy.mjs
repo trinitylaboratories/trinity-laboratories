@@ -31,7 +31,13 @@ export function buildContentSecurityPolicy(scriptHashes = []) {
       throw new Error(`Invalid CSP script hash: ${hash}`);
     }
   }
-  const scriptSources = ["'self'", ...normalizedHashes.map((hash) => `'${hash}'`)].join(' ');
+  // Pagefind compiles its local search index from WebAssembly. `wasm-unsafe-eval` permits only
+  // WebAssembly compilation; it does not enable JavaScript eval or remote script origins.
+  const scriptSources = [
+    "'self'",
+    "'wasm-unsafe-eval'",
+    ...normalizedHashes.map((hash) => `'${hash}'`),
+  ].join(' ');
   return [
     "default-src 'self'",
     "base-uri 'none'",
