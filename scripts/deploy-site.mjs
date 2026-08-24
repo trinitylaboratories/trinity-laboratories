@@ -38,9 +38,11 @@ export function deploymentCommand(env = process.env, repositoryState) {
     const branch = environmentBranch || repositoryState.branch;
     const verifiedHead = repositoryState.head ?? '';
     const workersCi = env.WORKERS_CI === '1';
+    const workersCommitSha = env.WORKERS_CI_COMMIT_SHA?.trim().toLowerCase() ?? '';
+    const workersCommitMatches =
+      workersCommitSha === '' || workersCommitSha === verifiedHead.toLowerCase();
     const workersMainIdentity =
-      env.WORKERS_CI_BRANCH === 'main' &&
-      env.WORKERS_CI_COMMIT_SHA?.toLowerCase() === verifiedHead.toLowerCase();
+      env.WORKERS_CI_BRANCH === 'main' && workersCommitMatches;
     const workersBranchState = repositoryState.branch === '' || repositoryState.branch === 'main';
     const attachedMain = !workersCi && branch === 'main' && repositoryState.branch === 'main';
     const verifiedWorkersMain = workersCi && workersMainIdentity && workersBranchState;
