@@ -16,6 +16,7 @@ export default defineConfig({
   integrations: [
     starlight({
       title: 'Trinity Institutional Records Network',
+      favicon: '/media/brand/trinity-icon.png',
       disable404Route: true,
       pagefind: true,
       customCss: ['./src/styles/records.css'],
