@@ -10,3 +10,5 @@
 *.webp binary
 *.woff2 binary
 *.zip binary
+
+public/fonts/OFL.txt text eol=lf
