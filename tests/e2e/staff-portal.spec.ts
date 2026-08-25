@@ -3,6 +3,7 @@ import { visit } from './support/site';
 
 const PORTAL_ROUTES = [
   '/portal/',
+  '/portal/records/',
   '/portal/authorizations/',
   '/portal/forms/',
   '/portal/help/',
@@ -59,17 +60,74 @@ test.describe('staff portal', () => {
     await expect(page.getByRole('link', { name: /search TIRN/i })).toBeVisible();
   });
 
-  test('forms exposes all approved blank templates and the loopback workstation', async ({
+  test('forms exposes all approved templates and keeps workstation access terminal-local', async ({
     page,
   }) => {
     await visit(page, '/portal/forms/');
     await expect(page.locator('.portal-table tbody tr')).toHaveCount(15);
     await expect(page.getByText('TL-101', { exact: true })).toBeVisible();
     await expect(page.getByText('TL-X595', { exact: true })).toBeVisible();
-    await expect(page.locator('[data-filing-workstation-link]')).toHaveAttribute(
-      'href',
-      'http://127.0.0.1:4319/',
+    await expect(page.locator('[data-filing-workstation-link]')).toHaveCount(0);
+    await expect(page.locator('[data-filing-workstation-status]')).toContainText(
+      /unavailable from this terminal/i,
     );
+  });
+
+  test('records catalogue filters and sorts canonical metadata without changing browser state', async ({
+    page,
+  }) => {
+    const nonReadRequests: string[] = [];
+    page.on('request', (request) => {
+      if (!['GET', 'HEAD'].includes(request.method())) {
+        nonReadRequests.push(`${request.method()} ${request.url()}`);
+      }
+    });
+    await visit(page, '/portal/records/');
+    const initialUrl = page.url();
+    const catalogue = page.locator('[data-record-catalogue]');
+    const rows = catalogue.locator('[data-catalogue-row]');
+    const total = await rows.count();
+    expect(total).toBeGreaterThanOrEqual(19);
+    await expect(catalogue.locator('[data-catalogue-visible-count]')).toHaveText(String(total));
+
+    await page.getByLabel('Record, title, office, or tag').fill('TL-340-TRN-001');
+    await expect(rows.filter({ visible: true })).toHaveCount(1);
+    await expect(page.getByRole('link', { name: 'TL-340-TRN-001' })).toBeVisible();
+
+    await catalogue.locator('[data-catalogue-clear]').click();
+    await page.getByLabel('Record type').selectOption('form-template');
+    await page.getByLabel('Family').selectOption('personnel');
+    await expect(rows.filter({ visible: true })).toHaveCount(2);
+    await expect(page.getByRole('link', { name: 'TL-P110' })).toBeVisible();
+    await expect(page.getByRole('link', { name: 'TL-P365' })).toBeVisible();
+
+    await page.getByLabel('Publication').selectOption('controlled');
+    await expect(rows.filter({ visible: true })).toHaveCount(0);
+    await expect(catalogue.locator('[data-catalogue-empty]')).toBeVisible();
+
+    await catalogue.locator('[data-catalogue-clear]').click();
+    await expect(rows.filter({ visible: true })).toHaveCount(total);
+    expect(page.url()).toBe(initialUrl);
+    expect(await page.evaluate(() => Object.keys(sessionStorage))).toEqual([]);
+    expect(await page.evaluate(() => Object.keys(localStorage))).toEqual([]);
+    expect(nonReadRequests).toEqual([]);
+  });
+
+  test('records catalogue remains a complete static register without JavaScript', async ({
+    browser,
+    baseURL,
+  }) => {
+    const context = await browser.newContext({ baseURL, javaScriptEnabled: false });
+    const page = await context.newPage();
+    try {
+      await page.goto('/portal/records/', { waitUntil: 'domcontentloaded' });
+      expect(await page.locator('[data-catalogue-row]').count()).toBeGreaterThanOrEqual(19);
+      await expect(page.locator('[data-catalogue-controls]')).toHaveAttribute('disabled', '');
+      await expect(page.locator('[data-catalogue-query]')).toBeDisabled();
+      await expect(page.locator('[data-catalogue-row]').first()).toBeVisible();
+    } finally {
+      await context.close();
+    }
   });
 
   test('terminating the portal session clears generic session and grant state', async ({
@@ -105,14 +163,14 @@ test.describe('staff portal', () => {
     page,
   }) => {
     await page.setViewportSize({ width: 390, height: 844 });
-    await visit(page, '/portal/forms/');
+    await visit(page, '/portal/records/');
     await expect(page.getByRole('navigation', { name: 'Staff services' })).toBeVisible();
     const dimensions = await page.evaluate(() => ({
       viewport: document.documentElement.clientWidth,
       document: document.documentElement.scrollWidth,
     }));
     expect(dimensions.document).toBeLessThanOrEqual(dimensions.viewport);
-    await expect(page.locator('.portal-table-wrap')).toBeVisible();
+    await expect(page.locator('.record-catalogue__table-wrap')).toBeVisible();
   });
 
   test('reduced motion and print preferences remove nonessential portal chrome', async ({

@@ -79,6 +79,29 @@ test.describe('browser-local authorization controls', () => {
     ).toEqual({ localStorage: [], indexedDatabases: [] });
   });
 
+  test('a completed form with the employee terminal code reports an unrecognized credential', async ({
+    page,
+  }) => {
+    await establishBaseSession(page);
+    await visit(page, '/portal/authorizations/');
+
+    const gate = page.locator('[data-controlled-section="handling-acknowledgment"]');
+    await gate.locator('[data-authorize-trigger]').click();
+    const dialog = gate.locator('dialog[open]');
+    const form = dialog.locator('[data-authorization-form]');
+
+    await form.locator('[data-authorization-purpose]').selectOption('record-review');
+    await form.locator('[data-authorization-credential]').fill('ABC123');
+    await form.locator('[data-authorization-attestation]').check();
+    await form.getByRole('button', { name: /evaluate authorization/i }).click();
+
+    await expect(dialog.locator('[data-auth-status]')).toContainText(/not recognized/i);
+    await expect(form.locator('[data-authorization-credential]')).toHaveValue('');
+    await expect(form.locator('[data-authorization-purpose]')).toHaveValue('');
+    await expect(form.locator('[data-authorization-attestation]')).not.toBeChecked();
+    expect(await page.evaluate(() => sessionStorage.getItem('tirn-grant'))).toBeNull();
+  });
+
   test('the open authorization console has no serious accessibility violations', async ({
     page,
   }) => {

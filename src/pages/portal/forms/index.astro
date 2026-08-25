@@ -22,11 +22,12 @@ const forms = [
 ] as const;
 
 const formRoute = (recordId: string) => `/records/forms/${recordId.toLowerCase()}/`;
+const workstationAvailable = import.meta.env.DEV;
 ---
 
 <PortalLayout
   title="Forms"
-  description="Browse Trinity blank form templates and open the loopback-only Filing Workstation for local record preparation."
+  description="Browse Trinity blank form templates and prepare filing packages from a configured local terminal."
   active="forms"
 >
   <PortalPageHeading
@@ -41,20 +42,29 @@ const formRoute = (recordId: string) => `/records/forms/${recordId.toLowerCase()
         <p class="portal-section__label">Local preparation</p>
         <h2 id="filing-workstation-heading">TIRN Filing Workstation</h2>
         <p>
-          The workstation runs only on this computer and prepares a review package without sending
-          form values to the website. Start it from the project directory before opening the local
-          address.
+          The workstation is available only from a configured local terminal. It prepares a review
+          package without routing working values through the records network.
         </p>
         <p class="portal-callout">
-          Drafts remain local until a generated package is deliberately added to a repository branch
-          and passes review.
+          Drafts remain in local custody until a generated package passes records-control review.
         </p>
-        <a
-          class="portal-button portal-button--primary"
-          href="http://127.0.0.1:4319/"
-          rel="noreferrer"
-          data-filing-workstation-link>Open local Filing Workstation</a
-        >
+        {
+          workstationAvailable ? (
+            <a
+              class="portal-button portal-button--primary"
+              href="http://127.0.0.1:4319/"
+              rel="noreferrer"
+              data-filing-workstation-link
+            >
+              Open local Filing Workstation
+            </a>
+          ) : (
+            <p class="portal-callout portal-callout--warning" data-filing-workstation-status>
+              Filing Workstation unavailable from this terminal. Use a configured local records
+              workstation to prepare a package.
+            </p>
+          )
+        }
       </section>
 
       <section class="portal-section" aria-labelledby="forms-library-heading">
@@ -93,7 +103,7 @@ const formRoute = (recordId: string) => `/records/forms/${recordId.toLowerCase()
           <li>Use the correct record family and identifier.</li>
           <li>Separate information classification from physical authority.</li>
           <li>Do not place withheld plaintext in a publication package.</li>
-          <li>Review the generated diff before committing.</li>
+          <li>Review the complete generated package before release.</li>
         </ul>
       </section>
     </aside>

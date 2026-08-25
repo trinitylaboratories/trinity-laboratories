@@ -1,0 +1,297 @@
+---
+import {
+  CATALOGUE_RECORD_TYPES,
+  CATALOGUE_SORTS,
+  CATALOGUE_STATUSES,
+  CLASSIFICATION_LEVELS,
+  PUBLICATION_STATES,
+  RECORD_FAMILIES,
+  RECORD_TYPE_LABELS,
+  sortCatalogueEntries,
+  type RecordCatalogueEntry,
+} from '../../lib/record-catalogue';
+
+interface Props {
+  entries: RecordCatalogueEntry[];
+}
+
+const { entries } = Astro.props;
+const orderedEntries = sortCatalogueEntries(entries);
+const familyLabels = {
+  security: 'Security',
+  research: 'Research',
+  personnel: 'Personnel',
+  operations: 'Operations',
+  notice: 'Notices',
+  procedure: 'Procedures',
+  executive: 'Executive',
+} as const;
+const statusLabels = {
+  active: 'Active',
+  template: 'Template',
+  archived: 'Archived',
+  superseded: 'Superseded',
+} as const;
+const publicationLabels = {
+  released: 'Released',
+  controlled: 'Controlled',
+  withheld: 'Withheld',
+} as const;
+const sortLabels = {
+  'effective-desc': 'Effective date — newest',
+  'record-id': 'Record identifier',
+  title: 'Title',
+} as const;
+---
+
+<section class="record-catalogue" data-record-catalogue data-total={orderedEntries.length}>
+  <fieldset class="record-catalogue__controls" data-catalogue-controls disabled>
+    <legend>Filter register</legend>
+    <div class="record-catalogue__filter-grid">
+      <label class="record-catalogue__query">
+        Record, title, office, or tag
+        <input
+          type="search"
+          inputmode="search"
+          autocomplete="off"
+          placeholder="Search register"
+          data-catalogue-query
+        />
+      </label>
+      <label>
+        Record type
+        <select data-catalogue-record-type>
+          <option value="">All types</option>
+          {
+            CATALOGUE_RECORD_TYPES.map((recordType) => (
+              <option value={recordType}>{RECORD_TYPE_LABELS[recordType]}</option>
+            ))
+          }
+        </select>
+      </label>
+      <label>
+        Family
+        <select data-catalogue-family>
+          <option value="">All families</option>
+          {RECORD_FAMILIES.map((family) => <option value={family}>{familyLabels[family]}</option>)}
+        </select>
+      </label>
+      <label>
+        Record status
+        <select data-catalogue-status>
+          <option value="">All statuses</option>
+          {
+            CATALOGUE_STATUSES.map((status) => (
+              <option value={status}>{statusLabels[status]}</option>
+            ))
+          }
+        </select>
+      </label>
+      <label>
+        Publication
+        <select data-catalogue-publication>
+          <option value="">All publication states</option>
+          {
+            PUBLICATION_STATES.map((state) => (
+              <option value={state}>{publicationLabels[state]}</option>
+            ))
+          }
+        </select>
+      </label>
+      <label>
+        Information
+        <select data-catalogue-information>
+          <option value="">All information levels</option>
+          {CLASSIFICATION_LEVELS.map((level) => <option value={level}>{level}</option>)}
+        </select>
+      </label>
+      <label>
+        Sort
+        <select data-catalogue-sort>
+          {CATALOGUE_SORTS.map((sort) => <option value={sort}>{sortLabels[sort]}</option>)}
+        </select>
+      </label>
+    </div>
+    <div class="record-catalogue__control-footer">
+      <p role="status" aria-live="polite" aria-atomic="true">
+        <strong data-catalogue-visible-count>{orderedEntries.length}</strong> of {
+          orderedEntries.length
+        } records shown
+      </p>
+      <button type="button" data-catalogue-clear disabled>Clear filters</button>
+    </div>
+  </fieldset>
+
+  <div class="portal-table-wrap record-catalogue__table-wrap">
+    <table class="portal-table record-catalogue__table">
+      <caption>Canonical records available through this network node</caption>
+      <thead>
+        <tr>
+          <th scope="col">Record</th>
+          <th scope="col">Title / control office</th>
+          <th scope="col">Family</th>
+          <th scope="col">Information</th>
+          <th scope="col">Status</th>
+          <th scope="col">Publication</th>
+          <th scope="col">Effective</th>
+        </tr>
+      </thead>
+      <tbody data-catalogue-body>
+        {
+          orderedEntries.map((entry) => (
+            <tr data-catalogue-row data-catalogue-entry={JSON.stringify(entry)}>
+              <td class="record-catalogue__record">
+                <a href={entry.href}>{entry.recordId}</a>
+                <span>{RECORD_TYPE_LABELS[entry.recordType]}</span>
+              </td>
+              <td class="record-catalogue__title">
+                <strong>{entry.title}</strong>
+                <span>{entry.controllingOffice ?? `Revision ${entry.revision}`}</span>
+              </td>
+              <td>{familyLabels[entry.recordFamily]}</td>
+              <td>{entry.informationLevel ?? 'Not assigned'}</td>
+              <td data-catalogue-state={entry.status}>{statusLabels[entry.status]}</td>
+              <td data-catalogue-state={entry.publicationState}>
+                {publicationLabels[entry.publicationState]}
+              </td>
+              <td>
+                {entry.effectiveDate ? (
+                  <time datetime={entry.effectiveDate}>{entry.effectiveDate}</time>
+                ) : (
+                  'Undated'
+                )}
+              </td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+  <p class="record-catalogue__empty" data-catalogue-empty hidden>
+    No records match the selected controls.
+  </p>
+</section>
+
+<script>
+  import {
+    recordMatchesCatalogueFilters,
+    sortCatalogueEntries,
+    type CatalogueSort,
+    type RecordCatalogueEntry,
+    type RecordCatalogueFilters,
+  } from '../../lib/record-catalogue';
+
+  interface CatalogueRow {
+    element: HTMLTableRowElement;
+    entry: RecordCatalogueEntry;
+  }
+
+  const initializeRecordCatalogue = (root: HTMLElement) => {
+    if (root.dataset.initialized === 'true') return;
+    root.dataset.initialized = 'true';
+
+    const controls = root.querySelector<HTMLFieldSetElement>('[data-catalogue-controls]');
+    const query = root.querySelector<HTMLInputElement>('[data-catalogue-query]');
+    const recordType = root.querySelector<HTMLSelectElement>('[data-catalogue-record-type]');
+    const family = root.querySelector<HTMLSelectElement>('[data-catalogue-family]');
+    const status = root.querySelector<HTMLSelectElement>('[data-catalogue-status]');
+    const publication = root.querySelector<HTMLSelectElement>('[data-catalogue-publication]');
+    const information = root.querySelector<HTMLSelectElement>('[data-catalogue-information]');
+    const sort = root.querySelector<HTMLSelectElement>('[data-catalogue-sort]');
+    const clear = root.querySelector<HTMLButtonElement>('[data-catalogue-clear]');
+    const count = root.querySelector<HTMLElement>('[data-catalogue-visible-count]');
+    const empty = root.querySelector<HTMLElement>('[data-catalogue-empty]');
+    const body = root.querySelector<HTMLTableSectionElement>('[data-catalogue-body]');
+
+    const rows: CatalogueRow[] = Array.from(
+      root.querySelectorAll<HTMLTableRowElement>('[data-catalogue-row]'),
+    ).flatMap((element) => {
+      try {
+        const entry = JSON.parse(element.dataset.catalogueEntry ?? '') as RecordCatalogueEntry;
+        return [{ element, entry }];
+      } catch {
+        return [];
+      }
+    });
+
+    if (
+      !controls ||
+      !query ||
+      !recordType ||
+      !family ||
+      !status ||
+      !publication ||
+      !information ||
+      !sort ||
+      !clear ||
+      !count ||
+      !empty ||
+      !body ||
+      rows.length === 0
+    ) {
+      return;
+    }
+
+    const currentFilters = (): RecordCatalogueFilters => ({
+      query: query.value,
+      recordType: recordType.value as RecordCatalogueFilters['recordType'],
+      recordFamily: family.value as RecordCatalogueFilters['recordFamily'],
+      status: status.value as RecordCatalogueFilters['status'],
+      publicationState: publication.value as RecordCatalogueFilters['publicationState'],
+      informationLevel: information.value as RecordCatalogueFilters['informationLevel'],
+    });
+
+    const refresh = () => {
+      const filters = currentFilters();
+      const ordered = sortCatalogueEntries(
+        rows.map(({ entry }) => entry),
+        sort.value as CatalogueSort,
+      );
+      const rowsById = new Map(rows.map((row) => [row.entry.recordId, row]));
+      let visible = 0;
+
+      for (const entry of ordered) {
+        const row = rowsById.get(entry.recordId);
+        if (!row) continue;
+        const matches = recordMatchesCatalogueFilters(entry, filters);
+        row.element.hidden = !matches;
+        if (matches) visible += 1;
+        body.append(row.element);
+      }
+
+      count.textContent = String(visible);
+      empty.hidden = visible !== 0;
+      clear.disabled =
+        !filters.query &&
+        !filters.recordType &&
+        !filters.recordFamily &&
+        !filters.status &&
+        !filters.publicationState &&
+        !filters.informationLevel &&
+        sort.value === 'effective-desc';
+    };
+
+    query.addEventListener('input', refresh);
+    for (const select of [recordType, family, status, publication, information, sort]) {
+      select.addEventListener('change', refresh);
+    }
+    clear.addEventListener('click', () => {
+      query.value = '';
+      recordType.value = '';
+      family.value = '';
+      status.value = '';
+      publication.value = '';
+      information.value = '';
+      sort.value = 'effective-desc';
+      refresh();
+      query.focus();
+    });
+
+    controls.disabled = false;
+    refresh();
+  };
+
+  document
+    .querySelectorAll<HTMLElement>('[data-record-catalogue]')
+    .forEach(initializeRecordCatalogue);
+</script>

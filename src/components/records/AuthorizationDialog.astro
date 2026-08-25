@@ -19,6 +19,7 @@ const {
 const dialogId = `${id}-authorization-dialog`;
 const dialogTitleId = `${id}-authorization-title`;
 const dialogDescriptionId = `${id}-authorization-description`;
+const credentialHelpId = `${id}-authorization-credential-help`;
 ---
 
 <div
@@ -87,12 +88,16 @@ const dialogDescriptionId = `${id}-authorization-description`;
               type="password"
               data-authorization-credential
               required
-              minlength="16"
               maxlength="128"
               autocomplete="off"
               autocapitalize="characters"
               spellcheck="false"
+              aria-describedby={credentialHelpId}
             />
+            <span class="authorization-dialog__field-help" id={credentialHelpId}>
+              Use the separately issued TL-3 credential. The six-character employee terminal code is
+              not valid for this control.
+            </span>
           </label>
 
           <label class="authorization-dialog__attestation">
@@ -429,6 +434,13 @@ const dialogDescriptionId = `${id}-authorization-description`;
     align-items: start;
     color: #33404d;
     font-size: 0.78rem;
+  }
+
+  .authorization-dialog__field-help {
+    color: #66717c;
+    font: 400 0.7rem/1.45 var(--font-sans, sans-serif);
+    letter-spacing: normal;
+    text-transform: none;
   }
 
   .authorization-dialog__attestation input {

@@ -40,11 +40,15 @@ export const INDEXABLE_ROUTES = [
 
 export const CONTROLLED_ROUTES = [
   '/portal/',
+  '/portal/records/',
   '/portal/authorizations/',
   '/portal/forms/',
   '/portal/help/',
   '/records/reports/',
+  '/records/reports/tl-101-ins-001/',
+  '/records/reports/tl-220-ea-001/',
   '/records/reports/tl-340-trn-001/',
+  '/records/reports/tl-sop-720-fs-001/',
   '/records/submissions/',
 ] as const;
 

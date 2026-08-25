@@ -1,0 +1,107 @@
+---
+interface Props {
+  body: string;
+}
+
+interface FieldRow {
+  label: string;
+  value: string;
+}
+
+type BodyBlock = { kind: 'fields'; rows: FieldRow[] } | { kind: 'paragraph'; text: string };
+
+const { body } = Astro.props;
+const fieldParagraph = /^\*\*([^*\n]{1,180}?):\*\*[\t ]+(\S[\s\S]*)$/;
+const paragraphs = body
+  .replace(/\r\n?/g, '\n')
+  .trim()
+  .split(/\n[\t ]*\n+/)
+  .map((paragraph) => paragraph.trim())
+  .filter(Boolean);
+
+const blocks: BodyBlock[] = [];
+
+for (const paragraph of paragraphs) {
+  const match = paragraph.match(fieldParagraph);
+  if (!match) {
+    blocks.push({ kind: 'paragraph', text: paragraph });
+    continue;
+  }
+
+  const row = { label: match[1].trim(), value: match[2].trim() };
+  const previous = blocks.at(-1);
+  if (previous?.kind === 'fields') previous.rows.push(row);
+  else blocks.push({ kind: 'fields', rows: [row] });
+}
+---
+
+<div class="submission-section-body" data-submission-section-body>
+  {
+    blocks.map((block) =>
+      block.kind === 'fields' ? (
+        <dl class="submission-section-body__fields" data-submission-field-list>
+          {block.rows.map((row) => (
+            <div class="submission-section-body__field" data-submission-field-row>
+              <dt>{row.label}</dt>
+              <dd>{row.value}</dd>
+            </div>
+          ))}
+        </dl>
+      ) : (
+        <p>{block.text}</p>
+      ),
+    )
+  }
+</div>
+
+<style>
+  .submission-section-body {
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .submission-section-body p,
+  .submission-section-body__fields {
+    margin: 0;
+  }
+
+  .submission-section-body__fields {
+    border-top: 1px solid #aeb8c2;
+  }
+
+  .submission-section-body__field {
+    display: grid;
+    grid-template-columns: minmax(10rem, 0.8fr) minmax(0, 1.6fr);
+    gap: 1rem;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid #d5dbe0;
+  }
+
+  .submission-section-body__field dt {
+    color: #53606d;
+    font: 600 0.68rem/1.4 var(--sl-font-mono);
+    letter-spacing: 0.035em;
+    text-transform: uppercase;
+  }
+
+  .submission-section-body__field dd {
+    min-width: 0;
+    margin: 0;
+    color: #17212b;
+    overflow-wrap: anywhere;
+    white-space: pre-line;
+  }
+
+  @media (max-width: 40rem) {
+    .submission-section-body__field {
+      grid-template-columns: 1fr;
+      gap: 0.25rem;
+    }
+  }
+
+  @media print {
+    .submission-section-body__field {
+      break-inside: avoid;
+    }
+  }
+</style>

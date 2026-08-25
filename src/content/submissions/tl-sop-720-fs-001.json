@@ -1,0 +1,90 @@
+{
+  "recordId": "TL-SOP-720-FS-001",
+  "formId": "TL-SOP-720",
+  "title": "Routine Surface-Water Sampling and Field Return Procedure",
+  "recordType": "completed-report",
+  "recordFamily": "procedure",
+  "status": "active",
+  "revision": "1.0",
+  "effectiveDate": "2026-08-21",
+  "controllingOffice": "Field Sampling & Geological Research",
+  "publicationState": "controlled",
+  "information": {
+    "level": "TL-2"
+  },
+  "tags": ["field-sampling", "surface-water", "chain-of-custody", "transport", "tl-sop-720"],
+  "summary": "Current procedure for routine surface-water grab sampling, field measurements, custody sealing, transport, and laboratory intake under ordinary conditions.",
+  "relatedRecords": ["TL-SOP-720", "TL-220-EA-001", "TL-SEC-04", "TL-SEC-001"],
+  "sections": [
+    {
+      "id": "document-control",
+      "title": "DOCUMENT CONTROL",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**SOP Title:** Routine Surface-Water Sampling and Field Return Procedure\n\n**Expedition / Site:** Approved non-hazardous sampling locations; site identifier entered in the field log.\n\n**Revision:** 1.0\n\n**Prepared By:** Field Procedure Coordinator (role)\n\n**Reviewed By:** Laboratory Safety Reviewer (role)\n\n**Effective Date:** 2026-08-21"
+    },
+    {
+      "id": "1-purpose-scope",
+      "title": "1. PURPOSE & SCOPE",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Mission Objective:** Obtain representative surface-water grab samples and contemporaneous field measurements with traceable custody.\n\n**Geographic / Environmental Scope:** Temperate surface-water locations reachable by ordinary vehicle and foot access under stable weather conditions.\n\n**Exclusions:** Swift-water entry, confined spaces, boat operations, known contaminated sites, and after-dark sampling.\n\n**Success Criteria:** Required locations sampled, labels reconciled, field measurements recorded, custody seals intact, and samples accepted at laboratory intake."
+    },
+    {
+      "id": "2-roles-responsibilities",
+      "title": "2. ROLES & RESPONSIBILITIES",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Expedition Lead:** Confirms authorization, site limits, personnel accountability, and stop-work decisions.\n\n**Safety Lead:** Conducts the field hazard review and monitors weather, footing, and protective controls.\n\n**Technical Lead:** Directs meter checks, sampling order, preservation, labeling, and field documentation.\n\n**Communications / Logistics:** Maintains check-in schedule, transport readiness, and custody packet control.\n\n**Local Liaison / Cover Function:** Confirms property-access conditions when required; no representational activity beyond the approved sampling purpose."
+    },
+    {
+      "id": "3-pre-deployment-requirements",
+      "title": "3. PRE-DEPLOYMENT REQUIREMENTS",
+      "disclosure": {
+        "mode": "authorize",
+        "requiredLevel": "TL-3"
+      },
+      "body": "**Permits / Property Access:** Written authorization confirmed before departure and retained with the trip packet.\n\n**Weather / Terrain Review:** Forecast, recent precipitation, access route, bank stability, and daylight window reviewed on day of departure.\n\n**Medical / Fitness Requirements:** Personnel self-confirm fitness for walking on uneven ground and carrying the assigned field load.\n\n**Equipment Checklist Ref.:** FS-EQ-01.\n\n**Calibration / Sample Containers:** Meter verification complete; preservation supplies in date; containers counted, labeled, and packed upright.\n\n**Emergency Contacts / Extraction:** Current duty contacts and nearest ordinary emergency access point recorded in the sealed trip packet; personal contact details are excluded from this publication copy."
+    },
+    {
+      "id": "4-field-procedure",
+      "title": "4. FIELD PROCEDURE",
+      "disclosure": {
+        "mode": "authorize",
+        "requiredLevel": "TL-3"
+      },
+      "body": "**Arrival / Site Control:** Confirm site identifier and authorization, establish a clean staging area, and log personnel count and arrival time.\n\n**Survey Pattern:** Work from the least disturbed point toward subsequent stations; avoid re-entering completed sampling areas.\n\n**Sampling Method:** Collect upstream-facing grab sample without contacting the bed or bank; cap immediately and apply preservation specified by the analytical request.\n\n**Photography / Mapping Standard:** Record only approved site context and sample-station markers; exclude people, private property details, and unrelated activity.\n\n**Chain of Custody:** One sample identifier across bottle, field log, seal, and custody form; every transfer receives date, time, and role acknowledgment.\n\n**Daily Check-In / No-Contact Threshold:** Check in at departure, arrival, completion, and return. A missed scheduled check-in initiates duty-contact verification before further travel."
+    },
+    {
+      "id": "5-contingencies-closeout",
+      "title": "5. CONTINGENCIES & CLOSEOUT",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Severe Weather:** Suspend work and leave the sampling area before conditions impair footing, visibility, or safe travel.\n\n**Vehicle / Communications Failure:** Remain on the approved route, use the alternate contact method, and do not begin or continue sampling without the required check-in capability.\n\n**Civilian Contact:** Provide only the approved general description of environmental sampling and refer detailed inquiries to the designated office.\n\n**Injury / Medical Evacuation:** Stop work, provide aid within training, contact ordinary emergency services, and notify the duty contact.\n\n**Site Restoration:** Remove markers and consumables unless retention is authorized; leave the access point in its prior condition.\n\n**Return / Debrief / Sample Intake:** Reconcile personnel, equipment, samples, seals, field notes, and custody documents before release from duty."
+    },
+    {
+      "id": "procedure-steps-sequence",
+      "title": "PROCEDURE STEPS / SEQUENCE",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**PROCEDURE STEPS / SEQUENCE:** 1. Confirm authorization and weather review. 2. Verify meters, containers, labels, custody forms, and communications. 3. Log departure and personnel count. 4. Confirm site identifier on arrival. 5. Establish clean staging and complete the field hazard review. 6. Record baseline conditions. 7. Collect, preserve, label, and seal samples in station order. 8. Complete final check-in and depart by the approved route. 9. Transfer sealed samples and custody packet to laboratory intake. 10. Reconcile equipment and archive the field log."
+    },
+    {
+      "id": "revision-notes-approval",
+      "title": "REVISION NOTES / APPROVAL",
+      "disclosure": {
+        "mode": "withheld"
+      }
+    }
+  ],
+  "physicalAccess": {
+    "level": "S-2",
+    "endorsements": ["/F", "/T"]
+  },
+  "facilityCondition": "WHITE"
+}
