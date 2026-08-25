@@ -6,6 +6,15 @@ export const BASE_STAFF_LEVEL = 'TL-2' as const;
 export const DEMONSTRATION_GRANT_LEVEL = 'TL-3' as const;
 export const DEMONSTRATION_GRANT_SCOPE = 'training' as const;
 export const ELEVATED_GRANT_TTL_MS = 15 * 60 * 1000;
+export const TEMPORARY_GRANT_LEVELS = ['TL-3', 'TL-4'] as const;
+export const AUTHORIZATION_PURPOSES = [
+  'record-review',
+  'required-training',
+  'records-administration',
+] as const;
+
+export const AUTHORIZATION_REFERENCE_EXAMPLE = 'TL3-ABC123';
+export const CONTROL_OFFICE_REFERENCE_EXAMPLE = 'CO-ABC123';
 
 export const TIRN_LEVELS = [
   'TL-0',
@@ -21,34 +30,37 @@ export const TIRN_LEVELS = [
 
 export type TirnLevel = (typeof TIRN_LEVELS)[number];
 export type DisclosureMode = 'open' | 'authorize' | 'withheld';
+export type TemporaryGrantLevel = (typeof TEMPORARY_GRANT_LEVELS)[number];
+export type AuthorizationPurpose = (typeof AUTHORIZATION_PURPOSES)[number];
 
 export interface ElevatedGrant {
   version: 1;
-  level: typeof DEMONSTRATION_GRANT_LEVEL;
+  level: TemporaryGrantLevel;
   scope: typeof DEMONSTRATION_GRANT_SCOPE;
   expiresAt: number;
 }
 
-export interface AuthorizationVerifier {
-  version: 1;
-  salt: string;
-  digest: string;
-  level: typeof DEMONSTRATION_GRANT_LEVEL;
-  scope: typeof DEMONSTRATION_GRANT_SCOPE;
+export interface AuthorizationRequest {
+  requiredLevel: TirnLevel;
+  purpose: string;
+  authorizationReference: string;
+  controlOfficeReference?: string;
+  attested: boolean;
 }
 
-export const TRAINING_AUTHORIZATION_VERIFIER: Readonly<AuthorizationVerifier> = Object.freeze({
-  version: 1,
-  salt: '1b31e36bc1cdded03fe6095f8a33d333',
-  digest: 'e6123cc3f56f2c813fd67ba4e5b354298f737e473366d45a18f7cf70a5d4c209',
-  level: DEMONSTRATION_GRANT_LEVEL,
-  scope: DEMONSTRATION_GRANT_SCOPE,
-});
+export type AuthorizationRequestResult =
+  | { accepted: true; grant: ElevatedGrant }
+  | {
+      accepted: false;
+      field:
+        'level' | 'purpose' | 'authorizationReference' | 'controlOfficeReference' | 'attestation';
+      message: string;
+    };
 
 export interface TirnAccessState {
   session: 'unverified' | 'staff';
   baseLevel: 'TL-0' | typeof BASE_STAFF_LEVEL;
-  effectiveLevel: 'TL-0' | typeof BASE_STAFF_LEVEL | typeof DEMONSTRATION_GRANT_LEVEL;
+  effectiveLevel: 'TL-0' | typeof BASE_STAFF_LEVEL | TemporaryGrantLevel;
   grant: ElevatedGrant | null;
 }
 
@@ -63,56 +75,82 @@ const STANDARD_LEVEL_RANK: Partial<Record<TirnLevel, number>> = {
   'TL-7': 7,
 };
 
-function bytesToHex(values: ArrayLike<number>): string {
-  return Array.from(values, (value) => (value & 0xff).toString(16).padStart(2, '0')).join('');
-}
-
-function equalHex(left: string, right: string): boolean {
-  if (left.length !== right.length) return false;
-  let difference = 0;
-  for (let index = 0; index < left.length; index += 1) {
-    difference |= left.charCodeAt(index) ^ right.charCodeAt(index);
-  }
-  return difference === 0;
-}
-
-export function normalizeAuthorizationCredential(value: string): string {
+export function normalizeAuthorizationReference(value: string): string {
   return value.trim().toUpperCase();
 }
 
-export async function hashAuthorizationCredential(
-  credential: string,
-  salt: string,
-): Promise<string> {
-  const normalized = normalizeAuthorizationCredential(credential);
-  const payload = new TextEncoder().encode(`${salt}:${normalized}`);
-  const digest = await crypto.subtle.digest('SHA-256', payload);
-  return bytesToHex(new Uint8Array(digest));
+export function isTemporaryGrantLevel(level: TirnLevel): level is TemporaryGrantLevel {
+  return TEMPORARY_GRANT_LEVELS.includes(level as TemporaryGrantLevel);
 }
 
-export async function verifyAuthorizationCredential(
-  input: string,
-  now: number,
-): Promise<ElevatedGrant | null> {
-  const verifier = TRAINING_AUTHORIZATION_VERIFIER;
-  if (
-    verifier.version !== 1 ||
-    verifier.level !== DEMONSTRATION_GRANT_LEVEL ||
-    verifier.scope !== DEMONSTRATION_GRANT_SCOPE ||
-    !normalizeAuthorizationCredential(input)
-  ) {
-    return null;
-  }
-
-  const candidateDigest = await hashAuthorizationCredential(input, verifier.salt);
-  if (!equalHex(candidateDigest, verifier.digest)) return null;
-
+export function createElevatedGrant(level: TirnLevel, now: number): ElevatedGrant | null {
+  if (!isTemporaryGrantLevel(level)) return null;
   return {
     version: 1,
-    level: DEMONSTRATION_GRANT_LEVEL,
+    level,
     scope: DEMONSTRATION_GRANT_SCOPE,
     expiresAt: now + ELEVATED_GRANT_TTL_MS,
   };
+}
+
+export function authorizationReferenceMatchesLevel(value: string, level: TirnLevel): boolean {
+  if (!isTemporaryGrantLevel(level)) return false;
+  const match = normalizeAuthorizationReference(value).match(/^TL([34])-[A-Z0-9]{6,12}$/);
+  return Boolean(match && `TL-${match[1]}` === level);
+}
+
+export function isControlOfficeReference(value: string): boolean {
+  return /^CO-[A-Z0-9]{6,12}$/.test(normalizeAuthorizationReference(value));
+}
+
+export function evaluateAuthorizationRequest(
+  request: AuthorizationRequest,
+  now: number,
+): AuthorizationRequestResult {
+  if (!isTemporaryGrantLevel(request.requiredLevel)) {
+    return {
+      accepted: false,
+      field: 'level',
+      message: 'This information level requires separate authorization.',
+    };
+  }
+
+  if (!AUTHORIZATION_PURPOSES.includes(request.purpose as AuthorizationPurpose)) {
+    return {
+      accepted: false,
+      field: 'purpose',
+      message: 'Select a working purpose.',
+    };
+  }
+
+  if (!authorizationReferenceMatchesLevel(request.authorizationReference, request.requiredLevel)) {
+    return {
+      accepted: false,
+      field: 'authorizationReference',
+      message: `Enter a ${request.requiredLevel} authorization reference in the ${request.requiredLevel.replace('-', '')}-XXXXXX format.`,
+    };
+  }
+
+  if (
+    request.requiredLevel === 'TL-4' &&
+    !isControlOfficeReference(request.controlOfficeReference ?? '')
+  ) {
+    return {
+      accepted: false,
+      field: 'controlOfficeReference',
+      message: 'Enter a control-office reference in the CO-XXXXXX format.',
+    };
+  }
+
+  if (!request.attested) {
+    return {
+      accepted: false,
+      field: 'attestation',
+      message: 'Confirm the need-to-know attestation.',
+    };
+  }
+
+  return { accepted: true, grant: createElevatedGrant(request.requiredLevel, now)! };
 }
 
 export function serializeElevatedGrant(grant: ElevatedGrant): string {
@@ -129,7 +167,7 @@ export function parseElevatedGrant(value: string | null, now: number): ElevatedG
     if (keys.join(',') !== 'expiresAt,level,scope,version') return null;
     if (
       record.version !== 1 ||
-      record.level !== DEMONSTRATION_GRANT_LEVEL ||
+      !TEMPORARY_GRANT_LEVELS.includes(record.level as TemporaryGrantLevel) ||
       record.scope !== DEMONSTRATION_GRANT_SCOPE ||
       typeof record.expiresAt !== 'number' ||
       !Number.isFinite(record.expiresAt) ||
@@ -172,10 +210,12 @@ export function accessAllows(
   requiredScope: typeof DEMONSTRATION_GRANT_SCOPE = DEMONSTRATION_GRANT_SCOPE,
 ): boolean {
   if (state.session !== 'staff') return requiredLevel === 'TL-0';
-  if (requiredLevel === 'TL-3') {
-    return Boolean(state.grant && state.grant.scope === requiredScope);
-  }
-  return levelAllows(state.effectiveLevel, requiredLevel);
+  if (levelAllows(state.baseLevel, requiredLevel)) return true;
+  return Boolean(
+    state.grant &&
+    state.grant.scope === requiredScope &&
+    levelAllows(state.grant.level, requiredLevel),
+  );
 }
 
 export function formatGrantRemaining(expiresAt: number, now: number): string {

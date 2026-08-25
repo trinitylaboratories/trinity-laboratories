@@ -46,7 +46,7 @@
         ? `Session Accepted / ${grant.level} · ${formatGrantRemaining(grant.expiresAt, now)}`
         : accepted
           ? 'Session Accepted / TL-2'
-          : 'Guest / Unverified';
+          : 'Guest / No staff session';
       state.dataset.accepted = String(accepted);
     }
   };
@@ -57,7 +57,7 @@
       sessionStorage.removeItem(TIRN_GRANT_STORAGE_KEY);
       sessionStorage.removeItem(TIRN_SESSION_STORAGE_KEY);
     } catch {
-      // The indicator is optional and does not gate record access.
+      // The record presentation remains locked when the local session cannot be evaluated.
     }
     updateSession();
     window.dispatchEvent(new CustomEvent(TIRN_ACCESS_CHANGE_EVENT));

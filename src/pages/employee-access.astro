@@ -143,7 +143,7 @@ import CorporateLayout from '../layouts/CorporateLayout.astro';
     try {
       sessionStorage.setItem('tirn-session', 'accepted');
     } catch {
-      // Storage is only a cosmetic session indicator; records remain public.
+      // Storage holds only the generic local presentation state for this browser tab.
     }
     if (status) status.textContent = 'SESSION ACCEPTED. OPENING STAFF SERVICES.';
     window.setTimeout(() => window.location.assign('/portal/'), 180);

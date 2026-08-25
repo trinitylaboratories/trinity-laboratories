@@ -27,7 +27,7 @@ const navItems = [
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
-    <meta name="robots" content="noindex, nofollow" />
+    <meta name="robots" content="noindex, nofollow, noarchive" />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/media/brand/trinity-icon.png" />
     <meta name="theme-color" content="#10243b" />
@@ -66,7 +66,7 @@ const navItems = [
           <a href="/records/">Records network</a>
         </div>
         <div class="portal-nav__session-actions">
-          <button type="button" data-revoke-grant hidden>Relinquish TL-3</button>
+          <button type="button" data-revoke-grant hidden>Relinquish temporary access</button>
           <button type="button" data-terminate-session data-session-terminate
             >Terminate session</button
           >
@@ -76,12 +76,33 @@ const navItems = [
 
     <aside class="portal-session-warning" data-session-warning hidden>
       <strong>Unverified session.</strong>{' '}
-      Released resources remain available. <a href="/employee-access/">Return to Employee Access</a
-      >{' '}
+      Internal services remain locked. <a href="/employee-access/">Return to Employee Access</a>{
+        ' '
+      }
       to establish the base TL-2 staff session.
     </aside>
 
-    <main id="portal-main" class="portal-main" data-pagefind-ignore><slot /></main>
+    <main id="portal-main" class="portal-main" data-pagefind-ignore>
+      <section class="portal-access-boundary" data-portal-locked hidden aria-live="polite">
+        <p class="portal-section__label">Session required</p>
+        <h2>Staff Services is limited to authenticated personnel.</h2>
+        <p>
+          Establish a staff session through Employee Access before opening records, forms, or
+          authorization services on this terminal.
+        </p>
+        <a class="portal-button portal-button--primary" href="/employee-access/"
+          >Open Employee Access</a
+        >
+      </section>
+      <div data-portal-staff-content hidden><slot /></div>
+      <noscript>
+        <section class="portal-access-boundary">
+          <p class="portal-section__label">Terminal unavailable</p>
+          <h2>JavaScript is required to evaluate the local staff session.</h2>
+          <p>No record content is displayed while local session evaluation is unavailable.</p>
+        </section>
+      </noscript>
+    </main>
 
     <footer class="portal-footer">
       <span>TIRN · Staff Services</span>
@@ -103,6 +124,8 @@ const navItems = [
       const warning = document.querySelector<HTMLElement>('[data-session-warning]');
       const terminate = document.querySelector<HTMLButtonElement>('[data-terminate-session]');
       const revoke = document.querySelector<HTMLButtonElement>('[data-revoke-grant]');
+      const lockedPanel = document.querySelector<HTMLElement>('[data-portal-locked]');
+      const staffContent = document.querySelector<HTMLElement>('[data-portal-staff-content]');
 
       const readStoredValue = (key: string) => {
         try {
@@ -134,13 +157,15 @@ const navItems = [
         document.body.dataset.portalSession = state.session;
         if (warning) warning.hidden = state.session === 'staff';
         if (revoke) revoke.hidden = !state.grant;
+        if (lockedPanel) lockedPanel.hidden = state.session === 'staff';
+        if (staffContent) staffContent.hidden = state.session !== 'staff';
 
         if (sessionState) {
           sessionState.textContent = state.grant
             ? `Staff / ${state.grant.level} temporary · ${formatGrantRemaining(state.grant.expiresAt, now)}`
             : state.session === 'staff'
               ? 'Staff / TL-2 base'
-              : 'Guest / released access';
+              : 'Guest / no staff session';
         }
         document.querySelectorAll<HTMLElement>('[data-portal-summary-session]').forEach((node) => {
           node.textContent =

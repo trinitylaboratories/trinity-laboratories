@@ -18,7 +18,7 @@ function entry(overrides: Partial<RecordCatalogueEntry> = {}): RecordCatalogueEn
     recordType: 'form-template',
     recordFamily: 'research',
     status: 'template',
-    publicationState: 'released',
+    publicationState: 'controlled',
     revision: 'Source undated',
     informationLevel: 'TL-1',
     controllingOffice: 'Information Security & Records Division',
@@ -52,6 +52,31 @@ describe('portal record catalogue', () => {
         title: 'Forms Library',
       }),
     ).toBeNull();
+  });
+
+  it('keeps all internal templates controlled unless an explicit state says otherwise', () => {
+    expect(
+      catalogueEntryFromDocument('records/forms/tl-220', {
+        title: 'TL-220 — Controlled Experimental Study Record',
+        recordId: 'TL-220',
+        recordType: 'form-template',
+        recordFamily: 'research',
+        status: 'template',
+        revision: 'Source undated',
+        information: { level: 'TL-2' },
+      })?.publicationState,
+    ).toBe('controlled');
+    expect(
+      catalogueEntryFromDocument('records/forms/tl-590', {
+        title: 'TL-590 — Directorate record',
+        recordId: 'TL-590',
+        recordType: 'form-template',
+        recordFamily: 'research',
+        status: 'template',
+        revision: 'Source undated',
+        information: { level: 'TL-5' },
+      })?.publicationState,
+    ).toBe('controlled');
   });
 
   it('normalizes completed submissions into their report route', () => {

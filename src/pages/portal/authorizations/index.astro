@@ -8,7 +8,7 @@ import PortalLayout from '../../../layouts/PortalLayout.astro';
 
 <PortalLayout
   title="Authorizations"
-  description="Review TIRN eligibility, establish a temporary TL-3 training grant, and inspect controlled presentation states."
+  description="Review TIRN eligibility, establish temporary TL-3 or TL-4 access, and inspect controlled presentation states."
   active="authorizations"
 >
   <PortalPageHeading
@@ -23,13 +23,13 @@ import PortalLayout from '../../../layouts/PortalLayout.astro';
         <p class="portal-section__label">Access principle</p>
         <h2 id="authorization-principle-heading">Eligibility is not permission</h2>
         <p>
-          The base staff session establishes TL-2 information eligibility. A qualifying credential
-          may establish a temporary TL-3 training grant for the controlled examples below. Program,
+          The base staff session establishes TL-2 information eligibility. A qualifying request may
+          establish temporary TL-3 or TL-4 access for the controlled examples below. Program,
           compartment, physical, and need-to-know requirements remain independent.
         </p>
         <div class="portal-callout">
           Temporary grants expire after 15 minutes and are removed when the staff session is
-          terminated. Authorization credentials are issued separately by the controlling office.
+          terminated. Request references are assigned separately by the controlling office.
         </div>
       </section>
 
@@ -62,12 +62,30 @@ import PortalLayout from '../../../layouts/PortalLayout.astro';
         <ol>
           <li>Verify that the temporary authorization indicator is visible.</li>
           <li>Review only the information required for the current exercise.</li>
-          <li>Use “Relinquish TL-3” to return the record to its omitted state.</li>
+          <li>Use “Relinquish temporary access” to return the record to its omitted state.</li>
         </ol>
         <p>
           No operational event, facility, person, or active program is represented by this exercise.
         </p>
       </ControlledRecord>
+
+      <ControlledSection
+        id="release-coordination-four"
+        title="Controlled release coordination"
+        mode="authorize"
+        requiredLevel="TL-4"
+        summary="Temporary TL-4 access, an independent control-office reference, and affirmed need-to-know are required."
+      >
+        <p>
+          Confirm the assigned review scope, distribution list, and current revision before using
+          material from a special-access release. Record copying and onward distribution remain
+          subject to the controlling office instructions.
+        </p>
+        <p>
+          Close the record when the assigned review is complete and relinquish temporary access if
+          no additional TL-4 material is required during this session.
+        </p>
+      </ControlledSection>
 
       <ControlledSection
         id="separate-source-example"
@@ -87,8 +105,10 @@ import PortalLayout from '../../../layouts/PortalLayout.astro';
         <h2 id="authorization-results-heading">Possible outcomes</h2>
         <dl class="portal-summary">
           <div><dt>TL-0–TL-2</dt><dd>Base staff session</dd></div>
-          <div><dt>TL-3</dt><dd>Temporary training grant</dd></div>
-          <div><dt>TL-4 and above</dt><dd>Separate grant required</dd></div>
+          <div><dt>TL-3</dt><dd>Authorization reference required</dd></div>
+          <div><dt>TL-4</dt><dd>Authorization and control-office references required</dd></div>
+          <div><dt>Program / compartment</dt><dd>Separate authorization required</dd></div>
+          <div><dt>TL-5 and above</dt><dd>Separate authorization required</dd></div>
           <div><dt>Withheld body</dt><dd>Not present in site</dd></div>
         </dl>
       </section>

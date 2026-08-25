@@ -1,6 +1,7 @@
 ---
 title: 'TL-SOP-890 — SOP Outline — Anomalous Site Expedition & Recovery'
 description: 'Accessible transcription and blank DOCX download for Trinity Laboratories form TL-SOP-890.'
+pagefind: false
 recordId: 'TL-SOP-890'
 recordType: 'form-template'
 recordFamily: 'procedure'

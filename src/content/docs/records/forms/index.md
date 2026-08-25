@@ -1,6 +1,7 @@
 ---
 title: 'Forms Library'
 description: 'Accessible transcriptions and metadata-scrubbed downloads for Trinity blank record templates.'
+pagefind: false
 sidebar:
   order: 3
 ---

@@ -1,0 +1,151 @@
+---
+import AuthorizationDialog from './AuthorizationDialog.astro';
+import type { TirnLevel } from '../../lib/tirn-access';
+
+type RecordsData = {
+  recordId?: string;
+  recordType?: string;
+  information?: {
+    level?: TirnLevel;
+    program?: string;
+    compartment?: string;
+  };
+};
+
+const data = Astro.locals.starlightRoute.entry.data as RecordsData;
+const isForm = data.recordType === 'form-template';
+const requiredLevel: TirnLevel = isForm ? (data.information?.level ?? 'TL-2') : 'TL-2';
+const recordId = data.recordId ?? Astro.locals.starlightRoute.id.toUpperCase();
+const standardRank = Number(requiredLevel.replace('TL-', ''));
+const separatelyControlled =
+  Boolean(data.information?.program || data.information?.compartment) ||
+  requiredLevel === 'TL/Ø' ||
+  !Number.isFinite(standardRank) ||
+  standardRank >= 5;
+const requestAvailable = !separatelyControlled && standardRank >= 3;
+const gateTitle = separatelyControlled
+  ? 'Separate authorization is required.'
+  : requestAvailable
+    ? `${requiredLevel} authorization is required.`
+    : 'A staff session is required.';
+const gateCopy = separatelyControlled
+  ? 'This node contains catalog metadata only. The record body and source attachment are not available through browser authorization.'
+  : requestAvailable
+    ? 'Establish a staff session, then submit a temporary-access request for the displayed information level.'
+    : 'Establish a staff session through Employee Access to open this internal reference.';
+---
+
+<div
+  class="records-document-boundary"
+  data-records-document-boundary
+  data-record-id={recordId}
+  data-required-level={requiredLevel}
+  data-separately-controlled={String(separatelyControlled)}
+>
+  <section class="records-document-gate" data-records-document-gate>
+    <p class="records-document-gate__label">Internal records control</p>
+    <h2>{gateTitle}</h2>
+    <p>{gateCopy}</p>
+    <dl>
+      <div><dt>Record</dt><dd>{recordId}</dd></div>
+      <div><dt>Required eligibility</dt><dd>{requiredLevel}</dd></div>
+      <div><dt>Access basis</dt><dd>Eligibility and documented need-to-know</dd></div>
+    </dl>
+    <div class="records-document-gate__actions">
+      <a href="/employee-access/">Establish staff session</a>
+      {
+        requestAvailable && (
+          <AuthorizationDialog
+            id={`document-${recordId.toLowerCase()}`}
+            requiredLevel={requiredLevel}
+            program={data.information?.program}
+            compartment={data.information?.compartment}
+            triggerLabel="Request temporary access"
+          />
+        )
+      }
+    </div>
+  </section>
+
+  <div
+    class="sl-markdown-content records-document-content"
+    data-records-document-content
+    aria-hidden="true"
+    hidden
+  >
+    <slot />
+  </div>
+</div>
+
+<script>
+  import {
+    accessAllows,
+    resolveTirnAccess,
+    TIRN_ACCESS_CHANGE_EVENT,
+    TIRN_GRANT_STORAGE_KEY,
+    TIRN_SESSION_STORAGE_KEY,
+    type TirnLevel,
+  } from '../../lib/tirn-access';
+
+  const readSessionValue = (key: string) => {
+    try {
+      return sessionStorage.getItem(key);
+    } catch {
+      return null;
+    }
+  };
+
+  const refreshDocumentBoundary = (root: HTMLElement, moveFocus = false) => {
+    const now = Date.now();
+    const state = resolveTirnAccess(
+      readSessionValue(TIRN_SESSION_STORAGE_KEY),
+      readSessionValue(TIRN_GRANT_STORAGE_KEY),
+      now,
+    );
+    const requiredLevel = (root.dataset.requiredLevel || 'TL-2') as TirnLevel;
+    const separatelyControlled = root.dataset.separatelyControlled === 'true';
+    const authorized = !separatelyControlled && accessAllows(state, requiredLevel);
+    const wasAuthorized = root.dataset.accessState === 'authorized';
+    const gate = root.querySelector<HTMLElement>('[data-records-document-gate]');
+    const content = root.querySelector<HTMLElement>('[data-records-document-content]');
+    const recordId = root.dataset.recordId;
+
+    root.dataset.accessState = authorized ? 'authorized' : 'locked';
+    if (gate) gate.hidden = authorized;
+    if (content) {
+      content.hidden = !authorized;
+      content.setAttribute('aria-hidden', String(!authorized));
+    }
+    document
+      .querySelectorAll<HTMLElement>(
+        `[data-protected-record-title="${CSS.escape(recordId ?? '')}"]`,
+      )
+      .forEach((title) => {
+        title.hidden = !authorized;
+      });
+    document
+      .querySelectorAll<HTMLElement>(
+        `[data-protected-record-title-fallback="${CSS.escape(recordId ?? '')}"]`,
+      )
+      .forEach((fallback) => {
+        fallback.hidden = authorized;
+      });
+    if (moveFocus && authorized && !wasAuthorized) {
+      document.querySelector<HTMLElement>('#_top')?.focus();
+    }
+  };
+
+  document.querySelectorAll<HTMLElement>('[data-records-document-boundary]').forEach((root) => {
+    refreshDocumentBoundary(root);
+  });
+  window.addEventListener(TIRN_ACCESS_CHANGE_EVENT, () => {
+    document.querySelectorAll<HTMLElement>('[data-records-document-boundary]').forEach((root) => {
+      refreshDocumentBoundary(root, true);
+    });
+  });
+  window.setInterval(() => {
+    document.querySelectorAll<HTMLElement>('[data-records-document-boundary]').forEach((root) => {
+      refreshDocumentBoundary(root);
+    });
+  }, 1000);
+</script>

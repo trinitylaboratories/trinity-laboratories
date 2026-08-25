@@ -145,7 +145,10 @@ const sortLabels = {
                 <span>{RECORD_TYPE_LABELS[entry.recordType]}</span>
               </td>
               <td class="record-catalogue__title">
-                <strong>{entry.title}</strong>
+                <strong data-catalogue-title hidden>
+                  {entry.title}
+                </strong>
+                <strong data-catalogue-title-fallback>Title withheld — eligibility required</strong>
                 <span>{entry.controllingOffice ?? `Revision ${entry.revision}`}</span>
               </td>
               <td>{familyLabels[entry.recordFamily]}</td>
@@ -180,10 +183,21 @@ const sortLabels = {
     type RecordCatalogueEntry,
     type RecordCatalogueFilters,
   } from '../../lib/record-catalogue';
+  import {
+    accessAllows,
+    resolveTirnAccess,
+    TIRN_ACCESS_CHANGE_EVENT,
+    TIRN_GRANT_STORAGE_KEY,
+    TIRN_SESSION_STORAGE_KEY,
+    type TirnLevel,
+  } from '../../lib/tirn-access';
 
   interface CatalogueRow {
     element: HTMLTableRowElement;
     entry: RecordCatalogueEntry;
+    title: HTMLElement | null;
+    titleFallback: HTMLElement | null;
+    titleAuthorized: boolean;
   }
 
   const initializeRecordCatalogue = (root: HTMLElement) => {
@@ -208,7 +222,15 @@ const sortLabels = {
     ).flatMap((element) => {
       try {
         const entry = JSON.parse(element.dataset.catalogueEntry ?? '') as RecordCatalogueEntry;
-        return [{ element, entry }];
+        return [
+          {
+            element,
+            entry,
+            title: element.querySelector<HTMLElement>('[data-catalogue-title]'),
+            titleFallback: element.querySelector<HTMLElement>('[data-catalogue-title-fallback]'),
+            titleAuthorized: false,
+          },
+        ];
       } catch {
         return [];
       }
@@ -232,6 +254,34 @@ const sortLabels = {
       return;
     }
 
+    const readCatalogueAccessValue = (key: string) => {
+      try {
+        return sessionStorage.getItem(key);
+      } catch {
+        return null;
+      }
+    };
+
+    const refreshTitleAccess = () => {
+      const state = resolveTirnAccess(
+        readCatalogueAccessValue(TIRN_SESSION_STORAGE_KEY),
+        readCatalogueAccessValue(TIRN_GRANT_STORAGE_KEY),
+        Date.now(),
+      );
+      let changed = false;
+      for (const row of rows) {
+        const requiredLevel = (row.entry.informationLevel ?? 'TL-2') as TirnLevel;
+        const titleAuthorized =
+          row.entry.publicationState !== 'withheld' && accessAllows(state, requiredLevel);
+        if (row.titleAuthorized === titleAuthorized) continue;
+        row.titleAuthorized = titleAuthorized;
+        changed = true;
+        if (row.title) row.title.hidden = !row.titleAuthorized;
+        if (row.titleFallback) row.titleFallback.hidden = row.titleAuthorized;
+      }
+      return changed;
+    };
+
     const currentFilters = (): RecordCatalogueFilters => ({
       query: query.value,
       recordType: recordType.value as RecordCatalogueFilters['recordType'],
@@ -253,7 +303,8 @@ const sortLabels = {
       for (const entry of ordered) {
         const row = rowsById.get(entry.recordId);
         if (!row) continue;
-        const matches = recordMatchesCatalogueFilters(entry, filters);
+        const searchableEntry = row.titleAuthorized ? entry : { ...entry, title: '', tags: [] };
+        const matches = recordMatchesCatalogueFilters(searchableEntry, filters);
         row.element.hidden = !matches;
         if (matches) visible += 1;
         body.append(row.element);
@@ -288,7 +339,16 @@ const sortLabels = {
     });
 
     controls.disabled = false;
+    refreshTitleAccess();
     refresh();
+
+    window.addEventListener(TIRN_ACCESS_CHANGE_EVENT, () => {
+      refreshTitleAccess();
+      refresh();
+    });
+    window.setInterval(() => {
+      if (refreshTitleAccess()) refresh();
+    }, 1000);
   };
 
   document

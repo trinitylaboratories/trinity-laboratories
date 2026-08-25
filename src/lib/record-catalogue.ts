@@ -53,6 +53,7 @@ export interface CatalogueDocumentData {
   recordType?: Exclude<CatalogueRecordType, 'completed-report'>;
   recordFamily?: RecordFamily;
   status?: CatalogueStatus;
+  publicationState?: PublicationState;
   revision?: string;
   effectiveDate?: string;
   controllingOffice?: string;
@@ -90,6 +91,11 @@ function displayTitle(recordId: string, title: string): string {
   );
 }
 
+function documentPublicationState(data: CatalogueDocumentData): PublicationState {
+  if (data.publicationState) return data.publicationState;
+  return 'controlled';
+}
+
 export function catalogueEntryFromDocument(
   collectionId: string,
   data: CatalogueDocumentData,
@@ -104,7 +110,7 @@ export function catalogueEntryFromDocument(
     recordType: data.recordType,
     recordFamily: data.recordFamily,
     status: data.status,
-    publicationState: 'released',
+    publicationState: documentPublicationState(data),
     revision: data.revision,
     effectiveDate: data.effectiveDate,
     controllingOffice: data.controllingOffice,

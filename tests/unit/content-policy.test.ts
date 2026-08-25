@@ -25,20 +25,26 @@ function recordFrontmatter({
   hash,
   related = '[]',
   level = 'TL-1',
+  recordType = 'policy',
+  publicationState = '',
+  pagefind = '',
 }: {
   id?: string;
   hash: string;
   related?: string;
   level?: string;
+  recordType?: string;
+  publicationState?: string;
+  pagefind?: string;
 }) {
   return `---
 title: Test record
 recordId: ${id}
-recordType: policy
+recordType: ${recordType}
 recordFamily: security
 status: active
 revision: "1"
-legacyMarking:
+${publicationState ? `publicationState: ${publicationState}\n` : ''}${pagefind ? `pagefind: ${pagefind}\n` : ''}legacyMarking:
   level: I
   label: Institutional
 information:
@@ -121,6 +127,33 @@ describe('content policy', () => {
   it('rejects duplicate YAML keys during frontmatter parsing', () => {
     expect(() => parseFrontmatter('---\nrecordId: TL-A\nrecordId: TL-B\n---\n')).toThrow(
       /invalid YAML frontmatter/,
+    );
+  });
+
+  it('rejects search indexing or public-release status on TL-3+ form templates', async () => {
+    const root = await fixtureRoot();
+    const payload = 'fixture attachment';
+    const hash = createHash('sha256').update(payload).digest('hex');
+    await writeFile(path.join(root, 'public', 'downloads', 'test.txt'), payload, 'utf8');
+    await writeFile(
+      path.join(root, 'content', 'record.md'),
+      recordFrontmatter({
+        hash,
+        level: 'TL-3',
+        recordType: 'form-template',
+        publicationState: 'released',
+      }),
+      'utf8',
+    );
+    const result = await validateContent({
+      contentRoot: path.join(root, 'content'),
+      publicRoot: path.join(root, 'public'),
+    });
+    expect(result.errors).toEqual(
+      expect.arrayContaining([
+        expect.stringMatching(/TL-3\+ form templates must set pagefind: false/),
+        expect.stringMatching(/TL-3\+ records may not declare publicationState: released/),
+      ]),
     );
   });
 });

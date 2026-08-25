@@ -1,11 +1,16 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 
 import { captureRuntimeErrors, visit } from './support/site';
 
 const REPORT_ROUTE = '/records/reports/tl-340-trn-001/';
 const STRUCTURED_REPORT_ROUTE = '/records/reports/tl-101-ins-001/';
 
+async function establishStaffSession(page: Page) {
+  await page.addInitScript(() => sessionStorage.setItem('tirn-session', 'accepted'));
+}
+
 test('completed-report catalogs expose only safe control metadata', async ({ page }) => {
+  await establishStaffSession(page);
   await visit(page, '/records/reports/');
   const reportLink = page.getByRole('link', { name: 'TL-340-TRN-001' });
   const reportRow = page.getByRole('row').filter({ has: reportLink });
@@ -23,6 +28,7 @@ test('completed-report catalogs expose only safe control metadata', async ({ pag
 });
 
 test('workstation field paragraphs render as semantic labeled rows', async ({ page }) => {
+  await establishStaffSession(page);
   await visit(page, STRUCTURED_REPORT_ROUTE);
 
   const projectTitle = page
@@ -47,6 +53,7 @@ test('workstation field paragraphs render as semantic labeled rows', async ({ pa
 
 test('TL-3 report is redacted without an elevated session', async ({ page }) => {
   const runtimeErrors = captureRuntimeErrors(page);
+  await establishStaffSession(page);
   await visit(page, REPORT_ROUTE);
 
   await expect(page.locator('[data-record-id="TL-340-TRN-001"]')).toBeVisible();
@@ -120,6 +127,7 @@ test('a generic browser-local TL-3 grant reveals authorized training content onl
 test('Pagefind indexes released report fields but excludes controlled body text', async ({
   page,
 }) => {
+  await establishStaffSession(page);
   await visit(page, '/records/search/');
   const search = page.getByRole('search').getByRole('textbox', { name: 'Search released records' });
 
@@ -160,6 +168,7 @@ test('completed-report interactions make no non-read or external request', async
     }
   });
 
+  await establishStaffSession(page);
   await visit(page, REPORT_ROUTE);
   observedOrigin = new URL(page.url()).origin;
   const recordLock = page.locator(

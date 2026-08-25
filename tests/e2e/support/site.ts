@@ -29,13 +29,23 @@ export const INDEXABLE_ROUTES = [
   '/careers/',
   '/contact/',
   '/employee-access/',
+] as const;
+
+export const RECORD_ROUTES = [
   '/records/',
   '/records/search/',
+  '/records/security/',
   '/records/security/information-classification/',
   '/records/security/physical-access/',
   '/records/security/endorsements-and-conditions/',
   '/records/forms/',
   ...FORM_IDS.map((id) => `/records/forms/${id}/`),
+  '/records/reports/',
+  '/records/reports/tl-101-ins-001/',
+  '/records/reports/tl-220-ea-001/',
+  '/records/reports/tl-340-trn-001/',
+  '/records/reports/tl-sop-720-fs-001/',
+  '/records/submissions/',
 ] as const;
 
 export const CONTROLLED_ROUTES = [
@@ -44,12 +54,7 @@ export const CONTROLLED_ROUTES = [
   '/portal/authorizations/',
   '/portal/forms/',
   '/portal/help/',
-  '/records/reports/',
-  '/records/reports/tl-101-ins-001/',
-  '/records/reports/tl-220-ea-001/',
-  '/records/reports/tl-340-trn-001/',
-  '/records/reports/tl-sop-720-fs-001/',
-  '/records/submissions/',
+  ...RECORD_ROUTES,
 ] as const;
 
 export const SITE_ROUTES = [...INDEXABLE_ROUTES, ...CONTROLLED_ROUTES] as const;

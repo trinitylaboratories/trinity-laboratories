@@ -15,10 +15,10 @@ import {
   LOCAL_FORM_ROUTES,
   NOINDEX_ROUTES,
   PRODUCTION_ORIGIN,
-  RECORD_ROUTES,
   REQUIRED_GATEWAY_HOOKS,
   REQUIRED_SESSION_HOOKS,
   routeToOutputPath,
+  SEARCHABLE_RECORD_ROUTES,
   SITEMAP_ROUTES,
   SITE_ROUTES,
 } from './lib/site-contract.mjs';
@@ -233,9 +233,9 @@ export async function validatePagefindOutput(distRoot) {
         total + (Number.isInteger(language?.page_count) ? language.page_count : 0),
       0,
     );
-    if (indexedPages < RECORD_ROUTES.length) {
+    if (indexedPages < SEARCHABLE_RECORD_ROUTES.length) {
       errors.push(
-        `Pagefind reports only ${indexedPages} indexed page(s); expected at least ${RECORD_ROUTES.length} records`,
+        `Pagefind reports only ${indexedPages} indexed page(s); expected at least ${SEARCHABLE_RECORD_ROUTES.length} searchable records`,
       );
     }
   } catch (error) {
@@ -252,7 +252,7 @@ export async function validatePagefindOutput(distRoot) {
     errors.push('Pagefind output contains no indexed document fragments');
   }
 
-  for (const route of RECORD_ROUTES) {
+  for (const route of SEARCHABLE_RECORD_ROUTES) {
     const outputPath = path.join(distRoot, routeToOutputPath(route));
     const html = await readFile(outputPath, 'utf8').catch(() => '');
     if (!/\bdata-pagefind-body(?:\s|=|>)/i.test(html)) {

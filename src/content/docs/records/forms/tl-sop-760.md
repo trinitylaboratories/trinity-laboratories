@@ -1,6 +1,7 @@
 ---
 title: 'TL-SOP-760 — SOP Outline — Controlled High-Risk Experiment'
 description: 'Accessible transcription and blank DOCX download for Trinity Laboratories form TL-SOP-760.'
+pagefind: false
 recordId: 'TL-SOP-760'
 recordType: 'form-template'
 recordFamily: 'procedure'
