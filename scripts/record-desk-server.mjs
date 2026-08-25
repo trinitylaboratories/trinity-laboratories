@@ -14,6 +14,7 @@ import {
   stableJson,
   validateDraftPackage,
 } from '../tools/record-desk/core.mjs';
+import { readStableUtf8File } from './lib/stable-file-read.mjs';
 import { loadDefinitionCatalog } from './validate-form-definitions.mjs';
 
 export const PROJECT_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -191,9 +192,12 @@ export async function createRecordDeskServer({
           path.join(safeDraftDirectory, draftName),
           'Draft path',
         );
-        let stat;
+        let draftFile;
         try {
-          stat = await fs.stat(filePath);
+          draftFile = await readStableUtf8File(filePath, {
+            label: 'Stored draft',
+            maxBytes: MAX_DRAFT_BYTES,
+          });
         } catch (error) {
           if (error && typeof error === 'object' && error.code === 'ENOENT') {
             sendJson(response, 404, { error: 'Draft not found.' });
@@ -201,11 +205,7 @@ export async function createRecordDeskServer({
           }
           throw error;
         }
-        if (!stat.isFile() || stat.size > MAX_DRAFT_BYTES) {
-          sendJson(response, 422, { error: 'Stored draft is not a valid workstation package.' });
-          return;
-        }
-        const draft = JSON.parse(await fs.readFile(filePath, 'utf8'));
+        const draft = JSON.parse(draftFile.text);
         validateDraftPackage(draft);
         const definition = definitions.get(draft.templateId);
         if (!definition) throw new Error('Stored draft references an unknown form template.');

@@ -9,6 +9,7 @@ import {
   toPublicRecord,
   validateDraftPackage,
 } from '../tools/record-desk/core.mjs';
+import { readStableUtf8File } from './lib/stable-file-read.mjs';
 import { loadDefinitionCatalog } from './validate-form-definitions.mjs';
 
 export const PROJECT_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -41,15 +42,23 @@ export function parseImportArguments(argv) {
 
 export async function readCurrentBranch(root = PROJECT_ROOT) {
   const dotGit = path.join(root, '.git');
-  const stat = await fs.stat(dotGit);
   let gitDirectory = dotGit;
-  if (stat.isFile()) {
-    const pointer = (await fs.readFile(dotGit, 'utf8')).trim();
+  const gitEntry = await readStableUtf8File(dotGit, {
+    label: 'Repository Git entry',
+    maxBytes: 16 * 1024,
+    allowDirectory: true,
+  });
+  if (gitEntry.kind === 'file') {
+    const pointer = gitEntry.text.trim();
     const match = pointer.match(/^gitdir:\s*(.+)$/i);
     if (!match) throw new Error('Unable to resolve the repository Git directory.');
     gitDirectory = path.resolve(root, match[1]);
   }
-  const head = (await fs.readFile(path.join(gitDirectory, 'HEAD'), 'utf8')).trim();
+  const headFile = await readStableUtf8File(path.join(gitDirectory, 'HEAD'), {
+    label: 'Repository HEAD',
+    maxBytes: 16 * 1024,
+  });
+  const head = headFile.text.trim();
   const match = head.match(/^ref:\s*refs\/heads\/(.+)$/);
   return match ? match[1] : null;
 }
@@ -141,15 +150,11 @@ export async function stageDraftPackage({
     path.resolve(physicalRoot, inputPath),
     'Input path',
   );
-  const sourceStat = await fs.stat(sourcePath);
-  if (!sourceStat.isFile()) throw new Error('Input path must identify a regular file.');
-  if (sourceStat.size > MAX_DRAFT_BYTES) {
-    throw new Error(`Draft package exceeds the ${MAX_DRAFT_BYTES}-byte limit.`);
-  }
-  const source = await fs.readFile(sourcePath, 'utf8');
-  if (Buffer.byteLength(source, 'utf8') > MAX_DRAFT_BYTES) {
-    throw new Error(`Draft package exceeds the ${MAX_DRAFT_BYTES}-byte limit.`);
-  }
+  const sourceFile = await readStableUtf8File(sourcePath, {
+    label: 'Draft package',
+    maxBytes: MAX_DRAFT_BYTES,
+  });
+  const source = sourceFile.text;
   let draft;
   try {
     draft = JSON.parse(source);

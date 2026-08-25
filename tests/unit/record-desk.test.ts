@@ -17,6 +17,7 @@ import {
   DEFAULT_OUTPUT_DIRECTORY,
   assertImportBranch,
   parseImportArguments,
+  readCurrentBranch,
   stageDraftPackage,
 } from '../../scripts/import-record.mjs';
 import {
@@ -237,6 +238,20 @@ describe('record desk package policy', () => {
 });
 
 describe('record desk importer', () => {
+  it('reads branch metadata from repositories and linked worktrees through stable handles', async () => {
+    const repositoryRoot = await fixtureRoot();
+    await fs.mkdir(path.join(repositoryRoot, '.git'));
+    await fs.writeFile(path.join(repositoryRoot, '.git', 'HEAD'), 'ref: refs/heads/codex/direct\n');
+    expect(await readCurrentBranch(repositoryRoot)).toBe('codex/direct');
+
+    const worktreeRoot = await fixtureRoot();
+    const worktreeGitDirectory = path.join(worktreeRoot, '.worktree-git');
+    await fs.mkdir(worktreeGitDirectory);
+    await fs.writeFile(path.join(worktreeGitDirectory, 'HEAD'), 'ref: refs/heads/codex/worktree\n');
+    await fs.writeFile(path.join(worktreeRoot, '.git'), 'gitdir: .worktree-git\n');
+    expect(await readCurrentBranch(worktreeRoot)).toBe('codex/worktree');
+  });
+
   it('stages canonical public JSON on a working branch and refuses collisions', async () => {
     const root = await fixtureRoot();
     await fs.mkdir(path.join(root, 'data', 'form-definitions'), { recursive: true });
@@ -275,6 +290,15 @@ describe('record desk importer', () => {
     await expect(
       stageDraftPackage({ root, inputPath: path.basename(source), branch: 'codex/record-desk' }),
     ).rejects.toThrow(/exceeds/i);
+  });
+
+  it('rejects a directory in place of a draft file', async () => {
+    const root = await fixtureRoot();
+    const source = path.join(root, 'directory.tirn-draft.json');
+    await fs.mkdir(source);
+    await expect(
+      stageDraftPackage({ root, inputPath: path.basename(source), branch: 'codex/record-desk' }),
+    ).rejects.toThrow(/regular file/i);
   });
 });
 
@@ -350,6 +374,14 @@ describe('loopback record desk server', () => {
         saved: true,
         filename: 'tl-101-trn-001.tirn-draft.json',
       });
+
+      const retrieved = await request(
+        instance.origin,
+        '/api/drafts/tl-101-trn-001.tirn-draft.json',
+        { headers: { 'X-TIRN-CSRF': 'unit-test-csrf-token' } },
+      );
+      expect(retrieved.status).toBe(200);
+      expect(JSON.parse(retrieved.body)).toEqual(makeDraft());
     } finally {
       await new Promise<void>((resolve) => instance.server.close(() => resolve()));
     }
