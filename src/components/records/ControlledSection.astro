@@ -19,7 +19,7 @@ const {
   requiredLevel = 'TL-3',
   program,
   compartment,
-  summary = 'Controlled section content is not displayed in the current view.',
+  summary = 'This section requires additional information authorization.',
 } = Astro.props;
 const headingId = `${id}-heading`;
 ---
@@ -59,7 +59,7 @@ const headingId = `${id}-heading`;
             </>
           </div>
           <div>
-            <strong>Controlled content omitted from current view</strong>
+            <strong>Additional information authorization required</strong>
             <p>{summary}</p>
             <p class="tirn-controlled__requirements">
               Required: {requiredLevel}
@@ -94,7 +94,7 @@ const headingId = `${id}-heading`;
           </>
         </div>
         <div>
-          <strong>Content withheld from this publication</strong>
+          <strong>Source content held by controlling office</strong>
           <p>{summary}</p>
           <p class="tirn-controlled__requirements">
             Required: {requiredLevel}

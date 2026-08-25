@@ -1,6 +1,7 @@
 ---
 title: 'TL-SEC-001 Reference — Endorsements & Facility Conditions'
-description: 'Derived quick reference for Trinity physical-access endorsements and facility conditions.'
+description: 'Controlled reference for Trinity physical-access endorsements and facility conditions.'
+pagefind: false
 recordId: 'TL-SEC-001-REF'
 recordType: 'security-reference'
 recordFamily: 'security'
@@ -8,7 +9,7 @@ status: 'active'
 revision: 'Derived from TL-SEC-001, revision 1986'
 controllingOffice: 'Corporate Security Division'
 information:
-  level: 'TL-0'
+  level: 'TL-4'
 tags:
   - 'physical-security'
   - 'endorsements'
@@ -19,7 +20,6 @@ relatedRecords:
 ---
 
 > **Derived reference:** This page reorganizes sections 3 and 4 of [TL-SEC-001 — Security Access Classification System](/records/security/physical-access/) for rapid lookup. TL-SEC-001 remains the controlling policy.
-> **Source download:** [Metadata-scrubbed TL-SEC-001 PDF](/downloads/policies/tl-sec-001-security-access-classification.pdf)
 
 Endorsements qualify a physical security level for a specialized function. They are additive, not hierarchical, and do not replace information classification, compartment authorization, or need-to-know.
 

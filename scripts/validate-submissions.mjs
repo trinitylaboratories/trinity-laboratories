@@ -62,6 +62,29 @@ const STATUSES = new Set(['active', 'archived', 'superseded']);
 const PUBLICATION_STATES = new Set(['released', 'controlled', 'withheld']);
 const RECORD_ID_PATTERN = /^TL-[A-Z0-9]+(?:-[A-Z0-9]+)+$/;
 const SECTION_ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const PERSONNEL_ID_PATTERN = /^TL-P110-PER-(\d{4})$/;
+const PERSONNEL_TITLE_PATTERN = /^Personnel Assignment Record — File (\d{4})$/;
+const PERSONNEL_SUMMARY =
+  'Personnel assignment file. Subject identity and assignment details require the displayed information eligibility.';
+const PERSONNEL_TAGS = new Set(['personnel', 'assignment-record', 'active', 'archived', 'tl-p110']);
+const SENSITIVE_PERSONNEL_LABELS = Object.freeze([
+  ['birth information', /\b(?:date of birth|birth date|born on)\b/i],
+  ['residential address', /\b(?:home|residential|street) address\b/i],
+  ['personal email', /\b(?:personal e-?mail|e-?mail address)\b/i],
+  ['telephone number', /\b(?:telephone|phone|mobile) (?:number|no\.?|contact)\b/i],
+  ['emergency contact', /\b(?:emergency contact|next of kin)\b/i],
+  [
+    'government identifier',
+    /\b(?:social security|government identifier|passport|driver'?s license)\b/i,
+  ],
+  [
+    'access credential identifier',
+    /\b(?:badge|credential|access card) (?:number|no\.?|id|identifier)\b/i,
+  ],
+  ['signature or portrait', /\b(?:signature|portrait|headshot)\b/i],
+  ['health information', /\b(?:medical|health|diagnosis|treatment)\b/i],
+  ['family information', /\b(?:family member|spouse|dependent)\b/i],
+]);
 
 const RECORD_KEYS = new Set([
   'recordId',
@@ -267,6 +290,70 @@ function validateSections(value, publicationState, errors) {
   }
 }
 
+function validatePersonnelRecord(record, errors) {
+  if (record.recordFamily !== 'personnel') return;
+
+  if (record.formId !== 'TL-P110') {
+    errors.push('record.formId: personnel records must originate from TL-P110');
+  }
+  if (!['TL-3', 'TL-4'].includes(record.information?.level)) {
+    errors.push('record.information.level: personnel records must be TL-3 or TL-4');
+  }
+  if (record.publicationState !== 'controlled') {
+    errors.push('record.publicationState: personnel records must be controlled');
+  }
+  if (hasOwn(record, 'physicalAccess')) {
+    errors.push('record.physicalAccess: personnel records must not publish physical-access data');
+  }
+  if (hasOwn(record, 'facilityCondition')) {
+    errors.push('record.facilityCondition: personnel records must not publish facility conditions');
+  }
+  if (record.controllingOffice !== 'Personnel Office') {
+    errors.push(
+      'record.controllingOffice: personnel records must use the generic Personnel Office',
+    );
+  }
+  if (record.summary !== PERSONNEL_SUMMARY) {
+    errors.push('record.summary: personnel records must use the approved generic summary');
+  }
+
+  const idMatch =
+    typeof record.recordId === 'string' ? record.recordId.match(PERSONNEL_ID_PATTERN) : null;
+  const titleMatch =
+    typeof record.title === 'string' ? record.title.match(PERSONNEL_TITLE_PATTERN) : null;
+  if (!idMatch) {
+    errors.push('record.recordId: personnel records must use TL-P110-PER-NNNN');
+  }
+  if (!titleMatch) {
+    errors.push('record.title: personnel records must use the generic file-number title');
+  } else if (idMatch && titleMatch[1] !== idMatch[1]) {
+    errors.push('record.title: personnel file number must match record.recordId');
+  }
+
+  if (Array.isArray(record.tags)) {
+    for (const [index, tag] of record.tags.entries()) {
+      if (!PERSONNEL_TAGS.has(tag)) {
+        errors.push(`record.tags[${index}]: personnel record tags must use the generic allowlist`);
+      }
+    }
+    if (!record.tags.includes(record.status)) {
+      errors.push('record.tags: personnel record tags must include the record status');
+    }
+  }
+
+  const controlledText = Array.isArray(record.sections)
+    ? record.sections
+        .flatMap((section) => [section?.title, section?.summary, section?.body])
+        .filter((value) => typeof value === 'string')
+        .join('\n')
+    : '';
+  for (const [label, pattern] of SENSITIVE_PERSONNEL_LABELS) {
+    if (pattern.test(controlledText)) {
+      errors.push(`record.sections: personnel records must not contain ${label}`);
+    }
+  }
+}
+
 /**
  * Validate invariants that must also hold for workstation-generated records.
  * Information classification and physical access are intentionally evaluated as separate objects.
@@ -298,6 +385,9 @@ export function validateSubmissionRecord(record, options = {}) {
   requireString(record.controllingOffice, 'record.controllingOffice', errors, 140);
   requireEnum(record.publicationState, PUBLICATION_STATES, 'record.publicationState', errors);
   validateInformation(record.information, errors);
+  if (record.publicationState === 'released' && ELEVATED_LEVELS.has(record.information?.level)) {
+    errors.push('record.publicationState: TL-3+ records may not be released');
+  }
   if (hasOwn(record, 'physicalAccess')) validatePhysicalAccess(record.physicalAccess, errors);
   if (hasOwn(record, 'facilityCondition')) {
     requireEnum(record.facilityCondition, FACILITY_CONDITIONS, 'record.facilityCondition', errors);
@@ -341,6 +431,7 @@ export function validateSubmissionRecord(record, options = {}) {
   }
 
   validateSections(record.sections, record.publicationState, errors);
+  validatePersonnelRecord(record, errors);
   return errors;
 }
 

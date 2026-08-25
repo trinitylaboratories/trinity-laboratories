@@ -93,6 +93,50 @@ for (const route of ['/contact/', '/careers/']) {
   });
 }
 
+for (const route of [
+  '/studies/indoor-condition-observation/',
+  '/studies/household-timekeeping-stability/',
+  '/studies/consumer-compass-repeatability/',
+]) {
+  test(`${route} screening creates no request or durable browser state`, async ({
+    context,
+    page,
+  }) => {
+    await installPrivacyProbe(page);
+    const nonReadRequests: string[] = [];
+    page.on('request', (request) => {
+      if (!['GET', 'HEAD'].includes(request.method())) {
+        nonReadRequests.push(`${request.method()} ${request.url()}`);
+      }
+    });
+
+    await visit(page, route);
+    const initialUrl = page.url();
+    const form = page.locator('[data-study-form]');
+    for (const checkbox of await form.locator('input[type="checkbox"]').all()) {
+      await checkbox.check();
+    }
+    for (const select of await form.locator('select').all()) {
+      await select.selectOption({ index: 1 });
+    }
+    for (const number of await form.locator('input[type="number"]').all()) {
+      await number.fill((await number.getAttribute('min')) ?? '1');
+    }
+    await form.getByRole('button', { name: 'Complete participation screen' }).click();
+
+    await expect(form.locator('[data-study-status]')).toContainText(/eligibility provisional/i);
+    expect(page.url()).toBe(initialUrl);
+    expect(await context.cookies()).toEqual([]);
+    expect(nonReadRequests).toEqual([]);
+    expect(await browserState(page)).toEqual({
+      calls: { beacons: [], fetches: [] },
+      databases: [],
+      local: {},
+      session: {},
+    });
+  });
+}
+
 test('gateway retains only an opaque session flag and clears it on termination', async ({
   context,
   page,

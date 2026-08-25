@@ -6,7 +6,7 @@ import {
   BASE_STAFF_LEVEL,
   CONTROL_OFFICE_REFERENCE_EXAMPLE,
   createElevatedGrant,
-  DEMONSTRATION_GRANT_SCOPE,
+  TEMPORARY_GRANT_SCOPE,
   ELEVATED_GRANT_TTL_MS,
   evaluateAuthorizationRequest,
   formatGrantRemaining,
@@ -32,7 +32,7 @@ function grant(
   return {
     version: 1,
     level,
-    scope: DEMONSTRATION_GRANT_SCOPE,
+    scope: TEMPORARY_GRANT_SCOPE,
     expiresAt,
   };
 }

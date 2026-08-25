@@ -8,8 +8,8 @@ License](https://creativecommons.org/licenses/by-nc-sa/4.0/).
 
 This grant covers:
 
-- original published prose and fictional records under `src/content/docs/**` and
-  `src/content/submissions/**`;
+- original published prose, fictional study descriptions, and fictional records under
+  `src/content/docs/**`, `src/content/studies/**`, and `src/content/submissions/**`;
 - original user-visible narrative and descriptive prose embedded in `src/pages/**` and
   `src/components/**` (but not the surrounding source code, markup, scripts, or styles); and
 - original art, media, and downloadable fictional documents under `public/**` when the item is

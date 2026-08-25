@@ -1,0 +1,52 @@
+{
+  "recordId": "TL-101-PE-0002",
+  "formId": "TL-101",
+  "title": "Fastener Torque-Mark Visibility Trial",
+  "recordType": "completed-report",
+  "recordFamily": "research",
+  "status": "archived",
+  "revision": "1.0",
+  "effectiveDate": "2000-10-05",
+  "controllingOffice": "Prototype Evaluation",
+  "publicationState": "released",
+  "information": {
+    "level": "TL-1"
+  },
+  "tags": ["prototype-evaluation", "fasteners", "inspection", "torque-mark", "tl-101"],
+  "summary": "Torque-mark visibility was compared under ordinary bench lighting and after handling; the wider mark remained most consistently readable.",
+  "relatedRecords": ["TL-101"],
+  "sections": [
+    {
+      "id": "administrative-record",
+      "title": "ADMINISTRATIVE RECORD",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Study title:** Fastener Torque-Mark Visibility Trial\n\n**Responsible unit:** Prototype Evaluation\n\n**Responsible personnel:** Technical staff (role-only archive copy)\n\n**Effective date:** 2000-10-05\n\n**Record basis:** TL-101"
+    },
+    {
+      "id": "purpose-and-scope",
+      "title": "PURPOSE & SCOPE",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Objective:** Torque-mark visibility was compared under ordinary bench lighting and after handling; the wider mark remained most consistently readable.\n\n**Scope limitation:** Internal comparative work only; no client, location, or external-party information is included in this archive copy."
+    },
+    {
+      "id": "method-and-observations",
+      "title": "METHOD & OBSERVATIONS",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Method:** Coded materials or instruments were evaluated through a repeatable bench or field-support sequence appropriate to the stated objective. Observations were recorded at fixed checkpoints and reviewed against the applicable internal working range.\n\n**Observations:** The comparison produced stable, ordinary results suitable for the stated disposition. No unexpected response was recorded."
+    },
+    {
+      "id": "disposition",
+      "title": "DISPOSITION",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Result summary:** Torque-mark visibility was compared under ordinary bench lighting and after handling; the wider mark remained most consistently readable.\n\n**Disposition:** Archive with the responsible unit's routine technical records.\n\n**Review status:** Technical review complete; role-only archive copy."
+    }
+  ]
+}

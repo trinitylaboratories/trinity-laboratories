@@ -1,0 +1,85 @@
+{
+  "studyId": "ST-25-009",
+  "slug": "diagram-recall-route-notation",
+  "title": "Diagram Recall and Route Notation",
+  "shortTitle": "Diagram recall and route notation",
+  "researchQuestion": "Which simple notation styles make branching routes in abstract diagrams easier to recall after a short viewing interval?",
+  "summary": "This browser-based methods study compares line weight, node labels, and turn notation in invented floor-plan diagrams. It does not use real buildings, travel history, clinical measures, or location data. Enrollment is paused while the current protocol presentation is reviewed.",
+  "status": "paused",
+  "phase": "Protocol presentation review",
+  "discipline": "Prototype Evaluation",
+  "studyType": "Interface and notation task",
+  "participationMode": "Single-session visual task",
+  "commitment": "One session of approximately twelve minutes",
+  "protocolRevision": "1.4",
+  "controllingOffice": "Human Factors Methods Office",
+  "displayOrder": 5,
+  "ageMinimum": 18,
+  "featured": false,
+  "eligibility": [
+    "Age 18 or older.",
+    "Access to a desktop, laptop, or tablet with a keyboard or pointing device.",
+    "Able to complete one uninterrupted twelve-minute session.",
+    "Able to read the study interface in English."
+  ],
+  "exclusions": [
+    "No real building, route, workplace, residence, or travel information is used.",
+    "No medical history, diagnosis, vision record, cognitive assessment, webcam, microphone, or eye tracking is requested."
+  ],
+  "participantActivities": [
+    "Review a short sequence of abstract branching diagrams built from neutral lines, nodes, and symbols.",
+    "After each viewing interval, select the route sequence that matches the displayed diagram.",
+    "Complete a fixed-choice comparison of notation clarity and input method."
+  ],
+  "protocolSteps": [
+    {
+      "code": "01",
+      "title": "Orient",
+      "description": "Review the task key and practice with one diagram excluded from the study sequence."
+    },
+    {
+      "code": "02",
+      "title": "View",
+      "description": "Inspect an abstract branching diagram for the assigned fixed interval."
+    },
+    {
+      "code": "03",
+      "title": "Recall",
+      "description": "Select the matching route from fixed alternatives after the diagram closes."
+    },
+    {
+      "code": "04",
+      "title": "Compare",
+      "description": "Rate the clarity of the notation using a short fixed-choice scale."
+    }
+  ],
+  "dataRequested": [
+    "Selected route alternative for each abstract diagram.",
+    "Fixed-choice notation-clarity ratings.",
+    "Broad device and input-method category.",
+    "Optional prior familiarity category for diagram or map use."
+  ],
+  "dataNotRequested": [
+    "Real routes, addresses, building plans, location history, or travel records.",
+    "Name, contact information, medical history, diagnosis, or accessibility records.",
+    "Camera, microphone, eye tracking, biometric input, or device fingerprinting."
+  ],
+  "samplePrompts": [
+    "Which route sequence matches the diagram shown immediately before this screen?",
+    "Which node-label style was easiest to distinguish?",
+    "Was the task completed with a keyboard, pointing device, or touch input?"
+  ],
+  "methodNotes": [
+    "Every diagram is invented for the protocol and uses the same number of nodes and route branches within its comparison set.",
+    "Viewing intervals and response choices are fixed before each task sequence.",
+    "The activity measures task responses only and is not presented as an evaluation of individual ability."
+  ],
+  "limitations": [
+    "Screen size, viewing distance, ambient light, and input method vary between remote sessions.",
+    "A short abstract task does not establish performance in real navigation or emergency wayfinding.",
+    "The current pause concerns protocol presentation and does not imply a finding."
+  ],
+  "application": null,
+  "relatedRecordIds": [],
+  "editorialState": "owner-approved"
+}

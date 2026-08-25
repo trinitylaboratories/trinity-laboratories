@@ -5,28 +5,23 @@ sidebar:
   order: 1
 ---
 
-The TIRN Records Gateway provides released references, blank form templates, and controlled-record catalog access. Staff workflow begins in the [Employee Portal](/portal/).
+The TIRN Records Gateway provides policy references, approved forms, completed reports, and records-control services. Staff workflow begins in the [Employee Portal](/portal/).
 
 ## Archive modules
 
-| Module                                     | Contents                                                                                     |
-| ------------------------------------------ | -------------------------------------------------------------------------------------------- |
-| [Security references](/records/security/)  | Information classification, physical access authority, endorsements, and facility conditions |
-| [Forms library](/records/forms/)           | Fifteen blank operational, research, personnel, notice, procedure, and executive templates   |
-| [Report register](/records/reports/)       | Completed-record metadata and authorization-controlled report presentation                   |
-| [Filed submissions](/records/submissions/) | Completed form records accepted into the current static publication set                      |
-| [Global search](/records/search/)          | Searchable policy and form transcriptions indexed by record ID and source language           |
-| Source downloads                           | Metadata-scrubbed PDFs and blank DOCX templates linked from each record                      |
+| Module                                     | Contents                                                              |
+| ------------------------------------------ | --------------------------------------------------------------------- |
+| [Security references](/records/security/)  | Information-classification and security-administration references     |
+| [Forms library](/records/forms/)           | Current operational, research, personnel, notice, and procedure forms |
+| [Report register](/records/reports/)       | Completed records subject to their assigned information controls      |
+| [Filed submissions](/records/submissions/) | Records accepted by Records Control                                   |
+| [Global search](/records/search/)          | Released records available to the current staff session               |
 
-## Archive holdings
+## Current holdings
 
-- 2 active policy transcriptions
-- 15 blank form-template transcriptions
-- 1 non-operational access-control training report
-- 17 metadata-scrubbed source downloads
-- Approved blank badge and brand media only
-
-Credential references are blank designs only; no issued identity credentials or completed personnel records appear in this archive.
+Current holdings include active policy references, approved blank forms, completed technical
+reports, and records-control notices. Availability is determined by the record marking and the
+eligibility established for the current session.
 
 ## Staff workflow
 

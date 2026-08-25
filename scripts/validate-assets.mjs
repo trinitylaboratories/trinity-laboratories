@@ -71,8 +71,6 @@ const APPROVED_ASSET_CATEGORIES = new Map([
     },
   ],
   ['brand', { mediaTypes: new Set(['image/png', 'image/svg+xml']), prefix: '/media/brand/' }],
-  ['blank-badge-front', { mediaTypes: new Set(['image/png']), prefix: '/media/badges/' }],
-  ['blank-badge-back', { mediaTypes: new Set(['image/png']), prefix: '/media/badges/' }],
   [
     'third-party-font',
     {
@@ -94,6 +92,10 @@ const FORBIDDEN_RELEASE_NAME_PATTERNS = Object.freeze([
   [
     'prefilled or completed artifact',
     /(?:^|[/_.-])(?:pre[-_ ]?filled|completed[-_ ]?(?:badge|form)|filled[-_ ]?(?:badge|form))(?:[/_.-]|$)/i,
+  ],
+  [
+    'credential or access-card media',
+    /(?:^|[/_.-])(?:badges?|access[-_ ]?cards?|credential[-_ ]?(?:card|design)s?)(?:[/_.-]|$)/i,
   ],
 ]);
 

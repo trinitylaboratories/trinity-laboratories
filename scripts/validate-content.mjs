@@ -139,9 +139,12 @@ export async function validateContent({
       errors.push(`${fileName}: tags must not contain duplicates`);
     }
 
+    const sourceAttachmentRequired =
+      data.recordType === 'form-template' ||
+      (data.recordType === 'policy' && (!Number.isFinite(informationRank) || informationRank < 3));
     if (
-      (!Array.isArray(data.attachments) || data.attachments.length === 0) &&
-      data.recordType !== 'security-reference'
+      sourceAttachmentRequired &&
+      (!Array.isArray(data.attachments) || data.attachments.length === 0)
     ) {
       errors.push(`${fileName}: record metadata requires at least one source attachment`);
     }
@@ -198,16 +201,16 @@ export async function validateContent({
       data.recordType === 'security-reference' &&
       (!Array.isArray(data.attachments) || data.attachments.length === 0)
     ) {
-      const hasAttachedPolicySource = Array.isArray(related)
+      const hasPolicySource = Array.isArray(related)
         ? related.some((relatedId) => {
             if (typeof relatedId !== 'string') return false;
             const sourceRecord = recordsById.get(relatedId.toUpperCase());
-            return sourceRecord?.recordType === 'policy' && sourceRecord.attachments?.length > 0;
+            return sourceRecord?.recordType === 'policy';
           })
         : false;
-      if (!hasAttachedPolicySource) {
+      if (!hasPolicySource) {
         errors.push(
-          `${fileName}: a derived security-reference without an attachment must relate to an attached policy record`,
+          `${fileName}: a derived security-reference without an attachment must relate to a policy record`,
         );
       }
     }

@@ -179,4 +179,19 @@ describe('portal record catalogue', () => {
       }).map(({ recordId }) => recordId),
     ).toEqual(['TL-340-TRN-001']);
   });
+
+  it('filters dated archive entries by effective decade', () => {
+    const records = [
+      entry({ recordId: 'TL-101-AM-8701', effectiveDate: '1987-03-18' }),
+      entry({ recordId: 'TL-220-II-2102', effectiveDate: '2021-04-21' }),
+      entry({ recordId: 'TL-UNDATED', effectiveDate: undefined }),
+    ];
+
+    expect(
+      filterCatalogueEntries(records, {
+        ...EMPTY_CATALOGUE_FILTERS,
+        decade: '1980',
+      }).map(({ recordId }) => recordId),
+    ).toEqual(['TL-101-AM-8701']);
+  });
 });

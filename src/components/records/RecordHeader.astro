@@ -28,6 +28,7 @@ interface Props {
   facilityCondition?: FacilityCondition;
   summary: string;
   tags: string[];
+  metadataControlled?: boolean;
 }
 
 const {
@@ -43,6 +44,7 @@ const {
   facilityCondition,
   summary,
   tags,
+  metadataControlled = false,
 } = Astro.props;
 
 const dateLabel = new Intl.DateTimeFormat('en-US', {
@@ -53,7 +55,15 @@ const dateLabel = new Intl.DateTimeFormat('en-US', {
 }).format(new Date(`${effectiveDate}T00:00:00Z`));
 ---
 
-<header class="record-header" aria-label="Record control information">
+<header
+  class="record-header"
+  aria-label="Record control information"
+  data-record-header-controlled={String(metadataControlled)}
+  data-required-level={information.level}
+  data-program={information.program}
+  data-compartment={information.compartment}
+  data-publication-state={publicationState}
+>
   <div class="record-header__band">
     <p class="record-header__id" data-pagefind-meta="record-id">{recordId}</p>
     <p class="record-header__state" data-publication-state={publicationState}>
@@ -61,7 +71,21 @@ const dateLabel = new Intl.DateTimeFormat('en-US', {
     </p>
   </div>
 
-  <p class="record-header__summary" data-pagefind-meta="description">{summary}</p>
+  <p
+    class="record-header__summary"
+    data-record-header-sensitive
+    data-pagefind-meta="description"
+    hidden={metadataControlled}
+  >
+    {summary}
+  </p>
+  {
+    metadataControlled && (
+      <p class="record-header__summary" data-record-header-fallback>
+        Descriptive metadata requires the displayed information eligibility.
+      </p>
+    )
+  }
 
   <dl class="record-header__controls">
     <div>
@@ -70,7 +94,7 @@ const dateLabel = new Intl.DateTimeFormat('en-US', {
         {information.level}
         {
           (information.program || information.compartment) && (
-            <small>
+            <small data-record-header-sensitive hidden={metadataControlled}>
               {[information.program, information.compartment].filter(Boolean).join(' / ')}
             </small>
           )
@@ -79,7 +103,7 @@ const dateLabel = new Intl.DateTimeFormat('en-US', {
     </div>
     <div>
       <dt>Physical authority</dt>
-      <dd>
+      <dd data-record-header-sensitive hidden={metadataControlled}>
         {physicalAccess?.level ?? 'Not specified'}
         {
           physicalAccess && physicalAccess.endorsements.length > 0 && (
@@ -87,10 +111,14 @@ const dateLabel = new Intl.DateTimeFormat('en-US', {
           )
         }
       </dd>
+      {metadataControlled && <dd data-record-header-fallback>Restricted</dd>}
     </div>
     <div>
       <dt>Condition</dt>
-      <dd>{facilityCondition ?? 'Not assigned'}</dd>
+      <dd data-record-header-sensitive hidden={metadataControlled}>
+        {facilityCondition ?? 'Not assigned'}
+      </dd>
+      {metadataControlled && <dd data-record-header-fallback>Restricted</dd>}
     </div>
     <div>
       <dt>Record status</dt>
@@ -104,19 +132,79 @@ const dateLabel = new Intl.DateTimeFormat('en-US', {
     </div>
     <div><dt>Revision</dt><dd>{revision}</dd></div>
     <div><dt>Effective</dt><dd><time datetime={effectiveDate}>{dateLabel}</time></dd></div>
-    <div><dt>Control office</dt><dd>{controllingOffice}</dd></div>
+    <div>
+      <dt>Control office</dt>
+      <dd data-record-header-sensitive hidden={metadataControlled}>{controllingOffice}</dd>
+      {metadataControlled && <dd data-record-header-fallback>Restricted</dd>}
+    </div>
   </dl>
 
-  <ul class="record-header__tags" aria-label="Catalog tags">
+  <ul
+    class="record-header__tags"
+    aria-label="Catalog tags"
+    data-record-header-sensitive
+    hidden={metadataControlled}
+  >
     {tags.map((tag) => <li data-pagefind-filter="tag">{tag}</li>)}
   </ul>
 </header>
+
+<script>
+  import {
+    accessAllows,
+    resolveTirnAccess,
+    TIRN_ACCESS_CHANGE_EVENT,
+    TIRN_GRANT_STORAGE_KEY,
+    TIRN_SESSION_STORAGE_KEY,
+    type TirnLevel,
+  } from '../../lib/tirn-access';
+
+  const readRecordHeaderAccessValue = (key: string) => {
+    try {
+      return sessionStorage.getItem(key);
+    } catch {
+      return null;
+    }
+  };
+
+  const refreshRecordHeaders = () => {
+    const state = resolveTirnAccess(
+      readRecordHeaderAccessValue(TIRN_SESSION_STORAGE_KEY),
+      readRecordHeaderAccessValue(TIRN_GRANT_STORAGE_KEY),
+      Date.now(),
+    );
+    document
+      .querySelectorAll<HTMLElement>('[data-record-header-controlled="true"]')
+      .forEach((header) => {
+        const requiredLevel = (header.dataset.requiredLevel || 'TL-3') as TirnLevel;
+        const separatelyControlled = Boolean(header.dataset.program || header.dataset.compartment);
+        const authorized =
+          header.dataset.publicationState !== 'withheld' &&
+          !separatelyControlled &&
+          accessAllows(state, requiredLevel);
+        header.querySelectorAll<HTMLElement>('[data-record-header-sensitive]').forEach((node) => {
+          node.hidden = !authorized;
+        });
+        header.querySelectorAll<HTMLElement>('[data-record-header-fallback]').forEach((node) => {
+          node.hidden = authorized;
+        });
+      });
+  };
+
+  refreshRecordHeaders();
+  window.addEventListener(TIRN_ACCESS_CHANGE_EVENT, refreshRecordHeaders);
+  window.setInterval(refreshRecordHeaders, 1000);
+</script>
 
 <style>
   .record-header {
     margin-bottom: 2.5rem;
     border-bottom: 1px solid #aeb2b4;
     padding-bottom: 1.5rem;
+  }
+
+  .record-header [hidden] {
+    display: none !important;
   }
 
   .record-header__band {

@@ -1,29 +1,24 @@
 ---
 title: 'TL-SEC-001 — Security Access Classification System'
-description: 'Accessible transcription of the Trinity Laboratories physical-access policy.'
+description: 'Controlled Trinity Laboratories physical-security administration policy.'
+pagefind: false
 recordId: 'TL-SEC-001'
 recordType: 'policy'
 recordFamily: 'security'
 status: 'active'
 revision: '1986'
 information:
-  level: 'TL-0'
+  level: 'TL-4'
 effectiveDate: '1986-07-01'
 controllingOffice: 'Corporate Security Division'
 tags:
   - 'physical-security'
-  - 'badges'
+  - 'access-authority'
   - 'endorsements'
   - 'facility-conditions'
 relatedRecords:
   - 'TL-SEC-04'
   - 'TL-SEC-001-REF'
-attachments:
-  - label: 'Metadata-scrubbed policy PDF'
-    path: '/downloads/policies/tl-sec-001-security-access-classification.pdf'
-    mediaType: 'application/pdf'
-    sourceFilename: 'Trinity_Labs_Security_Access_Classification_1986_Improved.pdf'
-    sha256: 'bcf37e34a074e6db68f89fd26b443a27ed3b0c79467eea9617bd234010a77639'
 ---
 
 > **Document:** TL-SEC-001
@@ -32,11 +27,11 @@ attachments:
 > **Authority:** Corporate Security Director
 > **Source imprint:** TRINITY LABS, INC. | CORPORATE SECURITY DIVISION | © 1986
 > **Source page marking:** TL-SEC-001 | CONTROLLED | PAGE 1 OF 2; PAGE 2 OF 2
-> **Download:** [Metadata-scrubbed policy PDF](/downloads/policies/tl-sec-001-security-access-classification.pdf)
 
 [Open the derived endorsements and facility-conditions quick reference.](/records/security/endorsements-and-conditions/)
 
-This published copy is normalized as TL-0 in archive metadata; the transcription preserves the source marking **CONTROLLED INTERNAL POLICY**. It follows the supplied two-page policy, and textual color names and hexadecimal source colors are included so the visual level key is available without color perception.
+The current record retains the original marking **CONTROLLED INTERNAL POLICY**. Text labels accompany
+the policy color key and remain controlling when color reproduction is unavailable.
 
 ## 1. Purpose and authority
 

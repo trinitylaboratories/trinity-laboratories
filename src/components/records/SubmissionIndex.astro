@@ -35,27 +35,107 @@ const ordered = [...submissions].sort(
           </tr>
         </thead>
         <tbody>
-          {ordered.map(({ data }) => (
-            <tr>
-              <td class="submission-index__id">
-                <a href={submissionHref(data.recordId)}>{data.recordId}</a>
-              </td>
-              <td>
-                <strong>{data.title}</strong>
-                <span>{data.summary}</span>
-              </td>
-              <td>{data.information.level}</td>
-              <td data-state={data.publicationState}>{data.publicationState}</td>
-              <td>
-                <time datetime={data.effectiveDate}>{data.effectiveDate}</time>
-              </td>
-            </tr>
-          ))}
+          {ordered.map(({ data }) => {
+            const standardRank = Number(data.information.level.replace('TL-', ''));
+            const elevated = !Number.isFinite(standardRank) || standardRank >= 3;
+            return (
+              <tr
+                data-submission-index-row
+                data-required-level={data.information.level}
+                data-program={data.information.program}
+                data-compartment={data.information.compartment}
+                data-publication-state={data.publicationState}
+              >
+                <td class="submission-index__id">
+                  <a href={submissionHref(data.recordId)}>{data.recordId}</a>
+                </td>
+                <td>
+                  <strong
+                    data-submission-title
+                    data-pagefind-ignore={elevated ? '' : undefined}
+                    hidden
+                  >
+                    {data.title}
+                  </strong>
+                  <strong data-submission-title-fallback>
+                    Controlled report — eligibility required
+                  </strong>
+                  <span
+                    data-submission-summary
+                    data-pagefind-ignore={elevated ? '' : undefined}
+                    hidden
+                  >
+                    {data.summary}
+                  </span>
+                  <span data-submission-summary-fallback>
+                    Descriptive metadata requires information eligibility.
+                  </span>
+                </td>
+                <td>{data.information.level}</td>
+                <td data-state={data.publicationState}>{data.publicationState}</td>
+                <td>
+                  <time datetime={data.effectiveDate}>{data.effectiveDate}</time>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>
   )
 }
+
+<script>
+  import {
+    accessAllows,
+    resolveTirnAccess,
+    TIRN_ACCESS_CHANGE_EVENT,
+    TIRN_GRANT_STORAGE_KEY,
+    TIRN_SESSION_STORAGE_KEY,
+    type TirnLevel,
+  } from '../../lib/tirn-access';
+
+  const readSubmissionAccessValue = (key: string) => {
+    try {
+      return sessionStorage.getItem(key);
+    } catch {
+      return null;
+    }
+  };
+
+  const refreshSubmissionIndex = () => {
+    const state = resolveTirnAccess(
+      readSubmissionAccessValue(TIRN_SESSION_STORAGE_KEY),
+      readSubmissionAccessValue(TIRN_GRANT_STORAGE_KEY),
+      Date.now(),
+    );
+
+    document.querySelectorAll<HTMLElement>('[data-submission-index-row]').forEach((row) => {
+      const requiredLevel = (row.dataset.requiredLevel || 'TL-2') as TirnLevel;
+      const separatelyControlled = Boolean(row.dataset.program || row.dataset.compartment);
+      const authorized =
+        row.dataset.publicationState !== 'withheld' &&
+        !separatelyControlled &&
+        accessAllows(state, requiredLevel);
+      row
+        .querySelectorAll<HTMLElement>('[data-submission-title], [data-submission-summary]')
+        .forEach((node) => {
+          node.hidden = !authorized;
+        });
+      row
+        .querySelectorAll<HTMLElement>(
+          '[data-submission-title-fallback], [data-submission-summary-fallback]',
+        )
+        .forEach((node) => {
+          node.hidden = authorized;
+        });
+    });
+  };
+
+  refreshSubmissionIndex();
+  window.addEventListener(TIRN_ACCESS_CHANGE_EVENT, refreshSubmissionIndex);
+  window.setInterval(refreshSubmissionIndex, 1000);
+</script>
 
 <style>
   .submission-index {
@@ -88,6 +168,10 @@ const ordered = [...submissions].sort(
   .submission-index td strong,
   .submission-index td span {
     display: block;
+  }
+
+  .submission-index [hidden] {
+    display: none !important;
   }
 
   .submission-index td span {

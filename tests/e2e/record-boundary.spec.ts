@@ -13,7 +13,7 @@ async function establishAccess(page: Page, grantLevel: TemporaryLevel | null = n
         JSON.stringify({
           version: 1,
           level,
-          scope: 'training',
+          scope: 'records-review',
           expiresAt: Date.now() + 10 * 60 * 1000,
         }),
       );

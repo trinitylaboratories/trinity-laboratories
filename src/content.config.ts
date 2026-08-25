@@ -16,6 +16,7 @@ import {
   RECORD_FAMILIES,
   SUBMISSION_STATUSES,
 } from './lib/submission-schema';
+import { studySchema } from './lib/study-schema';
 
 const elevatedDisclosureSchema = z
   .object({
@@ -207,5 +208,12 @@ export const collections = {
       pattern: '**/*.json',
     }),
     schema: submissionSchema,
+  }),
+  studies: defineCollection({
+    loader: glob({
+      base: './src/content/studies',
+      pattern: '**/*.json',
+    }),
+    schema: studySchema,
   }),
 };

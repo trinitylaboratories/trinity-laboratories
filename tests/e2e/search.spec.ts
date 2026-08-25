@@ -35,7 +35,7 @@ test('records search returns routine forms while excluding elevated templates', 
       .filter({ hasText: /TL-X595|Directorate Executive Order/i }),
   ).toHaveCount(0);
 
-  await search.fill('TL-101');
+  await search.fill('Routine Research Technical Activity Record');
 
   const result = page
     .locator('a[href*="/records/forms/tl-101/"]')

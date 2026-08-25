@@ -156,4 +156,48 @@ describe('content policy', () => {
       ]),
     );
   });
+
+  it('allows controlled policy sources to remain with their controlling office', async () => {
+    const root = await fixtureRoot();
+    const policy = `---
+title: Controlled policy
+recordId: TL-SEC-X
+recordType: policy
+recordFamily: security
+status: active
+revision: "1"
+pagefind: false
+information:
+  level: TL-4
+tags: [security]
+relatedRecords: [TL-SEC-X-REF]
+attachments: []
+---
+# Controlled policy
+`;
+    const reference = `---
+title: Controlled reference
+recordId: TL-SEC-X-REF
+recordType: security-reference
+recordFamily: security
+status: active
+revision: "1"
+pagefind: false
+information:
+  level: TL-4
+tags: [security, reference]
+relatedRecords: [TL-SEC-X]
+attachments: []
+---
+# Controlled reference
+`;
+    await writeFile(path.join(root, 'content', 'policy.md'), policy, 'utf8');
+    await writeFile(path.join(root, 'content', 'reference.md'), reference, 'utf8');
+
+    const result = await validateContent({
+      contentRoot: path.join(root, 'content'),
+      publicRoot: path.join(root, 'public'),
+    });
+    expect(result.errors).toEqual([]);
+  });
 });

@@ -1,17 +1,28 @@
 ---
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, type CollectionEntry } from 'astro:content';
 
 import SubmissionIndex from '../../../components/records/SubmissionIndex.astro';
 
 const submissions = await getCollection('submissions');
+const effectiveYears = submissions
+  .map((submission: CollectionEntry<'submissions'>) =>
+    Number(submission.data.effectiveDate.slice(0, 4)),
+  )
+  .filter(Number.isFinite);
+const earliestYear = Math.min(...effectiveYears);
+const latestYear = Math.max(...effectiveYears);
+const personnelCount = submissions.filter(
+  (submission: CollectionEntry<'submissions'>) => submission.data.recordFamily === 'personnel',
+).length;
+const technicalCount = submissions.length - personnelCount;
 ---
 
 <StarlightPage
   frontmatter={{
-    title: 'Controlled Reports Register',
+    title: 'Digitized Technical Reports Register',
     description:
-      'Catalog of completed reports released to, controlled within, or withheld from the TIRN publication system.',
+      'Selected digitized technical and administrative reports available through the TIRN records node.',
     pagefind: true,
     head: [
       {
@@ -22,9 +33,16 @@ const submissions = await getCollection('submissions');
   }}
 >
   <p>
-    This register lists completed report artifacts separately from blank form templates. Catalog
-    metadata remains visible when a report body requires an elevated authorization.
+    This register contains selected digitized technical and administrative records. It is a working
+    access register rather than a complete inventory of physical holdings.
   </p>
+
+  <dl class="register-summary" aria-label="Digitized holdings summary">
+    <div><dt>Indexed records</dt><dd>{submissions.length}</dd></div>
+    <div><dt>Technical reports</dt><dd>{technicalCount}</dd></div>
+    <div><dt>Personnel files</dt><dd>{personnelCount}</dd></div>
+    <div><dt>Coverage</dt><dd>{earliestYear}–{latestYear}</dd></div>
+  </dl>
 
   <aside class="register-notice" aria-label="Access model">
     <strong>Catalog access is not report access.</strong>
@@ -35,7 +53,7 @@ const submissions = await getCollection('submissions');
   <SubmissionIndex submissions={submissions} />
 
   <p class="register-footnote">
-    New records enter the register after preparation, validation, and records-control review.
+    Availability reflects the current node, information eligibility, and archival conversion status.
   </p>
 </StarlightPage>
 
@@ -45,6 +63,30 @@ const submissions = await getCollection('submissions');
     border-block: 1px solid #aeb2b4;
     padding: 1rem 0;
     color: #3b4651;
+  }
+
+  .register-summary {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin: 1.5rem 0;
+    border-block: 1px solid #aeb2b4;
+  }
+
+  .register-summary div {
+    padding: 0.8rem;
+  }
+
+  .register-summary dt {
+    color: #59636d;
+    font: 600 0.62rem/1.3 var(--sl-font-mono);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .register-summary dd {
+    margin: 0.2rem 0 0;
+    color: #17283b;
+    font-weight: 650;
   }
 
   .register-notice strong {
@@ -57,5 +99,11 @@ const submissions = await getCollection('submissions');
     margin-top: 1.5rem;
     color: #59636d;
     font-size: 0.82rem;
+  }
+
+  @media (max-width: 42rem) {
+    .register-summary {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
   }
 </style>

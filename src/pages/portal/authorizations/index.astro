@@ -8,7 +8,7 @@ import PortalLayout from '../../../layouts/PortalLayout.astro';
 
 <PortalLayout
   title="Authorizations"
-  description="Review TIRN eligibility, establish temporary TL-3 or TL-4 access, and inspect controlled presentation states."
+  description="Review TIRN eligibility and establish temporary TL-3 or TL-4 information access."
   active="authorizations"
 >
   <PortalPageHeading
@@ -24,7 +24,7 @@ import PortalLayout from '../../../layouts/PortalLayout.astro';
         <h2 id="authorization-principle-heading">Eligibility is not permission</h2>
         <p>
           The base staff session establishes TL-2 information eligibility. A qualifying request may
-          establish temporary TL-3 or TL-4 access for the controlled examples below. Program,
+          establish temporary TL-3 or TL-4 access for the controlled records below. Program,
           compartment, physical, and need-to-know requirements remain independent.
         </p>
         <div class="portal-callout">
@@ -42,7 +42,7 @@ import PortalLayout from '../../../layouts/PortalLayout.astro';
       >
         <p>
           Use controlled material only for the stated working purpose. Do not copy it into an
-          unrelated record, browser address, message field, or public submission package.
+          unrelated record, unsecured correspondence, or an unapproved distribution list.
         </p>
         <p>
           Relinquish the elevated grant when review is complete. Terminating the staff session also
@@ -56,17 +56,17 @@ import PortalLayout from '../../../layouts/PortalLayout.astro';
         title="Controlled-record handling exercise"
         mode="authorize"
         requiredLevel="TL-3"
-        summary="This neutral training record demonstrates whole-record authorization."
+        summary="Required handling exercise for personnel assigned controlled-record review duties."
       >
-        <p><strong>Purpose:</strong> Confirm whole-record display and relocking behavior.</p>
-        <ol>
-          <li>Verify that the temporary authorization indicator is visible.</li>
-          <li>Review only the information required for the current exercise.</li>
-          <li>Use “Relinquish temporary access” to return the record to its omitted state.</li>
-        </ol>
         <p>
-          No operational event, facility, person, or active program is represented by this exercise.
+          <strong>Purpose:</strong> Complete the current controlled-information handling review.
         </p>
+        <ol>
+          <li>Confirm the record marking and approved distribution.</li>
+          <li>Review only the information required for the assigned duty.</li>
+          <li>Relinquish temporary access when the review is complete.</li>
+        </ol>
+        <p>Record completion through the assigned training coordinator.</p>
       </ControlledRecord>
 
       <ControlledSection
@@ -89,7 +89,7 @@ import PortalLayout from '../../../layouts/PortalLayout.astro';
 
       <ControlledSection
         id="separate-source-example"
-        title="Separately controlled source example"
+        title="Separately controlled source record"
         mode="withheld"
         requiredLevel="TL-4"
         program="PROGRAM AUTHORIZATION"
@@ -109,7 +109,7 @@ import PortalLayout from '../../../layouts/PortalLayout.astro';
           <div><dt>TL-4</dt><dd>Authorization and control-office references required</dd></div>
           <div><dt>Program / compartment</dt><dd>Separate authorization required</dd></div>
           <div><dt>TL-5 and above</dt><dd>Separate authorization required</dd></div>
-          <div><dt>Withheld body</dt><dd>Not present in site</dd></div>
+          <div><dt>Withheld body</dt><dd>Held by controlling office</dd></div>
         </dl>
       </section>
     </aside>

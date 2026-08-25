@@ -13,7 +13,7 @@ const { kind, submitLabel, successMessage } = Astro.props;
     <slot />
     <div class="local-form__actions">
       <button class="button button--dark" type="submit">{submitLabel}</button>
-      <span class="local-form__protocol">Local terminal protocol</span>
+      <span class="local-form__protocol">Required fields are marked</span>
     </div>
   </fieldset>
   <p
@@ -23,7 +23,7 @@ const { kind, submitLabel, successMessage } = Astro.props;
     data-form-status
     data-success={successMessage}
   >
-    Terminal initialization required.
+    Form controls are loading.
   </p>
 </form>
 
@@ -36,7 +36,7 @@ const { kind, submitLabel, successMessage } = Astro.props;
     if (!fields || !status) return;
 
     fields.disabled = false;
-    status.textContent = 'Terminal ready. Required fields are marked.';
+    status.textContent = 'Ready for review.';
 
     form.addEventListener('submit', (event) => {
       event.preventDefault();

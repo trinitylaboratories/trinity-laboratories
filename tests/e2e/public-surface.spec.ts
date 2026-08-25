@@ -1,16 +1,8 @@
 import { expect, test } from '@playwright/test';
 
-import { visit } from './support/site';
+import { INDEXABLE_ROUTES, visit } from './support/site';
 
-const CORPORATE_ROUTES = [
-  '/',
-  '/about/',
-  '/research/',
-  '/facilities/',
-  '/publications/',
-  '/careers/',
-  '/contact/',
-] as const;
+const CORPORATE_ROUTES = INDEXABLE_ROUTES.filter((route) => route !== '/employee-access/');
 
 const INTERNAL_FORM_ID =
   /\bTL-(?:101|220|340|470|590|P110|P365|O205|N310|N480|SOP-720|SOP-760|SOP-890|X510|X595)\b/i;
@@ -51,5 +43,16 @@ test.describe('corporate information boundary', () => {
     const text = (await page.locator('body').innerText()).replace(/\s+/g, ' ');
 
     expect(text).not.toMatch(/condition white|public record|system revision/i);
+  });
+
+  test('public routes do not expose implementation vocabulary', async ({ page }) => {
+    const forbidden =
+      /static publication|repository review|schema validation|deterministic json|approved merge|generated package|withheld plaintext|browser (?:grant|authorization|storage)|local-only|front-end|pagefind|cloudflare|github|astro|photography pending|media reserved/i;
+
+    for (const route of CORPORATE_ROUTES) {
+      await visit(page, route);
+      const text = (await page.locator('body').innerText()).replace(/\s+/g, ' ');
+      expect(text, `${route} should use only institutional copy`).not.toMatch(forbidden);
+    }
   });
 });

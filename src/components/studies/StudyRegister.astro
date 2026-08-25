@@ -1,0 +1,39 @@
+---
+import type { StudyData } from '../../lib/study-schema';
+import { studyStatusLabel } from '../../lib/study-schema';
+
+interface Props {
+  studies: StudyData[];
+}
+
+const { studies } = Astro.props;
+---
+
+<div class="study-register" data-study-register>
+  <div class="study-register__head" aria-hidden="true">
+    <span>Protocol</span><span>Study</span><span>Participation</span><span>Status</span><span
+    ></span>
+  </div>
+  <ol>
+    {
+      studies.map((study) => (
+        <li data-study-status={study.status}>
+          <a href={`/studies/${study.slug}/`} aria-label={`Open ${study.title}`}>
+            <span class="study-register__id">{study.studyId}</span>
+            <span class="study-register__title">
+              <strong>{study.shortTitle}</strong>
+              <small>{study.discipline}</small>
+            </span>
+            <span class="study-register__commitment">{study.commitment}</span>
+            <span class="study-status" data-status={study.status}>
+              {studyStatusLabel(study.status)}
+            </span>
+            <span class="study-register__arrow" aria-hidden="true">
+              →
+            </span>
+          </a>
+        </li>
+      ))
+    }
+  </ol>
+</div>

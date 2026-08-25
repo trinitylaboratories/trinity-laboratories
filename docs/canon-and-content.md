@@ -51,8 +51,16 @@ but proposals and placeholders must never be presented as established facts with
   **Environmental Analysis**, **Applied Physics**, **Field Sampling & Geological Research**,
   **Laboratory Safety Systems**, **Prototype Evaluation**, and **Contract Research**.
 - Staff-interface copy uses the canonical `TL-3` form rather than the informal abbreviation `T3`.
-- `TL-340-TRN-001` is an owner-approved, non-operational access-control training record. It does
-  not establish a person, client, facility, incident, program, or historical event as canon.
+- `TL-340-TRN-001` is an owner-approved controlled-records handling review. It documents an
+  ordinary internal quality check without establishing a client, facility, incident, or program.
+- The digitized reports register contains an owner-approved selection of routine internal technical
+  records dated from 1987 onward. These records establish only the work described in their own
+  narrow scope; they do not establish external clients, named facilities, public incidents, or
+  geographic locations.
+- The subjects of records `TL-P110-PER-9302`, `TL-P110-PER-9804`, `TL-P110-PER-0403`,
+  `TL-P110-PER-1110`, `TL-P110-PER-1806`, and `TL-P110-PER-2402` are wholly fictional. Their
+  published records may contain only professional assignment information and must omit contact,
+  residential, government-identifier, access-media, signature, portrait, health, and family data.
 
 ## Staff portal and disclosure states
 
@@ -74,7 +82,8 @@ Until the owner resolves them, treat these as working questions rather than cano
 
 - the precise relationship between “Trinity Laboratories” and “Trinity Labs, Inc.”;
 - the website-era framing; and
-- any newly invented named person, facility, program, or incident.
+- any newly invented named facility, program, or incident, and any named person not covered by an
+  explicit owner-approved fictional-personnel decision.
 
 Do not rewrite historical source files to make an approved digital crosswalk appear original.
 

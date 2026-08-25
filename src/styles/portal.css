@@ -617,6 +617,35 @@
   align-items: center;
 }
 
+.portal-summary-list {
+  margin: 0;
+  border-top: 1px solid var(--portal-line);
+}
+
+.portal-summary-list > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1rem;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid #dce1e5;
+}
+
+.portal-summary-list dt,
+.portal-summary-list dd {
+  margin: 0;
+}
+
+.portal-summary-list dt {
+  color: var(--portal-muted);
+  font-size: 0.76rem;
+}
+
+.portal-summary-list dd {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 650;
+}
+
 .portal-muted-status {
   color: var(--portal-muted);
   font: 500 0.66rem/1.35 var(--font-mono);

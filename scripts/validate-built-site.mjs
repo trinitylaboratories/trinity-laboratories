@@ -21,6 +21,7 @@ import {
   SEARCHABLE_RECORD_ROUTES,
   SITEMAP_ROUTES,
   SITE_ROUTES,
+  STUDY_FORM_ROUTES,
 } from './lib/site-contract.mjs';
 
 const TRACKER_PATTERN =
@@ -119,6 +120,9 @@ export function validateHtmlPage(html, route, { environment = 'production' } = {
   if (LOCAL_FORM_ROUTES.includes(route) && !/\bdata-local-form(?:\s|=|>)/i.test(html)) {
     errors.push(`${route}: missing [data-local-form]`);
   }
+  if (STUDY_FORM_ROUTES.includes(route) && !/\bdata-study-form(?:\s|=|>)/i.test(html)) {
+    errors.push(`${route}: missing [data-study-form]`);
+  }
 
   if (route === GATEWAY_ROUTE) {
     for (const hook of REQUIRED_GATEWAY_HOOKS) {
@@ -150,6 +154,7 @@ export function validateForms(html, route) {
 
     if (
       hasAttribute(openingTag, 'data-local-form') ||
+      hasAttribute(openingTag, 'data-study-form') ||
       hasAttribute(openingTag, 'data-gateway-form') ||
       hasAttribute(openingTag, 'data-authorization-form')
     ) {

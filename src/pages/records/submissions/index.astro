@@ -10,7 +10,7 @@ const submissions = await getCollection('submissions');
 <StarlightPage
   frontmatter={{
     title: 'Submission Register',
-    description: 'Repository publication register for validated TIRN form submissions.',
+    description: 'Register of completed TIRN records accepted by Records Control.',
     pagefind: true,
     head: [
       {
@@ -21,22 +21,22 @@ const submissions = await getCollection('submissions');
   }}
 >
   <p>
-    Entries in this register have passed local schema validation and repository review. The web
-    interface does not accept or transmit form responses.
+    Entries in this register have completed originating-office review and records-control intake.
+    Registration confirms the record identifier, revision, effective date, and distribution state.
   </p>
 
   <dl class="submission-process">
     <div>
       <dt>Draft</dt>
-      <dd>Kept outside the public repository in the local Filing Workstation.</dd>
+      <dd>The originating office completes the current approved form.</dd>
     </div>
     <div>
-      <dt>Stage</dt>
-      <dd>Produces deterministic JSON for review without transmitting field values.</dd>
+      <dt>Review</dt>
+      <dd>The designated reviewer confirms completeness, classification, and distribution.</dd>
     </div>
     <div>
-      <dt>Publish</dt>
-      <dd>Occurs only after repository validation and an approved merge.</dd>
+      <dt>Register</dt>
+      <dd>Records Control assigns the effective revision and enters the accepted record.</dd>
     </div>
   </dl>
 

@@ -104,7 +104,7 @@ import CorporateLayout from '../layouts/CorporateLayout.astro';
 
   if (fields && status) {
     fields.disabled = false;
-    status.textContent = 'Terminal ready. Issue a local code to continue.';
+    status.textContent = 'Terminal ready. Issue a one-time terminal code to continue.';
   }
 
   generate?.addEventListener('click', () => {

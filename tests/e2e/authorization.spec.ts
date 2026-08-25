@@ -14,7 +14,7 @@ async function seedGenericTrainingGrant(page: Page, level: 'TL-3' | 'TL-4' = 'TL
       JSON.stringify({
         version: 1,
         level: grantLevel,
-        scope: 'training',
+        scope: 'records-review',
         expiresAt: Date.now() + 15 * 60 * 1000,
       }),
     );
@@ -164,7 +164,7 @@ test.describe('browser-local authorization controls', () => {
     expect(grant).toEqual({
       version: 1,
       level: 'TL-3',
-      scope: 'training',
+      scope: 'records-review',
       expiresAt: expect.any(Number),
     });
     expect(grant.expiresAt).toBeGreaterThan(Date.now());
@@ -223,7 +223,7 @@ test.describe('browser-local authorization controls', () => {
     expect(grant).toEqual({
       version: 1,
       level: 'TL-4',
-      scope: 'training',
+      scope: 'records-review',
       expiresAt: expect.any(Number),
     });
     await expectNoPersistentPrivateState(context, page, [rawReference, rawControlReference]);

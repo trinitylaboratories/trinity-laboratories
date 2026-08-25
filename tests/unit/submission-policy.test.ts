@@ -13,12 +13,23 @@ async function fixture() {
   return JSON.parse(await readFile(filename, 'utf8')) as Record<string, unknown>;
 }
 
+async function personnelFixture() {
+  const filename = path.join(
+    process.cwd(),
+    'src',
+    'content',
+    'submissions',
+    'tl-p110-per-9302.json',
+  );
+  return JSON.parse(await readFile(filename, 'utf8')) as Record<string, unknown>;
+}
+
 describe('completed submission policy', () => {
   it('validates the canonical submission directory and its related records', async () => {
     await expect(validateSubmissionDirectory(process.cwd())).resolves.toEqual({
       diagnostics: [],
-      files: 4,
-      records: 4,
+      files: 34,
+      records: 34,
     });
   });
 
@@ -30,7 +41,80 @@ describe('completed submission policy', () => {
     expect(validateSubmissionRecord(record)).toEqual([]);
 
     record.publicationState = 'released';
+    expect(validateSubmissionRecord(record)).toContain(
+      'record.publicationState: TL-3+ records may not be released',
+    );
+  });
+
+  it('keeps fictional personnel metadata generic and separately controlled', async () => {
+    const record = await personnelFixture();
+
     expect(validateSubmissionRecord(record)).toEqual([]);
+    expect(record).toMatchObject({
+      recordId: 'TL-P110-PER-9302',
+      formId: 'TL-P110',
+      title: 'Personnel Assignment Record — File 9302',
+      recordFamily: 'personnel',
+      controllingOffice: 'Personnel Office',
+      publicationState: 'controlled',
+      information: { level: 'TL-3' },
+    });
+    expect(record).not.toHaveProperty('physicalAccess');
+    expect(record).not.toHaveProperty('facilityCondition');
+
+    const metadata = JSON.stringify({
+      title: record.title,
+      summary: record.summary,
+      tags: record.tags,
+      controllingOffice: record.controllingOffice,
+    });
+    expect(metadata).not.toContain('Mara Venn');
+  });
+
+  it('rejects unsafe personnel form, access, publication, and metadata choices', async () => {
+    const record = await personnelFixture();
+    record.formId = 'TL-P365';
+    record.publicationState = 'released';
+    record.information = { level: 'TL-2' };
+    record.physicalAccess = { level: 'S-2', endorsements: [] };
+    record.facilityCondition = 'WHITE';
+    record.controllingOffice = 'Advanced Materials';
+    record.title = 'Named employee assignment';
+    record.summary = 'A descriptive personnel summary.';
+    record.tags = ['personnel', 'Mara-Venn'];
+
+    const errors = validateSubmissionRecord(record);
+    expect(errors).toContain('record.formId: personnel records must originate from TL-P110');
+    expect(errors).toContain('record.information.level: personnel records must be TL-3 or TL-4');
+    expect(errors).toContain('record.publicationState: personnel records must be controlled');
+    expect(errors).toContain(
+      'record.physicalAccess: personnel records must not publish physical-access data',
+    );
+    expect(errors).toContain(
+      'record.facilityCondition: personnel records must not publish facility conditions',
+    );
+    expect(errors).toContain(
+      'record.controllingOffice: personnel records must use the generic Personnel Office',
+    );
+    expect(errors).toContain(
+      'record.title: personnel records must use the generic file-number title',
+    );
+    expect(errors).toContain(
+      'record.summary: personnel records must use the approved generic summary',
+    );
+    expect(errors).toContain(
+      'record.tags[1]: personnel record tags must use the generic allowlist',
+    );
+  });
+
+  it('rejects sensitive personal-data labels from personnel bodies', async () => {
+    const record = await personnelFixture();
+    const sections = record.sections as Array<Record<string, unknown>>;
+    sections[0].body = `${String(sections[0].body)}\n\n**Home address:** prohibited`;
+
+    expect(validateSubmissionRecord(record)).toContain(
+      'record.sections: personnel records must not contain residential address',
+    );
   });
 
   it('rejects a plaintext value on a withheld section', async () => {

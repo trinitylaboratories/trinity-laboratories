@@ -1,0 +1,140 @@
+---
+import type { StudyData } from '../../lib/study-schema';
+
+interface Props {
+  studyId: string;
+  application: NonNullable<StudyData['application']>;
+}
+
+const { studyId, application } = Astro.props;
+const controlId = (fieldId: string) => `study-${studyId.toLowerCase()}-${fieldId}`;
+---
+
+<section class="study-screen" aria-labelledby={`${controlId('heading')}`}>
+  <div class="study-screen__heading">
+    <p class="section-label">Participation interest</p>
+    <h2 id={controlId('heading')}>{application.title}</h2>
+    <p>{application.introduction}</p>
+  </div>
+
+  <form class="study-form" data-study-form data-study-id={studyId} novalidate autocomplete="off">
+    <fieldset disabled data-study-fields>
+      <legend>Preliminary conditions</legend>
+      <div class="study-form__grid">
+        {
+          application.fields.map((field) => {
+            const id = controlId(field.id);
+            if (field.type === 'checkbox') {
+              return (
+                <label class="study-form__check" for={id} data-wide>
+                  <input id={id} type="checkbox" required={field.required} autocomplete="off" />
+                  <span>
+                    <strong>{field.label}</strong>
+                    {field.hint && <small>{field.hint}</small>}
+                  </span>
+                </label>
+              );
+            }
+
+            if (field.type === 'select') {
+              return (
+                <label for={id}>
+                  <span>{field.label}</span>
+                  <select id={id} required={field.required} autocomplete="off">
+                    <option value="">Select one</option>
+                    {field.options.map((option, index) => (
+                      <option value={`option-${index + 1}`}>{option}</option>
+                    ))}
+                  </select>
+                  {field.hint && <small>{field.hint}</small>}
+                </label>
+              );
+            }
+
+            if (field.type === 'number') {
+              return (
+                <label for={id}>
+                  <span>{field.label}</span>
+                  <span class="study-form__number">
+                    <input
+                      id={id}
+                      type="number"
+                      required={field.required}
+                      min={field.min}
+                      max={field.max}
+                      step={field.step}
+                      inputmode="numeric"
+                      autocomplete="off"
+                    />
+                    {field.unit && <i>{field.unit}</i>}
+                  </span>
+                  {field.hint && <small>{field.hint}</small>}
+                </label>
+              );
+            }
+
+            return (
+              <label for={id} data-wide>
+                <span>{field.label}</span>
+                <input
+                  id={id}
+                  type="text"
+                  required={field.required}
+                  maxlength={field.maxLength}
+                  placeholder={field.placeholder}
+                  autocomplete="off"
+                  spellcheck="false"
+                />
+                {field.hint && <small>{field.hint}</small>}
+              </label>
+            );
+          })
+        }
+      </div>
+      <div class="study-form__actions">
+        <button class="button button--primary" type="submit">Complete participation screen</button>
+        <span>{studyId} / preliminary review</span>
+      </div>
+    </fieldset>
+    <p class="study-form__status" role="status" aria-live="polite" data-study-status>
+      Participation screen initialization required.
+    </p>
+  </form>
+  <noscript>
+    <p class="study-screen__notice">The participation screen is unavailable on this terminal.</p>
+  </noscript>
+</section>
+
+<script>
+  const alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+
+  const issueScreeningReference = () => {
+    const randomValues = new Uint32Array(6);
+    crypto.getRandomValues(randomValues);
+    return Array.from(randomValues, (value) => alphabet[value % alphabet.length]).join('');
+  };
+
+  document.querySelectorAll<HTMLFormElement>('[data-study-form]').forEach((form) => {
+    const fields = form.querySelector<HTMLFieldSetElement>('[data-study-fields]');
+    const status = form.querySelector<HTMLElement>('[data-study-status]');
+    if (!fields || !status) return;
+
+    fields.disabled = false;
+    status.textContent = 'Participation screen ready. Required fields are marked.';
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        status.textContent = 'Screen incomplete. Review the marked conditions.';
+        status.dataset.state = 'incomplete';
+        return;
+      }
+
+      const reference = issueScreeningReference();
+      form.reset();
+      status.textContent = `PRE-SCREEN COMPLETE — ELIGIBILITY PROVISIONAL. NO ENROLLMENT RECORD CREATED. SCREENING REFERENCE: ${reference}.`;
+      status.dataset.state = 'complete';
+    });
+  });
+</script>

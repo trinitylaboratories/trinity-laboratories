@@ -1,6 +1,6 @@
 ---
 title: 'TL-SEC-04 — Information Security Classification System'
-description: 'Accessible transcription of the Trinity Laboratories information-classification policy.'
+description: 'Current Trinity Laboratories information-classification policy reference.'
 recordId: 'TL-SEC-04'
 recordType: 'policy'
 recordFamily: 'security'
@@ -16,7 +16,7 @@ tags:
 relatedRecords:
   - 'TL-SEC-001'
 attachments:
-  - label: 'Metadata-scrubbed policy PDF'
+  - label: 'Reference copy (PDF)'
     path: '/downloads/policies/tl-sec-04-information-security-classification.pdf'
     mediaType: 'application/pdf'
     sourceFilename: 'TL86-ClearanceLevels_TrinityLabs1986c.pdf'
@@ -26,9 +26,10 @@ attachments:
 > **Document:** TL-SEC-04
 > **Issued by:** Information Security & Records Division
 > **Applies to:** All Trinity Laboratories personnel, records, facilities, specimens, and research programs
-> **Download:** [Metadata-scrubbed policy PDF](/downloads/policies/tl-sec-04-information-security-classification.pdf)
+> **Reference copy:** [TL-SEC-04 policy PDF](/downloads/policies/tl-sec-04-information-security-classification.pdf)
 
-This public release is normalized as TL-0 in archive metadata. The transcription preserves the supplied policy terminology and its original eight-page order while presenting tables and lists as searchable HTML.
+This reference is approved for general release. It follows the controlling policy's eight-section
+order; the issued policy PDF remains the authoritative copy.
 
 ## Clearance level summary
 

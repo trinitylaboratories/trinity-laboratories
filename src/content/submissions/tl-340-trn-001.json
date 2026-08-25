@@ -1,45 +1,42 @@
 {
   "recordId": "TL-340-TRN-001",
   "formId": "TL-340",
-  "title": "Access-Control Training Assessment",
+  "title": "Controlled Records Handling Review",
   "recordType": "completed-report",
   "recordFamily": "research",
   "status": "active",
-  "revision": "1.0",
+  "revision": "1.1",
   "effectiveDate": "2026-08-24",
   "controllingOffice": "Information Security & Records Division",
   "publicationState": "controlled",
   "information": {
     "level": "TL-3"
   },
-  "facilityCondition": "WHITE",
-  "tags": ["training", "access-control", "records-handling", "tl-340"],
-  "summary": "A neutral training record used to verify controlled-record handling and section-level disclosure behavior.",
+  "tags": ["records-handling", "quality-review", "routing", "tl-340"],
+  "summary": "Quarterly review of controlled-record routing, reviewer acknowledgements, and terminal-session closeout practices.",
   "relatedRecords": ["TL-340", "TL-SEC-04", "TL-SEC-001"],
   "sections": [
     {
-      "id": "exercise-scope",
-      "title": "Exercise scope",
-      "summary": "Approved context for the training record.",
+      "id": "review-scope",
+      "title": "REVIEW SCOPE",
       "disclosure": {
         "mode": "open"
       },
-      "body": "This record describes a records-handling exercise only. It does not represent a person, facility, client, incident, research subject, or live operation."
+      "body": "**Review period:** Current quarterly cycle\n\n**Control sample:** Coded routing entries selected from the ordinary records queue\n\n**Review objective:** Confirm that required acknowledgements, classification markings, and closeout entries were present before archival disposition."
     },
     {
-      "id": "evaluation-criteria",
-      "title": "Evaluation criteria",
-      "summary": "Controlled training guidance available to an authorized session.",
+      "id": "findings-and-disposition",
+      "title": "FINDINGS & DISPOSITION",
       "disclosure": {
         "mode": "authorize",
         "requiredLevel": "TL-3"
       },
-      "body": "The exercise is complete when the operator distinguishes information classification from physical access authority, verifies need-to-know before disclosure, and terminates the elevated session after review."
+      "body": "**Routing review:** Sampled entries followed the assigned review sequence.\n\n**Acknowledgements:** Required role acknowledgements were present in the reviewed set.\n\n**Session closeout:** Terminal closeout entries were complete for the selected records.\n\n**Disposition:** No systemic correction required. One formatting reminder was issued for the next records-control briefing."
     },
     {
-      "id": "review-annotation",
-      "title": "Review annotation",
-      "summary": "The annotation is intentionally omitted from the published artifact.",
+      "id": "supervisory-annotation",
+      "title": "SUPERVISORY ANNOTATION",
+      "summary": "The supervisory annotation remains with the originating review file.",
       "disclosure": {
         "mode": "withheld"
       }

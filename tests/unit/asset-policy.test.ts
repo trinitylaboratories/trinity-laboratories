@@ -89,6 +89,23 @@ describe('asset policy', () => {
     );
   });
 
+  it('rejects credential and access-card media before ledger review', async () => {
+    const parent = path.join(process.cwd(), '.tools', 'test-results');
+    await mkdir(parent, { recursive: true });
+    const root = await mkdtemp(path.join(parent, 'unit-credential-media-'));
+    temporaryRoots.push(root);
+    await mkdir(path.join(root, 'media', 'badges'), { recursive: true });
+    await writeFile(path.join(root, 'media', 'badges', 's0.png'), 'not an image', 'utf8');
+    await writeFile(path.join(root, 'employee-access-card.png'), 'not an image', 'utf8');
+    const result = await validateAssetRoot(root);
+    expect(result.errors).toEqual(
+      expect.arrayContaining([
+        expect.stringMatching(/media\/badges\/s0\.png: credential or access-card media/),
+        expect.stringMatching(/employee-access-card\.png: credential or access-card media/),
+      ]),
+    );
+  });
+
   it('inspects DOCX packages for external links, comments, tracked changes, and metadata', () => {
     const archive = zipSync({
       'docProps/core.xml': strToU8(
