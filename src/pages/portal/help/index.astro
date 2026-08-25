@@ -6,7 +6,7 @@ import PortalLayout from '../../../layouts/PortalLayout.astro';
 
 <PortalLayout
   title="Help"
-  description="Operational guidance for TIRN staff sessions, temporary authorization, records access, and local form preparation."
+  description="Operational guidance for TIRN staff sessions, temporary authorization, records access, and filing."
   active="help"
 >
   <PortalPageHeading
@@ -27,8 +27,8 @@ import PortalLayout from '../../../layouts/PortalLayout.astro';
           <li>Confirm that Staff Services reports “Staff / TL-2 base.”</li>
         </ol>
         <p>
-          Badge identifiers and terminal codes are cleared after the access sequence. Only the
-          generic accepted-session state is retained for the current terminal session.
+          Badge identifiers and terminal codes are cleared after the access sequence. The staff
+          session remains active on this terminal until it is terminated.
         </p>
       </section>
 
@@ -43,19 +43,18 @@ import PortalLayout from '../../../layouts/PortalLayout.astro';
           <li>Relinquish the grant when review is complete.</li>
         </ol>
         <p class="portal-callout portal-callout--warning">
-          Temporary browser grants do not satisfy TL-5+, named program, compartment, endorsement, or
-          physical-access requirements.
+          Temporary session authorization does not satisfy TL-5+, named program, compartment,
+          endorsement, or physical-access requirements.
         </p>
       </section>
 
       <section class="portal-section" aria-labelledby="filing-help-heading">
-        <p class="portal-section__label">Local records preparation</p>
+        <p class="portal-section__label">Records preparation</p>
         <h2 id="filing-help-heading">Prepare a new record</h2>
         <p>
-          Open the Filing Workstation from a configured local terminal, select a blank template,
-          complete the fields, and review the guest, authorized, and print presentations. The
-          workstation generates a package for records-control review; it does not enter the register
-          directly.
+          Use a designated Filing Workstation, select the current approved template, complete the
+          required fields, and obtain supervisory review. Route the completed record to Records
+          Control for identifier, revision, and distribution review.
         </p>
         <a class="portal-button" href="/portal/forms/">Open forms and filing</a>
       </section>
@@ -86,8 +85,8 @@ import PortalLayout from '../../../layouts/PortalLayout.astro';
               </tr>
               <tr>
                 <td>Content withheld</td>
-                <td>The record body is not present in the website.</td>
-                <td>No browser authorization can reveal it.</td>
+                <td>The source record is held by its controlling office.</td>
+                <td>Contact the controlling office for release instructions.</td>
               </tr>
             </tbody>
           </table>
@@ -98,14 +97,14 @@ import PortalLayout from '../../../layouts/PortalLayout.astro';
     <aside class="portal-workspace__aside" aria-label="Current access context">
       <SessionSummary />
       <section class="portal-section" aria-labelledby="privacy-heading">
-        <p class="portal-section__label">Local-state policy</p>
-        <h2 id="privacy-heading">What the browser retains</h2>
+        <p class="portal-section__label">Session administration</p>
+        <h2 id="privacy-heading">Session controls</h2>
         <dl class="portal-summary">
-          <div><dt>Staff session</dt><dd>Generic accepted state</dd></div>
-          <div><dt>Elevated grant</dt><dd>Level, scope, expiry</dd></div>
-          <div><dt>Request references</dt><dd>Not retained</dd></div>
-          <div><dt>Purpose</dt><dd>Not retained</dd></div>
-          <div><dt>Network submission</dt><dd>None</dd></div>
+          <div><dt>Staff session</dt><dd>Active until termination</dd></div>
+          <div><dt>Temporary authorization</dt><dd>Level, scope, and expiry</dd></div>
+          <div><dt>Request references</dt><dd>Cleared after evaluation</dd></div>
+          <div><dt>Working purpose</dt><dd>Cleared after evaluation</dd></div>
+          <div><dt>Records routing</dt><dd>Through Records Control</dd></div>
         </dl>
       </section>
     </aside>

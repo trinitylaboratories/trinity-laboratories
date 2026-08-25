@@ -4,7 +4,6 @@ import type { TirnLevel } from '../../lib/tirn-access';
 
 type RecordsData = {
   recordId?: string;
-  recordType?: string;
   information?: {
     level?: TirnLevel;
     program?: string;
@@ -13,8 +12,7 @@ type RecordsData = {
 };
 
 const data = Astro.locals.starlightRoute.entry.data as RecordsData;
-const isForm = data.recordType === 'form-template';
-const requiredLevel: TirnLevel = isForm ? (data.information?.level ?? 'TL-2') : 'TL-2';
+const requiredLevel: TirnLevel = data.information?.level ?? 'TL-2';
 const recordId = data.recordId ?? Astro.locals.starlightRoute.id.toUpperCase();
 const standardRank = Number(requiredLevel.replace('TL-', ''));
 const separatelyControlled =
@@ -29,7 +27,7 @@ const gateTitle = separatelyControlled
     ? `${requiredLevel} authorization is required.`
     : 'A staff session is required.';
 const gateCopy = separatelyControlled
-  ? 'This node contains catalog metadata only. The record body and source attachment are not available through browser authorization.'
+  ? 'This node contains catalog metadata only. The source record and attachment are held by the controlling office.'
   : requestAvailable
     ? 'Establish a staff session, then submit a temporary-access request for the displayed information level.'
     : 'Establish a staff session through Employee Access to open this internal reference.';

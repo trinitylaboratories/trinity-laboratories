@@ -77,6 +77,16 @@ describe('built HTML validation', () => {
     );
   });
 
+  it('applies the same serialization boundary to study screening forms', () => {
+    const html = '<form data-study-form method="post"><input name="location"></form>';
+    expect(validateForms(html, '/studies/indoor-condition-observation/')).toEqual(
+      expect.arrayContaining([
+        expect.stringMatching(/method attribute/),
+        expect.stringMatching(/name attributes/),
+      ]),
+    );
+  });
+
   it('rejects third-party resources and transmission APIs', () => {
     expect(
       validateResourceOrigins('<script src="https://example.test/app.js"></script>', '/'),

@@ -1,0 +1,133 @@
+{
+  "studyId": "ST-26-027",
+  "slug": "consumer-compass-repeatability",
+  "title": "Consumer Compass Repeatability Observation",
+  "shortTitle": "Compass repeatability observation",
+  "researchQuestion": "How repeatable are stationary readings from common consumer compasses when the observation point and reading procedure remain fixed?",
+  "summary": "This field-method interest screen concerns repeatability rather than geographic accuracy. A future observation interval would use one participant-selected, non-sensitive station and categorical reading differences; coordinates, routes, photographs, and property details are not part of the protocol.",
+  "status": "interest-only",
+  "phase": "Method feasibility registry",
+  "discipline": "Field Sampling & Geological Research",
+  "studyType": "Stationary field observation",
+  "participationMode": "Participant-selected stationary point",
+  "commitment": "Five stationary readings on three nonconsecutive days",
+  "protocolRevision": "0.8",
+  "controllingOffice": "Field Methods Office",
+  "displayOrder": 3,
+  "ageMinimum": 18,
+  "featured": true,
+  "eligibility": [
+    "Age 18 or older.",
+    "Access to a basic magnetic compass intended for ordinary navigation or instruction.",
+    "Access to one safe, stationary, non-sensitive observation point away from traffic.",
+    "Able to repeat the same standing position and reading sequence on three nonconsecutive days."
+  ],
+  "exclusions": [
+    "No readings may be made while moving, driving, cycling, boating, or performing another task.",
+    "No coordinates, maps, routes, addresses, photographs, device brands, or property descriptions are requested."
+  ],
+  "participantActivities": [
+    "Select one safe stationary point where a compass can be read without obstructing a walkway or entering restricted property.",
+    "Use the same body orientation and reading sequence for five observations on each assigned day.",
+    "Record categorical agreement between readings and note only whether common nearby metal objects were present."
+  ],
+  "protocolSteps": [
+    {
+      "code": "01",
+      "title": "Station",
+      "description": "Choose one safe, non-sensitive observation point and keep its arrangement unchanged."
+    },
+    {
+      "code": "02",
+      "title": "Orient",
+      "description": "Use the same standing direction and hold the instrument level for each reading."
+    },
+    {
+      "code": "03",
+      "title": "Repeat",
+      "description": "Make five stationary readings in sequence on each assigned observation day."
+    },
+    {
+      "code": "04",
+      "title": "Classify",
+      "description": "Record agreement by fixed categories rather than coordinates or exact bearings."
+    }
+  ],
+  "dataRequested": [
+    "General compass format selected from fixed categories.",
+    "General observation setting selected as indoors, sheltered outdoors, or open outdoors.",
+    "Categorical reading agreement and presence of common nearby metal objects.",
+    "Availability for three nonconsecutive stationary observation days."
+  ],
+  "dataNotRequested": [
+    "Coordinates, street address, travel route, property identity, maps, or photographs.",
+    "Name, email address, telephone number, or identifying account information.",
+    "Compass brand, serial number, purchase record, or device telemetry."
+  ],
+  "samplePrompts": [
+    "Did all five readings remain within the same marked interval?",
+    "Were ordinary metal objects present within arm's reach of the station?",
+    "Was the assigned standing position used for every reading?"
+  ],
+  "methodNotes": [
+    "The proposed method uses categorical agreement bands because it is intended to compare repeatability, not determine geographic accuracy.",
+    "A single fixed station reduces variation introduced by route changes, moving platforms, and different surrounding structures.",
+    "Participants would stop the sequence when safe stationary observation is not possible."
+  ],
+  "limitations": [
+    "Consumer compass construction, local materials, and user technique vary and are not independently verified.",
+    "Categorical readings cannot support a detailed magnetic survey or navigation decision.",
+    "An interest screen evaluates only basic feasibility; it does not activate an observation interval."
+  ],
+  "application": {
+    "mode": "interest-screen",
+    "title": "Method feasibility screen",
+    "introduction": "Describe only the broad equipment and setting categories below. Completion provides a provisional screening reference and does not activate or enroll a study interval.",
+    "fields": [
+      {
+        "id": "adult-confirmation",
+        "type": "checkbox",
+        "label": "I confirm that I am 18 years of age or older.",
+        "required": true
+      },
+      {
+        "id": "compass-format",
+        "type": "select",
+        "label": "Available compass format",
+        "required": true,
+        "options": [
+          "Baseplate compass",
+          "Lensatic-style compass",
+          "Pocket compass",
+          "Other ordinary magnetic compass"
+        ]
+      },
+      {
+        "id": "setting-category",
+        "type": "select",
+        "label": "General stationary setting",
+        "required": true,
+        "options": ["Ordinary indoor area", "Sheltered outdoor area", "Open outdoor area"]
+      },
+      {
+        "id": "schedule-availability",
+        "type": "select",
+        "label": "Three-day availability",
+        "required": true,
+        "options": [
+          "Three weekday observations",
+          "Three weekend observations",
+          "Mixed weekday and weekend observations"
+        ]
+      },
+      {
+        "id": "safety-confirmation",
+        "type": "checkbox",
+        "label": "I can use a safe stationary point away from traffic and restricted property.",
+        "required": true
+      }
+    ]
+  },
+  "relatedRecordIds": [],
+  "editorialState": "owner-approved"
+}

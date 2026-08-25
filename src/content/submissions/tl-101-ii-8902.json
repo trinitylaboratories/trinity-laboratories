@@ -1,0 +1,52 @@
+{
+  "recordId": "TL-101-II-8902",
+  "formId": "TL-101",
+  "title": "Chart Recorder Weekly Linearity Check",
+  "recordType": "completed-report",
+  "recordFamily": "research",
+  "status": "archived",
+  "revision": "1.0",
+  "effectiveDate": "1989-11-06",
+  "controllingOffice": "Industrial Instrumentation",
+  "publicationState": "released",
+  "information": {
+    "level": "TL-1"
+  },
+  "tags": ["instrumentation", "chart-recorder", "linearity", "verification", "tl-101"],
+  "summary": "Five-point checks of two chart recorders found no material departure from the reference signal over the selected operating range.",
+  "relatedRecords": ["TL-101"],
+  "sections": [
+    {
+      "id": "administrative-record",
+      "title": "ADMINISTRATIVE RECORD",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Study title:** Chart Recorder Weekly Linearity Check\n\n**Responsible unit:** Industrial Instrumentation\n\n**Responsible personnel:** Technical staff (role-only archive copy)\n\n**Effective date:** 1989-11-06\n\n**Record basis:** TL-101"
+    },
+    {
+      "id": "purpose-and-scope",
+      "title": "PURPOSE & SCOPE",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Objective:** Five-point checks of two chart recorders found no material departure from the reference signal over the selected operating range.\n\n**Scope limitation:** Internal comparative work only; no client, location, or external-party information is included in this archive copy."
+    },
+    {
+      "id": "method-and-observations",
+      "title": "METHOD & OBSERVATIONS",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Method:** Coded materials or instruments were evaluated through a repeatable bench or field-support sequence appropriate to the stated objective. Observations were recorded at fixed checkpoints and reviewed against the applicable internal working range.\n\n**Observations:** The comparison produced stable, ordinary results suitable for the stated disposition. No unexpected response was recorded."
+    },
+    {
+      "id": "disposition",
+      "title": "DISPOSITION",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Result summary:** Five-point checks of two chart recorders found no material departure from the reference signal over the selected operating range.\n\n**Disposition:** Archive with the responsible unit's routine technical records.\n\n**Review status:** Technical review complete; role-only archive copy."
+    }
+  ]
+}

@@ -1,0 +1,136 @@
+{
+  "studyId": "ST-26-021",
+  "slug": "household-timekeeping-stability",
+  "title": "Household Timekeeping Stability Survey",
+  "shortTitle": "Household timekeeping stability",
+  "researchQuestion": "What patterns of agreement appear among commonly available clocks during routine indoor use over a fourteen-day interval?",
+  "summary": "The survey examines how ordinary quartz clocks, appliance displays, and network-synchronized devices agree or diverge when read on a fixed schedule. Participants identify devices by broad category only; brands, serial numbers, network records, and exact locations are outside the protocol.",
+  "status": "recruiting",
+  "phase": "Comparison interval 01",
+  "discipline": "Industrial Instrumentation",
+  "studyType": "Instrument comparison survey",
+  "participationMode": "Remote / fixed-device observations",
+  "commitment": "Two observations weekly for fourteen days",
+  "protocolRevision": "1.2",
+  "controllingOffice": "Participant Programs Office",
+  "displayOrder": 2,
+  "ageMinimum": 18,
+  "featured": true,
+  "eligibility": [
+    "Age 18 or older.",
+    "Routine access to at least three independently operating time displays.",
+    "One display must provide a network-synchronized or radio-controlled reference.",
+    "Able to observe the same displays without moving or resetting them during the study interval."
+  ],
+  "exclusions": [
+    "Workplace control systems, security systems, medical equipment, and restricted equipment are excluded.",
+    "No account information, network logs, device identifiers, photographs, or precise location information are requested."
+  ],
+  "participantActivities": [
+    "Assign a simple device category to each participating display and identify one reference display.",
+    "Twice each week, read the displays in the same order and record whole-minute agreement or difference from the reference.",
+    "Note only ordinary interruptions such as a power loss, manual reset, daylight-saving adjustment, or device replacement."
+  ],
+  "protocolSteps": [
+    {
+      "code": "01",
+      "title": "Inventory",
+      "description": "Select three to six ordinary time displays and assign each a broad device category."
+    },
+    {
+      "code": "02",
+      "title": "Reference",
+      "description": "Designate one synchronized display as the comparison reference for the full interval."
+    },
+    {
+      "code": "03",
+      "title": "Compare",
+      "description": "Read all selected displays in the same order twice each week."
+    },
+    {
+      "code": "04",
+      "title": "Close",
+      "description": "Record ordinary resets or interruptions and complete the final agreement check."
+    }
+  ],
+  "dataRequested": [
+    "Number of available clocks within the permitted range.",
+    "Broad clock categories and the type of synchronized reference.",
+    "Whole-minute differences observed on the assigned schedule.",
+    "Fixed-category notes for power interruption or manual adjustment."
+  ],
+  "dataNotRequested": [
+    "Names, contact details, account information, or household identifiers.",
+    "Brands, model numbers, serial numbers, network addresses, or photographs.",
+    "Exact time zone, street address, coordinates, or device telemetry."
+  ],
+  "samplePrompts": [
+    "How many selected displays agree with the reference to the displayed minute?",
+    "Has any selected display been reset since the previous observation?",
+    "Were all displays read in the assigned order?"
+  ],
+  "methodNotes": [
+    "Comparisons use displayed whole minutes rather than sub-second timing, which keeps the method suitable for ordinary household equipment.",
+    "The same synchronized display remains the reference throughout the interval unless it becomes unavailable; reference changes close the series.",
+    "Device descriptions are categorical so the study does not create an inventory of a participant's household equipment."
+  ],
+  "limitations": [
+    "Display update behavior and synchronization methods vary by device category.",
+    "Reading order introduces a small interval between the first and last comparison.",
+    "The survey describes displayed agreement and does not provide calibration or product-performance certification."
+  ],
+  "application": {
+    "mode": "eligibility-screen",
+    "title": "Timekeeping survey screen",
+    "introduction": "Confirm the available display categories and observation schedule. Completion provides a provisional screening reference only and does not create an enrollment record.",
+    "fields": [
+      {
+        "id": "adult-confirmation",
+        "type": "checkbox",
+        "label": "I confirm that I am 18 years of age or older.",
+        "required": true
+      },
+      {
+        "id": "available-display-count",
+        "type": "number",
+        "label": "Number of ordinary time displays available",
+        "hint": "Enter a whole number from 3 through 6.",
+        "required": true,
+        "min": 3,
+        "max": 6,
+        "step": 1,
+        "unit": "displays"
+      },
+      {
+        "id": "reference-type",
+        "type": "select",
+        "label": "Available synchronized reference",
+        "required": true,
+        "options": [
+          "Network-synchronized device",
+          "Radio-controlled clock",
+          "No synchronized reference"
+        ]
+      },
+      {
+        "id": "device-mix",
+        "type": "select",
+        "label": "Available device mix",
+        "required": true,
+        "options": [
+          "Quartz and appliance displays",
+          "Quartz and synchronized displays",
+          "Mixed household display types"
+        ]
+      },
+      {
+        "id": "schedule-confirmation",
+        "type": "checkbox",
+        "label": "I can complete two scheduled observations each week for fourteen days.",
+        "required": true
+      }
+    ]
+  },
+  "relatedRecordIds": [],
+  "editorialState": "owner-approved"
+}

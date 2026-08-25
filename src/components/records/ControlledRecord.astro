@@ -21,7 +21,7 @@ const {
   requiredLevel = 'TL-3',
   program,
   compartment,
-  summary = 'The record body is controlled and is not displayed in the current view.',
+  summary = 'The record body requires additional information authorization.',
 } = Astro.props;
 const headingId = `${id}-heading`;
 ---
@@ -56,7 +56,7 @@ const headingId = `${id}-heading`;
     mode === 'authorize' && (
       <>
         <div class="tirn-record-gate__lock" data-controlled-locked data-pagefind-ignore>
-          <p class="tirn-record-gate__stamp">RESTRICTED CONTENT OMITTED FROM CURRENT VIEW</p>
+          <p class="tirn-record-gate__stamp">ADDITIONAL INFORMATION AUTHORIZATION REQUIRED</p>
           <p>{summary}</p>
           <dl>
             <div>
@@ -111,7 +111,7 @@ const headingId = `${id}-heading`;
   {
     mode === 'withheld' && (
       <div class="tirn-record-gate__lock" data-controlled-withheld data-pagefind-ignore>
-        <p class="tirn-record-gate__stamp">RECORD BODY WITHHELD FROM THIS PUBLICATION</p>
+        <p class="tirn-record-gate__stamp">SOURCE RECORD HELD BY CONTROLLING OFFICE</p>
         <p>{summary}</p>
         <dl>
           <div>
@@ -135,7 +135,7 @@ const headingId = `${id}-heading`;
           <div>
             <>
               <dt>Source status</dt>
-              <dd>Not present in the published site</dd>
+              <dd>Release not available at this node</dd>
             </>
           </div>
         </dl>

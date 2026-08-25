@@ -17,6 +17,13 @@ interface Props {
 
 const { entries } = Astro.props;
 const orderedEntries = sortCatalogueEntries(entries);
+const decades = [
+  ...new Set(
+    orderedEntries.flatMap((entry) =>
+      entry.effectiveDate ? [`${entry.effectiveDate.slice(0, 3)}0`] : [],
+    ),
+  ),
+].sort((left, right) => right.localeCompare(left));
 const familyLabels = {
   security: 'Security',
   research: 'Research',
@@ -42,6 +49,12 @@ const sortLabels = {
   'record-id': 'Record identifier',
   title: 'Title',
 } as const;
+const clientEntry = (entry: RecordCatalogueEntry): RecordCatalogueEntry => ({
+  ...entry,
+  title: '',
+  controllingOffice: undefined,
+  tags: [],
+});
 ---
 
 <section class="record-catalogue" data-record-catalogue data-total={orderedEntries.length}>
@@ -49,7 +62,7 @@ const sortLabels = {
     <legend>Filter register</legend>
     <div class="record-catalogue__filter-grid">
       <label class="record-catalogue__query">
-        Record, title, office, or tag
+        Record, title, or office
         <input
           type="search"
           inputmode="search"
@@ -57,6 +70,13 @@ const sortLabels = {
           placeholder="Search register"
           data-catalogue-query
         />
+      </label>
+      <label>
+        Effective decade
+        <select data-catalogue-decade>
+          <option value="">All decades</option>
+          {decades.map((decade) => <option value={decade}>{decade}s</option>)}
+        </select>
       </label>
       <label>
         Record type
@@ -139,7 +159,7 @@ const sortLabels = {
       <tbody data-catalogue-body>
         {
           orderedEntries.map((entry) => (
-            <tr data-catalogue-row data-catalogue-entry={JSON.stringify(entry)}>
+            <tr data-catalogue-row data-catalogue-entry={JSON.stringify(clientEntry(entry))}>
               <td class="record-catalogue__record">
                 <a href={entry.href}>{entry.recordId}</a>
                 <span>{RECORD_TYPE_LABELS[entry.recordType]}</span>
@@ -149,7 +169,10 @@ const sortLabels = {
                   {entry.title}
                 </strong>
                 <strong data-catalogue-title-fallback>Title withheld — eligibility required</strong>
-                <span>{entry.controllingOffice ?? `Revision ${entry.revision}`}</span>
+                <span data-catalogue-office hidden>
+                  {entry.controllingOffice ?? `Revision ${entry.revision}`}
+                </span>
+                <span data-catalogue-office-fallback>Controlling office restricted</span>
               </td>
               <td>{familyLabels[entry.recordFamily]}</td>
               <td>{entry.informationLevel ?? 'Not assigned'}</td>
@@ -197,6 +220,8 @@ const sortLabels = {
     entry: RecordCatalogueEntry;
     title: HTMLElement | null;
     titleFallback: HTMLElement | null;
+    office: HTMLElement | null;
+    officeFallback: HTMLElement | null;
     titleAuthorized: boolean;
   }
 
@@ -206,6 +231,7 @@ const sortLabels = {
 
     const controls = root.querySelector<HTMLFieldSetElement>('[data-catalogue-controls]');
     const query = root.querySelector<HTMLInputElement>('[data-catalogue-query]');
+    const decade = root.querySelector<HTMLSelectElement>('[data-catalogue-decade]');
     const recordType = root.querySelector<HTMLSelectElement>('[data-catalogue-record-type]');
     const family = root.querySelector<HTMLSelectElement>('[data-catalogue-family]');
     const status = root.querySelector<HTMLSelectElement>('[data-catalogue-status]');
@@ -228,6 +254,8 @@ const sortLabels = {
             entry,
             title: element.querySelector<HTMLElement>('[data-catalogue-title]'),
             titleFallback: element.querySelector<HTMLElement>('[data-catalogue-title-fallback]'),
+            office: element.querySelector<HTMLElement>('[data-catalogue-office]'),
+            officeFallback: element.querySelector<HTMLElement>('[data-catalogue-office-fallback]'),
             titleAuthorized: false,
           },
         ];
@@ -239,6 +267,7 @@ const sortLabels = {
     if (
       !controls ||
       !query ||
+      !decade ||
       !recordType ||
       !family ||
       !status ||
@@ -278,12 +307,15 @@ const sortLabels = {
         changed = true;
         if (row.title) row.title.hidden = !row.titleAuthorized;
         if (row.titleFallback) row.titleFallback.hidden = row.titleAuthorized;
+        if (row.office) row.office.hidden = !row.titleAuthorized;
+        if (row.officeFallback) row.officeFallback.hidden = row.titleAuthorized;
       }
       return changed;
     };
 
     const currentFilters = (): RecordCatalogueFilters => ({
       query: query.value,
+      decade: decade.value,
       recordType: recordType.value as RecordCatalogueFilters['recordType'],
       recordFamily: family.value as RecordCatalogueFilters['recordFamily'],
       status: status.value as RecordCatalogueFilters['status'],
@@ -293,18 +325,23 @@ const sortLabels = {
 
     const refresh = () => {
       const filters = currentFilters();
-      const ordered = sortCatalogueEntries(
-        rows.map(({ entry }) => entry),
-        sort.value as CatalogueSort,
+      const searchableEntries = rows.map((row) =>
+        row.titleAuthorized
+          ? {
+              ...row.entry,
+              title: row.title?.textContent?.trim() ?? '',
+              controllingOffice: row.office?.textContent?.trim() || undefined,
+            }
+          : row.entry,
       );
+      const ordered = sortCatalogueEntries(searchableEntries, sort.value as CatalogueSort);
       const rowsById = new Map(rows.map((row) => [row.entry.recordId, row]));
       let visible = 0;
 
       for (const entry of ordered) {
         const row = rowsById.get(entry.recordId);
         if (!row) continue;
-        const searchableEntry = row.titleAuthorized ? entry : { ...entry, title: '', tags: [] };
-        const matches = recordMatchesCatalogueFilters(searchableEntry, filters);
+        const matches = recordMatchesCatalogueFilters(entry, filters);
         row.element.hidden = !matches;
         if (matches) visible += 1;
         body.append(row.element);
@@ -314,6 +351,7 @@ const sortLabels = {
       empty.hidden = visible !== 0;
       clear.disabled =
         !filters.query &&
+        !filters.decade &&
         !filters.recordType &&
         !filters.recordFamily &&
         !filters.status &&
@@ -323,11 +361,12 @@ const sortLabels = {
     };
 
     query.addEventListener('input', refresh);
-    for (const select of [recordType, family, status, publication, information, sort]) {
+    for (const select of [decade, recordType, family, status, publication, information, sort]) {
       select.addEventListener('change', refresh);
     }
     clear.addEventListener('click', () => {
       query.value = '';
+      decade.value = '';
       recordType.value = '';
       family.value = '';
       status.value = '';

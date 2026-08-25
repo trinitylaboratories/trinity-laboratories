@@ -10,11 +10,15 @@ import {
   PRODUCTION_ORIGIN,
   RECORD_INDEX_ROUTES,
   RECORD_ROUTES,
+  REPORT_IDS,
+  REPORT_ROUTES,
   routeToOutputPath,
   SEARCHABLE_FORM_ROUTES,
   SEARCHABLE_RECORD_ROUTES,
   SITEMAP_ROUTES,
   SITE_ROUTES,
+  STUDY_FORM_ROUTES,
+  STUDY_ROUTES,
 } from '../../scripts/lib/site-contract.mjs';
 
 describe('site contract', () => {
@@ -36,7 +40,7 @@ describe('site contract', () => {
     }
   });
 
-  it('limits the internal search index to routine forms and security references', () => {
+  it('limits the internal search index to routine forms and the general classification reference', () => {
     expect(SEARCHABLE_FORM_ROUTES).toEqual([
       '/records/forms/tl-101/',
       '/records/forms/tl-220/',
@@ -46,8 +50,6 @@ describe('site contract', () => {
     ]);
     expect(SEARCHABLE_RECORD_ROUTES).toEqual([
       '/records/security/information-classification/',
-      '/records/security/physical-access/',
-      '/records/security/endorsements-and-conditions/',
       ...SEARCHABLE_FORM_ROUTES,
     ]);
     for (const route of SEARCHABLE_RECORD_ROUTES) expect(RECORD_ROUTES).toContain(route);
@@ -59,8 +61,9 @@ describe('site contract', () => {
   });
 
   it('keeps every records and staff route outside the public sitemap contract', () => {
-    expect(PORTAL_ROUTES).toHaveLength(5);
+    expect(PORTAL_ROUTES).toHaveLength(6);
     expect(PORTAL_ROUTES).toContain('/portal/records/');
+    expect(PORTAL_ROUTES).toContain('/portal/personnel/');
     expect(RECORD_INDEX_ROUTES).toContain('/records/');
     expect(RECORD_INDEX_ROUTES).toContain('/records/security/');
     for (const route of CONTROLLED_RECORD_ROUTES) {
@@ -78,6 +81,13 @@ describe('site contract', () => {
       '/',
       '/about/',
       '/research/',
+      '/studies/',
+      '/studies/indoor-condition-observation/',
+      '/studies/household-timekeeping-stability/',
+      '/studies/consumer-compass-repeatability/',
+      '/studies/paper-substrate-curl-recovery/',
+      '/studies/diagram-recall-route-notation/',
+      '/studies/small-sensor-display-agreement/',
       '/facilities/',
       '/publications/',
       '/careers/',
@@ -88,5 +98,22 @@ describe('site contract', () => {
     expect(SITEMAP_ROUTES.every((route) => !/^\/(?:portal|records)\//.test(route))).toBe(true);
     expect(new Set(SITE_ROUTES).size).toBe(SITE_ROUTES.length);
     expect(SITE_ROUTES).toEqual([...SITEMAP_ROUTES, ...NOINDEX_ROUTES]);
+  });
+
+  it('publishes the complete studies register and keeps study screens local', () => {
+    expect(STUDY_ROUTES).toHaveLength(7);
+    expect(STUDY_ROUTES[0]).toBe('/studies/');
+    expect(STUDY_FORM_ROUTES).toHaveLength(3);
+    for (const route of STUDY_ROUTES) expect(SITEMAP_ROUTES).toContain(route);
+    for (const route of STUDY_FORM_ROUTES) expect(STUDY_ROUTES).toContain(route);
+  });
+
+  it('registers the historical and personnel report corpus exactly once', () => {
+    expect(REPORT_IDS).toHaveLength(34);
+    expect(new Set(REPORT_IDS).size).toBe(REPORT_IDS.length);
+    expect(REPORT_ROUTES).toHaveLength(36);
+    for (const recordId of REPORT_IDS) {
+      expect(REPORT_ROUTES).toContain(`/records/reports/${recordId}/`);
+    }
   });
 });

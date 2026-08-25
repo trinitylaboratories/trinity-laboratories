@@ -1,0 +1,52 @@
+{
+  "recordId": "TL-101-AP-9303",
+  "formId": "TL-101",
+  "title": "Low-Frequency Bench Vibration Survey",
+  "recordType": "completed-report",
+  "recordFamily": "research",
+  "status": "archived",
+  "revision": "1.0",
+  "effectiveDate": "1993-08-27",
+  "controllingOffice": "Applied Physics",
+  "publicationState": "released",
+  "information": {
+    "level": "TL-1"
+  },
+  "tags": ["applied-physics", "vibration", "baseline", "instrument-setup", "tl-101"],
+  "summary": "Relative vibration measurements at three bench positions established a routine daytime baseline for instrument setup.",
+  "relatedRecords": ["TL-101"],
+  "sections": [
+    {
+      "id": "administrative-record",
+      "title": "ADMINISTRATIVE RECORD",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Study title:** Low-Frequency Bench Vibration Survey\n\n**Responsible unit:** Applied Physics\n\n**Responsible personnel:** Technical staff (role-only archive copy)\n\n**Effective date:** 1993-08-27\n\n**Record basis:** TL-101"
+    },
+    {
+      "id": "purpose-and-scope",
+      "title": "PURPOSE & SCOPE",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Objective:** Relative vibration measurements at three bench positions established a routine daytime baseline for instrument setup.\n\n**Scope limitation:** Internal comparative work only; no client, location, or external-party information is included in this archive copy."
+    },
+    {
+      "id": "method-and-observations",
+      "title": "METHOD & OBSERVATIONS",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Method:** Coded materials or instruments were evaluated through a repeatable bench or field-support sequence appropriate to the stated objective. Observations were recorded at fixed checkpoints and reviewed against the applicable internal working range.\n\n**Observations:** The comparison produced stable, ordinary results suitable for the stated disposition. No unexpected response was recorded."
+    },
+    {
+      "id": "disposition",
+      "title": "DISPOSITION",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Result summary:** Relative vibration measurements at three bench positions established a routine daytime baseline for instrument setup.\n\n**Disposition:** Archive with the responsible unit's routine technical records.\n\n**Review status:** Technical review complete; role-only archive copy."
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "recordId": "TL-220-AM-2303",
+  "formId": "TL-220",
+  "title": "Polymer Coupon Mass-Stability Observation",
+  "recordType": "completed-report",
+  "recordFamily": "research",
+  "status": "archived",
+  "revision": "1.0",
+  "effectiveDate": "2023-09-12",
+  "controllingOffice": "Advanced Materials",
+  "publicationState": "controlled",
+  "information": {
+    "level": "TL-2"
+  },
+  "tags": ["materials", "polymer", "mass-stability", "conditioning", "tl-220"],
+  "summary": "Polymer coupons were weighed over a twelve-week conditioning interval; changes stabilized within the expected laboratory handling range.",
+  "relatedRecords": ["TL-220"],
+  "sections": [
+    {
+      "id": "administrative-record",
+      "title": "ADMINISTRATIVE RECORD",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Study title:** Polymer Coupon Mass-Stability Observation\n\n**Responsible unit:** Advanced Materials\n\n**Responsible personnel:** Technical staff (role-only archive copy)\n\n**Effective date:** 2023-09-12\n\n**Record basis:** TL-220"
+    },
+    {
+      "id": "purpose-and-scope",
+      "title": "PURPOSE & SCOPE",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Objective:** Polymer coupons were weighed over a twelve-week conditioning interval; changes stabilized within the expected laboratory handling range.\n\n**Scope limitation:** Internal comparative work only; no client, location, or external-party information is included in this archive copy."
+    },
+    {
+      "id": "method-and-observations",
+      "title": "METHOD & OBSERVATIONS",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Method:** Coded materials or instruments were evaluated through a repeatable bench or field-support sequence appropriate to the stated objective. Observations were recorded at fixed checkpoints and reviewed against the applicable internal working range.\n\n**Observations:** The comparison produced stable, ordinary results suitable for the stated disposition. No unexpected response was recorded."
+    },
+    {
+      "id": "disposition",
+      "title": "DISPOSITION",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Result summary:** Polymer coupons were weighed over a twelve-week conditioning interval; changes stabilized within the expected laboratory handling range.\n\n**Disposition:** Archive with the responsible unit's routine technical records.\n\n**Review status:** Technical review complete; role-only archive copy."
+    }
+  ]
+}

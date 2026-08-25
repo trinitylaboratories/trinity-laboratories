@@ -40,6 +40,7 @@ export interface RecordCatalogueEntry {
 
 export interface RecordCatalogueFilters {
   query: string;
+  decade: string;
   recordType: '' | CatalogueRecordType;
   recordFamily: '' | RecordFamily;
   status: '' | CatalogueStatus;
@@ -63,6 +64,7 @@ export interface CatalogueDocumentData {
 
 export const EMPTY_CATALOGUE_FILTERS: Readonly<RecordCatalogueFilters> = Object.freeze({
   query: '',
+  decade: '',
   recordType: '',
   recordFamily: '',
   status: '',
@@ -147,6 +149,12 @@ export function recordMatchesCatalogueFilters(
   entry: RecordCatalogueEntry,
   filters: RecordCatalogueFilters,
 ): boolean {
+  if (
+    filters.decade &&
+    (!entry.effectiveDate || `${entry.effectiveDate.slice(0, 3)}0` !== filters.decade)
+  ) {
+    return false;
+  }
   if (filters.recordType && entry.recordType !== filters.recordType) return false;
   if (filters.recordFamily && entry.recordFamily !== filters.recordFamily) return false;
   if (filters.status && entry.status !== filters.status) return false;

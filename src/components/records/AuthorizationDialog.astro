@@ -162,8 +162,8 @@ const controlOfficeHelpId = `${id}-control-office-reference-help`;
         Access-request console initialization required.
       </p>
       <p class="authorization-dialog__privacy">
-        Reference and purpose values are cleared after evaluation and are not transmitted or
-        retained. Only the temporary level, scope, and expiry are kept for this session.
+        Request references and working-purpose details are cleared after evaluation. Temporary
+        authorization remains limited to the approved level, scope, and expiry.
       </p>
     </div>
   </dialog>
@@ -255,7 +255,7 @@ const controlOfficeHelpId = `${id}-control-office-reference-help`;
       if (fields) fields.disabled = false;
       status.textContent = requestAvailable
         ? 'Console ready. Request values are required.'
-        : 'Separate authorization is required. No local request is available.';
+        : 'Separate authorization is required. Request not available at this node.';
       updateTrigger();
     }
 
@@ -267,7 +267,7 @@ const controlOfficeHelpId = `${id}-control-office-reference-help`;
           ? 'A qualifying temporary access grant is already active.'
           : requestAvailable
             ? 'Console ready. Request values are required.'
-            : 'Separate authorization is required. No local request is available.';
+            : 'Separate authorization is required. Request not available at this node.';
       }
       dialog.showModal();
       (requestAvailable ? purpose : close)?.focus();
@@ -337,7 +337,9 @@ const controlOfficeHelpId = `${id}-control-office-reference-help`;
       try {
         sessionStorage.setItem(TIRN_GRANT_STORAGE_KEY, serializeElevatedGrant(result.grant));
       } catch {
-        if (status) status.textContent = 'Session storage unavailable. Access was not retained.';
+        if (status) {
+          status.textContent = 'Temporary authorization could not be established on this terminal.';
+        }
         return;
       }
 

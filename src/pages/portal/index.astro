@@ -33,11 +33,14 @@ const formCount = documentEntries.filter(
 const securityCount = documentEntries.filter(
   ({ recordFamily }: RecordCatalogueEntry) => recordFamily === 'security',
 ).length;
+const personnelCount = submissionEntries.filter(
+  ({ recordFamily }: RecordCatalogueEntry) => recordFamily === 'personnel',
+).length;
 ---
 
 <PortalLayout
   title="Staff Home"
-  description="TIRN Staff Services provides local access status, records references, forms, and authorization controls."
+  description="TIRN Staff Services provides current session status, records references, forms, and authorization controls."
   active="home"
 >
   <PortalPageHeading
@@ -66,6 +69,11 @@ const securityCount = documentEntries.filter(
                 <td>Completed reports</td>
                 <td>{submissionEntries.length} registered</td>
                 <td><a href="/records/reports/">Open register</a></td>
+              </tr>
+              <tr>
+                <td>Personnel files</td>
+                <td>{personnelCount} controlled files</td>
+                <td><a href="/portal/personnel/">Open personnel register</a></td>
               </tr>
               <tr>
                 <td>Security references</td>
@@ -106,11 +114,22 @@ const securityCount = documentEntries.filter(
                 </thead>
                 <tbody>
                   {submissionEntries.slice(0, 5).map((entry) => (
-                    <tr>
+                    <tr
+                      data-portal-recent-record
+                      data-required-level={entry.informationLevel ?? 'TL-2'}
+                      data-publication-state={entry.publicationState}
+                    >
                       <td>
                         <a href={entry.href}>{entry.recordId}</a>
                       </td>
-                      <td>{entry.title}</td>
+                      <td>
+                        <span data-portal-recent-title hidden>
+                          {entry.title}
+                        </span>
+                        <span data-portal-recent-title-fallback>
+                          Controlled report — eligibility required
+                        </span>
+                      </td>
                       <td>{entry.status}</td>
                       <td>
                         {entry.effectiveDate ? (
@@ -138,6 +157,7 @@ const securityCount = documentEntries.filter(
         <h2 id="common-tasks-heading">Common tasks</h2>
         <ul class="portal-actions">
           <li><a href="/portal/records/">Filter the canonical records catalogue</a></li>
+          <li><a href="/portal/personnel/">Review controlled personnel files</a></li>
           <li><a href="/records/search/">Search TIRN released records</a></li>
           <li>
             <a href="/records/security/information-classification/">Check information eligibility</a
@@ -162,3 +182,43 @@ const securityCount = documentEntries.filter(
     </aside>
   </div>
 </PortalLayout>
+
+<script>
+  import {
+    accessAllows,
+    resolveTirnAccess,
+    TIRN_ACCESS_CHANGE_EVENT,
+    TIRN_GRANT_STORAGE_KEY,
+    TIRN_SESSION_STORAGE_KEY,
+    type TirnLevel,
+  } from '../../lib/tirn-access';
+
+  const readRecentRecordAccessValue = (key: string) => {
+    try {
+      return sessionStorage.getItem(key);
+    } catch {
+      return null;
+    }
+  };
+
+  const refreshRecentRecordTitles = () => {
+    const state = resolveTirnAccess(
+      readRecentRecordAccessValue(TIRN_SESSION_STORAGE_KEY),
+      readRecentRecordAccessValue(TIRN_GRANT_STORAGE_KEY),
+      Date.now(),
+    );
+    document.querySelectorAll<HTMLElement>('[data-portal-recent-record]').forEach((row) => {
+      const requiredLevel = (row.dataset.requiredLevel || 'TL-2') as TirnLevel;
+      const authorized =
+        row.dataset.publicationState !== 'withheld' && accessAllows(state, requiredLevel);
+      const title = row.querySelector<HTMLElement>('[data-portal-recent-title]');
+      const fallback = row.querySelector<HTMLElement>('[data-portal-recent-title-fallback]');
+      if (title) title.hidden = !authorized;
+      if (fallback) fallback.hidden = authorized;
+    });
+  };
+
+  refreshRecentRecordTitles();
+  window.addEventListener(TIRN_ACCESS_CHANGE_EVENT, refreshRecentRecordTitles);
+  window.setInterval(refreshRecentRecordTitles, 1000);
+</script>

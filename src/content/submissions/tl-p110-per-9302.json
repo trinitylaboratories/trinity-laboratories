@@ -1,0 +1,52 @@
+{
+  "recordId": "TL-P110-PER-9302",
+  "formId": "TL-P110",
+  "title": "Personnel Assignment Record — File 9302",
+  "recordType": "completed-report",
+  "recordFamily": "personnel",
+  "status": "archived",
+  "revision": "1.0",
+  "effectiveDate": "1993-04-12",
+  "controllingOffice": "Personnel Office",
+  "publicationState": "controlled",
+  "information": {
+    "level": "TL-3"
+  },
+  "tags": ["personnel", "assignment-record", "archived", "tl-p110"],
+  "summary": "Personnel assignment file. Subject identity and assignment details require the displayed information eligibility.",
+  "relatedRecords": ["TL-P110"],
+  "sections": [
+    {
+      "id": "assignment-summary",
+      "title": "ASSIGNMENT SUMMARY",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Staff member:** Mara Venn\n\n**Role family:** Materials Characterization Specialist\n\n**Assigned unit:** Advanced Materials\n\n**Assignment period:** 1993–1998\n\n**File status:** Closed and archived"
+    },
+    {
+      "id": "functional-scope",
+      "title": "FUNCTIONAL SCOPE",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Assignment scope:** Bench characterization, comparative coupon measurements, materials-condition logs, and technical worksheet review.\n\n**Supervisory basis:** Unit assignment and ordinary workload requirements.\n\n**External representation:** None recorded."
+    },
+    {
+      "id": "qualification-status",
+      "title": "QUALIFICATION STATUS",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**General laboratory orientation:** Complete at assignment\n\n**Records handling orientation:** Complete at assignment\n\n**Unit familiarization:** Complete\n\n**Periodic review:** Recorded by responsible unit"
+    },
+    {
+      "id": "administrative-annotations",
+      "title": "ADMINISTRATIVE ANNOTATIONS",
+      "summary": "Annotations remain with the originating personnel file.",
+      "disclosure": {
+        "mode": "withheld"
+      }
+    }
+  ]
+}

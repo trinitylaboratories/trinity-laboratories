@@ -1,0 +1,52 @@
+{
+  "recordId": "TL-220-PE-9502",
+  "formId": "TL-220",
+  "title": "Packaging Insert Compression-Set Trial",
+  "recordType": "completed-report",
+  "recordFamily": "research",
+  "status": "archived",
+  "revision": "1.0",
+  "effectiveDate": "1995-02-09",
+  "controllingOffice": "Prototype Evaluation",
+  "publicationState": "controlled",
+  "information": {
+    "level": "TL-2"
+  },
+  "tags": ["prototype-evaluation", "packaging", "compression", "materials-screening", "tl-220"],
+  "summary": "Four insert materials were held under a fixed load and measured after recovery; two configurations were retained for later packaging trials.",
+  "relatedRecords": ["TL-220"],
+  "sections": [
+    {
+      "id": "administrative-record",
+      "title": "ADMINISTRATIVE RECORD",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Study title:** Packaging Insert Compression-Set Trial\n\n**Responsible unit:** Prototype Evaluation\n\n**Responsible personnel:** Technical staff (role-only archive copy)\n\n**Effective date:** 1995-02-09\n\n**Record basis:** TL-220"
+    },
+    {
+      "id": "purpose-and-scope",
+      "title": "PURPOSE & SCOPE",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Objective:** Four insert materials were held under a fixed load and measured after recovery; two configurations were retained for later packaging trials.\n\n**Scope limitation:** Internal comparative work only; no client, location, or external-party information is included in this archive copy."
+    },
+    {
+      "id": "method-and-observations",
+      "title": "METHOD & OBSERVATIONS",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Method:** Coded materials or instruments were evaluated through a repeatable bench or field-support sequence appropriate to the stated objective. Observations were recorded at fixed checkpoints and reviewed against the applicable internal working range.\n\n**Observations:** The comparison produced stable, ordinary results suitable for the stated disposition. No unexpected response was recorded."
+    },
+    {
+      "id": "disposition",
+      "title": "DISPOSITION",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Result summary:** Four insert materials were held under a fixed load and measured after recovery; two configurations were retained for later packaging trials.\n\n**Disposition:** Archive with the responsible unit's routine technical records.\n\n**Review status:** Technical review complete; role-only archive copy."
+    }
+  ]
+}

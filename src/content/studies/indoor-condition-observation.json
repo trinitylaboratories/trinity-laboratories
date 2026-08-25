@@ -1,0 +1,129 @@
+{
+  "studyId": "ST-26-014",
+  "slug": "indoor-condition-observation",
+  "title": "Indoor Condition Observation Series",
+  "shortTitle": "Indoor condition observations",
+  "researchQuestion": "How closely do brief room-comfort observations align with ordinary temperature and relative-humidity readings over seven consecutive days?",
+  "summary": "This remote observation series compares a participant's simple description of one indoor environment with readings from an ordinary household thermo-hygrometer. The protocol is concerned with consistency of observation, not health, diagnosis, or building inspection.",
+  "status": "recruiting",
+  "phase": "Observation series 02",
+  "discipline": "Environmental Analysis",
+  "studyType": "Repeated observation",
+  "participationMode": "Remote / participant-selected room",
+  "commitment": "Three brief observations daily for seven days",
+  "protocolRevision": "2.1",
+  "controllingOffice": "Participant Programs Office",
+  "displayOrder": 1,
+  "ageMinimum": 18,
+  "featured": true,
+  "eligibility": [
+    "Age 18 or older.",
+    "Regular access to the same ordinary indoor room for seven consecutive days.",
+    "Able to make three observations during a consistent morning, afternoon, and evening window.",
+    "A household temperature and relative-humidity display is useful but not required."
+  ],
+  "exclusions": [
+    "No workplace, clinical, secure, or otherwise sensitive location may be used.",
+    "No health symptoms, resident identities, photographs, addresses, or precise location information are requested."
+  ],
+  "participantActivities": [
+    "Choose one ordinary indoor room and retain the same observation position for the full series.",
+    "At each interval, record a neutral comfort category, whether a window or exterior door was recently open, and available temperature or relative-humidity readings.",
+    "Complete one short end-of-series check describing schedule consistency and any ordinary interruption to the observation sequence."
+  ],
+  "protocolSteps": [
+    {
+      "code": "01",
+      "title": "Select",
+      "description": "Choose one non-sensitive indoor observation point that can remain consistent for seven days."
+    },
+    {
+      "code": "02",
+      "title": "Observe",
+      "description": "Make one morning, afternoon, and evening observation within stable daily windows."
+    },
+    {
+      "code": "03",
+      "title": "Record",
+      "description": "Use fixed response categories and note instrument readings only when a display is available."
+    },
+    {
+      "code": "04",
+      "title": "Review",
+      "description": "Check the seven-day log for missed intervals and ordinary environmental changes."
+    }
+  ],
+  "dataRequested": [
+    "Broad indoor climate description selected from fixed categories.",
+    "Availability and general type of a temperature or relative-humidity display.",
+    "Daily availability windows and confirmation of the seven-day commitment.",
+    "Fixed-category observations of room comfort and recent ventilation."
+  ],
+  "dataNotRequested": [
+    "Name, email address, telephone number, or date of birth.",
+    "Street address, coordinates, IP-derived location, photographs, or recordings.",
+    "Medical information, symptoms, diagnoses, or information about other occupants."
+  ],
+  "samplePrompts": [
+    "At this interval, did the room feel cooler than expected, neutral, or warmer than expected?",
+    "Was a window or exterior door open during the preceding 30 minutes?",
+    "Was the observation made within the assigned time window?"
+  ],
+  "methodNotes": [
+    "The same response categories are used throughout the series so that changes in wording do not become changes in the observation scale.",
+    "Instrument readings are treated as contextual observations. Consumer displays are not assumed to be calibrated laboratory instruments.",
+    "A missed interval remains a missed interval; participants are not asked to reconstruct readings from memory."
+  ],
+  "limitations": [
+    "Room selection, instrument placement, and household equipment vary between participants.",
+    "Self-reported comfort is an ordinal observation and is not interpreted as a medical or indoor-air-quality assessment.",
+    "The series is designed to describe observation consistency and cannot establish the cause of a particular reading."
+  ],
+  "application": {
+    "mode": "eligibility-screen",
+    "title": "Participation eligibility screen",
+    "introduction": "Confirm the basic study conditions below. Completion provides a provisional screening reference only and does not create an enrollment record.",
+    "fields": [
+      {
+        "id": "adult-confirmation",
+        "type": "checkbox",
+        "label": "I confirm that I am 18 years of age or older.",
+        "required": true
+      },
+      {
+        "id": "climate-description",
+        "type": "select",
+        "label": "General indoor climate description",
+        "hint": "Choose the closest broad description; no location is requested.",
+        "required": true,
+        "options": ["Generally dry", "Generally moderate", "Generally humid", "Varies considerably"]
+      },
+      {
+        "id": "instrument-availability",
+        "type": "select",
+        "label": "Available household display",
+        "required": true,
+        "options": ["Temperature only", "Temperature and relative humidity", "No display available"]
+      },
+      {
+        "id": "observation-window",
+        "type": "select",
+        "label": "Daily observation availability",
+        "required": true,
+        "options": [
+          "Morning, afternoon, and evening",
+          "Morning and evening only",
+          "Schedule varies by day"
+        ]
+      },
+      {
+        "id": "commitment-confirmation",
+        "type": "checkbox",
+        "label": "I can use the same non-sensitive room for the seven-day observation period.",
+        "required": true
+      }
+    ]
+  },
+  "relatedRecordIds": [],
+  "editorialState": "owner-approved"
+}

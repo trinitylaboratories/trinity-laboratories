@@ -15,7 +15,11 @@ test('completed-report catalogs expose only safe control metadata', async ({ pag
   const reportLink = page.getByRole('link', { name: 'TL-340-TRN-001' });
   const reportRow = page.getByRole('row').filter({ has: reportLink });
   await expect(reportLink).toHaveAttribute('href', REPORT_ROUTE);
-  await expect(reportRow.getByText('Access-Control Training Assessment')).toBeVisible();
+  await expect(reportRow.locator('[data-submission-title]')).toBeHidden();
+  await expect(reportRow.locator('[data-submission-title-fallback]')).toHaveText(
+    'Controlled report — eligibility required',
+  );
+  await expect(reportRow.locator('[data-submission-title-fallback]')).toBeVisible();
   await expect(reportRow.getByRole('cell', { name: 'TL-3', exact: true })).toBeVisible();
   await expect(reportRow.getByRole('cell', { name: 'controlled', exact: true })).toBeVisible();
 
@@ -59,7 +63,7 @@ test('TL-3 report is redacted without an elevated session', async ({ page }) => 
   await expect(page.locator('[data-record-id="TL-340-TRN-001"]')).toBeVisible();
   await expect(page.locator('[data-pagefind-meta="record-id"]')).toHaveText('TL-340-TRN-001');
   await expect(
-    page.getByText('Physical authority').locator('..').getByText('Not specified'),
+    page.getByText('Physical authority').locator('..').getByText('Restricted'),
   ).toBeVisible();
 
   const controlledRecord = page.locator('[data-controlled-record="TL-340-TRN-001"]');
@@ -68,18 +72,14 @@ test('TL-3 report is redacted without an elevated session', async ({ page }) => 
   await expect(controlledRecord).toHaveAttribute('data-access-state', 'locked');
   await expect(recordLock).toBeVisible();
   await expect(recordLock.locator('[data-authorize-trigger]')).toBeEnabled();
+  await expect(page.getByText('Current quarterly cycle')).toBeHidden();
   await expect(
-    page.getByText('This record describes a records-handling exercise only.'),
-  ).toBeHidden();
-  await expect(
-    page.getByText('The exercise is complete when the operator distinguishes information'),
+    page.getByText('Sampled entries followed the assigned review sequence.'),
   ).toBeHidden();
   expect(runtimeErrors).toEqual([]);
 });
 
-test('a generic browser-local TL-3 grant reveals authorized training content only', async ({
-  page,
-}) => {
+test('a generic TL-3 review grant reveals authorized controlled content only', async ({ page }) => {
   await page.addInitScript(() => {
     sessionStorage.setItem('tirn-session', 'accepted');
     sessionStorage.setItem(
@@ -87,7 +87,7 @@ test('a generic browser-local TL-3 grant reveals authorized training content onl
       JSON.stringify({
         version: 1,
         level: 'TL-3',
-        scope: 'training',
+        scope: 'records-review',
         expiresAt: Date.now() + 10 * 60 * 1000,
       }),
     );
@@ -98,29 +98,26 @@ test('a generic browser-local TL-3 grant reveals authorized training content onl
   await expect(controlledRecord).toHaveAttribute('data-access-state', 'authorized');
   await expect(controlledRecord.locator(':scope > [data-controlled-locked]')).toBeHidden();
 
-  const openSection = page.locator('[data-controlled-section="exercise-scope"]');
+  const openSection = page.locator('[data-controlled-section="review-scope"]');
   await expect(openSection).toHaveAttribute('data-mode', 'open');
-  await expect(
-    openSection.getByText('This record describes a records-handling exercise only.'),
-  ).toBeVisible();
-  await expect(openSection.locator('[data-submission-section-body] > p')).toHaveCount(1);
-  await expect(openSection.locator('[data-submission-field-list]')).toHaveCount(0);
+  await expect(openSection.getByText('Current quarterly cycle')).toBeVisible();
+  await expect(openSection.locator('[data-submission-field-list]')).not.toHaveCount(0);
 
-  const authorizedSection = page.locator('[data-controlled-section="evaluation-criteria"]');
+  const authorizedSection = page.locator('[data-controlled-section="findings-and-disposition"]');
   await expect(authorizedSection).toHaveAttribute('data-mode', 'authorize');
   await expect(authorizedSection).toHaveAttribute('data-access-state', 'authorized');
   const authorizedBody = authorizedSection.getByText(
-    'The exercise is complete when the operator distinguishes information',
+    'Sampled entries followed the assigned review sequence.',
   );
   await expect(authorizedBody).toBeVisible();
   expect(
     await authorizedBody.evaluate((node) => Boolean(node.closest('[data-pagefind-ignore]'))),
   ).toBe(true);
 
-  const withheldSection = page.locator('[data-controlled-section="review-annotation"]');
+  const withheldSection = page.locator('[data-controlled-section="supervisory-annotation"]');
   await expect(withheldSection).toHaveAttribute('data-mode', 'withheld');
   await expect(withheldSection.locator('[data-controlled-withheld]')).toBeVisible();
-  await expect(withheldSection).toContainText('Content withheld from this publication');
+  await expect(withheldSection).toContainText('Source content held by controlling office');
   await expect(withheldSection.locator('[data-controlled-content]')).toHaveCount(0);
 });
 
@@ -133,11 +130,14 @@ test('Pagefind indexes released report fields but excludes controlled body text'
 
   await search.fill('TL-340-TRN-001');
   const reportResult = page.locator(`a[href*="${REPORT_ROUTE}"]`).first();
-  await expect(reportResult).toBeVisible({ timeout: 15_000 });
+  await expect(page.locator('.pagefind-ui__message')).toContainText('TL-340-TRN-001', {
+    timeout: 15_000,
+  });
+  await expect(reportResult).toHaveCount(0);
 
-  await search.fill('operator distinguishes information');
+  await search.fill('sampled entries followed the assigned review sequence');
   await expect(page.locator('.pagefind-ui__message')).toContainText(
-    'operator distinguishes information',
+    'sampled entries followed the assigned review sequence',
     { timeout: 15_000 },
   );
   await expect(page.locator(`a[href*="${REPORT_ROUTE}"]`)).toHaveCount(0, { timeout: 15_000 });

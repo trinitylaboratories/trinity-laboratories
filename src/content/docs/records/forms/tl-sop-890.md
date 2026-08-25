@@ -1,6 +1,6 @@
 ---
 title: 'TL-SOP-890 — SOP Outline — Anomalous Site Expedition & Recovery'
-description: 'Accessible transcription and blank DOCX download for Trinity Laboratories form TL-SOP-890.'
+description: 'Current blank form and field schedule for Trinity Laboratories form TL-SOP-890.'
 pagefind: false
 recordId: 'TL-SOP-890'
 recordType: 'form-template'
@@ -20,24 +20,24 @@ relatedRecords:
   - 'TL-SEC-04'
   - 'TL-SEC-001'
 attachments:
-  - label: 'Metadata-scrubbed blank DOCX'
+  - label: 'Current blank form (DOCX)'
     path: '/downloads/forms/tl-sop-890-anomalous-expedition-outline.docx'
     mediaType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     sourceFilename: 'TL-SOP890_Anomalous_Expedition_Outline.docx'
     sha256: '74e4c03ad787a12f8ac40419305c4e908e7f5235d4616644a5074d480a47fcd4'
 ---
 
-> **Blank source template.** No response fields are completed.
+> **Document status:** Blank issued form.
 >
 > **Source title:** SOP OUTLINE - ANOMALOUS SITE EXPEDITION & RECOVERY
 >
 > **Legacy marking:** FORM TL-SOP-890 | LEVEL IV - SPECIAL ACCESS
 >
-> **Download:** [Metadata-scrubbed blank DOCX](/downloads/forms/tl-sop-890-anomalous-expedition-outline.docx)
+> **Issued form:** [Current blank form (DOCX)](/downloads/forms/tl-sop-890-anomalous-expedition-outline.docx)
 
-Empty table cells and ruled writing areas are represented as blank response areas below. Checkbox labels are transcribed in source order.
+Field labels follow the issued form order. Blank response fields are shown below.
 
-## Accessible transcription
+## Field schedule
 
 > **Source footer:** TRINITY LABS, INC. - © 1986 - SPECIAL ACCESS SOP - FIELD COPY MUST BE ACCOUNTED FOR ON RETURN
 

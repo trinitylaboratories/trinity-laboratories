@@ -10,13 +10,18 @@ static records archive.
 The current release combines:
 
 - a restrained public corporate website;
+- a public studies register with browser-local interest and screening forms;
 - a browser-local employee-access transition and staff portal;
-- a searchable institutional records system under `/records/`; and
+- a searchable institutional records system under `/records/`, including a deliberately routine
+  multi-decade technical archive and clearance-gated fictional personnel files; and
 - a loopback-only Filing Workstation for preparing completed form records.
 
 Everything deployed is public. Staff sessions, elevated grants, redactions, and unlisted records
 are narrative devices, not security boundaries. Content that is truly withheld must remain outside
 Git, the generated website, and every client-accessible asset.
+
+Public study forms are simulations as well: they validate and reset in the browser without sending
+or retaining participant information. They are not recruitment for real human-subject research.
 
 ## Architecture
 

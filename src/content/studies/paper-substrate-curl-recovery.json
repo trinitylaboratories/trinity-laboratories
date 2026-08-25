@@ -1,0 +1,85 @@
+{
+  "studyId": "ST-26-031",
+  "slug": "paper-substrate-curl-recovery",
+  "title": "Paper Substrate Curl Recovery",
+  "shortTitle": "Paper curl recovery",
+  "researchQuestion": "How does a short indoor conditioning interval affect the visible curl recovery of common uncoated office paper?",
+  "summary": "This materials observation uses ordinary, untreated office paper and a flat reference surface to evaluate whether a small categorical curl measure can be applied consistently outside a laboratory. The current protocol interval is active and is not accepting additional participation screens.",
+  "status": "active",
+  "phase": "Method confirmation interval",
+  "discipline": "Advanced Materials",
+  "studyType": "Low-risk materials observation",
+  "participationMode": "Remote / tabletop observation",
+  "commitment": "Four observations across forty-eight hours",
+  "protocolRevision": "1.0",
+  "controllingOffice": "Materials Evaluation Office",
+  "displayOrder": 4,
+  "ageMinimum": 18,
+  "featured": false,
+  "eligibility": [
+    "Age 18 or older.",
+    "Access to ordinary, untreated office paper and a clean, dry, flat indoor surface.",
+    "Able to leave the sample undisturbed for forty-eight hours.",
+    "A household relative-humidity display may be used but is not required."
+  ],
+  "exclusions": [
+    "Coated, thermal, archival, chemically treated, wet, contaminated, or personally significant paper is excluded.",
+    "No heat source, chemical, liquid application, or enclosed high-humidity treatment is permitted."
+  ],
+  "participantActivities": [
+    "Prepare one ordinary sheet using the specified dry fold-and-release sequence and place it on a clean flat surface.",
+    "At four assigned intervals, select the closest categorical edge-height reference without touching or weighting the sheet.",
+    "Record whether the sample was disturbed and, when available, the room's displayed relative-humidity category."
+  ],
+  "protocolSteps": [
+    {
+      "code": "01",
+      "title": "Prepare",
+      "description": "Use one clean untreated sheet and the specified dry fold-and-release sequence."
+    },
+    {
+      "code": "02",
+      "title": "Condition",
+      "description": "Place the sample on a dry flat surface and leave it unweighted and undisturbed."
+    },
+    {
+      "code": "03",
+      "title": "Observe",
+      "description": "Select the nearest categorical edge-height reference at four assigned intervals."
+    },
+    {
+      "code": "04",
+      "title": "Reconcile",
+      "description": "Mark any disturbance and check the observation sequence for missed intervals."
+    }
+  ],
+  "dataRequested": [
+    "Broad paper weight and surface category.",
+    "Categorical edge-height observation at each assigned interval.",
+    "Broad indoor relative-humidity category when a display is available.",
+    "Confirmation that the sample remained undisturbed."
+  ],
+  "dataNotRequested": [
+    "Paper brand, purchase information, printed content, photographs, or physical samples.",
+    "Home or workplace address, room identity, or information about occupants.",
+    "Use of chemicals, liquids, heat, or powered test equipment."
+  ],
+  "samplePrompts": [
+    "Which edge-height reference most closely matches the highest free corner?",
+    "Was the sheet moved, touched, or weighted since the preceding observation?",
+    "Is a room relative-humidity category available at this interval?"
+  ],
+  "methodNotes": [
+    "Categorical edge references are used instead of improvised precision measurement so the method remains consistent with ordinary household materials.",
+    "The protocol uses only dry mechanical preparation and ambient indoor conditioning.",
+    "Samples that are disturbed or exposed to liquid are closed without replacement observations."
+  ],
+  "limitations": [
+    "Paper manufacture, prior storage, room conditions, and flatness of the reference surface vary between observations.",
+    "Categorical edge height is a screening measure and is not a substitute for laboratory dimensional-stability testing.",
+    "The protocol can describe recovery patterns but cannot assign a manufacturing cause."
+  ],
+  "application": null,
+  "relatedRecordIds": [],
+  "editorialState": "owner-approved"
+}

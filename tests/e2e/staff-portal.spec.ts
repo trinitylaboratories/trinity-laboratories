@@ -4,6 +4,7 @@ import { visit } from './support/site';
 const PORTAL_ROUTES = [
   '/portal/',
   '/portal/records/',
+  '/portal/personnel/',
   '/portal/authorizations/',
   '/portal/forms/',
   '/portal/help/',
@@ -50,6 +51,27 @@ test.describe('staff portal', () => {
     await expect(page.locator('[data-portal-base-level]')).toHaveText('TL-2');
     await expect(page.locator('[data-portal-current-level]')).toHaveText('TL-2');
     await expect(page.locator('[data-session-warning]')).toBeHidden();
+  });
+
+  test('staff and records surfaces use only in-world operating language', async ({ page }) => {
+    await page.addInitScript(() => sessionStorage.setItem('tirn-session', 'accepted'));
+    const routes = [
+      '/portal/forms/',
+      '/portal/help/',
+      '/portal/authorizations/',
+      '/records/submissions/',
+      '/records/forms/',
+      '/records/security/physical-access/',
+      '/records/security/endorsements-and-conditions/',
+    ];
+    const forbidden =
+      /static publication|repository review|schema validation|deterministic json|approved merge|generated package|publication package|withheld plaintext|browser (?:grant|authorization|storage)|local-only|front-end|pagefind|cloudflare|github|astro|photography pending|media reserved/i;
+
+    for (const route of routes) {
+      await visit(page, route);
+      const text = (await page.locator('body').innerText()).replace(/\s+/g, ' ');
+      expect(text, `${route} should read as an institutional system`).not.toMatch(forbidden);
+    }
   });
 
   test('direct portal access remains usable but identifies an unverified session', async ({
@@ -108,7 +130,7 @@ test.describe('staff portal', () => {
     await expect(tl5Row.getByRole('button', { name: 'Request access' })).toHaveCount(0);
     await expect(page.locator('[data-filing-workstation-link]')).toHaveCount(0);
     await expect(page.locator('[data-filing-workstation-status]')).toContainText(
-      /unavailable from this terminal/i,
+      /restricted to designated records workstations/i,
     );
   });
 
@@ -122,7 +144,7 @@ test.describe('staff portal', () => {
         JSON.stringify({
           version: 1,
           level: 'TL-3',
-          scope: 'training',
+          scope: 'records-review',
           expiresAt: Date.now() + 10 * 60 * 1000,
         }),
       );
@@ -168,7 +190,16 @@ test.describe('staff portal', () => {
     expect(total).toBeGreaterThanOrEqual(19);
     await expect(catalogue.locator('[data-catalogue-visible-count]')).toHaveText(String(total));
 
-    await page.getByLabel('Record, title, office, or tag').fill('TL-340-TRN-001');
+    const serializedEntries = await rows.evaluateAll((elements) =>
+      elements.map((element) => JSON.parse(element.getAttribute('data-catalogue-entry') ?? '{}')),
+    );
+    for (const entry of serializedEntries) {
+      expect(entry.title).toBe('');
+      expect(entry.controllingOffice).toBeUndefined();
+      expect(entry.tags).toEqual([]);
+    }
+
+    await page.getByLabel('Record, title, or office').fill('TL-340-TRN-001');
     await expect(rows.filter({ visible: true })).toHaveCount(1);
     await expect(page.getByRole('link', { name: 'TL-340-TRN-001' })).toBeVisible();
 
@@ -234,7 +265,7 @@ test.describe('staff portal', () => {
         JSON.stringify({
           version: 1,
           level: 'TL-3',
-          scope: 'training',
+          scope: 'records-review',
           expiresAt: Date.now() + 60_000,
         }),
       );

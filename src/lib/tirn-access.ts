@@ -4,7 +4,7 @@ export const TIRN_ACCESS_CHANGE_EVENT = 'tirn:access-change';
 
 export const BASE_STAFF_LEVEL = 'TL-2' as const;
 export const DEMONSTRATION_GRANT_LEVEL = 'TL-3' as const;
-export const DEMONSTRATION_GRANT_SCOPE = 'training' as const;
+export const TEMPORARY_GRANT_SCOPE = 'records-review' as const;
 export const ELEVATED_GRANT_TTL_MS = 15 * 60 * 1000;
 export const TEMPORARY_GRANT_LEVELS = ['TL-3', 'TL-4'] as const;
 export const AUTHORIZATION_PURPOSES = [
@@ -36,7 +36,7 @@ export type AuthorizationPurpose = (typeof AUTHORIZATION_PURPOSES)[number];
 export interface ElevatedGrant {
   version: 1;
   level: TemporaryGrantLevel;
-  scope: typeof DEMONSTRATION_GRANT_SCOPE;
+  scope: typeof TEMPORARY_GRANT_SCOPE;
   expiresAt: number;
 }
 
@@ -88,7 +88,7 @@ export function createElevatedGrant(level: TirnLevel, now: number): ElevatedGran
   return {
     version: 1,
     level,
-    scope: DEMONSTRATION_GRANT_SCOPE,
+    scope: TEMPORARY_GRANT_SCOPE,
     expiresAt: now + ELEVATED_GRANT_TTL_MS,
   };
 }
@@ -168,7 +168,7 @@ export function parseElevatedGrant(value: string | null, now: number): ElevatedG
     if (
       record.version !== 1 ||
       !TEMPORARY_GRANT_LEVELS.includes(record.level as TemporaryGrantLevel) ||
-      record.scope !== DEMONSTRATION_GRANT_SCOPE ||
+      record.scope !== TEMPORARY_GRANT_SCOPE ||
       typeof record.expiresAt !== 'number' ||
       !Number.isFinite(record.expiresAt) ||
       record.expiresAt <= now ||
@@ -207,7 +207,7 @@ export function resolveTirnAccess(
 export function accessAllows(
   state: TirnAccessState,
   requiredLevel: TirnLevel,
-  requiredScope: typeof DEMONSTRATION_GRANT_SCOPE = DEMONSTRATION_GRANT_SCOPE,
+  requiredScope: typeof TEMPORARY_GRANT_SCOPE = TEMPORARY_GRANT_SCOPE,
 ): boolean {
   if (state.session !== 'staff') return requiredLevel === 'TL-0';
   if (levelAllows(state.baseLevel, requiredLevel)) return true;

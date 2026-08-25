@@ -1,0 +1,25 @@
+---
+import type { StudyData } from '../../lib/study-schema';
+
+interface Props {
+  steps: StudyData['protocolSteps'];
+}
+
+const { steps } = Astro.props;
+---
+
+<ol class="study-protocol" aria-label="Study protocol sequence">
+  {
+    steps.map((step, index) => (
+      <li style={`--protocol-index: ${index}`}>
+        <span class="study-protocol__node" aria-hidden="true">
+          {step.code}
+        </span>
+        <div>
+          <h3>{step.title}</h3>
+          <p>{step.description}</p>
+        </div>
+      </li>
+    ))
+  }
+</ol>

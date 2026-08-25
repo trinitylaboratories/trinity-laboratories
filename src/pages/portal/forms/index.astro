@@ -56,26 +56,26 @@ const workstationAvailable = import.meta.env.DEV;
 
 <PortalLayout
   title="Forms"
-  description="Browse Trinity blank form templates and prepare filing packages from a configured local terminal."
+  description="Access approved Trinity forms and records-control services."
   active="forms"
 >
   <PortalPageHeading
     path="Staff Services / Forms"
     title="Forms and filing"
-    description="Select an approved blank template, prepare a record locally, and review generated files before publication."
+    description="Select the current approved template and confirm its revision before use."
   />
 
   <div class="portal-workspace">
     <div class="portal-workspace__primary">
       <section class="portal-section" aria-labelledby="filing-workstation-heading">
-        <p class="portal-section__label">Local preparation</p>
+        <p class="portal-section__label">Records preparation</p>
         <h2 id="filing-workstation-heading">TIRN Filing Workstation</h2>
         <p>
-          The workstation is available only from a configured local terminal. It prepares a review
-          package without routing working values through the records network.
+          Electronic record preparation is limited to designated records workstations. Select the
+          current form, complete the required review, and route the record to Records Control.
         </p>
         <p class="portal-callout">
-          Drafts remain in local custody until a generated package passes records-control review.
+          Records do not enter the institutional register until Records Control accepts the filing.
         </p>
         {
           workstationAvailable ? (
@@ -85,12 +85,12 @@ const workstationAvailable = import.meta.env.DEV;
               rel="noreferrer"
               data-filing-workstation-link
             >
-              Open local Filing Workstation
+              Open Filing Workstation
             </a>
           ) : (
             <p class="portal-callout portal-callout--warning" data-filing-workstation-status>
-              Filing Workstation unavailable from this terminal. Use a configured local records
-              workstation to prepare a package.
+              Record preparation is restricted to designated records workstations. Contact Records
+              Control for workstation access.
             </p>
           )
         }
@@ -153,13 +153,13 @@ const workstationAvailable = import.meta.env.DEV;
     <aside class="portal-workspace__aside" aria-label="Filing context">
       <SessionSummary />
       <section class="portal-section" aria-labelledby="filing-rules-heading">
-        <p class="portal-section__label">Before filing</p>
-        <h2 id="filing-rules-heading">Publication checks</h2>
+        <p class="portal-section__label">Records handling</p>
+        <h2 id="filing-rules-heading">Filing requirements</h2>
         <ul>
-          <li>Use the correct record family and identifier.</li>
-          <li>Separate information classification from physical authority.</li>
-          <li>Do not place withheld plaintext in a publication package.</li>
-          <li>Review the complete generated package before release.</li>
+          <li>Confirm the record family, identifier, and current revision.</li>
+          <li>Complete all required supervisory and technical approvals.</li>
+          <li>Apply the appropriate classification and distribution markings.</li>
+          <li>Route the completed record to Records Control for registration.</li>
         </ul>
       </section>
     </aside>

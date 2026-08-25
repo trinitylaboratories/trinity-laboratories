@@ -1,0 +1,117 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+import PortalPageHeading from '../../../components/portal/PortalPageHeading.astro';
+import SessionSummary from '../../../components/portal/SessionSummary.astro';
+import AuthorizationDialog from '../../../components/records/AuthorizationDialog.astro';
+import { submissionHref, type SubmissionRecordData } from '../../../lib/submission-schema';
+import PortalLayout from '../../../layouts/PortalLayout.astro';
+
+const personnelRecords: SubmissionRecordData[] = (await getCollection('submissions'))
+  .filter(
+    (submission: CollectionEntry<'submissions'>) => submission.data.recordFamily === 'personnel',
+  )
+  .map((submission: CollectionEntry<'submissions'>) => submission.data as SubmissionRecordData)
+  .sort(
+    (left: SubmissionRecordData, right: SubmissionRecordData) =>
+      right.effectiveDate.localeCompare(left.effectiveDate) ||
+      left.recordId.localeCompare(right.recordId),
+  );
+
+const activeCount = personnelRecords.filter(
+  (record: SubmissionRecordData) => record.status === 'active',
+).length;
+const archivedCount = personnelRecords.filter(
+  (record: SubmissionRecordData) => record.status === 'archived',
+).length;
+---
+
+<PortalLayout
+  title="Personnel Files"
+  description="Review the controlled personnel-assignment files available through the current TIRN staff node."
+  active="personnel"
+>
+  <PortalPageHeading
+    path="Staff Services / Personnel"
+    title="Personnel files"
+    description="Assignment records available to the current staff node. Subject identity remains inside the controlled record body."
+  />
+
+  <div class="portal-workspace">
+    <div class="portal-workspace__primary">
+      <section class="portal-section" aria-labelledby="personnel-register-heading">
+        <p class="portal-section__label">Personnel Office register</p>
+        <h2 id="personnel-register-heading">Available assignment files</h2>
+        <p>
+          Register entries identify the file and applicable information eligibility. Open a control
+          record to review its access requirements or request temporary TL-3/TL-4 eligibility.
+        </p>
+
+        <div class="portal-table-wrap">
+          <table class="portal-table">
+            <caption>Controlled personnel-assignment files available from this node</caption>
+            <thead>
+              <tr>
+                <th>Record</th>
+                <th>File</th>
+                <th>Information</th>
+                <th>Status</th>
+                <th>Effective</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                personnelRecords.map((record: SubmissionRecordData) => (
+                  <tr data-personnel-register-row data-required-level={record.information.level}>
+                    <td>{record.recordId}</td>
+                    <td>{record.title}</td>
+                    <td>{record.information.level}</td>
+                    <td>{record.status}</td>
+                    <td>
+                      <time datetime={record.effectiveDate}>{record.effectiveDate}</time>
+                    </td>
+                    <td>
+                      <div class="portal-record-actions">
+                        <a href={submissionHref(record.recordId)}>Open control record</a>
+                        {['TL-3', 'TL-4'].includes(record.information.level) && (
+                          <AuthorizationDialog
+                            id={`personnel-${record.recordId.toLowerCase()}`}
+                            requiredLevel={record.information.level}
+                            triggerLabel="Request access"
+                          />
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <aside class="portal-workspace__aside" aria-label="Personnel register context">
+      <SessionSummary />
+      <section class="portal-section" aria-labelledby="personnel-summary-heading">
+        <p class="portal-section__label">Register summary</p>
+        <h2 id="personnel-summary-heading">File status</h2>
+        <dl class="portal-summary-list">
+          <div><dt>Available files</dt><dd>{personnelRecords.length}</dd></div>
+          <div><dt>Current</dt><dd>{activeCount}</dd></div>
+          <div><dt>Archived</dt><dd>{archivedCount}</dd></div>
+          <div><dt>Minimum eligibility</dt><dd>TL-3</dd></div>
+        </dl>
+      </section>
+      <section class="portal-section" aria-labelledby="personnel-handling-heading">
+        <p class="portal-section__label">Records handling</p>
+        <h2 id="personnel-handling-heading">Assignment-file use</h2>
+        <p>
+          Personnel files are provided for authorized internal review. Classification eligibility,
+          need-to-know, and file status are evaluated independently.
+        </p>
+      </section>
+    </aside>
+  </div>
+</PortalLayout>

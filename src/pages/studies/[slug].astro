@@ -1,0 +1,196 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+import StudyInterestForm from '../../components/studies/StudyInterestForm.astro';
+import StudyProtocol from '../../components/studies/StudyProtocol.astro';
+import CorporateLayout from '../../layouts/CorporateLayout.astro';
+import { studyStatusLabel, type StudyData } from '../../lib/study-schema';
+import '../../styles/studies.css';
+
+export async function getStaticPaths() {
+  const studies = await getCollection('studies');
+  return studies.map((entry: CollectionEntry<'studies'>) => ({
+    params: { slug: entry.data.slug },
+    props: { study: entry.data as StudyData },
+  }));
+}
+
+interface Props {
+  study: StudyData;
+}
+
+const { study } = Astro.props;
+const description = (() => {
+  if (study.summary.length <= 178) return study.summary;
+  const shortened = study.summary.slice(0, 175).replace(/\s+\S*$/, '');
+  return `${shortened}…`;
+})();
+const participationMessage = {
+  active:
+    'The current observation interval is in progress. No additional participation screen is open.',
+  paused: 'Enrollment is paused while the current protocol presentation is reviewed.',
+  completed: 'This protocol is closed. No current participation screen is available.',
+  recruiting: '',
+  'interest-only': '',
+}[study.status];
+---
+
+<CorporateLayout title={study.shortTitle} description={description} active="studies">
+  <section class="study-hero" data-study-status={study.status}>
+    <div class="study-hero__grid" aria-hidden="true"></div>
+    <div class="study-hero__main">
+      <p class="eyebrow">Participant study / {study.studyId}</p>
+      <h1>{study.title}</h1>
+      <p class="study-hero__question">{study.researchQuestion}</p>
+      <div class="button-row">
+        {
+          study.application ? (
+            <a class="button button--primary" href="#participation-screen">
+              Check eligibility
+            </a>
+          ) : (
+            <a class="button button--primary" href="#study-method">
+              Review study method
+            </a>
+          )
+        }
+        <a class="button" href="/studies/">All studies</a>
+      </div>
+    </div>
+    <aside class="study-hero__meta" aria-label="Study details">
+      <span class="study-status" data-status={study.status}>{studyStatusLabel(study.status)}</span>
+      <dl>
+        <div><dt>Protocol</dt><dd>{study.studyId} / Rev. {study.protocolRevision}</dd></div>
+        <div><dt>Phase</dt><dd>{study.phase}</dd></div>
+        <div><dt>Method</dt><dd>{study.studyType}</dd></div>
+        <div><dt>Mode</dt><dd>{study.participationMode}</dd></div>
+        <div><dt>Commitment</dt><dd>{study.commitment}</dd></div>
+        <div><dt>Office</dt><dd>{study.controllingOffice}</dd></div>
+      </dl>
+    </aside>
+    <div class="study-hero__trace" aria-hidden="true">
+      <i></i><span>01</span><i></i><span>02</span><i></i><span>03</span><i></i><span>04</span><i
+      ></i>
+    </div>
+  </section>
+
+  <section class="section study-overview" data-reveal>
+    <div class="section__heading">
+      <p class="section-label">Study overview</p>
+      <h2>Scope and participant activity.</h2>
+      <p>{study.summary}</p>
+    </div>
+    <div class="study-two-column">
+      <div>
+        <h3>Participant activities</h3>
+        <ol class="study-numbered-list">
+          {study.participantActivities.map((activity) => <li>{activity}</li>)}
+        </ol>
+      </div>
+      <div>
+        <h3>Basic eligibility</h3>
+        <ul class="study-plain-list">
+          {study.eligibility.map((item) => <li>{item}</li>)}
+        </ul>
+        <h3>Outside this protocol</h3>
+        <ul class="study-plain-list study-plain-list--muted">
+          {study.exclusions.map((item) => <li>{item}</li>)}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--dark" id="study-method" data-reveal>
+    <div class="section__heading">
+      <p class="section-label">Protocol sequence</p>
+      <h2>One method, applied in order.</h2>
+      <p>
+        The sequence is fixed before an observation interval opens. Missed intervals are identified
+        as missing rather than reconstructed.
+      </p>
+    </div>
+    <StudyProtocol steps={study.protocolSteps} />
+  </section>
+
+  <section class="section study-data" data-reveal>
+    <div class="section__heading">
+      <p class="section-label">Information scope</p>
+      <h2>Only the listed observations.</h2>
+      <p>
+        The study is designed around broad categories and ordinary equipment. Information outside
+        the protocol is not required.
+      </p>
+    </div>
+    <div class="study-data__columns">
+      <div>
+        <h3>Requested by the protocol</h3>
+        <ul>{study.dataRequested.map((item) => <li>{item}</li>)}</ul>
+      </div>
+      <div>
+        <h3>Not requested</h3>
+        <ul>{study.dataNotRequested.map((item) => <li>{item}</li>)}</ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section study-prompts" data-reveal>
+    <div class="study-prompts__heading">
+      <p class="section-label">Example prompts</p>
+      <h2>Questions used to keep observations consistent.</h2>
+    </div>
+    <ol>
+      {
+        study.samplePrompts.map((prompt, index) => (
+          <li>
+            <>
+              <small>{String(index + 1).padStart(2, '0')}</small>
+              <p>{prompt}</p>
+            </>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="section study-method-notes" data-reveal>
+    <div>
+      <p class="section-label">Method notes</p>
+      <h2>How the protocol is bounded.</h2>
+      <ul>{study.methodNotes.map((note) => <li>{note}</li>)}</ul>
+    </div>
+    <div>
+      <p class="section-label">Limitations</p>
+      <h2>What the study cannot establish.</h2>
+      <ul>{study.limitations.map((limitation) => <li>{limitation}</li>)}</ul>
+    </div>
+  </section>
+
+  {
+    study.publicSummary && (
+      <section class="section study-public-summary" data-reveal>
+        <p class="section-label">Public method summary</p>
+        <h2>Protocol disposition.</h2>
+        <p>{study.publicSummary}</p>
+      </section>
+    )
+  }
+
+  {
+    study.application ? (
+      <div class="section" id="participation-screen" data-reveal>
+        <StudyInterestForm studyId={study.studyId} application={study.application} />
+      </div>
+    ) : (
+      <section class="section study-availability" data-reveal>
+        <p class="section-label">Participation status</p>
+        <h2>{studyStatusLabel(study.status)}</h2>
+        <p>{participationMessage}</p>
+        <div class="button-row">
+          <a class="button" href="/studies/">
+            Return to study register
+          </a>
+        </div>
+      </section>
+    )
+  }
+</CorporateLayout>

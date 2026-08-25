@@ -5,6 +5,13 @@ export const CORE_ROUTES = Object.freeze([
   '/',
   '/about/',
   '/research/',
+  '/studies/',
+  '/studies/indoor-condition-observation/',
+  '/studies/household-timekeeping-stability/',
+  '/studies/consumer-compass-repeatability/',
+  '/studies/paper-substrate-curl-recovery/',
+  '/studies/diagram-recall-route-notation/',
+  '/studies/small-sensor-display-agreement/',
   '/facilities/',
   '/publications/',
   '/careers/',
@@ -15,6 +22,7 @@ export const CORE_ROUTES = Object.freeze([
 export const PORTAL_ROUTES = Object.freeze([
   '/portal/',
   '/portal/records/',
+  '/portal/personnel/',
   '/portal/authorizations/',
   '/portal/forms/',
   '/portal/help/',
@@ -57,7 +65,7 @@ export const SEARCHABLE_FORM_ROUTES = Object.freeze([
 ]);
 
 export const SEARCHABLE_RECORD_ROUTES = Object.freeze([
-  ...SECURITY_RECORD_ROUTES,
+  '/records/security/information-classification/',
   ...SEARCHABLE_FORM_ROUTES,
 ]);
 
@@ -68,12 +76,46 @@ export const RECORD_INDEX_ROUTES = Object.freeze([
   '/records/forms/',
 ]);
 
+export const REPORT_IDS = Object.freeze([
+  'tl-101-am-8701',
+  'tl-101-cr-8801',
+  'tl-101-ii-8902',
+  'tl-220-ea-9101',
+  'tl-101-ap-9303',
+  'tl-220-pe-9502',
+  'tl-220-am-9704',
+  'tl-101-fs-9901',
+  'tl-101-pe-0002',
+  'tl-101-ea-0102',
+  'tl-220-ap-0301',
+  'tl-101-ii-0503',
+  'tl-220-ls-0702',
+  'tl-101-ea-0904',
+  'tl-220-ii-1102',
+  'tl-101-am-1305',
+  'tl-220-cr-1402',
+  'tl-220-pe-1503',
+  'tl-220-fs-1701',
+  'tl-101-ls-1904',
+  'tl-220-ii-2102',
+  'tl-101-ls-2201',
+  'tl-220-am-2303',
+  'tl-220-fs-2501',
+  'tl-101-ins-001',
+  'tl-220-ea-001',
+  'tl-340-trn-001',
+  'tl-sop-720-fs-001',
+  'tl-p110-per-9302',
+  'tl-p110-per-9804',
+  'tl-p110-per-0403',
+  'tl-p110-per-1110',
+  'tl-p110-per-1806',
+  'tl-p110-per-2402',
+]);
+
 export const REPORT_ROUTES = Object.freeze([
   '/records/reports/',
-  '/records/reports/tl-101-ins-001/',
-  '/records/reports/tl-220-ea-001/',
-  '/records/reports/tl-340-trn-001/',
-  '/records/reports/tl-sop-720-fs-001/',
+  ...REPORT_IDS.map((recordId) => `/records/reports/${recordId}/`),
   '/records/submissions/',
 ]);
 
@@ -88,6 +130,14 @@ export const NOINDEX_ROUTES = Object.freeze([...PORTAL_ROUTES, ...CONTROLLED_REC
 export const SITE_ROUTES = Object.freeze([...SITEMAP_ROUTES, ...NOINDEX_ROUTES]);
 
 export const LOCAL_FORM_ROUTES = Object.freeze(['/contact/', '/careers/']);
+export const STUDY_ROUTES = Object.freeze(
+  CORE_ROUTES.filter((route) => route === '/studies/' || route.startsWith('/studies/')),
+);
+export const STUDY_FORM_ROUTES = Object.freeze([
+  '/studies/indoor-condition-observation/',
+  '/studies/household-timekeeping-stability/',
+  '/studies/consumer-compass-repeatability/',
+]);
 export const GATEWAY_ROUTE = '/employee-access/';
 
 export const REQUIRED_GATEWAY_HOOKS = Object.freeze([

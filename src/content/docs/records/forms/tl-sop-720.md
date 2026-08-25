@@ -1,6 +1,6 @@
 ---
 title: 'TL-SOP-720 — SOP Outline — Remote Field Expedition'
-description: 'Accessible transcription and blank DOCX download for Trinity Laboratories form TL-SOP-720.'
+description: 'Current blank form and field schedule for Trinity Laboratories form TL-SOP-720.'
 recordId: 'TL-SOP-720'
 recordType: 'form-template'
 recordFamily: 'procedure'
@@ -19,24 +19,24 @@ relatedRecords:
   - 'TL-SEC-04'
   - 'TL-SEC-001'
 attachments:
-  - label: 'Metadata-scrubbed blank DOCX'
+  - label: 'Current blank form (DOCX)'
     path: '/downloads/forms/tl-sop-720-remote-field-expedition-outline.docx'
     mediaType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     sourceFilename: 'TL-SOP720_Remote_Field_Expedition_Outline.docx'
     sha256: '867d1527e2e8b02bf5d4871fd961ff2e78c2710ade0bfcd93983210e9aad7e05'
 ---
 
-> **Blank source template.** No response fields are completed.
+> **Document status:** Blank issued form.
 >
 > **Source title:** SOP OUTLINE - REMOTE FIELD EXPEDITION
 >
 > **Legacy marking:** FORM TL-SOP-720 | LEVEL II - CONTROLLED
 >
-> **Download:** [Metadata-scrubbed blank DOCX](/downloads/forms/tl-sop-720-remote-field-expedition-outline.docx)
+> **Issued form:** [Current blank form (DOCX)](/downloads/forms/tl-sop-720-remote-field-expedition-outline.docx)
 
-Empty table cells and ruled writing areas are represented as blank response areas below. Checkbox labels are transcribed in source order.
+Field labels follow the issued form order. Blank response fields are shown below.
 
-## Accessible transcription
+## Field schedule
 
 > **Source footer:** TRINITY LABS, INC. - © 1986 - CONTROLLED SOP WORKSHEET - APPROVAL REQUIRED BEFORE FIELD DEPLOYMENT
 

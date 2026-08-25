@@ -5,8 +5,8 @@
   "notes": [
     "Derivative paths are deployed public paths resolved beneath the repository public directory.",
     "Original Trinity policy and form content is licensed CC BY-NC-SA 4.0.",
-    "Trinity logos, wordmarks, icons, and badge designs are reserved marks governed by TRADEMARKS.md.",
-    "Prefilled badges, portraits, newspapers, timeline evidence, narrative evidence, and duplicate source copies are intentionally excluded."
+    "Trinity logos, wordmarks, and icons are reserved marks governed by TRADEMARKS.md.",
+    "Credential designs, portraits, newspapers, timeline evidence, narrative evidence, and duplicate source copies are intentionally excluded."
   ],
   "assets": [
     {
@@ -19,21 +19,6 @@
       "derivative": {
         "path": "/downloads/policies/tl-sec-04-information-security-classification.pdf",
         "sha256": "e4a85acb9e98c84159789fcf1fab2a9c15032a78ec2d2022108852d06132b9d7"
-      },
-      "mediaType": "application/pdf",
-      "license": "CC BY-NC-SA 4.0",
-      "transform": "Pages cloned with bundled pypdf 6.10.0; document Info and XMP metadata removed; canonical non-personal title retained."
-    },
-    {
-      "category": "policy",
-      "ownership": "Trinity Laboratories project owner and contributors",
-      "source": {
-        "basename": "Trinity_Labs_Security_Access_Classification_1986_Improved.pdf",
-        "sha256": "f4391bb91f578f4680ccdea3e0914b8c6a89218c8adab806c402032dc6f1c574"
-      },
-      "derivative": {
-        "path": "/downloads/policies/tl-sec-001-security-access-classification.pdf",
-        "sha256": "bcf37e34a074e6db68f89fd26b443a27ed3b0c79467eea9617bd234010a77639"
       },
       "mediaType": "application/pdf",
       "license": "CC BY-NC-SA 4.0",
@@ -353,141 +338,6 @@
       "mediaType": "image/png",
       "license": "All Rights Reserved; see TRADEMARKS.md.",
       "transform": "Lossless PNG re-encode with bundled Pillow 12.3.0 (optimize=true, compression level 9); ancillary metadata stripped; dimensions preserved."
-    },
-    {
-      "category": "blank-badge-front",
-      "ownership": "Trinity Laboratories project owner; trademark and design rights reserved under TRADEMARKS.md",
-      "source": {
-        "basename": "Trinity_Labs_Badge_S0_Visitor_Transparent.png",
-        "sha256": "22dd3c7793b84038ad1f72256a953821ce5a2898208e7c0ec7c8da61633f74b3"
-      },
-      "derivative": {
-        "path": "/media/badges/s0.png",
-        "sha256": "c3779a7b4a4bee5b0ea24f17a0b686acb24923e73f2377df9efae9570f644f51"
-      },
-      "mediaType": "image/png",
-      "license": "All Rights Reserved; see TRADEMARKS.md.",
-      "transform": "Lossless PNG re-encode with bundled Pillow 12.3.0 (optimize=true, compression level 9); ancillary metadata stripped; dimensions preserved. Blank front selected; prefilled identity examples excluded."
-    },
-    {
-      "category": "blank-badge-front",
-      "ownership": "Trinity Laboratories project owner; trademark and design rights reserved under TRADEMARKS.md",
-      "source": {
-        "basename": "Trinity_Labs_Badge_S1_General_Transparent.png",
-        "sha256": "331ce23c64b2d08c90650b9f6044d29cd4e9bf33c421e70c783ba02bf1493b94"
-      },
-      "derivative": {
-        "path": "/media/badges/s1.png",
-        "sha256": "dd05a28f37d6f8f8539509bad7e24f2c7d804c23cfb53c7eb8a80b5e9b2b0129"
-      },
-      "mediaType": "image/png",
-      "license": "All Rights Reserved; see TRADEMARKS.md.",
-      "transform": "Lossless PNG re-encode with bundled Pillow 12.3.0 (optimize=true, compression level 9); ancillary metadata stripped; dimensions preserved. Blank front selected; prefilled identity examples excluded."
-    },
-    {
-      "category": "blank-badge-front",
-      "ownership": "Trinity Laboratories project owner; trademark and design rights reserved under TRADEMARKS.md",
-      "source": {
-        "basename": "Trinity_Labs_Badge_S2_Technical_Transparent.png",
-        "sha256": "3a9ec536772758ca39a8bd72d49180707cb67f016123aa6eaf36b640a0300aee"
-      },
-      "derivative": {
-        "path": "/media/badges/s2.png",
-        "sha256": "925ef100ecc27b90d4771514453ec74ab7df9bd4e20f560448150cbbfc1eaf9f"
-      },
-      "mediaType": "image/png",
-      "license": "All Rights Reserved; see TRADEMARKS.md.",
-      "transform": "Lossless PNG re-encode with bundled Pillow 12.3.0 (optimize=true, compression level 9); ancillary metadata stripped; dimensions preserved. Blank front selected; prefilled identity examples excluded."
-    },
-    {
-      "category": "blank-badge-front",
-      "ownership": "Trinity Laboratories project owner; trademark and design rights reserved under TRADEMARKS.md",
-      "source": {
-        "basename": "Trinity_Labs_Badge_S3_Restricted_Transparent.png",
-        "sha256": "549677e42df9144dce846a52dbd0f6c06b3fb757b13c264fd0989c3a6470e025"
-      },
-      "derivative": {
-        "path": "/media/badges/s3.png",
-        "sha256": "77e62b00c1333513d884b4a62f57fd90b3b33f59afe94f043948bae7011a71f6"
-      },
-      "mediaType": "image/png",
-      "license": "All Rights Reserved; see TRADEMARKS.md.",
-      "transform": "Lossless PNG re-encode with bundled Pillow 12.3.0 (optimize=true, compression level 9); ancillary metadata stripped; dimensions preserved. Blank front selected; prefilled identity examples excluded."
-    },
-    {
-      "category": "blank-badge-front",
-      "ownership": "Trinity Laboratories project owner; trademark and design rights reserved under TRADEMARKS.md",
-      "source": {
-        "basename": "Trinity_Labs_Badge_S4_Containment_Transparent.png",
-        "sha256": "21905b1b0cb769786abc6015181914e643bac3f934e9146b9920ce4616d60a10"
-      },
-      "derivative": {
-        "path": "/media/badges/s4.png",
-        "sha256": "cd5eb1b0e04c1aed2021dccfdc46f6b4514d24e8d1a337b0478d2331f6ae8ad0"
-      },
-      "mediaType": "image/png",
-      "license": "All Rights Reserved; see TRADEMARKS.md.",
-      "transform": "Lossless PNG re-encode with bundled Pillow 12.3.0 (optimize=true, compression level 9); ancillary metadata stripped; dimensions preserved. Blank front selected; prefilled identity examples excluded."
-    },
-    {
-      "category": "blank-badge-front",
-      "ownership": "Trinity Laboratories project owner; trademark and design rights reserved under TRADEMARKS.md",
-      "source": {
-        "basename": "Trinity_Labs_Badge_S5_Critical_Transparent.png",
-        "sha256": "fe2d103ec56acab34e9a95d79ac54b192fcc13619642d5a02f5cefad9441552a"
-      },
-      "derivative": {
-        "path": "/media/badges/s5.png",
-        "sha256": "48c4d79fd8a47edca7cb60aeea2867a55316f6c2057729d3f01185157d40cd75"
-      },
-      "mediaType": "image/png",
-      "license": "All Rights Reserved; see TRADEMARKS.md.",
-      "transform": "Lossless PNG re-encode with bundled Pillow 12.3.0 (optimize=true, compression level 9); ancillary metadata stripped; dimensions preserved. Blank front selected; prefilled identity examples excluded."
-    },
-    {
-      "category": "blank-badge-front",
-      "ownership": "Trinity Laboratories project owner; trademark and design rights reserved under TRADEMARKS.md",
-      "source": {
-        "basename": "Trinity_Labs_Badge_S6_Directorate_Transparent.png",
-        "sha256": "c14c1d3a8ac8c6e0477742d1194901b93ef1eea60eaab94ff9308ed719525cfa"
-      },
-      "derivative": {
-        "path": "/media/badges/s6.png",
-        "sha256": "9f60125e619f3e57d054ab192599fd3d768974eae8de0db6e7f3b57205661883"
-      },
-      "mediaType": "image/png",
-      "license": "All Rights Reserved; see TRADEMARKS.md.",
-      "transform": "Lossless PNG re-encode with bundled Pillow 12.3.0 (optimize=true, compression level 9); ancillary metadata stripped; dimensions preserved. Blank front selected; prefilled identity examples excluded."
-    },
-    {
-      "category": "blank-badge-front",
-      "ownership": "Trinity Laboratories project owner; trademark and design rights reserved under TRADEMARKS.md",
-      "source": {
-        "basename": "Trinity_Labs_Badge_SX_Exception_Transparent.png",
-        "sha256": "6b2f03e3eb5118b1023e3fe4078739789875175f4b91bcce9e9a2356a1eddf03"
-      },
-      "derivative": {
-        "path": "/media/badges/sx.png",
-        "sha256": "4823191ea5189b4e16914fcd1b143e13eccf363c675b308a7d289b1f33d12d36"
-      },
-      "mediaType": "image/png",
-      "license": "All Rights Reserved; see TRADEMARKS.md.",
-      "transform": "Lossless PNG re-encode with bundled Pillow 12.3.0 (optimize=true, compression level 9); ancillary metadata stripped; dimensions preserved. Blank front selected; prefilled identity examples excluded."
-    },
-    {
-      "category": "blank-badge-back",
-      "ownership": "Trinity Laboratories project owner; trademark and design rights reserved under TRADEMARKS.md",
-      "source": {
-        "basename": "Trinity_Labs_Badge_Back_S1_General_Transparent.png",
-        "sha256": "64612a918067724dcd891907621fa734cf93c64a662c6502df2af57b5b6626d0"
-      },
-      "derivative": {
-        "path": "/media/badges/back.png",
-        "sha256": "2dd4838b47bbd007af1f70bc55d7f2d76fa4b57c4234d6d6df4b3699405b3f1b"
-      },
-      "mediaType": "image/png",
-      "license": "All Rights Reserved; see TRADEMARKS.md.",
-      "transform": "Neutral S-1 General back selected as the approved canonical back; lossless PNG re-encode with bundled Pillow 12.3.0 (optimize=true, compression level 9); ancillary metadata stripped; dimensions preserved."
     },
     {
       "category": "third-party-font",

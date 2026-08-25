@@ -18,13 +18,24 @@ export async function getStaticPaths() {
 }
 
 const { submission } = Astro.props;
+const standardRank = Number(submission.information.level.replace('TL-', ''));
+const elevated =
+  Boolean(submission.information.program || submission.information.compartment) ||
+  !Number.isFinite(standardRank) ||
+  standardRank >= 3;
+const documentTitle = elevated
+  ? `${submission.recordId} — Controlled report`
+  : `${submission.recordId} — ${submission.title}`;
+const documentDescription = elevated
+  ? 'Controlled TIRN report. Descriptive metadata requires the displayed information eligibility.'
+  : submission.summary;
 ---
 
 <StarlightPage
   frontmatter={{
-    title: `${submission.recordId} — ${submission.title}`,
-    description: submission.summary,
-    pagefind: true,
+    title: documentTitle,
+    description: documentDescription,
+    pagefind: !elevated && submission.publicationState !== 'withheld',
     head: [
       {
         tag: 'meta',

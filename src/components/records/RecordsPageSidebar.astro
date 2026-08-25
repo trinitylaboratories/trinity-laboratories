@@ -14,8 +14,7 @@ type RecordsSidebarData = {
 };
 
 const data = Astro.locals.starlightRoute.entry.data as RecordsSidebarData;
-const isForm = data.recordType === 'form-template';
-const requiredLevel: TirnLevel = isForm ? (data.information?.level ?? 'TL-2') : 'TL-2';
+const requiredLevel: TirnLevel = data.information?.level ?? 'TL-2';
 const standardRank = Number(requiredLevel.replace('TL-', ''));
 const separatelyControlled =
   Boolean(data.information?.program || data.information?.compartment) ||

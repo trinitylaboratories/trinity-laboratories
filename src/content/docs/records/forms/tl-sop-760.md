@@ -1,6 +1,6 @@
 ---
 title: 'TL-SOP-760 — SOP Outline — Controlled High-Risk Experiment'
-description: 'Accessible transcription and blank DOCX download for Trinity Laboratories form TL-SOP-760.'
+description: 'Current blank form and field schedule for Trinity Laboratories form TL-SOP-760.'
 pagefind: false
 recordId: 'TL-SOP-760'
 recordType: 'form-template'
@@ -20,24 +20,24 @@ relatedRecords:
   - 'TL-SEC-04'
   - 'TL-SEC-001'
 attachments:
-  - label: 'Metadata-scrubbed blank DOCX'
+  - label: 'Current blank form (DOCX)'
     path: '/downloads/forms/tl-sop-760-controlled-experiment-outline.docx'
     mediaType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     sourceFilename: 'TL-SOP760_Controlled_Experiment_Outline.docx'
     sha256: 'def1b310a8d827fad6acaa8830f98335480043bbbd329e5265a467295748c9d8'
 ---
 
-> **Blank source template.** No response fields are completed.
+> **Document status:** Blank issued form.
 >
 > **Source title:** SOP OUTLINE - CONTROLLED HIGH-RISK EXPERIMENT
 >
 > **Legacy marking:** FORM TL-SOP-760 | LEVEL III - RESTRICTED
 >
-> **Download:** [Metadata-scrubbed blank DOCX](/downloads/forms/tl-sop-760-controlled-experiment-outline.docx)
+> **Issued form:** [Current blank form (DOCX)](/downloads/forms/tl-sop-760-controlled-experiment-outline.docx)
 
-Empty table cells and ruled writing areas are represented as blank response areas below. Checkbox labels are transcribed in source order.
+Field labels follow the issued form order. Blank response fields are shown below.
 
-## Accessible transcription
+## Field schedule
 
 > **Source footer:** TRINITY LABS, INC. - © 1986 - RESTRICTED SOP WORKSHEET - TEST MAY NOT BEGIN WITHOUT SIGNED AUTHORIZATION
 
