@@ -1,7 +1,38 @@
 ---
+import { getCollection, type CollectionEntry } from 'astro:content';
+
 import PortalPageHeading from '../../components/portal/PortalPageHeading.astro';
 import SessionSummary from '../../components/portal/SessionSummary.astro';
+import {
+  catalogueEntryFromDocument,
+  catalogueEntryFromSubmission,
+  sortCatalogueEntries,
+  type CatalogueDocumentData,
+  type RecordCatalogueEntry,
+} from '../../lib/record-catalogue';
+import type { SubmissionRecordData } from '../../lib/submission-schema';
 import PortalLayout from '../../layouts/PortalLayout.astro';
+
+const documents = await getCollection('docs');
+const submissions = await getCollection('submissions');
+const documentEntries: RecordCatalogueEntry[] = documents.flatMap(
+  (document: CollectionEntry<'docs'>): RecordCatalogueEntry[] => {
+    const entry = catalogueEntryFromDocument(document.id, document.data as CatalogueDocumentData);
+    return entry ? [entry] : [];
+  },
+);
+const submissionEntries = sortCatalogueEntries(
+  submissions.map((submission: CollectionEntry<'submissions'>) =>
+    catalogueEntryFromSubmission(submission.data as SubmissionRecordData),
+  ),
+);
+const canonicalRecordCount = documentEntries.length + submissionEntries.length;
+const formCount = documentEntries.filter(
+  ({ recordType }: RecordCatalogueEntry) => recordType === 'form-template',
+).length;
+const securityCount = documentEntries.filter(
+  ({ recordFamily }: RecordCatalogueEntry) => recordFamily === 'security',
+).length;
 ---
 
 <PortalLayout
@@ -17,37 +48,33 @@ import PortalLayout from '../../layouts/PortalLayout.astro';
 
   <div class="portal-workspace">
     <div class="portal-workspace__primary">
-      <section class="portal-section" aria-labelledby="work-queue-heading">
-        <p class="portal-section__label">Assigned work</p>
-        <h2 id="work-queue-heading">Work queue</h2>
-        <div class="portal-empty">
-          <strong>No assigned items</strong>
-          <span>This static staff view contains no personnel assignments or routed approvals.</span>
-        </div>
-      </section>
-
       <section class="portal-section" aria-labelledby="records-heading">
-        <p class="portal-section__label">Reference set</p>
+        <p class="portal-section__label">Records control</p>
         <h2 id="records-heading">Available records services</h2>
         <div class="portal-table-wrap">
           <table class="portal-table">
             <thead>
-              <tr><th>Service</th><th>Availability</th><th>Action</th></tr>
+              <tr><th>Service</th><th>Current holdings</th><th>Action</th></tr>
             </thead>
             <tbody>
               <tr>
-                <td>Records search</td>
-                <td>Released index</td>
-                <td><a href="/records/search/">Search TIRN</a></td>
+                <td>Records catalogue</td>
+                <td>{canonicalRecordCount} canonical entries</td>
+                <td><a href="/portal/records/">Open catalogue</a></td>
+              </tr>
+              <tr>
+                <td>Completed reports</td>
+                <td>{submissionEntries.length} registered</td>
+                <td><a href="/records/reports/">Open register</a></td>
               </tr>
               <tr>
                 <td>Security references</td>
-                <td>2 released policies</td>
+                <td>{securityCount} active records</td>
                 <td><a href="/records/security/">Open references</a></td>
               </tr>
               <tr>
                 <td>Forms library</td>
-                <td>15 blank templates</td>
+                <td>{formCount} blank templates</td>
                 <td><a href="/portal/forms/">Review forms</a></td>
               </tr>
               <tr>
@@ -60,11 +87,58 @@ import PortalLayout from '../../layouts/PortalLayout.astro';
         </div>
       </section>
 
+      <section class="portal-section" aria-labelledby="recent-records-heading">
+        <p class="portal-section__label">Register activity</p>
+        <h2 id="recent-records-heading">Latest effective records</h2>
+        {
+          submissionEntries.length > 0 ? (
+            <div class="portal-table-wrap">
+              <table class="portal-table">
+                <thead>
+                  <tr>
+                    <>
+                      <th>Record</th>
+                      <th>Title</th>
+                      <th>Status</th>
+                      <th>Effective</th>
+                    </>
+                  </tr>
+                </thead>
+                <tbody>
+                  {submissionEntries.slice(0, 5).map((entry) => (
+                    <tr>
+                      <td>
+                        <a href={entry.href}>{entry.recordId}</a>
+                      </td>
+                      <td>{entry.title}</td>
+                      <td>{entry.status}</td>
+                      <td>
+                        {entry.effectiveDate ? (
+                          <time datetime={entry.effectiveDate}>{entry.effectiveDate}</time>
+                        ) : (
+                          'Undated'
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div class="portal-empty">
+              <strong>No effective records</strong>
+              <span>The completed-record register contains no current entries.</span>
+            </div>
+          )
+        }
+      </section>
+
       <section class="portal-section" aria-labelledby="common-tasks-heading">
         <p class="portal-section__label">Navigation</p>
         <h2 id="common-tasks-heading">Common tasks</h2>
         <ul class="portal-actions">
-          <li><a href="/records/">Review the records dashboard</a></li>
+          <li><a href="/portal/records/">Filter the canonical records catalogue</a></li>
+          <li><a href="/records/search/">Search TIRN released records</a></li>
           <li>
             <a href="/records/security/information-classification/">Check information eligibility</a
             >
@@ -81,10 +155,8 @@ import PortalLayout from '../../layouts/PortalLayout.astro';
         <p class="portal-section__label">Notices</p>
         <h2 id="notices-heading">Staff notices</h2>
         <div class="portal-empty">
-          <strong>No notices in this release</strong>
-          <span
-            >Operational notices and personnel messages are not included in the public staff view.</span
-          >
+          <strong>No active notices</strong>
+          <span>No staff-services notices apply to the current session.</span>
         </div>
       </section>
     </aside>

@@ -1,0 +1,53 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+import PortalPageHeading from '../../../components/portal/PortalPageHeading.astro';
+import RecordCatalogue from '../../../components/portal/RecordCatalogue.astro';
+import {
+  catalogueEntryFromDocument,
+  catalogueEntryFromSubmission,
+  sortCatalogueEntries,
+  type CatalogueDocumentData,
+  type RecordCatalogueEntry,
+} from '../../../lib/record-catalogue';
+import type { SubmissionRecordData } from '../../../lib/submission-schema';
+import PortalLayout from '../../../layouts/PortalLayout.astro';
+
+const documents = await getCollection('docs');
+const submissions = await getCollection('submissions');
+const documentEntries: RecordCatalogueEntry[] = documents.flatMap(
+  (document: CollectionEntry<'docs'>): RecordCatalogueEntry[] => {
+    const entry = catalogueEntryFromDocument(document.id, document.data as CatalogueDocumentData);
+    return entry ? [entry] : [];
+  },
+);
+const entries = sortCatalogueEntries([
+  ...documentEntries,
+  ...submissions.map((submission: CollectionEntry<'submissions'>) =>
+    catalogueEntryFromSubmission(submission.data as SubmissionRecordData),
+  ),
+]);
+---
+
+<PortalLayout
+  title="Records Catalogue"
+  description="Browse and filter the canonical records, blank templates, security references, and completed reports available through TIRN Staff Services."
+  active="records"
+>
+  <PortalPageHeading
+    path="Staff Services / Records"
+    title="Records catalogue"
+    description="Filter the current register by record family, status, publication state, and information classification."
+  />
+
+  <section class="portal-section portal-section--register" aria-labelledby="register-heading">
+    <p class="portal-section__label">Canonical register</p>
+    <h2 id="register-heading">Available records</h2>
+    <p>
+      Register metadata does not establish need-to-know, information eligibility, physical
+      authority, or endorsement status. Controlled record bodies remain subject to their displayed
+      requirements.
+    </p>
+    <RecordCatalogue entries={entries} />
+  </section>
+</PortalLayout>

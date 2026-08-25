@@ -20,6 +20,7 @@ export const CORE_ROUTES = Object.freeze([
 
 export const PORTAL_ROUTES = Object.freeze([
   '/portal/',
+  '/portal/records/',
   '/portal/authorizations/',
   '/portal/forms/',
   '/portal/help/',
@@ -27,7 +28,10 @@ export const PORTAL_ROUTES = Object.freeze([
 
 export const CONTROLLED_RECORD_ROUTES = Object.freeze([
   '/records/reports/',
+  '/records/reports/tl-101-ins-001/',
+  '/records/reports/tl-220-ea-001/',
   '/records/reports/tl-340-trn-001/',
+  '/records/reports/tl-sop-720-fs-001/',
   '/records/submissions/',
 ]);
 

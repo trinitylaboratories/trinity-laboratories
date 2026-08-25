@@ -29,8 +29,7 @@ import PortalLayout from '../../../layouts/PortalLayout.astro';
         </p>
         <div class="portal-callout">
           Temporary grants expire after 15 minutes and are removed when the staff session is
-          terminated. The authorization credential is issued out-of-band and is not published in the
-          site repository.
+          terminated. Authorization credentials are issued separately by the controlling office.
         </div>
       </section>
 
@@ -46,8 +45,8 @@ import PortalLayout from '../../../layouts/PortalLayout.astro';
           unrelated record, browser address, message field, or public submission package.
         </p>
         <p>
-          Relinquish the elevated grant when review is complete. Closing the browser tab also ends
-          the page-memory portion of the authorization sequence.
+          Relinquish the elevated grant when review is complete. Terminating the staff session also
+          removes the temporary authorization.
         </p>
       </ControlledSection>
 
@@ -77,7 +76,7 @@ import PortalLayout from '../../../layouts/PortalLayout.astro';
         requiredLevel="TL-4"
         program="PROGRAM AUTHORIZATION"
         compartment="COMPARTMENT AUTHORIZATION"
-        summary="No source body is present in the repository or published page."
+        summary="The source body is not available through this network node."
       />
     </div>
 

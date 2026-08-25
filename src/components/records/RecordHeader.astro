@@ -66,23 +66,27 @@ const dateLabel = new Intl.DateTimeFormat('en-US', {
   <dl class="record-header__controls">
     <div>
       <dt>Information</dt>
-      <dd data-pagefind-filter="classification">{information.level}</dd>
-      {
-        (information.program || information.compartment) && (
-          <small>
-            {[information.program, information.compartment].filter(Boolean).join(' / ')}
-          </small>
-        )
-      }
+      <dd data-pagefind-filter="classification">
+        {information.level}
+        {
+          (information.program || information.compartment) && (
+            <small>
+              {[information.program, information.compartment].filter(Boolean).join(' / ')}
+            </small>
+          )
+        }
+      </dd>
     </div>
     <div>
       <dt>Physical authority</dt>
-      <dd>{physicalAccess?.level ?? 'Not specified'}</dd>
-      {
-        physicalAccess && physicalAccess.endorsements.length > 0 && (
-          <small>{physicalAccess.endorsements.join(' ')}</small>
-        )
-      }
+      <dd>
+        {physicalAccess?.level ?? 'Not specified'}
+        {
+          physicalAccess && physicalAccess.endorsements.length > 0 && (
+            <small>{physicalAccess.endorsements.join(' ')}</small>
+          )
+        }
+      </dd>
     </div>
     <div>
       <dt>Condition</dt>

@@ -6,7 +6,7 @@ import '../styles/portal.css';
 interface Props {
   title: string;
   description: string;
-  active?: 'home' | 'authorizations' | 'forms' | 'help';
+  active?: 'home' | 'records' | 'authorizations' | 'forms' | 'help';
 }
 
 const { title, description, active } = Astro.props;
@@ -14,6 +14,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://trinitylabo
 const fullTitle = `${title} | TIRN Staff Services`;
 const navItems = [
   { id: 'home', href: '/portal/', label: 'Staff home' },
+  { id: 'records', href: '/portal/records/', label: 'Records' },
   { id: 'authorizations', href: '/portal/authorizations/', label: 'Authorizations' },
   { id: 'forms', href: '/portal/forms/', label: 'Forms' },
   { id: 'help', href: '/portal/help/', label: 'Help' },

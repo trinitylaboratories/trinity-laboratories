@@ -33,8 +33,16 @@ describe('site contract', () => {
   });
 
   it('keeps staff and controlled-record routes outside the public sitemap contract', () => {
-    expect(PORTAL_ROUTES).toHaveLength(4);
-    expect(NOINDEX_ROUTES).toContain('/records/reports/tl-340-trn-001/');
+    expect(PORTAL_ROUTES).toHaveLength(5);
+    expect(PORTAL_ROUTES).toContain('/portal/records/');
+    for (const route of [
+      '/records/reports/tl-101-ins-001/',
+      '/records/reports/tl-220-ea-001/',
+      '/records/reports/tl-340-trn-001/',
+      '/records/reports/tl-sop-720-fs-001/',
+    ]) {
+      expect(NOINDEX_ROUTES).toContain(route);
+    }
     for (const route of NOINDEX_ROUTES) {
       expect(SITE_ROUTES).toContain(route);
       expect(SITEMAP_ROUTES).not.toContain(route);

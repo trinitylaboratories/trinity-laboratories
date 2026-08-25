@@ -1,0 +1,58 @@
+{
+  "recordId": "TL-220-EA-001",
+  "formId": "TL-220",
+  "title": "Portable Conductivity Meter Repeatability Study",
+  "recordType": "completed-report",
+  "recordFamily": "research",
+  "status": "archived",
+  "revision": "1.0",
+  "effectiveDate": "2026-08-20",
+  "controllingOffice": "Environmental Analysis",
+  "publicationState": "controlled",
+  "information": {
+    "level": "TL-2"
+  },
+  "tags": ["environmental-analysis", "conductivity", "repeatability", "instrumentation", "tl-220"],
+  "summary": "Completed controlled comparison of three portable conductivity meters using a certified reference solution and repeated stabilized readings.",
+  "relatedRecords": ["TL-220", "TL-101-INS-001", "TL-SEC-04", "TL-SEC-001"],
+  "sections": [
+    {
+      "id": "administrative-control",
+      "title": "ADMINISTRATIVE CONTROL",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Project Code:** EA-CON-2608\n\n**Study Title:** Portable Conductivity Meter Repeatability Study\n\n**Sponsoring Division:** Environmental Analysis\n\n**Principal Investigator:** Technical Lead (role)\n\n**Authorized Personnel Roster Ref.:** EA-TL2 duty roster\n\n**Laboratory / Bay:** General wet-analysis workspace\n\n**Start Date / Time:** 2026-08-19 / 09:00\n\n**Shift Supervisor:** Laboratory Supervisor (role)"
+    },
+    {
+      "id": "experimental-basis",
+      "title": "EXPERIMENTAL BASIS",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Hypothesis:** Each meter will report the certified solution within ±2 percent, with within-instrument relative standard deviation not exceeding 1 percent.\n\n**Control Condition:** Certified 1,413 µS/cm conductivity solution at 25 °C, with deionized-water blank.\n\n**Test Condition(s):** Three meters; five sequential readings per meter after temperature compensation and stabilization.\n\n**Acceptance / Failure Criteria:** Mean result within ±2 percent of the certified value and relative standard deviation at or below 1 percent.\n\n**Known Hazards:** Low-hazard aqueous standard, wet-bench slip potential, and powered instrumentation near liquids.\n\n**Containment / Isolation Required:** Secondary tray and ordinary wet-bench controls; no special isolation required."
+    },
+    {
+      "id": "specimen-accountability",
+      "title": "SPECIMEN ACCOUNTABILITY",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Specimen / Article ID:** STD-COND-1413-L2608; DI-BLANK-2608.\n\n**Source / Custodian:** Metrology supply inventory / duty custodian.\n\n**Quantity Received:** 500 mL reference solution; 1 L deionized-water blank.\n\n**Seal / Container Condition:** Manufacturer seal intact at issue; working aliquots prepared in clean secondary containers.\n\n**Chain-of-Custody Ref.:** EA-COC-2608-07.\n\n**Return / Destruction Requirement:** Unused sealed stock returned to inventory; working aliquots disposed through the ordinary laboratory waste stream."
+    },
+    {
+      "id": "instrumentation-incident-control",
+      "title": "INSTRUMENTATION & INCIDENT CONTROL",
+      "disclosure": {
+        "mode": "authorize",
+        "requiredLevel": "TL-3"
+      },
+      "body": "**Instrumentation / Serial Nos.:** CM-021; CM-024; CM-031; reference thermometer REF-006.\n\n**Calibration Verified:** Yes\n\n**Environmental Conditions:** 22.1 ±0.4 °C; no direct solar load; bench surfaces dry at start.\n\n**Recording Systems:** Manual\n\n**Unexpected Response:** No\n\n**Escalation Recommended:** No\n\n**Chronological Observation Log:** 09:00 setup and label check complete. 09:18 blank checks complete. 09:31 reference series opened. 10:22 final replicate complete. 10:40 calculations independently reviewed. Maximum mean error was 1.1 percent; maximum relative standard deviation was 0.6 percent.\n\n**Investigator / Supervisor Approval:** Technical Lead — complete; Laboratory Supervisor — reviewed 2026-08-20 (role-only publication copy)."
+    }
+  ],
+  "physicalAccess": {
+    "level": "S-2",
+    "endorsements": ["/E"]
+  },
+  "facilityCondition": "WHITE"
+}

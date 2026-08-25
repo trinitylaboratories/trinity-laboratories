@@ -3,14 +3,16 @@ import { expect, test } from '@playwright/test';
 import { captureRuntimeErrors, visit } from './support/site';
 
 const REPORT_ROUTE = '/records/reports/tl-340-trn-001/';
+const STRUCTURED_REPORT_ROUTE = '/records/reports/tl-101-ins-001/';
 
 test('completed-report catalogs expose only safe control metadata', async ({ page }) => {
   await visit(page, '/records/reports/');
   const reportLink = page.getByRole('link', { name: 'TL-340-TRN-001' });
+  const reportRow = page.getByRole('row').filter({ has: reportLink });
   await expect(reportLink).toHaveAttribute('href', REPORT_ROUTE);
-  await expect(page.getByText('Access-Control Training Assessment')).toBeVisible();
-  await expect(page.getByRole('cell', { name: 'TL-3', exact: true })).toBeVisible();
-  await expect(page.getByText('controlled', { exact: true })).toBeVisible();
+  await expect(reportRow.getByText('Access-Control Training Assessment')).toBeVisible();
+  await expect(reportRow.getByRole('cell', { name: 'TL-3', exact: true })).toBeVisible();
+  await expect(reportRow.getByRole('cell', { name: 'controlled', exact: true })).toBeVisible();
 
   await visit(page, '/records/submissions/');
   await expect(page.getByRole('heading', { name: 'Published submissions' })).toBeVisible();
@@ -18,6 +20,29 @@ test('completed-report catalogs expose only safe control metadata', async ({ pag
     'href',
     REPORT_ROUTE,
   );
+});
+
+test('workstation field paragraphs render as semantic labeled rows', async ({ page }) => {
+  await visit(page, STRUCTURED_REPORT_ROUTE);
+
+  const projectTitle = page
+    .locator('[data-submission-field-row]')
+    .filter({ has: page.locator('dt', { hasText: 'Project / Study Title' }) });
+  await expect(projectTitle.locator('dt')).toHaveText('Project / Study Title');
+  await expect(projectTitle.locator('dd')).toHaveText(
+    'Portable Temperature Probe Verification Cycle',
+  );
+
+  const resultSummary = page
+    .locator('[data-submission-field-row]')
+    .filter({ has: page.locator('dt', { hasText: 'Result Summary' }) });
+  await expect(resultSummary.locator('dt')).toHaveText('Result Summary');
+  await expect(resultSummary.locator('dd')).toContainText(
+    'Both units met the ±0.5 °C acceptance tolerance.',
+  );
+  await expect(page.locator('[data-submission-field-list]')).not.toHaveCount(0);
+  await expect(page.locator('[data-submission-field-row] strong')).toHaveCount(0);
+  expect(await projectTitle.innerHTML()).not.toContain('**');
 });
 
 test('TL-3 report is redacted without an elevated session', async ({ page }) => {
@@ -71,6 +96,8 @@ test('a generic browser-local TL-3 grant reveals authorized training content onl
   await expect(
     openSection.getByText('This record describes a records-handling exercise only.'),
   ).toBeVisible();
+  await expect(openSection.locator('[data-submission-section-body] > p')).toHaveCount(1);
+  await expect(openSection.locator('[data-submission-field-list]')).toHaveCount(0);
 
   const authorizedSection = page.locator('[data-controlled-section="evaluation-criteria"]');
   await expect(authorizedSection).toHaveAttribute('data-mode', 'authorize');
@@ -90,7 +117,9 @@ test('a generic browser-local TL-3 grant reveals authorized training content onl
   await expect(withheldSection.locator('[data-controlled-content]')).toHaveCount(0);
 });
 
-test('Pagefind catalogs the report but excludes controlled body text', async ({ page }) => {
+test('Pagefind indexes released report fields but excludes controlled body text', async ({
+  page,
+}) => {
   await visit(page, '/records/search/');
   const search = page.getByRole('search').getByRole('textbox', { name: 'Search released records' });
 
@@ -104,6 +133,20 @@ test('Pagefind catalogs the report but excludes controlled body text', async ({ 
     { timeout: 15_000 },
   );
   await expect(page.locator(`a[href*="${REPORT_ROUTE}"]`)).toHaveCount(0, { timeout: 15_000 });
+
+  await search.fill('TP-014 maximum absolute deviation');
+  await expect(page.locator(`a[href*="${STRUCTURED_REPORT_ROUTE}"]`).first()).toBeVisible({
+    timeout: 15_000,
+  });
+
+  await search.fill('maximum mean error was 1.1 percent');
+  await expect(page.locator('.pagefind-ui__message')).toContainText(
+    'maximum mean error was 1.1 percent',
+    { timeout: 15_000 },
+  );
+  await expect(page.locator('a[href*="/records/reports/tl-220-ea-001/"]')).toHaveCount(0, {
+    timeout: 15_000,
+  });
 });
 
 test('completed-report interactions make no non-read or external request', async ({ page }) => {

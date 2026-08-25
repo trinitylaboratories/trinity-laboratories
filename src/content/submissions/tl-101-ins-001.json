@@ -1,0 +1,57 @@
+{
+  "recordId": "TL-101-INS-001",
+  "formId": "TL-101",
+  "title": "Portable Temperature Probe Verification Cycle",
+  "recordType": "completed-report",
+  "recordFamily": "research",
+  "status": "archived",
+  "revision": "1.0",
+  "effectiveDate": "2026-08-18",
+  "controllingOffice": "Industrial Instrumentation",
+  "publicationState": "released",
+  "information": {
+    "level": "TL-1"
+  },
+  "tags": ["instrumentation", "calibration", "temperature", "quality-control", "tl-101"],
+  "summary": "Routine comparison of two portable temperature probes against an in-date reference at three operating points; both units remained within the stated tolerance.",
+  "relatedRecords": ["TL-101", "TL-SEC-04", "TL-SEC-001"],
+  "sections": [
+    {
+      "id": "record-identification",
+      "title": "RECORD IDENTIFICATION",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Project / Study Title:** Portable Temperature Probe Verification Cycle\n\n**Department / Unit:** Industrial Instrumentation\n\n**Principal Researcher:** Instrumentation Technician (role)\n\n**Supporting Personnel:** Quality Reviewer (role)\n\n**Facility / Room:** General calibration workspace\n\n**Date Opened:** 2026-08-17\n\n**Target Completion:** 2026-08-18\n\n**Related Work Order / File No.:** INS-WO-2608-014"
+    },
+    {
+      "id": "purpose-scope",
+      "title": "PURPOSE & SCOPE",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Research Question / Objective:** Verify that two portable temperature probes remain within ±0.5 °C of the reference at 0 °C, 25 °C, and 50 °C.\n\n**Expected Practical Use:** Confirm suitability for routine laboratory checks and pre-deployment field measurements.\n\n**Prior Work Referenced:** Current calibration register and manufacturer operating instructions.\n\n**Normal Operating Assumptions:** Instruments are undamaged, batteries are serviceable, and readings are taken only after stabilization."
+    },
+    {
+      "id": "materials-equipment",
+      "title": "MATERIALS & EQUIPMENT",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Equipment / Asset IDs:** TP-014; TP-019; reference thermometer REF-006; dry-block unit DB-002.\n\n**Samples / Materials:** No research samples; distilled-water ice-point media only.\n\n**Calibration / Control Standard:** REF-006 certificate confirmed in date before use.\n\n**Required PPE / Safety Controls:** Laboratory coat, eye protection, and heat-resistant gloves for handling above 40 °C."
+    },
+    {
+      "id": "procedure-results",
+      "title": "PROCEDURE & RESULTS",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Procedure / Method No.:** Three-point comparison; three stabilized readings per probe at each set point.\n\n**Control / Baseline:** Reference thermometer REF-006.\n\n**Measurement Interval:** 60 seconds between stabilized readings.\n\n**Deviation From Method:** None.\n\n**Result Summary:** TP-014 maximum absolute deviation was 0.2 °C. TP-019 maximum absolute deviation was 0.3 °C. Both units met the ±0.5 °C acceptance tolerance.\n\n**Disposition:** Archive\n\n**Observations / Technician Notes:** Display response, cable condition, and battery checks were normal. Calibration labels were renewed through the next scheduled verification interval.\n\n**Researcher / Reviewer Signatures & Dates:** Instrumentation Technician — 2026-08-18; Quality Reviewer — 2026-08-18 (role-only publication copy)."
+    }
+  ],
+  "physicalAccess": {
+    "level": "S-2",
+    "endorsements": []
+  },
+  "facilityCondition": "WHITE"
+}

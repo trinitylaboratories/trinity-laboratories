@@ -245,6 +245,10 @@
   max-width: 68ch;
 }
 
+.portal-section--register {
+  padding-top: 2rem;
+}
+
 .portal-summary {
   margin: 0;
   border-top: 1px solid var(--portal-line-dark);
@@ -324,6 +328,167 @@
 
 .portal-table a {
   font-weight: 600;
+}
+
+.record-catalogue {
+  margin-top: 1.5rem;
+}
+
+.record-catalogue__controls {
+  margin: 0 0 1.25rem;
+  border: 0;
+  border-block: 1px solid var(--portal-line-dark);
+  padding: 1rem 0;
+}
+
+.record-catalogue__controls legend,
+.record-catalogue__controls label {
+  color: #4d5a67;
+  font: 600 0.62rem/1.3 var(--font-mono);
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+}
+
+.record-catalogue__controls legend {
+  padding: 0 0.5rem 0 0;
+}
+
+.record-catalogue__filter-grid {
+  display: grid;
+  grid-template-columns: minmax(14rem, 2fr) repeat(3, minmax(9rem, 1fr));
+  gap: 0.85rem 1rem;
+}
+
+.record-catalogue__controls label {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.record-catalogue__controls input,
+.record-catalogue__controls select {
+  width: 100%;
+  min-height: 2.55rem;
+  border: 1px solid #7f8b96;
+  border-radius: 0;
+  padding: 0.55rem 0.65rem;
+  background: #fff;
+  color: #17212b;
+  font: 400 0.8rem/1.3 var(--font-sans);
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.record-catalogue__controls input:disabled,
+.record-catalogue__controls select:disabled,
+.record-catalogue__controls button:disabled {
+  opacity: 0.62;
+  cursor: not-allowed;
+}
+
+.record-catalogue__control-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.9rem;
+}
+
+.record-catalogue__control-footer p {
+  margin: 0;
+  color: var(--portal-muted);
+  font: 500 0.68rem/1.3 var(--font-mono);
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+}
+
+.record-catalogue__control-footer strong {
+  color: #17283c;
+}
+
+.record-catalogue__control-footer button {
+  min-height: 2.3rem;
+  border: 1px solid #526273;
+  border-radius: 0;
+  padding: 0.5rem 0.75rem;
+  background: #fff;
+  color: #173d67;
+  font: 600 0.64rem/1.2 var(--font-mono);
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.record-catalogue__control-footer button:hover:not(:disabled) {
+  background: #e9f0f7;
+}
+
+.record-catalogue__table {
+  min-width: 76rem;
+}
+
+.record-catalogue__table caption {
+  padding: 0.65rem 0.8rem;
+  background: #fff;
+  color: var(--portal-muted);
+  font: 500 0.62rem/1.3 var(--font-mono);
+  letter-spacing: 0.045em;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.record-catalogue__table tr[hidden] {
+  display: none;
+}
+
+.record-catalogue__record,
+.record-catalogue__table td:nth-child(n + 3) {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  white-space: nowrap;
+}
+
+.record-catalogue__record span,
+.record-catalogue__title span {
+  display: block;
+  margin-top: 0.2rem;
+  color: var(--portal-muted);
+  font-size: 0.64rem;
+  font-weight: 400;
+}
+
+.record-catalogue__title {
+  min-width: 18rem;
+}
+
+.record-catalogue__title strong {
+  display: block;
+  font-size: 0.78rem;
+}
+
+.record-catalogue__table td[data-catalogue-state='controlled'],
+.record-catalogue__table td[data-catalogue-state='withheld'] {
+  color: #7a280f;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.record-catalogue__table td[data-catalogue-state='active'],
+.record-catalogue__table td[data-catalogue-state='released'] {
+  color: var(--portal-success);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.record-catalogue__empty {
+  margin: 0;
+  border-bottom: 1px solid var(--portal-line);
+  padding: 1rem 0;
+  color: var(--portal-muted);
+  font-size: 0.8rem;
+}
+
+.record-catalogue__empty[hidden] {
+  display: none;
 }
 
 .portal-empty {
@@ -474,6 +639,10 @@
   .portal-workspace {
     gap: 1rem;
   }
+
+  .record-catalogue__filter-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 38rem) {
@@ -503,6 +672,15 @@
     gap: 0.3rem;
   }
 
+  .record-catalogue__filter-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .record-catalogue__control-footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
   .portal-footer {
     display: grid;
     padding-block: 1rem;
@@ -530,6 +708,10 @@
   [data-revoke-grant],
   [data-terminate-session],
   .portal-button {
+    display: none !important;
+  }
+
+  .record-catalogue__controls {
     display: none !important;
   }
 

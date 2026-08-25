@@ -17,8 +17,8 @@ describe('completed submission policy', () => {
   it('validates the canonical submission directory and its related records', async () => {
     await expect(validateSubmissionDirectory(process.cwd())).resolves.toEqual({
       diagnostics: [],
-      files: 1,
-      records: 1,
+      files: 4,
+      records: 4,
     });
   });
 

@@ -3,6 +3,7 @@ import { publicationDisclosureMode, type SubmissionRecordData } from '../../lib/
 import ControlledRecord from './ControlledRecord.astro';
 import ControlledSection from './ControlledSection.astro';
 import RecordHeader from './RecordHeader.astro';
+import SubmissionSectionBody from './SubmissionSectionBody.astro';
 
 interface Props {
   submission: SubmissionRecordData;
@@ -77,7 +78,7 @@ const controlSummary =
                   program={section.disclosure.program}
                   compartment={section.disclosure.compartment}
                 >
-                  <p>{section.body}</p>
+                  <SubmissionSectionBody body={section.body ?? ''} />
                 </ControlledSection>
               </div>
             ) : (
@@ -87,7 +88,7 @@ const controlSummary =
                 summary={section.summary}
                 mode="open"
               >
-                <p>{section.body}</p>
+                <SubmissionSectionBody body={section.body ?? ''} />
               </ControlledSection>
             ),
           )}
