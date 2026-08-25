@@ -27,12 +27,36 @@ test('unknown routes return the designed 404 response', async ({ page }) => {
   await expect(page.locator('h1')).toHaveCount(1);
 });
 
-test('home exposes a photo-ready hero slot and careers path', async ({ page }) => {
+test('home uses the supplied 1986 icon in its hero and exposes the careers path', async ({
+  page,
+}) => {
   await visit(page, '/');
-  await expect(page.locator('[data-hero-media] .media-frame')).toHaveCount(1);
+  await expect(page.locator('[data-hero-media] img')).toHaveAttribute(
+    'src',
+    '/media/brand/trinity-icon.png',
+  );
   await expect(page.getByRole('link', { name: 'View careers' })).toHaveAttribute(
     'href',
     '/careers/',
+  );
+});
+
+test('official 1986 lockups replace the provisional site mark', async ({ page }) => {
+  await visit(page, '/');
+  await expect(page.locator('.site-header [data-brand-asset="full"] img')).toHaveAttribute(
+    'src',
+    '/media/brand/trinity-full.png',
+  );
+  await expect(page.locator('.site-footer [data-brand-asset="full"] img')).toHaveAttribute(
+    'src',
+    '/media/brand/trinity-full.png',
+  );
+  await expect(page.locator('.brand-mark__symbol')).toHaveCount(0);
+
+  await visit(page, '/portal/');
+  await expect(page.locator('.portal-header [data-brand-asset="wordmark"] img')).toHaveAttribute(
+    'src',
+    '/media/brand/trinity-wordmark.png',
   );
 });
 

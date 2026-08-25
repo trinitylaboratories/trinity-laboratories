@@ -293,7 +293,7 @@ export function validatePngPrivacy(bytes, fileName) {
     return [`${fileName}: malformed PNG signature`];
   }
 
-  const forbiddenChunks = new Set(['tEXt', 'zTXt', 'iTXt', 'eXIf']);
+  const forbiddenChunks = new Set(['tEXt', 'zTXt', 'iTXt', 'eXIf', 'caBX']);
   let offset = signature.length;
   let chunkIndex = 0;
   let sawIdat = false;
