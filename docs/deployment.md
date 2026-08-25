@@ -45,9 +45,15 @@ sets `PUBLIC_INDEXABLE=true` only when an explicit override says so or the detec
 deploys `main` normally and uploads any other branch as a named, non-production preview version.
 
 Keep preview URLs public for review, but never indexable. A preview build must contain `noindex,
-nofollow` metadata and a restrictive `robots.txt`; the production `main` build may be indexed. Do
-not add credentials or private records to previews—the generated site is public regardless of robot
-policy.
+nofollow` metadata and a restrictive `robots.txt`. In production, corporate and released-record
+routes may be indexed; `/portal/`, `/records/reports/`, and `/records/submissions/` remain excluded
+through HTML metadata, response headers, and the sitemap filter. These are discovery controls, not
+confidentiality. Do not add credentials or private records to any build—the generated site is public
+regardless of robot policy.
+
+The TIRN Filing Workstation is not deployed. `npm run record-desk` binds it to `127.0.0.1`; ignored
+drafts and owner-only authorization material under `.authoring/` must remain outside Git and every
+Cloudflare build context.
 
 For a manual deployment using the same branch-aware behavior:
 
@@ -131,10 +137,13 @@ For production, verify:
 2. the apex returns HTTPS with the expected certificate;
 3. `www` redirects once to the same path and query at the apex;
 4. canonical URLs, sitemap, and `robots.txt` use the apex;
-5. public pages, `/employee-access/`, `/records/`, search, downloads, and the custom 404 work; and
+5. public pages, `/employee-access/`, `/portal/`, `/records/`, controlled-report presentation,
+   search, downloads, and the custom 404 work;
 6. a fresh browser context loads no analytics beacon or third-party request; and
-7. the employee gateway makes no request containing entered values and stores only its generic local
-   session flag.
+7. employee and authorization controls make no request containing entered values, store only
+   allowlisted generic session/grant state, and clear that state on termination; and
+8. portal and controlled-record routes are absent from the production sitemap and return
+   `X-Robots-Tag: noindex`.
 
 ## Rollback
 

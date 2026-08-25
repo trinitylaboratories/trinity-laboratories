@@ -1,0 +1,111 @@
+---
+import PortalPageHeading from '../../../components/portal/PortalPageHeading.astro';
+import SessionSummary from '../../../components/portal/SessionSummary.astro';
+import PortalLayout from '../../../layouts/PortalLayout.astro';
+---
+
+<PortalLayout
+  title="Help"
+  description="Operational guidance for TIRN staff sessions, temporary authorization, records access, and local form preparation."
+  active="help"
+>
+  <PortalPageHeading
+    path="Staff Services / Help"
+    title="Access and filing help"
+    description="Reference the expected session states and recovery steps before reporting an access problem."
+  />
+
+  <div class="portal-workspace">
+    <div class="portal-workspace__primary">
+      <section class="portal-section" aria-labelledby="session-help-heading">
+        <p class="portal-section__label">Session access</p>
+        <h2 id="session-help-heading">Establish a staff session</h2>
+        <ol>
+          <li>Open <a href="/employee-access/">Employee Access</a>.</li>
+          <li>Enter a badge identifier and issue the six-character terminal code.</li>
+          <li>Enter the code before its five-minute expiry.</li>
+          <li>Confirm that Staff Services reports “Staff / TL-2 base.”</li>
+        </ol>
+        <p>
+          Badge identifiers and terminal codes are cleared after the access sequence. Only the
+          generic accepted-session state is retained for the current browser tab.
+        </p>
+      </section>
+
+      <section class="portal-section" aria-labelledby="elevation-help-heading">
+        <p class="portal-section__label">Controlled information</p>
+        <h2 id="elevation-help-heading">Request temporary TL-3 access</h2>
+        <ol>
+          <li>Open a controlled section or record and select <strong>Authorize</strong>.</li>
+          <li>Select the working purpose and affirm need-to-know.</li>
+          <li>Enter the separately issued authorization credential.</li>
+          <li>Relinquish the grant when review is complete.</li>
+        </ol>
+        <p class="portal-callout portal-callout--warning">
+          A TL-3 training grant does not satisfy TL-4+, named program, compartment, endorsement, or
+          physical-access requirements.
+        </p>
+      </section>
+
+      <section class="portal-section" aria-labelledby="filing-help-heading">
+        <p class="portal-section__label">Local records preparation</p>
+        <h2 id="filing-help-heading">Prepare a new record</h2>
+        <p>
+          Start the project-local Filing Workstation, select a blank template, complete the fields,
+          and review the guest, authorized, and print presentations. The workstation generates a
+          package for repository review; it does not publish directly.
+        </p>
+        <a class="portal-button" href="/portal/forms/">Open forms and filing</a>
+      </section>
+
+      <section class="portal-section" aria-labelledby="outcomes-heading">
+        <p class="portal-section__label">Troubleshooting</p>
+        <h2 id="outcomes-heading">Expected outcomes</h2>
+        <div class="portal-table-wrap">
+          <table class="portal-table">
+            <thead><tr><th>Message</th><th>Meaning</th><th>Action</th></tr></thead>
+            <tbody>
+              <tr>
+                <td>Guest / released access</td>
+                <td>No base staff session is present.</td>
+                <td>Return to Employee Access.</td>
+              </tr>
+              <tr>
+                <td>Authorization not recognized</td>
+                <td>The credential did not match the local verifier.</td>
+                <td>Clear the field and use the issued credential.</td>
+              </tr>
+              <tr>
+                <td>Separate grant required</td>
+                <td
+                  >The record requires a level or control not represented by the training grant.</td
+                >
+                <td>Use the released metadata only.</td>
+              </tr>
+              <tr>
+                <td>Content withheld</td>
+                <td>The record body is not present in the website.</td>
+                <td>No browser authorization can reveal it.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <aside class="portal-workspace__aside" aria-label="Current access context">
+      <SessionSummary />
+      <section class="portal-section" aria-labelledby="privacy-heading">
+        <p class="portal-section__label">Local-state policy</p>
+        <h2 id="privacy-heading">What the browser retains</h2>
+        <dl class="portal-summary">
+          <div><dt>Staff session</dt><dd>Generic accepted state</dd></div>
+          <div><dt>Elevated grant</dt><dd>Level, scope, expiry</dd></div>
+          <div><dt>Credential</dt><dd>Not retained</dd></div>
+          <div><dt>Purpose</dt><dd>Not retained</dd></div>
+          <div><dt>Network submission</dt><dd>None</dd></div>
+        </dl>
+      </section>
+    </aside>
+  </div>
+</PortalLayout>

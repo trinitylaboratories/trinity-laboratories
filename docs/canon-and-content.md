@@ -37,6 +37,8 @@ but proposals and placeholders must never be presented as established facts with
 - Store a historical Roman-numeral form marking separately from any normalized `TL-*` classification.
 - Clearance eligibility, compartment authorization, and need-to-know are distinct concepts.
 - Narrative discoverability is not security. Every deployed route and file may be found directly.
+- Publication state is independent from information classification. A released blank TL-5 template
+  remains public; a controlled record needs an explicit publication and presentation policy.
 
 ## Locked decisions
 
@@ -48,6 +50,23 @@ but proposals and placeholders must never be presented as established facts with
 - The approved public research list is **Advanced Materials**, **Industrial Instrumentation**,
   **Environmental Analysis**, **Applied Physics**, **Field Sampling & Geological Research**,
   **Laboratory Safety Systems**, **Prototype Evaluation**, and **Contract Research**.
+- Staff-interface copy uses the canonical `TL-3` form rather than the informal abbreviation `T3`.
+- `TL-340-TRN-001` is an owner-approved, non-operational access-control training record. It does
+  not establish a person, client, facility, incident, program, or historical event as canon.
+
+## Staff portal and disclosure states
+
+The employee portal and elevated authorization controls are in-world presentation. Information
+eligibility, physical authority, endorsements, program or compartment grants, and need-to-know are
+separate attributes; a higher numeric value in one system must not imply authority in another.
+
+Completed-record responses use one of three disclosure states:
+
+- **Open** — rendered and eligible for ordinary indexing.
+- **Authorize** — safe-for-public content presented only after a browser-local theatrical grant;
+  it remains discoverable through source inspection and must never contain a real secret.
+- **Withheld** — the public record contains a label or extent only and no response value. Private
+  plaintext remains outside Git, the generated site, Pagefind, and public assets.
 
 ## Open decisions
 

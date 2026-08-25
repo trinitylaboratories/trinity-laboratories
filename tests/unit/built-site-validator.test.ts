@@ -9,7 +9,7 @@ import {
   validateSitemapDocuments,
   validateScriptPrivacy,
 } from '../../scripts/validate-built-site.mjs';
-import { canonicalUrl, SITE_ROUTES } from '../../scripts/lib/site-contract.mjs';
+import { canonicalUrl, NOINDEX_ROUTES, SITEMAP_ROUTES } from '../../scripts/lib/site-contract.mjs';
 
 function validPage(route = '/contact/') {
   return `<!doctype html>
@@ -55,6 +55,12 @@ describe('built HTML validation', () => {
     expect(validateHtmlPage(validPage(), '/contact/', { environment: 'preview' })).toEqual([
       expect.stringMatching(/preview HTML must contain/),
     ]);
+
+    const controlledPage = validPage('/portal/').replace('index, follow', 'noindex, nofollow');
+    expect(validateHtmlPage(controlledPage, '/portal/')).toEqual([]);
+    expect(validateHtmlPage(validPage('/portal/'), '/portal/')).toEqual([
+      expect.stringMatching(/controlled production HTML must contain/),
+    ]);
   });
 
   it('rejects network-capable local forms', () => {
@@ -83,10 +89,10 @@ describe('built HTML validation', () => {
   });
 
   it('requires every canonical site route in production sitemap documents', () => {
-    const complete = `<urlset>${SITE_ROUTES.map(
+    const complete = `<urlset>${SITEMAP_ROUTES.map(
       (route) => `<url><loc>${canonicalUrl(route)}</loc></url>`,
     ).join('')}</urlset>`;
-    expect(extractSitemapLocations(complete)).toHaveLength(SITE_ROUTES.length);
+    expect(extractSitemapLocations(complete)).toHaveLength(SITEMAP_ROUTES.length);
     expect(validateSitemapDocuments([complete])).toEqual([]);
 
     const missing = complete.replace(
@@ -95,6 +101,14 @@ describe('built HTML validation', () => {
     );
     expect(validateSitemapDocuments([missing])).toEqual([
       expect.stringMatching(/records\/forms\/tl-x595/),
+    ]);
+
+    const leaked = complete.replace(
+      '</urlset>',
+      `<url><loc>${canonicalUrl(NOINDEX_ROUTES[0])}</loc></url></urlset>`,
+    );
+    expect(validateSitemapDocuments([leaked])).toEqual([
+      expect.stringMatching(/must exclude controlled canonical URL/),
     ]);
   });
 

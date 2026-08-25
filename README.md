@@ -7,14 +7,16 @@ static records archive.
 > project. The employee-access screen is theatrical, not authentication. Never enter a password
 > used on another service.
 
-The first release combines:
+The current release combines:
 
 - a restrained public corporate website;
-- a local-only employee-access transition; and
-- a searchable, wiki-style institutional records system under `/records/`.
+- a browser-local employee-access transition and staff portal;
+- a searchable institutional records system under `/records/`; and
+- a loopback-only Filing Workstation for preparing completed form records.
 
-Everything deployed is public. Unlisted records and the employee-access transition are narrative
-devices, not security boundaries.
+Everything deployed is public. Staff sessions, elevated grants, redactions, and unlisted records
+are narrative devices, not security boundaries. Content that is truly withheld must remain outside
+Git, the generated website, and every client-accessible asset.
 
 ## Architecture
 
@@ -25,6 +27,8 @@ devices, not security boundaries.
 - **Cloudflare Workers Static Assets** serves the generated `dist/` directory.
 - **GitHub Actions** validates pull requests; Cloudflare Workers Builds handles previews and
   production deployment from `main`.
+- **TIRN Filing Workstation** uses the pinned local Node runtime and repository content schemas; it
+  binds only to `127.0.0.1` and has no hosted service.
 
 The production origin is `https://trinitylaboratories.org`. No database, hosted CMS, real
 authentication provider, or application server is required.
@@ -63,22 +67,37 @@ manager, then run `npm ci`. Do not install project packages globally.
 
 Useful commands:
 
-| Windows command                              | Purpose                                                                     |
-| -------------------------------------------- | --------------------------------------------------------------------------- |
-| `.\scripts\run-local.ps1 dev`                | Start the local Astro development server                                    |
-| `.\scripts\run-local.ps1 lint`               | Lint Astro, TypeScript, and JavaScript source                               |
-| `.\scripts\run-local.ps1 check`              | Run Astro and TypeScript diagnostics                                        |
-| `.\scripts\run-local.ps1 test:unit`          | Run unit tests                                                              |
-| `.\scripts\run-local.ps1 test:unit:coverage` | Run unit tests with coverage                                                |
-| `.\scripts\run-local.ps1 browser:install`    | Install Chromium under `.tools/` for browser tests                          |
-| `.\scripts\run-local.ps1 test:e2e`           | Run Playwright browser tests                                                |
-| `.\scripts\run-local.ps1 audit`              | Fail on high or critical dependency advisories                              |
-| `.\scripts\run-local.ps1 build`              | Generate branch-aware static output in `dist/`                              |
-| `.\scripts\run-local.ps1 build:production`   | Generate explicitly indexable production output in `dist/`                  |
-| `.\scripts\run-local.ps1 validate`           | Run repository, asset, type, unit, build, deployment, and built-site checks |
-| `.\scripts\run-local.ps1 cf:install`         | Reproduce the lockfile install used by Cloudflare Workers Builds            |
-| `.\scripts\run-local.ps1 deploy:preview`     | Build, validate, and upload a non-indexable Cloudflare preview version      |
-| `.\scripts\run-local.ps1 deploy:production`  | Intentionally build, validate, and deploy production from `main`            |
+| Windows command                                | Purpose                                                                     |
+| ---------------------------------------------- | --------------------------------------------------------------------------- |
+| `.\scripts\run-local.ps1 dev`                  | Start the local Astro development server                                    |
+| `.\scripts\run-local.ps1 lint`                 | Lint Astro, TypeScript, and JavaScript source                               |
+| `.\scripts\run-local.ps1 check`                | Run Astro and TypeScript diagnostics                                        |
+| `.\scripts\run-local.ps1 test:unit`            | Run unit tests                                                              |
+| `.\scripts\run-local.ps1 test:unit:coverage`   | Run unit tests with coverage                                                |
+| `.\scripts\run-local.ps1 browser:install`      | Install Chromium under `.tools/` for browser tests                          |
+| `.\scripts\run-local.ps1 test:e2e`             | Run Playwright browser tests                                                |
+| `.\scripts\run-local.ps1 record-desk`          | Open the loopback-only TIRN Filing Workstation                              |
+| `.\scripts\run-local.ps1 record-desk:validate` | Validate the machine-readable form definitions                              |
+| `.\scripts\run-local.ps1 validate:submissions` | Validate publishable completed-form records                                 |
+| `.\scripts\run-local.ps1 audit`                | Fail on high or critical dependency advisories                              |
+| `.\scripts\run-local.ps1 build`                | Generate branch-aware static output in `dist/`                              |
+| `.\scripts\run-local.ps1 build:production`     | Generate explicitly indexable production output in `dist/`                  |
+| `.\scripts\run-local.ps1 validate`             | Run repository, asset, type, unit, build, deployment, and built-site checks |
+| `.\scripts\run-local.ps1 cf:install`           | Reproduce the lockfile install used by Cloudflare Workers Builds            |
+| `.\scripts\run-local.ps1 deploy:preview`       | Build, validate, and upload a non-indexable Cloudflare preview version      |
+| `.\scripts\run-local.ps1 deploy:production`    | Intentionally build, validate, and deploy production from `main`            |
+
+## Filing completed records
+
+The Filing Workstation converts completed instances of approved Trinity form templates into
+strict, reviewable JSON records. Local drafts stay under the ignored `.authoring/` directory. The
+workstation never commits, pushes, merges, deploys, or transmits a response; publication still uses
+a branch, pull request, green required checks, and merge to `main`.
+
+Every response is explicitly marked as open, safe for a theatrical authorization reveal, or
+withheld. Withheld responses contain no public value. A response marked for authorization must be
+safe to publish because a reader can bypass any browser-only presentation control in a public
+repository.
 
 ## Repository boundaries
 

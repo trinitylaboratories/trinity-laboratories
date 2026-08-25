@@ -18,6 +18,19 @@ export const CORE_ROUTES = Object.freeze([
   '/records/forms/',
 ]);
 
+export const PORTAL_ROUTES = Object.freeze([
+  '/portal/',
+  '/portal/authorizations/',
+  '/portal/forms/',
+  '/portal/help/',
+]);
+
+export const CONTROLLED_RECORD_ROUTES = Object.freeze([
+  '/records/reports/',
+  '/records/reports/tl-340-trn-001/',
+  '/records/submissions/',
+]);
+
 export const FORM_IDS = Object.freeze([
   'tl-101',
   'tl-220',
@@ -46,7 +59,9 @@ export const SECURITY_RECORD_ROUTES = Object.freeze([
 
 export const RECORD_ROUTES = Object.freeze([...SECURITY_RECORD_ROUTES, ...FORM_ROUTES]);
 
-export const SITE_ROUTES = Object.freeze([...CORE_ROUTES, ...FORM_ROUTES]);
+export const SITEMAP_ROUTES = Object.freeze([...CORE_ROUTES, ...FORM_ROUTES]);
+export const NOINDEX_ROUTES = Object.freeze([...PORTAL_ROUTES, ...CONTROLLED_RECORD_ROUTES]);
+export const SITE_ROUTES = Object.freeze([...SITEMAP_ROUTES, ...NOINDEX_ROUTES]);
 
 export const LOCAL_FORM_ROUTES = Object.freeze(['/contact/', '/careers/']);
 export const GATEWAY_ROUTE = '/employee-access/';

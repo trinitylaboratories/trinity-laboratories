@@ -1,0 +1,86 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import { getCollection } from 'astro:content';
+
+import SubmissionIndex from '../../../components/records/SubmissionIndex.astro';
+
+const submissions = await getCollection('submissions');
+---
+
+<StarlightPage
+  frontmatter={{
+    title: 'Submission Register',
+    description: 'Repository publication register for validated TIRN form submissions.',
+    pagefind: true,
+    head: [
+      {
+        tag: 'meta',
+        attrs: { name: 'robots', content: 'noindex, nofollow' },
+      },
+    ],
+  }}
+>
+  <p>
+    Entries in this register have passed local schema validation and repository review. The web
+    interface does not accept or transmit form responses.
+  </p>
+
+  <dl class="submission-process">
+    <div>
+      <dt>Draft</dt>
+      <dd>Kept outside the public repository in the local Filing Workstation.</dd>
+    </div>
+    <div>
+      <dt>Stage</dt>
+      <dd>Produces deterministic JSON for review without transmitting field values.</dd>
+    </div>
+    <div>
+      <dt>Publish</dt>
+      <dd>Occurs only after repository validation and an approved merge.</dd>
+    </div>
+  </dl>
+
+  <h2>Published submissions</h2>
+  <SubmissionIndex submissions={submissions} />
+</StarlightPage>
+
+<style>
+  .submission-process {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin: 2rem 0 2.5rem;
+    border: 1px solid #aeb2b4;
+  }
+
+  .submission-process div {
+    padding: 1rem;
+  }
+
+  .submission-process div + div {
+    border-left: 1px solid #aeb2b4;
+  }
+
+  .submission-process dt {
+    color: #0759c7;
+    font: 700 0.7rem/1.2 var(--sl-font-mono);
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+  }
+
+  .submission-process dd {
+    margin: 0.45rem 0 0;
+    color: #3f4953;
+    font-size: 0.86rem;
+  }
+
+  @media (max-width: 42rem) {
+    .submission-process {
+      grid-template-columns: 1fr;
+    }
+
+    .submission-process div + div {
+      border-top: 1px solid #aeb2b4;
+      border-left: 0;
+    }
+  }
+</style>

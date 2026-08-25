@@ -1,0 +1,92 @@
+---
+import PortalPageHeading from '../../components/portal/PortalPageHeading.astro';
+import SessionSummary from '../../components/portal/SessionSummary.astro';
+import PortalLayout from '../../layouts/PortalLayout.astro';
+---
+
+<PortalLayout
+  title="Staff Home"
+  description="TIRN Staff Services provides local access status, records references, forms, and authorization controls."
+  active="home"
+>
+  <PortalPageHeading
+    path="Staff Services / Home"
+    title="Staff home"
+    description="Routine access to released records, blank forms, and session authorization controls."
+  />
+
+  <div class="portal-workspace">
+    <div class="portal-workspace__primary">
+      <section class="portal-section" aria-labelledby="work-queue-heading">
+        <p class="portal-section__label">Assigned work</p>
+        <h2 id="work-queue-heading">Work queue</h2>
+        <div class="portal-empty">
+          <strong>No assigned items</strong>
+          <span>This static staff view contains no personnel assignments or routed approvals.</span>
+        </div>
+      </section>
+
+      <section class="portal-section" aria-labelledby="records-heading">
+        <p class="portal-section__label">Reference set</p>
+        <h2 id="records-heading">Available records services</h2>
+        <div class="portal-table-wrap">
+          <table class="portal-table">
+            <thead>
+              <tr><th>Service</th><th>Availability</th><th>Action</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Records search</td>
+                <td>Released index</td>
+                <td><a href="/records/search/">Search TIRN</a></td>
+              </tr>
+              <tr>
+                <td>Security references</td>
+                <td>2 released policies</td>
+                <td><a href="/records/security/">Open references</a></td>
+              </tr>
+              <tr>
+                <td>Forms library</td>
+                <td>15 blank templates</td>
+                <td><a href="/portal/forms/">Review forms</a></td>
+              </tr>
+              <tr>
+                <td>Temporary authorization</td>
+                <td>TL-3 training scope</td>
+                <td><a href="/portal/authorizations/">Open console</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="portal-section" aria-labelledby="common-tasks-heading">
+        <p class="portal-section__label">Navigation</p>
+        <h2 id="common-tasks-heading">Common tasks</h2>
+        <ul class="portal-actions">
+          <li><a href="/records/">Review the records dashboard</a></li>
+          <li>
+            <a href="/records/security/information-classification/">Check information eligibility</a
+            >
+          </li>
+          <li><a href="/records/security/physical-access/">Check physical authority rules</a></li>
+          <li><a href="/portal/help/">Review access and session help</a></li>
+        </ul>
+      </section>
+    </div>
+
+    <aside class="portal-workspace__aside" aria-label="Session and notices">
+      <SessionSummary />
+      <section class="portal-section" aria-labelledby="notices-heading">
+        <p class="portal-section__label">Notices</p>
+        <h2 id="notices-heading">Staff notices</h2>
+        <div class="portal-empty">
+          <strong>No notices in this release</strong>
+          <span
+            >Operational notices and personnel messages are not included in the public staff view.</span
+          >
+        </div>
+      </section>
+    </aside>
+  </div>
+</PortalLayout>

@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="tirn-csrf-token" content="__CSRF_TOKEN__" />
+    <title>TIRN Filing Workstation — Local</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script src="/app.js" type="module"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#workspace">Skip to filing workspace</a>
+    <header class="masthead">
+      <div class="identity">
+        <span class="identity-mark" aria-hidden="true"></span>
+        <span>
+          <strong>TRINITY LABORATORIES</strong>
+          <small>Trinity Institutional Records Network</small>
+        </span>
+      </div>
+      <div class="system-state" role="status">
+        <span class="state-lamp" aria-hidden="true"></span>
+        LOCAL WORKSTATION · LOOPBACK ONLY
+      </div>
+    </header>
+
+    <div class="app-shell">
+      <aside class="rail" aria-label="Filing controls">
+        <div class="rail-heading">
+          <span class="eyebrow">TIRN / RECORD DESK</span>
+          <strong>Filing Workstation</strong>
+          <p>Prepare a local draft for repository review. Nothing is transmitted.</p>
+        </div>
+
+        <section class="rail-section" aria-labelledby="template-heading">
+          <h2 id="template-heading">Form template</h2>
+          <label for="template-select">Released template</label>
+          <select id="template-select"></select>
+          <p class="field-note" id="template-meta"></p>
+          <button class="secondary-button" id="new-filing" type="button">Start blank filing</button>
+        </section>
+
+        <section class="rail-section" aria-labelledby="draft-heading">
+          <h2 id="draft-heading">Local drafts</h2>
+          <label for="draft-select">Stored under .authoring/drafts</label>
+          <select id="draft-select">
+            <option value="">No saved draft selected</option>
+          </select>
+          <div class="button-row">
+            <button class="secondary-button" id="load-draft" type="button">Load</button>
+            <button class="text-button" id="refresh-drafts" type="button">Refresh</button>
+          </div>
+        </section>
+
+        <section class="rail-section" aria-labelledby="package-heading">
+          <h2 id="package-heading">Draft package</h2>
+          <label class="file-button" for="import-file">Import .tirn-draft.json</label>
+          <input id="import-file" type="file" accept="application/json,.tirn-draft.json" />
+          <p class="field-note">
+            Packages are limited to 1 MiB. Import remains in browser memory until saved.
+          </p>
+        </section>
+
+        <div class="rail-notice">
+          <strong>Publication boundary</strong>
+          <p>
+            Saving here does not publish a record. Export, validate, and stage it from a non-main
+            Git branch.
+          </p>
+        </div>
+      </aside>
+
+      <main id="workspace" class="workspace" tabindex="-1">
+        <header class="workspace-header">
+          <div>
+            <span class="eyebrow">NEW RECORD / UNFILED</span>
+            <h1 id="workspace-title">Loading form definitions…</h1>
+          </div>
+          <div class="header-actions">
+            <button class="secondary-button" id="save-draft" type="button">Save local draft</button>
+            <button class="primary-button" id="export-draft" type="button">
+              Export reviewed package
+            </button>
+          </div>
+        </header>
+
+        <noscript>
+          <p class="alert">
+            The Filing Workstation requires JavaScript and cannot save or export without it.
+          </p>
+        </noscript>
+
+        <p class="status-line" id="status-line" role="status" aria-live="polite">
+          Initializing local record desk.
+        </p>
+
+        <form id="filing-form" autocomplete="off">
+          <section class="document-section metadata-section" aria-labelledby="metadata-heading">
+            <header class="section-heading">
+              <span class="section-number">00</span>
+              <div>
+                <h2 id="metadata-heading">Record control</h2>
+                <p>Required metadata for the completed report.</p>
+              </div>
+            </header>
+            <div class="field-grid metadata-grid">
+              <label>
+                Record ID
+                <input id="record-id" type="text" maxlength="60" spellcheck="false" />
+                <small>Example: TL-340-TRN-001</small>
+              </label>
+              <label class="span-two">
+                Record title
+                <input id="record-title" type="text" maxlength="180" />
+              </label>
+              <label>
+                Revision
+                <input id="revision" type="text" maxlength="80" value="1.0" />
+              </label>
+              <label>
+                Effective date
+                <input id="effective-date" type="date" />
+              </label>
+              <label>
+                Controlling office
+                <input id="controlling-office" type="text" maxlength="140" />
+              </label>
+              <label>
+                Publication state
+                <select id="publication-state">
+                  <option value="released">Released</option>
+                  <option value="controlled">Controlled</option>
+                  <option value="withheld">Withheld metadata only</option>
+                </select>
+              </label>
+              <label>
+                Information classification
+                <select id="information-level"></select>
+              </label>
+              <label>
+                Program (optional)
+                <input id="program" type="text" maxlength="80" />
+              </label>
+              <label>
+                Compartment (optional)
+                <input id="compartment" type="text" maxlength="80" />
+              </label>
+              <label>
+                Physical authority (optional)
+                <select id="physical-level">
+                  <option value="">Not specified</option>
+                  <option>S-0</option>
+                  <option>S-1</option>
+                  <option>S-2</option>
+                  <option>S-3</option>
+                  <option>S-4</option>
+                  <option>S-5</option>
+                  <option>S-6</option>
+                  <option>S-X</option>
+                </select>
+              </label>
+              <fieldset class="endorsement-field span-two">
+                <legend>Endorsements (optional)</legend>
+                <div id="endorsement-options" class="check-row"></div>
+              </fieldset>
+              <label>
+                Facility condition (optional)
+                <select id="facility-condition">
+                  <option value="">Not specified</option>
+                  <option selected>WHITE</option>
+                  <option>BLUE</option>
+                  <option>YELLOW</option>
+                  <option>RED</option>
+                  <option>BLACK</option>
+                  <option>NULL</option>
+                </select>
+              </label>
+              <label class="span-two">
+                Summary
+                <textarea id="summary" rows="3" maxlength="600"></textarea>
+                <small>Public-safe abstract, 20–600 characters for publication.</small>
+              </label>
+              <label>
+                Tags
+                <input id="tags" type="text" maxlength="400" />
+                <small>Comma-separated.</small>
+              </label>
+              <label>
+                Related record IDs
+                <input id="related-records" type="text" maxlength="600" />
+                <small>Comma-separated.</small>
+              </label>
+            </div>
+          </section>
+
+          <div id="form-sections"></div>
+
+          <section class="document-section review-section" aria-labelledby="review-heading">
+            <header class="section-heading">
+              <span class="section-number">R</span>
+              <div>
+                <h2 id="review-heading">Public-safety review</h2>
+                <p>All four confirmations are required before a package can be staged.</p>
+              </div>
+            </header>
+            <div class="review-grid">
+              <label
+                ><input id="check-rights" type="checkbox" /> Publication rights are
+                confirmed.</label
+              >
+              <label
+                ><input id="check-secrets" type="checkbox" /> No real secret or credential is
+                present.</label
+              >
+              <label
+                ><input id="check-personal" type="checkbox" /> Personal data has been
+                reviewed.</label
+              >
+              <label
+                ><input id="check-withheld" type="checkbox" /> Withheld plaintext has been
+                removed.</label
+              >
+            </div>
+          </section>
+        </form>
+
+        <section class="preview-section" aria-labelledby="preview-heading">
+          <header class="preview-header">
+            <div>
+              <span class="eyebrow">DISCLOSURE REVIEW</span>
+              <h2 id="preview-heading">Record preview</h2>
+            </div>
+            <div class="preview-controls" role="group" aria-label="Preview state">
+              <button type="button" class="preview-mode is-active" data-preview-mode="guest">
+                Guest
+              </button>
+              <button type="button" class="preview-mode" data-preview-mode="authorized">
+                Authorized
+              </button>
+              <button type="button" class="preview-mode" data-preview-mode="print">Print</button>
+            </div>
+          </header>
+          <div id="preview-output" class="document-preview" aria-live="polite"></div>
+        </section>
+      </main>
+    </div>
+
+    <footer class="footer-line">
+      <span>TIRN RECORD DESK / LOCAL AUTHORING SURFACE</span>
+      <span>NO NETWORK DELIVERY · NO ACCOUNT SESSION · NO TELEMETRY</span>
+    </footer>
+  </body>
+</html>

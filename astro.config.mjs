@@ -29,6 +29,9 @@ export default defineConfig({
           label: 'Records Gateway',
           items: [
             { label: 'Dashboard', link: '/records/' },
+            { label: 'Report Register', link: '/records/reports/' },
+            { label: 'Filed Submissions', link: '/records/submissions/' },
+            { label: 'Staff Portal', link: '/portal/' },
             { label: 'Employee Access', link: '/employee-access/' },
             { label: 'Public Website', link: '/' },
           ],
@@ -54,6 +57,15 @@ export default defineConfig({
             },
           ],
     }),
-    sitemap(),
+    sitemap({
+      filter: (page) => {
+        const pathname = new URL(page).pathname;
+        return (
+          !pathname.startsWith('/portal/') &&
+          !pathname.startsWith('/records/reports/') &&
+          !pathname.startsWith('/records/submissions/')
+        );
+      },
+    }),
   ],
 });

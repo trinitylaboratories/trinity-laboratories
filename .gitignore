@@ -3,6 +3,7 @@
 
 # Project-local runtime and downloaded tooling.
 /.tools/
+/.authoring/
 
 # JavaScript dependencies and generated output.
 /node_modules/
@@ -10,9 +11,11 @@
 /.astro/
 /coverage/
 /playwright-report/
+/.playwright-cli/
 /test-results/
 /output/
 /.wrangler/
+
 
 # Local configuration and secrets.
 .env

@@ -1,0 +1,252 @@
+---
+import type {
+  ClassificationLevel,
+  Endorsement,
+  FacilityCondition,
+  PhysicalAccessLevel,
+  PublicationState,
+  SubmissionStatus,
+} from '../../lib/submission-schema';
+
+interface Props {
+  recordId: string;
+  formId: string;
+  status: SubmissionStatus;
+  revision: string;
+  effectiveDate: string;
+  controllingOffice: string;
+  publicationState: PublicationState;
+  information: {
+    level: ClassificationLevel;
+    program?: string;
+    compartment?: string;
+  };
+  physicalAccess?: {
+    level: PhysicalAccessLevel;
+    endorsements: Endorsement[];
+  };
+  facilityCondition?: FacilityCondition;
+  summary: string;
+  tags: string[];
+}
+
+const {
+  recordId,
+  formId,
+  status,
+  revision,
+  effectiveDate,
+  controllingOffice,
+  publicationState,
+  information,
+  physicalAccess,
+  facilityCondition,
+  summary,
+  tags,
+} = Astro.props;
+
+const dateLabel = new Intl.DateTimeFormat('en-US', {
+  year: 'numeric',
+  month: 'short',
+  day: '2-digit',
+  timeZone: 'UTC',
+}).format(new Date(`${effectiveDate}T00:00:00Z`));
+---
+
+<header class="record-header" aria-label="Record control information">
+  <div class="record-header__band">
+    <p class="record-header__id" data-pagefind-meta="record-id">{recordId}</p>
+    <p class="record-header__state" data-publication-state={publicationState}>
+      {publicationState} copy
+    </p>
+  </div>
+
+  <p class="record-header__summary" data-pagefind-meta="description">{summary}</p>
+
+  <dl class="record-header__controls">
+    <div>
+      <dt>Information</dt>
+      <dd data-pagefind-filter="classification">{information.level}</dd>
+      {
+        (information.program || information.compartment) && (
+          <small>
+            {[information.program, information.compartment].filter(Boolean).join(' / ')}
+          </small>
+        )
+      }
+    </div>
+    <div>
+      <dt>Physical authority</dt>
+      <dd>{physicalAccess?.level ?? 'Not specified'}</dd>
+      {
+        physicalAccess && physicalAccess.endorsements.length > 0 && (
+          <small>{physicalAccess.endorsements.join(' ')}</small>
+        )
+      }
+    </div>
+    <div>
+      <dt>Condition</dt>
+      <dd>{facilityCondition ?? 'Not assigned'}</dd>
+    </div>
+    <div>
+      <dt>Record status</dt>
+      <dd>{status}</dd>
+    </div>
+  </dl>
+
+  <dl class="record-header__administration">
+    <div>
+      <dt>Source form</dt><dd><a href={`/records/forms/${formId.toLowerCase()}/`}>{formId}</a></dd>
+    </div>
+    <div><dt>Revision</dt><dd>{revision}</dd></div>
+    <div><dt>Effective</dt><dd><time datetime={effectiveDate}>{dateLabel}</time></dd></div>
+    <div><dt>Control office</dt><dd>{controllingOffice}</dd></div>
+  </dl>
+
+  <ul class="record-header__tags" aria-label="Catalog tags">
+    {tags.map((tag) => <li data-pagefind-filter="tag">{tag}</li>)}
+  </ul>
+</header>
+
+<style>
+  .record-header {
+    margin-bottom: 2.5rem;
+    border-bottom: 1px solid #aeb2b4;
+    padding-bottom: 1.5rem;
+  }
+
+  .record-header__band {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    border-block: 1px solid #8f969d;
+    padding: 0.55rem 0;
+    font-family: var(--sl-font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .record-header__id,
+  .record-header__state,
+  .record-header__summary {
+    margin: 0;
+  }
+
+  .record-header__id {
+    color: #073f87;
+    font-weight: 700;
+  }
+
+  .record-header__state {
+    color: #4b5661;
+  }
+
+  .record-header__state[data-publication-state='controlled'],
+  .record-header__state[data-publication-state='withheld'] {
+    color: #7a280f;
+  }
+
+  .record-header__summary {
+    max-width: 52rem;
+    padding: 1.25rem 0;
+    color: #29323b;
+    font-size: 1.05rem;
+  }
+
+  .record-header__controls,
+  .record-header__administration {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin: 0;
+  }
+
+  .record-header__controls {
+    border: 1px solid #aeb2b4;
+    border-right: 0;
+  }
+
+  .record-header__controls > div {
+    min-width: 0;
+    border-right: 1px solid #aeb2b4;
+    padding: 0.75rem;
+  }
+
+  .record-header__administration {
+    gap: 1rem;
+    padding: 1rem 0 0;
+  }
+
+  .record-header dt {
+    color: #59636d;
+    font-family: var(--sl-font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+  }
+
+  .record-header dd {
+    margin: 0.2rem 0 0;
+    color: #151b22;
+    font-weight: 650;
+    overflow-wrap: anywhere;
+  }
+
+  .record-header small {
+    display: block;
+    margin-top: 0.2rem;
+    color: #555f69;
+    font-family: var(--sl-font-mono);
+    font-size: 0.66rem;
+  }
+
+  .record-header__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 0.8rem;
+    margin: 1rem 0 0;
+    padding: 0;
+    color: #505b65;
+    font: 400 0.7rem/1.3 var(--sl-font-mono);
+    list-style: none;
+  }
+
+  .record-header__tags li::before {
+    content: '#';
+    color: #0759c7;
+  }
+
+  @media (max-width: 46rem) {
+    .record-header__controls,
+    .record-header__administration {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .record-header__controls > div:nth-child(-n + 2) {
+      border-bottom: 1px solid #aeb2b4;
+    }
+  }
+
+  @media (max-width: 28rem) {
+    .record-header__controls,
+    .record-header__administration {
+      grid-template-columns: 1fr;
+    }
+
+    .record-header__controls > div {
+      border-bottom: 1px solid #aeb2b4;
+    }
+
+    .record-header__controls > div:last-child {
+      border-bottom: 0;
+    }
+  }
+
+  @media print {
+    .record-header__state[data-publication-state='controlled'],
+    .record-header__state[data-publication-state='withheld'] {
+      color: #000;
+    }
+  }
+</style>

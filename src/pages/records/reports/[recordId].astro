@@ -1,0 +1,37 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+import SubmissionRecord from '../../../components/records/SubmissionRecord.astro';
+import type { SubmissionRecordData } from '../../../lib/submission-schema';
+
+interface Props {
+  submission: SubmissionRecordData;
+}
+
+export async function getStaticPaths() {
+  const submissions = await getCollection('submissions');
+  return submissions.map((submission: CollectionEntry<'submissions'>) => ({
+    params: { recordId: submission.data.recordId.toLowerCase() },
+    props: { submission: submission.data as SubmissionRecordData },
+  }));
+}
+
+const { submission } = Astro.props;
+---
+
+<StarlightPage
+  frontmatter={{
+    title: `${submission.recordId} — ${submission.title}`,
+    description: submission.summary,
+    pagefind: true,
+    head: [
+      {
+        tag: 'meta',
+        attrs: { name: 'robots', content: 'noindex, nofollow' },
+      },
+    ],
+  }}
+>
+  <SubmissionRecord submission={submission} />
+</StarlightPage>

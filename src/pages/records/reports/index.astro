@@ -1,0 +1,62 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import { getCollection } from 'astro:content';
+
+import SubmissionIndex from '../../../components/records/SubmissionIndex.astro';
+
+const submissions = await getCollection('submissions');
+---
+
+<StarlightPage
+  frontmatter={{
+    title: 'Controlled Reports Register',
+    description:
+      'Catalog of completed reports released to, controlled within, or withheld from the TIRN publication system.',
+    pagefind: true,
+    head: [
+      {
+        tag: 'meta',
+        attrs: { name: 'robots', content: 'noindex, nofollow' },
+      },
+    ],
+  }}
+>
+  <p>
+    This register lists completed report artifacts separately from blank form templates. Catalog
+    metadata remains visible when a report body requires an elevated authorization.
+  </p>
+
+  <aside class="register-notice" aria-label="Access model">
+    <strong>Catalog access is not report access.</strong>
+    Information eligibility, need-to-know, physical authority, and endorsements are evaluated as independent
+    controls.
+  </aside>
+
+  <SubmissionIndex submissions={submissions} />
+
+  <p class="register-footnote">
+    New public records are prepared in the loopback-only Filing Workstation, validated locally, and
+    published through the repository review process.
+  </p>
+</StarlightPage>
+
+<style>
+  .register-notice {
+    margin: 1.5rem 0 2rem;
+    border-block: 1px solid #aeb2b4;
+    padding: 1rem 0;
+    color: #3b4651;
+  }
+
+  .register-notice strong {
+    display: block;
+    margin-bottom: 0.2rem;
+    color: #151b22;
+  }
+
+  .register-footnote {
+    margin-top: 1.5rem;
+    color: #59636d;
+    font-size: 0.82rem;
+  }
+</style>

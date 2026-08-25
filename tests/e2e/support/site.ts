@@ -20,7 +20,7 @@ export const FORM_IDS = [
   'tl-x595',
 ] as const;
 
-export const SITE_ROUTES = [
+export const INDEXABLE_ROUTES = [
   '/',
   '/about/',
   '/research/',
@@ -37,6 +37,18 @@ export const SITE_ROUTES = [
   '/records/forms/',
   ...FORM_IDS.map((id) => `/records/forms/${id}/`),
 ] as const;
+
+export const CONTROLLED_ROUTES = [
+  '/portal/',
+  '/portal/authorizations/',
+  '/portal/forms/',
+  '/portal/help/',
+  '/records/reports/',
+  '/records/reports/tl-340-trn-001/',
+  '/records/submissions/',
+] as const;
+
+export const SITE_ROUTES = [...INDEXABLE_ROUTES, ...CONTROLLED_ROUTES] as const;
 
 export function canonicalUrl(route: string): string {
   return new URL(route, PRODUCTION_ORIGIN).href;

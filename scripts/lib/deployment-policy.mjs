@@ -13,6 +13,12 @@ const BASE_HEADERS = Object.freeze([
   ['X-Frame-Options', 'DENY'],
 ]);
 
+const ALWAYS_NOINDEX_PATHS = Object.freeze([
+  '/portal/*',
+  '/records/reports/*',
+  '/records/submissions/*',
+]);
+
 export function extractInlineScriptHashes(html) {
   const hashes = new Set();
   for (const match of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script\s*>/gi)) {
@@ -81,6 +87,18 @@ export function buildHeaders(environment, { scriptHashes = [] } = {}) {
     'https://:deployment.:account.workers.dev/*',
     '  X-Robots-Tag: noindex, nofollow, noarchive',
     '',
+  );
+
+  for (const pattern of ALWAYS_NOINDEX_PATHS) {
+    lines.push(
+      `# Staff and controlled-record presentation stays out of public search indexes.`,
+      pattern,
+      '  X-Robots-Tag: noindex, nofollow, noarchive',
+      '',
+    );
+  }
+
+  lines.push(
     '/_astro/*',
     '  Cache-Control: public, max-age=31536000, immutable',
     '',

@@ -11,18 +11,42 @@
 </div>
 
 <script>
+  import {
+    formatGrantRemaining,
+    parseElevatedGrant,
+    TIRN_ACCESS_CHANGE_EVENT,
+    TIRN_GRANT_STORAGE_KEY,
+    TIRN_SESSION_STORAGE_KEY,
+  } from '../../lib/tirn-access';
+
   const state = document.querySelector<HTMLElement>('[data-session-state]');
   const terminate = document.querySelector<HTMLButtonElement>('[data-session-terminate]');
 
   const updateSession = () => {
     let accepted: boolean;
+    let storedGrant: string | null;
     try {
-      accepted = sessionStorage.getItem('tirn-session') === 'accepted';
+      accepted = sessionStorage.getItem(TIRN_SESSION_STORAGE_KEY) === 'accepted';
+      storedGrant = sessionStorage.getItem(TIRN_GRANT_STORAGE_KEY);
     } catch {
       accepted = false;
+      storedGrant = null;
+    }
+    const now = Date.now();
+    const grant = accepted ? parseElevatedGrant(storedGrant, now) : null;
+    if (storedGrant && !grant) {
+      try {
+        sessionStorage.removeItem(TIRN_GRANT_STORAGE_KEY);
+      } catch {
+        // Invalid or expired cosmetic grant state can be ignored when storage is unavailable.
+      }
     }
     if (state) {
-      state.textContent = accepted ? 'Session Accepted' : 'Guest / Unverified';
+      state.textContent = grant
+        ? `Session Accepted / ${grant.level} · ${formatGrantRemaining(grant.expiresAt, now)}`
+        : accepted
+          ? 'Session Accepted / TL-2'
+          : 'Guest / Unverified';
       state.dataset.accepted = String(accepted);
     }
   };
@@ -30,10 +54,14 @@
   updateSession();
   terminate?.addEventListener('click', () => {
     try {
-      sessionStorage.removeItem('tirn-session');
+      sessionStorage.removeItem(TIRN_GRANT_STORAGE_KEY);
+      sessionStorage.removeItem(TIRN_SESSION_STORAGE_KEY);
     } catch {
       // The indicator is optional and does not gate record access.
     }
     updateSession();
+    window.dispatchEvent(new CustomEvent(TIRN_ACCESS_CHANGE_EVENT));
   });
+  window.addEventListener(TIRN_ACCESS_CHANGE_EVENT, updateSession);
+  window.setInterval(updateSession, 1000);
 </script>

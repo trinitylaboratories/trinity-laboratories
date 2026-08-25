@@ -58,7 +58,7 @@ covered by that file's path-based grant. By contributing code, you agree to lice
 MIT. By contributing eligible original creative content, you agree to license it under CC BY-NC-SA
 4.0. No contribution grants rights to Trinity trademarks.
 
-## Employee-gateway safety
+## Employee-gateway and authorization safety
 
 The gateway is a local theatrical transition only. Changes must preserve all of these invariants:
 
@@ -67,11 +67,24 @@ The gateway is a local theatrical transition only. Changes must preserve all of 
 - no submitted value leaves the browser;
 - no submitted value is logged, hashed, analyzed, placed in a URL, retained in storage, or rendered
   after submission;
-- only a generic session flag may be stored;
-- transient local validation and one-time-code comparison may occur only in browser memory; and
+- only allowlisted generic session and expiring grant state may be stored;
+- badge identifiers, entered codes, authorization credentials, purposes, and document responses may
+  never be retained;
+- transient local validation and credential comparison may occur only in browser memory; and
 - direct `/records/` links continue to work.
 
 Do not add analytics, session replay, third-party scripts, or real authentication to that route.
+
+Browser-only authorization is bypassable presentation. Content marked for an authorization reveal
+must be safe for the public repository. A withheld response must contain no plaintext value in Git,
+the generated site, public assets, or Pagefind output.
+
+## Filing completed records
+
+Use the loopback-only Filing Workstation described in `docs/record-desk.md`. Keep drafts and
+owner-only credentials under ignored `.authoring/` paths. Review the deterministic public JSON diff
+before committing, and never bypass form-definition, submission, canon, rights, or public-safety
+validation. The workstation must not commit, push, merge, or deploy on a contributor's behalf.
 
 ## Pull requests
 

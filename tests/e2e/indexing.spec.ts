@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { canonicalUrl, SITE_ROUTES, visit } from './support/site';
+import { canonicalUrl, CONTROLLED_ROUTES, SITE_ROUTES, visit } from './support/site';
 
 const deploymentEnvironment =
   process.env.SITE_DEPLOYMENT_ENV === 'preview' ? 'preview' : 'production';
@@ -24,6 +24,11 @@ test.describe(`indexing contract (${deploymentEnvironment})`, () => {
         if (!['127.0.0.1', 'localhost'].includes(new URL(page.url()).hostname)) {
           expect(robotsHeader.toLowerCase()).toContain('noindex');
         }
+      } else if (CONTROLLED_ROUTES.includes(route as (typeof CONTROLLED_ROUTES)[number])) {
+        expect(metaRobots.toLowerCase()).toContain('noindex');
+        if (!['127.0.0.1', 'localhost'].includes(new URL(page.url()).hostname)) {
+          expect(robotsHeader.toLowerCase()).toContain('noindex');
+        }
       } else {
         expect(metaRobots.toLowerCase()).not.toContain('noindex');
         expect(robotsHeader.toLowerCase()).not.toContain('noindex');
@@ -44,6 +49,17 @@ test.describe(`indexing contract (${deploymentEnvironment})`, () => {
       expect(robotsText).toContain('Allow: /');
       expect(robotsText).toContain('Sitemap: https://trinitylaboratories.org/sitemap-index.xml');
       expect(sitemap.status()).toBe(200);
+      const sitemapIndex = await sitemap.text();
+      const childPaths = [...sitemapIndex.matchAll(/<loc>([^<]+)<\/loc>/g)].map(
+        ([, location]) => new URL(location).pathname,
+      );
+      const childDocuments = await Promise.all(
+        childPaths.map(async (path) => (await request.get(path)).text()),
+      );
+      const publishedLocations = childDocuments.join('\n');
+      for (const route of CONTROLLED_ROUTES) {
+        expect(publishedLocations).not.toContain(canonicalUrl(route));
+      }
     }
   });
 });

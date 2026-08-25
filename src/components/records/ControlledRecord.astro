@@ -1,0 +1,345 @@
+---
+import AuthorizationDialog from './AuthorizationDialog.astro';
+import type { DisclosureMode, TirnLevel } from '../../lib/tirn-access';
+
+interface Props {
+  id: string;
+  recordId: string;
+  title: string;
+  mode?: DisclosureMode;
+  requiredLevel?: TirnLevel;
+  program?: string;
+  compartment?: string;
+  summary?: string;
+}
+
+const {
+  id,
+  recordId,
+  title,
+  mode = 'authorize',
+  requiredLevel = 'TL-3',
+  program,
+  compartment,
+  summary = 'The record body is controlled and is not displayed in the current view.',
+} = Astro.props;
+const headingId = `${id}-heading`;
+---
+
+<article
+  class="tirn-record-gate"
+  data-controlled-record={recordId}
+  data-controlled-root
+  data-mode={mode}
+  data-required-level={requiredLevel}
+  data-program={program}
+  data-compartment={compartment}
+  aria-labelledby={headingId}
+>
+  <header class="tirn-record-gate__header">
+    <div>
+      <p>{recordId} · {mode === 'open' ? 'Released' : requiredLevel}</p>
+      <h2 id={headingId} tabindex="-1" data-controlled-heading>{title}</h2>
+    </div>
+    <span>{mode === 'withheld' ? 'Withheld' : mode === 'authorize' ? 'Controlled' : 'Open'}</span>
+  </header>
+
+  {
+    mode === 'open' && (
+      <div class="tirn-record-gate__content" data-controlled-content>
+        <slot />
+      </div>
+    )
+  }
+
+  {
+    mode === 'authorize' && (
+      <>
+        <div class="tirn-record-gate__lock" data-controlled-locked data-pagefind-ignore>
+          <p class="tirn-record-gate__stamp">RESTRICTED CONTENT OMITTED FROM CURRENT VIEW</p>
+          <p>{summary}</p>
+          <dl>
+            <div>
+              <>
+                <dt>Information eligibility</dt>
+                <dd>{requiredLevel}</dd>
+              </>
+            </div>
+            <div>
+              <>
+                <dt>Program</dt>
+                <dd>{program ?? 'Not specified'}</dd>
+              </>
+            </div>
+            <div>
+              <>
+                <dt>Compartment</dt>
+                <dd>{compartment ?? 'Not specified'}</dd>
+              </>
+            </div>
+            <div>
+              <>
+                <dt>Permission</dt>
+                <dd>Affirmed need-to-know</dd>
+              </>
+            </div>
+          </dl>
+          <div class="tirn-record-gate__bars" aria-hidden="true">
+            <>
+              <span />
+              <span />
+              <span />
+              <span />
+            </>
+          </div>
+          <AuthorizationDialog
+            id={id}
+            requiredLevel={requiredLevel}
+            program={program}
+            compartment={compartment}
+            triggerLabel="Authorize record"
+          />
+        </div>
+        <div class="tirn-record-gate__content" data-controlled-content data-pagefind-ignore hidden>
+          <p class="tirn-record-gate__released-note">Temporary authorization active.</p>
+          <slot />
+        </div>
+      </>
+    )
+  }
+
+  {
+    mode === 'withheld' && (
+      <div class="tirn-record-gate__lock" data-controlled-withheld data-pagefind-ignore>
+        <p class="tirn-record-gate__stamp">RECORD BODY WITHHELD FROM THIS PUBLICATION</p>
+        <p>{summary}</p>
+        <dl>
+          <div>
+            <>
+              <dt>Information eligibility</dt>
+              <dd>{requiredLevel}</dd>
+            </>
+          </div>
+          <div>
+            <>
+              <dt>Program</dt>
+              <dd>{program ?? 'Separately controlled'}</dd>
+            </>
+          </div>
+          <div>
+            <>
+              <dt>Compartment</dt>
+              <dd>{compartment ?? 'Separately controlled'}</dd>
+            </>
+          </div>
+          <div>
+            <>
+              <dt>Source status</dt>
+              <dd>Not present in the published site</dd>
+            </>
+          </div>
+        </dl>
+      </div>
+    )
+  }
+</article>
+
+<script>
+  import {
+    accessAllows,
+    resolveTirnAccess,
+    TIRN_ACCESS_CHANGE_EVENT,
+    TIRN_GRANT_STORAGE_KEY,
+    TIRN_SESSION_STORAGE_KEY,
+    type TirnLevel,
+  } from '../../lib/tirn-access';
+
+  const readStoredValue = (key: string) => {
+    try {
+      return sessionStorage.getItem(key);
+    } catch {
+      return null;
+    }
+  };
+
+  const refreshControlledRecord = (root: HTMLElement, moveFocus = false) => {
+    if (root.dataset.mode !== 'authorize') return;
+    const state = resolveTirnAccess(
+      readStoredValue(TIRN_SESSION_STORAGE_KEY),
+      readStoredValue(TIRN_GRANT_STORAGE_KEY),
+      Date.now(),
+    );
+    const requiredLevel = (root.dataset.requiredLevel || 'TL-3') as TirnLevel;
+    const hasAdditionalControl = Boolean(root.dataset.program || root.dataset.compartment);
+    const authorized = !hasAdditionalControl && accessAllows(state, requiredLevel);
+    const wasAuthorized = root.dataset.accessState === 'authorized';
+    const locked = root.querySelector<HTMLElement>('[data-controlled-locked]');
+    const content = root.querySelector<HTMLElement>('[data-controlled-content]');
+
+    root.dataset.accessState = authorized ? 'authorized' : 'locked';
+    if (locked) locked.hidden = authorized;
+    if (content) content.hidden = !authorized;
+    if (moveFocus && authorized && !wasAuthorized) {
+      root.querySelector<HTMLElement>('[data-controlled-heading]')?.focus();
+    }
+  };
+
+  document.querySelectorAll<HTMLElement>('[data-controlled-record]').forEach((root) => {
+    refreshControlledRecord(root);
+  });
+  window.addEventListener(TIRN_ACCESS_CHANGE_EVENT, () => {
+    document.querySelectorAll<HTMLElement>('[data-controlled-record]').forEach((root) => {
+      refreshControlledRecord(root, true);
+    });
+  });
+  window.setInterval(() => {
+    document.querySelectorAll<HTMLElement>('[data-controlled-record]').forEach((root) => {
+      refreshControlledRecord(root);
+    });
+  }, 1000);
+</script>
+
+<style>
+  .tirn-record-gate {
+    margin-block: 1.75rem;
+    border: 1px solid #75818d;
+    background: #fff;
+    color: #17212b;
+  }
+
+  .tirn-record-gate__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 0.9rem 1rem;
+    border-bottom: 2px solid #273b50;
+    background: #e8ecef;
+  }
+
+  .tirn-record-gate__header p,
+  .tirn-record-gate__header h2 {
+    margin: 0;
+  }
+
+  .tirn-record-gate__header p,
+  .tirn-record-gate__header > span {
+    color: #4b5966;
+    font: 600 0.6rem/1.2 var(--font-mono, monospace);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .tirn-record-gate__header h2 {
+    margin-top: 0.2rem;
+    color: #17283b;
+    font-size: 1.08rem;
+    font-weight: 650;
+  }
+
+  .tirn-record-gate__lock,
+  .tirn-record-gate__content {
+    padding: clamp(1rem, 3vw, 1.75rem);
+  }
+
+  .tirn-record-gate__lock[hidden],
+  .tirn-record-gate__content[hidden] {
+    display: none;
+  }
+
+  .tirn-record-gate__stamp {
+    margin: 0 0 0.55rem;
+    color: #6b1f24;
+    font: 700 0.68rem/1.3 var(--font-mono, monospace);
+    letter-spacing: 0.08em;
+  }
+
+  .tirn-record-gate__lock > p:not(.tirn-record-gate__stamp) {
+    max-width: 64ch;
+    margin: 0 0 1rem;
+    font-size: 0.82rem;
+  }
+
+  .tirn-record-gate dl {
+    margin: 0 0 1.2rem;
+    border-top: 1px solid #8f99a3;
+  }
+
+  .tirn-record-gate dl div {
+    display: grid;
+    grid-template-columns: minmax(10rem, 0.8fr) minmax(0, 1.2fr);
+    gap: 1rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #d0d5da;
+  }
+
+  .tirn-record-gate dt,
+  .tirn-record-gate dd {
+    margin: 0;
+    font-size: 0.72rem;
+  }
+
+  .tirn-record-gate dt {
+    color: #52606d;
+    font-family: var(--font-mono, monospace);
+    text-transform: uppercase;
+  }
+
+  .tirn-record-gate dd {
+    font-weight: 600;
+  }
+
+  .tirn-record-gate__bars {
+    display: grid;
+    gap: 0.55rem;
+    margin: 1.2rem 0;
+  }
+
+  .tirn-record-gate__bars span {
+    display: block;
+    width: min(100%, 38rem);
+    height: 0.72rem;
+    background: #1b252e;
+  }
+
+  .tirn-record-gate__bars span:nth-child(2) {
+    width: min(82%, 31rem);
+  }
+
+  .tirn-record-gate__bars span:nth-child(3) {
+    width: min(94%, 35rem);
+  }
+
+  .tirn-record-gate__bars span:nth-child(4) {
+    width: min(65%, 25rem);
+  }
+
+  .tirn-record-gate__released-note {
+    margin: 0 0 1rem;
+    border-left: 3px solid #246443;
+    padding: 0.55rem 0.7rem;
+    background: #e8f2ec;
+    color: #1f563b;
+    font: 600 0.62rem/1.3 var(--font-mono, monospace);
+    letter-spacing: 0.045em;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 35rem) {
+    .tirn-record-gate__header {
+      align-items: flex-start;
+    }
+
+    .tirn-record-gate dl div {
+      grid-template-columns: 1fr;
+      gap: 0.2rem;
+    }
+  }
+
+  @media print {
+    .tirn-record-gate__lock,
+    .tirn-record-gate__released-note {
+      display: none !important;
+    }
+  }
+</style>

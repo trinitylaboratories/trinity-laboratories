@@ -29,9 +29,16 @@ scope further.
 - Do not silently reconcile contradictory sources or present proposed lore as established canon.
 - This is a static fictional experience. Do not add real authentication, a credential API, a
   database, or server-side session handling unless the owner explicitly changes the architecture.
-- The employee gateway may transiently validate fields and compare the one-time access code in local
-  browser memory. It must never transmit, persist, log, hash, or reflect raw entered values. It may
-  store only a harmless generic accepted-session flag.
+- The employee gateway and authorization console may transiently validate fictional credentials in
+  local browser memory. They must never transmit, persist, log, or reflect raw entered values.
+  `sessionStorage` may contain only allowlisted generic state such as an accepted-session flag,
+  information-level and endorsement enums, grant scope, and expiry time. It must never contain a
+  badge identifier, entered credential, justification, document response, or reusable secret.
+- Browser-side authorization is presentation, not a security boundary. Content marked as safe for a
+  theatrical reveal may be discoverable in public source. Truly withheld content must not enter the
+  repository, generated site, Pagefind output, or client-accessible assets.
+- Local authoring services must bind only to `127.0.0.1`, keep drafts under ignored local paths, and
+  leave all commits, pushes, merges, and deployments to the normal reviewed Git workflow.
 
 ## Quality bar
 
