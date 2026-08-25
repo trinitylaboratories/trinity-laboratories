@@ -151,6 +151,12 @@ describe('asset policy', () => {
     expect(validatePngPrivacy(metadata, 'unsafe.png')).toEqual([
       expect.stringMatching(/metadata chunk iTXt/),
     ]);
+    const provenance = pngFixture(
+      pngChunk('caBX', new TextEncoder().encode('C2PA provenance metadata')),
+    );
+    expect(validatePngPrivacy(provenance, 'provenance.png')).toEqual([
+      expect.stringMatching(/metadata chunk caBX/),
+    ]);
     expect(validatePngPrivacy(metadata.subarray(0, metadata.length - 2), 'truncated.png')).toEqual(
       expect.arrayContaining([expect.stringMatching(/truncated PNG chunk/)]),
     );

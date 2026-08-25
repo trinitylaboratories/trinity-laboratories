@@ -20,13 +20,15 @@ const capabilities = [
 >
   <section class="home-hero">
     <div class="home-hero__grid" aria-hidden="true"></div>
-    <div class="home-hero__media" data-hero-media>
-      <MediaFrame
-        aspect="square"
-        alt="Reserved hero photography field with Trinity identity geometry"
-        label="Hero photography pending"
+    <div class="home-hero__media" data-hero-media aria-hidden="true">
+      <img
+        src="/media/brand/trinity-icon.png"
+        width="1422"
+        height="1106"
+        alt=""
         loading="eager"
         fetchpriority="high"
+        decoding="async"
       />
     </div>
     <div class="home-hero__copy">
@@ -215,12 +217,14 @@ const capabilities = [
     top: 7%;
     right: calc(-1.5 * var(--page-gutter));
     width: min(39vw, 42rem);
-    opacity: 0.9;
+    opacity: 0.94;
     filter: drop-shadow(0 1.7rem 2.5rem rgba(8, 43, 96, 0.2));
   }
 
-  .home-hero__media :global(.media-frame__field) {
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+  .home-hero__media img {
+    display: block;
+    width: 100%;
+    height: auto;
   }
 
   .capability-list {
