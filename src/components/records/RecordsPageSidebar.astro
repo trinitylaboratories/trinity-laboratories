@@ -1,0 +1,139 @@
+---
+import MobileTableOfContents from '@astrojs/starlight/components/MobileTableOfContents.astro';
+import TableOfContents from '@astrojs/starlight/components/TableOfContents.astro';
+
+import type { TirnLevel } from '../../lib/tirn-access';
+
+type RecordsSidebarData = {
+  recordType?: string;
+  information?: {
+    level?: TirnLevel;
+    program?: string;
+    compartment?: string;
+  };
+};
+
+const data = Astro.locals.starlightRoute.entry.data as RecordsSidebarData;
+const isForm = data.recordType === 'form-template';
+const requiredLevel: TirnLevel = isForm ? (data.information?.level ?? 'TL-2') : 'TL-2';
+const standardRank = Number(requiredLevel.replace('TL-', ''));
+const separatelyControlled =
+  Boolean(data.information?.program || data.information?.compartment) ||
+  requiredLevel === 'TL/Ø' ||
+  !Number.isFinite(standardRank) ||
+  standardRank >= 5;
+const { toc } = Astro.locals.starlightRoute;
+---
+
+{
+  toc && (
+    <div
+      data-records-toc-boundary
+      data-required-level={requiredLevel}
+      data-separately-controlled={String(separatelyControlled)}
+      hidden
+    >
+      <div class="lg:sl-hidden">
+        <MobileTableOfContents />
+      </div>
+      <div class="right-sidebar-panel sl-hidden lg:sl-block">
+        <div class="sl-container">
+          <TableOfContents />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+<script>
+  import {
+    accessAllows,
+    resolveTirnAccess,
+    TIRN_ACCESS_CHANGE_EVENT,
+    TIRN_GRANT_STORAGE_KEY,
+    TIRN_SESSION_STORAGE_KEY,
+    type TirnLevel,
+  } from '../../lib/tirn-access';
+
+  const readTocAccessValue = (key: string) => {
+    try {
+      return sessionStorage.getItem(key);
+    } catch {
+      return null;
+    }
+  };
+
+  const refreshRecordsToc = () => {
+    const state = resolveTirnAccess(
+      readTocAccessValue(TIRN_SESSION_STORAGE_KEY),
+      readTocAccessValue(TIRN_GRANT_STORAGE_KEY),
+      Date.now(),
+    );
+    let authorized = false;
+
+    document.querySelectorAll<HTMLElement>('[data-records-toc-boundary]').forEach((root) => {
+      const requiredLevel = (root.dataset.requiredLevel || 'TL-2') as TirnLevel;
+      const rootAuthorized =
+        root.dataset.separatelyControlled !== 'true' && accessAllows(state, requiredLevel);
+      root.hidden = !rootAuthorized;
+      authorized ||= rootAuthorized;
+    });
+
+    document.documentElement.dataset.recordsTocAccess = authorized ? 'authorized' : 'locked';
+    document.documentElement.toggleAttribute('data-has-toc', authorized);
+  };
+
+  refreshRecordsToc();
+  window.addEventListener(TIRN_ACCESS_CHANGE_EVENT, refreshRecordsToc);
+  window.setInterval(refreshRecordsToc, 1000);
+</script>
+
+<style>
+  @layer starlight.core {
+    [data-records-toc-boundary][hidden] {
+      display: none !important;
+    }
+
+    .right-sidebar-panel {
+      padding: 1rem var(--sl-sidebar-pad-x);
+    }
+
+    .sl-container {
+      width: calc(var(--sl-sidebar-width) - 2 * var(--sl-sidebar-pad-x));
+    }
+
+    .right-sidebar-panel :global(h2) {
+      margin-bottom: 0.5rem;
+      color: var(--sl-color-white);
+      font-size: var(--sl-text-h5);
+      font-weight: 600;
+      line-height: var(--sl-line-height-headings);
+    }
+
+    .right-sidebar-panel :global(:where(a)) {
+      display: block;
+      overflow-wrap: anywhere;
+      color: var(--sl-color-gray-3);
+      font-size: var(--sl-text-xs);
+      text-decoration: none;
+    }
+
+    .right-sidebar-panel :global(:where(a):hover) {
+      color: var(--sl-color-white);
+    }
+
+    @media (min-width: 72rem) {
+      .sl-container {
+        max-width: calc(
+          (
+            (
+                100vw - var(--sl-sidebar-width) - 2 * var(--sl-content-pad-x) - 2 *
+                  var(--sl-sidebar-pad-x)
+              ) *
+              0.25
+          )
+        );
+      }
+    }
+  }
+</style>

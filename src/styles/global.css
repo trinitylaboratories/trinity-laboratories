@@ -689,9 +689,8 @@ html[data-js-enabled] [data-reveal][data-visible] {
   }
 
   .page-hero__index {
-    position: absolute;
-    top: 8.5rem;
-    left: var(--page-gutter);
+    position: static;
+    margin-bottom: 0.75rem;
   }
 
   .editorial-grid,

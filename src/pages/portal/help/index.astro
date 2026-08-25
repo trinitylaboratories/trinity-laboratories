@@ -34,15 +34,16 @@ import PortalLayout from '../../../layouts/PortalLayout.astro';
 
       <section class="portal-section" aria-labelledby="elevation-help-heading">
         <p class="portal-section__label">Controlled information</p>
-        <h2 id="elevation-help-heading">Request temporary TL-3 access</h2>
+        <h2 id="elevation-help-heading">Request temporary TL-3 or TL-4 access</h2>
         <ol>
-          <li>Open a controlled section or record and select <strong>Authorize</strong>.</li>
-          <li>Select the working purpose and affirm need-to-know.</li>
-          <li>Enter the separately issued authorization credential.</li>
+          <li>Open a controlled section or record and select <strong>Request access</strong>.</li>
+          <li>Select the working purpose and enter the assigned authorization reference.</li>
+          <li>For TL-4, also enter the independent control-office reference.</li>
+          <li>Affirm need-to-know and evaluate the request.</li>
           <li>Relinquish the grant when review is complete.</li>
         </ol>
         <p class="portal-callout portal-callout--warning">
-          A TL-3 training grant does not satisfy TL-4+, named program, compartment, endorsement, or
+          Temporary browser grants do not satisfy TL-5+, named program, compartment, endorsement, or
           physical-access requirements.
         </p>
       </section>
@@ -67,19 +68,19 @@ import PortalLayout from '../../../layouts/PortalLayout.astro';
             <thead><tr><th>Message</th><th>Meaning</th><th>Action</th></tr></thead>
             <tbody>
               <tr>
-                <td>Guest / released access</td>
+                <td>Guest / no staff session</td>
                 <td>No base staff session is present.</td>
                 <td>Return to Employee Access.</td>
               </tr>
               <tr>
-                <td>Authorization not recognized</td>
-                <td>The credential did not match the local verifier.</td>
-                <td>Clear the field and use the issued credential.</td>
+                <td>Enter an authorization reference</td>
+                <td>The reference is missing or does not match the requested level.</td>
+                <td>Check the assigned request reference and retain the completed fields.</td>
               </tr>
               <tr>
                 <td>Separate grant required</td>
                 <td
-                  >The record requires a level or control not represented by the training grant.</td
+                  >The record requires a level, program, or compartment unavailable at this node.</td
                 >
                 <td>Use the released metadata only.</td>
               </tr>
@@ -102,7 +103,7 @@ import PortalLayout from '../../../layouts/PortalLayout.astro';
         <dl class="portal-summary">
           <div><dt>Staff session</dt><dd>Generic accepted state</dd></div>
           <div><dt>Elevated grant</dt><dd>Level, scope, expiry</dd></div>
-          <div><dt>Credential</dt><dd>Not retained</dd></div>
+          <div><dt>Request references</dt><dd>Not retained</dd></div>
           <div><dt>Purpose</dt><dd>Not retained</dd></div>
           <div><dt>Network submission</dt><dd>None</dd></div>
         </dl>

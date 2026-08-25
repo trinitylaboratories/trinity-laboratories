@@ -110,6 +110,27 @@ export async function validateContent({
       errors.push(`${fileName}: record metadata requires information.level`);
     }
 
+    const informationLevel = data.information?.level;
+    const informationRank =
+      typeof informationLevel === 'string' && /^TL-[0-7]$/.test(informationLevel)
+        ? Number(informationLevel.slice(3))
+        : Number.NaN;
+    if (
+      data.recordType === 'form-template' &&
+      Number.isFinite(informationRank) &&
+      informationRank >= 3 &&
+      data.pagefind !== false
+    ) {
+      errors.push(`${fileName}: TL-3+ form templates must set pagefind: false`);
+    }
+    if (
+      data.publicationState === 'released' &&
+      Number.isFinite(informationRank) &&
+      informationRank >= 3
+    ) {
+      errors.push(`${fileName}: TL-3+ records may not declare publicationState: released`);
+    }
+
     if (!Array.isArray(data.tags) || data.tags.length === 0) {
       errors.push(`${fileName}: record metadata requires at least one tag`);
     } else if (data.tags.some((tag) => typeof tag !== 'string' || tag.trim() === '')) {

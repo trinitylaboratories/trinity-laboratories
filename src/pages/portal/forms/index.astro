@@ -1,25 +1,54 @@
 ---
+import { getCollection, type CollectionEntry } from 'astro:content';
+
 import PortalPageHeading from '../../../components/portal/PortalPageHeading.astro';
 import SessionSummary from '../../../components/portal/SessionSummary.astro';
+import AuthorizationDialog from '../../../components/records/AuthorizationDialog.astro';
+import type { TirnLevel } from '../../../lib/tirn-access';
 import PortalLayout from '../../../layouts/PortalLayout.astro';
 
-const forms = [
-  ['TL-101', 'Routine Research & Technical Activity Record', 'Research'],
-  ['TL-220', 'Controlled Experimental Study Record', 'Research'],
-  ['TL-340', 'Restricted Phenomena Assessment Record', 'Research'],
-  ['TL-470', 'Special Access Anomalous Research Protocol', 'Research'],
-  ['TL-590', 'Directorate Exception & Nonstandard Reality Event Record', 'Research'],
-  ['TL-P110', 'Personnel Research Assignment Record', 'Personnel'],
-  ['TL-P365', 'Restricted Personnel Exposure & Fitness Record', 'Personnel'],
-  ['TL-O205', 'Temporary Operational Order', 'Operations'],
-  ['TL-N310', 'Emergency Condition Notice', 'Notices'],
-  ['TL-N480', 'Anomalous Emergency Action Notice', 'Notices'],
-  ['TL-SOP-720', 'Remote Field Expedition', 'Procedure'],
-  ['TL-SOP-760', 'Controlled High-Risk Experiment', 'Procedure'],
-  ['TL-SOP-890', 'Anomalous Site Expedition & Recovery', 'Procedure'],
-  ['TL-X510', 'Executive Directive', 'Executive'],
-  ['TL-X595', 'Directorate Executive Order', 'Executive'],
-] as const;
+interface PortalForm {
+  recordId: string;
+  title: string;
+  recordFamily: string;
+  level: TirnLevel;
+  program?: string;
+  compartment?: string;
+}
+
+const levelRank = new Map([
+  ['TL-0', 0],
+  ['TL-1', 1],
+  ['TL-2', 2],
+  ['TL-3', 3],
+  ['TL-4', 4],
+  ['TL-5', 5],
+  ['TL-6', 6],
+  ['TL-7', 7],
+]);
+const forms: PortalForm[] = (await getCollection('docs'))
+  .flatMap((document: CollectionEntry<'docs'>): PortalForm[] => {
+    const { data } = document;
+    if (
+      data.recordType !== 'form-template' ||
+      !data.recordId ||
+      !data.recordFamily ||
+      !data.information
+    ) {
+      return [];
+    }
+    return [
+      {
+        recordId: data.recordId,
+        title: data.title.replace(/^TL-[A-Z0-9-]+\s+—\s+/, ''),
+        recordFamily: data.recordFamily,
+        level: data.information.level,
+        program: data.information.program,
+        compartment: data.information.compartment,
+      },
+    ];
+  })
+  .sort((left: PortalForm, right: PortalForm) => left.recordId.localeCompare(right.recordId));
 
 const formRoute = (recordId: string) => `/records/forms/${recordId.toLowerCase()}/`;
 const workstationAvailable = import.meta.env.DEV;
@@ -73,20 +102,47 @@ const workstationAvailable = import.meta.env.DEV;
         <div class="portal-table-wrap">
           <table class="portal-table">
             <thead>
-              <tr><th>Record</th><th>Template</th><th>Family</th><th>Source</th></tr>
+              <tr>
+                <th>Record</th><th>Template</th><th>Family</th><th>Eligibility</th><th>Action</th>
+              </tr>
             </thead>
             <tbody>
               {
-                forms.map(([recordId, title, family]) => (
-                  <tr>
-                    <td>{recordId}</td>
-                    <td>{title}</td>
-                    <td>{family}</td>
-                    <td>
-                      <a href={formRoute(recordId)}>Open blank form</a>
-                    </td>
-                  </tr>
-                ))
+                forms.map((form) => {
+                  const rank = levelRank.get(form.level) ?? Number.MAX_VALUE;
+                  const requestLevel = rank === 3 ? 'TL-3' : 'TL-4';
+                  return (
+                    <tr data-form-register-row data-required-level={form.level}>
+                      <td>{form.recordId}</td>
+                      <td>
+                        <span data-form-title hidden>
+                          {form.title}
+                        </span>
+                        <span data-form-title-fallback>Controlled template</span>
+                      </td>
+                      <td>{form.recordFamily}</td>
+                      <td>{form.level}</td>
+                      <td>
+                        {rank <= 2 && <a href={formRoute(form.recordId)}>Open blank form</a>}
+                        {rank >= 3 && rank <= 4 && (
+                          <div class="portal-record-actions">
+                            <a href={formRoute(form.recordId)}>Review control record</a>
+                            <AuthorizationDialog
+                              id={`forms-${form.recordId.toLowerCase()}`}
+                              requiredLevel={requestLevel}
+                              program={form.program}
+                              compartment={form.compartment}
+                              triggerLabel="Request access"
+                            />
+                          </div>
+                        )}
+                        {rank > 4 && (
+                          <span class="portal-muted-status">Separate authorization required</span>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })
               }
             </tbody>
           </table>
@@ -109,3 +165,43 @@ const workstationAvailable = import.meta.env.DEV;
     </aside>
   </div>
 </PortalLayout>
+
+<script>
+  import {
+    accessAllows,
+    resolveTirnAccess,
+    TIRN_ACCESS_CHANGE_EVENT,
+    TIRN_GRANT_STORAGE_KEY,
+    TIRN_SESSION_STORAGE_KEY,
+    type TirnLevel,
+  } from '../../../lib/tirn-access';
+
+  const readFormAccessValue = (key: string) => {
+    try {
+      return sessionStorage.getItem(key);
+    } catch {
+      return null;
+    }
+  };
+
+  const refreshFormRegister = () => {
+    const state = resolveTirnAccess(
+      readFormAccessValue(TIRN_SESSION_STORAGE_KEY),
+      readFormAccessValue(TIRN_GRANT_STORAGE_KEY),
+      Date.now(),
+    );
+
+    document.querySelectorAll<HTMLElement>('[data-form-register-row]').forEach((row) => {
+      const requiredLevel = (row.dataset.requiredLevel || 'TL-2') as TirnLevel;
+      const authorized = accessAllows(state, requiredLevel);
+      const title = row.querySelector<HTMLElement>('[data-form-title]');
+      const fallback = row.querySelector<HTMLElement>('[data-form-title-fallback]');
+      if (title) title.hidden = !authorized;
+      if (fallback) fallback.hidden = authorized;
+    });
+  };
+
+  refreshFormRegister();
+  window.addEventListener(TIRN_ACCESS_CHANGE_EVENT, refreshFormRegister);
+  window.setInterval(refreshFormRegister, 1000);
+</script>

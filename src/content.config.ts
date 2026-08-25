@@ -161,6 +161,7 @@ export const collections = {
           ])
           .optional(),
         status: z.enum(['active', 'template', 'archived', 'superseded']).optional(),
+        publicationState: z.enum(PUBLICATION_STATES).optional(),
         revision: z.string().min(1).optional(),
         effectiveDate: z.iso.date().optional(),
         controllingOffice: z.string().min(1).optional(),

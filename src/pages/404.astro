@@ -3,19 +3,17 @@ import CorporateLayout from '../layouts/CorporateLayout.astro';
 ---
 
 <CorporateLayout
-  title="Record Not Found"
-  description="The requested Trinity Laboratories record is unavailable."
+  title="Page Not Found"
+  description="The requested Trinity Laboratories page is unavailable."
   indexable={false}
 >
   <section class="section missing">
-    <p class="section-label">HTTP 404 / Record absent</p>
-    <h1>Requested record not found.</h1>
-    <p>The address does not correspond to an available public or institutional record.</p>
+    <p class="section-label">HTTP 404</p>
+    <h1>Page not found.</h1>
+    <p>The requested address does not correspond to an available page.</p>
     <div class="button-row">
-      <a class="button button--primary" href="/">Return to public index</a><a
-        class="button"
-        href="/records/">Open TIRN</a
-      >
+      <a class="button button--primary" href="/">Return home</a>
+      <a class="button" href="/contact/">Contact Trinity</a>
     </div>
   </section>
 </CorporateLayout>

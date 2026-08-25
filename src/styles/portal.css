@@ -170,6 +170,29 @@
   padding-block: 2.25rem 4.5rem;
 }
 
+.portal-access-boundary {
+  max-width: 44rem;
+  margin: clamp(2rem, 8vw, 7rem) auto;
+  border-top: 4px solid var(--portal-navy);
+  border-bottom: 1px solid var(--portal-line-dark);
+  padding: clamp(1.5rem, 4vw, 2.5rem) 0;
+}
+
+.portal-access-boundary h2 {
+  max-width: 24ch;
+  margin: 0 0 0.8rem;
+  color: #17283c;
+  font-size: clamp(1.45rem, 3vw, 2rem);
+  font-weight: 650;
+  letter-spacing: -0.025em;
+}
+
+.portal-access-boundary > p:not(.portal-section__label) {
+  max-width: 62ch;
+  margin: 0 0 1.25rem;
+  color: var(--portal-muted);
+}
+
 .portal-page-heading {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(15rem, 25rem);
@@ -465,6 +488,10 @@
   font-size: 0.78rem;
 }
 
+.record-catalogue__title [hidden] {
+  display: none !important;
+}
+
 .record-catalogue__table td[data-catalogue-state='controlled'],
 .record-catalogue__table td[data-catalogue-state='withheld'] {
   color: #7a280f;
@@ -581,6 +608,20 @@
 .portal-page .portal-button--primary:hover {
   background: #103e6c;
   color: #fff;
+}
+
+.portal-record-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem 0.8rem;
+  align-items: center;
+}
+
+.portal-muted-status {
+  color: var(--portal-muted);
+  font: 500 0.66rem/1.35 var(--font-mono);
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
 }
 
 .portal-footer {

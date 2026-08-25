@@ -15,8 +15,9 @@ const BASE_HEADERS = Object.freeze([
 
 const ALWAYS_NOINDEX_PATHS = Object.freeze([
   '/portal/*',
-  '/records/reports/*',
-  '/records/submissions/*',
+  '/records/*',
+  '/downloads/forms/*',
+  '/downloads/policies/*',
 ]);
 
 export function extractInlineScriptHashes(html) {

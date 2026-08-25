@@ -1,5 +1,9 @@
 ---
-import type { TirnLevel } from '../../lib/tirn-access';
+import {
+  CONTROL_OFFICE_REFERENCE_EXAMPLE,
+  isTemporaryGrantLevel,
+  type TirnLevel,
+} from '../../lib/tirn-access';
 
 interface Props {
   id: string;
@@ -14,12 +18,16 @@ const {
   requiredLevel = 'TL-3',
   program,
   compartment,
-  triggerLabel = 'Authorize',
+  triggerLabel = 'Request access',
 } = Astro.props;
+const requestAvailable = isTemporaryGrantLevel(requiredLevel) && !program && !compartment;
+const requiresControlOfficeReference = requiredLevel === 'TL-4';
+const authorizationReferenceExample = `${requiredLevel.replace('-', '')}-ABC123`;
 const dialogId = `${id}-authorization-dialog`;
 const dialogTitleId = `${id}-authorization-title`;
 const dialogDescriptionId = `${id}-authorization-description`;
-const credentialHelpId = `${id}-authorization-credential-help`;
+const referenceHelpId = `${id}-authorization-reference-help`;
+const controlOfficeHelpId = `${id}-control-office-reference-help`;
 ---
 
 <div
@@ -28,6 +36,8 @@ const credentialHelpId = `${id}-authorization-credential-help`;
   data-required-level={requiredLevel}
   data-program={program}
   data-compartment={compartment}
+  data-request-available={String(requestAvailable)}
+  data-trigger-label={triggerLabel}
 >
   <button
     class="authorization-trigger"
@@ -37,7 +47,7 @@ const credentialHelpId = `${id}-authorization-credential-help`;
     aria-controls={dialogId}
     disabled
   >
-    {triggerLabel}
+    {requestAvailable ? triggerLabel : 'Review access requirements'}
   </button>
 
   <dialog
@@ -49,8 +59,8 @@ const credentialHelpId = `${id}-authorization-credential-help`;
   >
     <div class="authorization-dialog__heading">
       <div>
-        <p>Access control / temporary grant</p>
-        <h2 id={dialogTitleId}>Authorize controlled information</h2>
+        <p>Access control / information request</p>
+        <h2 id={dialogTitleId}>Request controlled information access</h2>
       </div>
       <button type="button" data-authorization-close aria-label="Close authorization console">
         Close
@@ -62,59 +72,98 @@ const credentialHelpId = `${id}-authorization-credential-help`;
         <div><dt>Required eligibility</dt><dd>{requiredLevel}</dd></div>
         <div><dt>Program</dt><dd>{program ?? 'Not specified'}</dd></div>
         <div><dt>Compartment</dt><dd>{compartment ?? 'Not specified'}</dd></div>
+        <div>
+          <dt>Control-office confirmation</dt>
+          <dd>{requiresControlOfficeReference ? 'Required' : 'Not required'}</dd>
+        </div>
         <div><dt>Grant duration</dt><dd>15 minutes</dd></div>
       </dl>
 
       <p class="authorization-dialog__notice" id={dialogDescriptionId}>
-        Eligibility does not establish need-to-know. State the working purpose and enter the
-        authorization credential issued for this release set.
+        {
+          requestAvailable
+            ? 'Eligibility does not establish need-to-know. State the working purpose and enter the authorization reference assigned to this review.'
+            : 'This record requires a level, program, or compartment authorization that cannot be established from this terminal.'
+        }
       </p>
 
-      <form data-authorization-form novalidate autocomplete="off">
-        <fieldset disabled data-authorization-fields>
-          <label>
-            Working purpose
-            <select data-authorization-purpose required autocomplete="off">
-              <option value="">Select a purpose</option>
-              <option value="record-review">Record review</option>
-              <option value="required-training">Required training</option>
-              <option value="records-administration">Records administration</option>
-            </select>
-          </label>
+      {
+        requestAvailable && (
+          <form data-authorization-form novalidate autocomplete="off">
+            <fieldset disabled data-authorization-fields>
+              <label>
+                Working purpose
+                <select data-authorization-purpose required autocomplete="off">
+                  <option value="">Select a purpose</option>
+                  <option value="record-review">Record review</option>
+                  <option value="required-training">Required training</option>
+                  <option value="records-administration">Records administration</option>
+                </select>
+              </label>
 
-          <label>
-            Authorization credential
-            <input
-              type="password"
-              data-authorization-credential
-              required
-              maxlength="128"
-              autocomplete="off"
-              autocapitalize="characters"
-              spellcheck="false"
-              aria-describedby={credentialHelpId}
-            />
-            <span class="authorization-dialog__field-help" id={credentialHelpId}>
-              Use the separately issued TL-3 credential. The six-character employee terminal code is
-              not valid for this control.
-            </span>
-          </label>
+              <label>
+                Authorization reference
+                <input
+                  type="text"
+                  data-authorization-reference
+                  required
+                  minlength="10"
+                  maxlength="16"
+                  autocomplete="off"
+                  autocapitalize="characters"
+                  spellcheck="false"
+                  placeholder={authorizationReferenceExample}
+                  aria-describedby={referenceHelpId}
+                />
+                <span class="authorization-dialog__field-help" id={referenceHelpId}>
+                  Enter the assigned {requiredLevel} reference in the{' '}
+                  {requiredLevel.replace('-', '')}-XXXXXX format. Employee terminal codes are not
+                  valid here.
+                </span>
+              </label>
 
-          <label class="authorization-dialog__attestation">
-            <input type="checkbox" data-authorization-attestation required />
-            <span>I attest that the requested information is required for the stated purpose.</span>
-          </label>
+              {requiresControlOfficeReference && (
+                <label>
+                  Control-office reference
+                  <input
+                    type="text"
+                    data-control-office-reference
+                    required
+                    minlength="9"
+                    maxlength="15"
+                    autocomplete="off"
+                    autocapitalize="characters"
+                    spellcheck="false"
+                    placeholder={CONTROL_OFFICE_REFERENCE_EXAMPLE}
+                    aria-describedby={controlOfficeHelpId}
+                  />
+                  <span class="authorization-dialog__field-help" id={controlOfficeHelpId}>
+                    TL-4 requests require an independent CO-XXXXXX release reference.
+                  </span>
+                </label>
+              )}
 
-          <button class="authorization-submit" type="submit">Evaluate authorization</button>
-        </fieldset>
-      </form>
+              <label class="authorization-dialog__attestation">
+                <input type="checkbox" data-authorization-attestation required />
+                <span>
+                  I attest that the requested information is required for the stated purpose.
+                </span>
+              </label>
+
+              <button class="authorization-submit" type="submit">
+                Evaluate request
+              </button>
+            </fieldset>
+          </form>
+        )
+      }
 
       <p class="authorization-dialog__status" role="status" aria-live="polite" data-auth-status>
-        Authorization console initialization required.
+        Access-request console initialization required.
       </p>
       <p class="authorization-dialog__privacy">
-        Credential and purpose values are evaluated in this page, cleared after each attempt, and
-        are not transmitted or retained.
+        Reference and purpose values are cleared after evaluation and are not transmitted or
+        retained. Only the temporary level, scope, and expiry are kept for this session.
       </p>
     </div>
   </dialog>
@@ -123,13 +172,13 @@ const credentialHelpId = `${id}-authorization-credential-help`;
 <script>
   import {
     accessAllows,
+    evaluateAuthorizationRequest,
     parseElevatedGrant,
     resolveTirnAccess,
     serializeElevatedGrant,
     TIRN_ACCESS_CHANGE_EVENT,
     TIRN_GRANT_STORAGE_KEY,
     TIRN_SESSION_STORAGE_KEY,
-    verifyAuthorizationCredential,
     type TirnLevel,
   } from '../../lib/tirn-access';
 
@@ -143,11 +192,17 @@ const credentialHelpId = `${id}-authorization-credential-help`;
     const form = root.querySelector<HTMLFormElement>('[data-authorization-form]');
     const fields = root.querySelector<HTMLFieldSetElement>('[data-authorization-fields]');
     const purpose = root.querySelector<HTMLSelectElement>('[data-authorization-purpose]');
-    const credential = root.querySelector<HTMLInputElement>('[data-authorization-credential]');
+    const authorizationReference = root.querySelector<HTMLInputElement>(
+      '[data-authorization-reference]',
+    );
+    const controlOfficeReference = root.querySelector<HTMLInputElement>(
+      '[data-control-office-reference]',
+    );
     const attestation = root.querySelector<HTMLInputElement>('[data-authorization-attestation]');
     const status = root.querySelector<HTMLElement>('[data-auth-status]');
     const requiredLevel = (root.dataset.requiredLevel || 'TL-3') as TirnLevel;
     const hasAdditionalControl = Boolean(root.dataset.program || root.dataset.compartment);
+    const requestAvailable = root.dataset.requestAvailable === 'true';
 
     const getValue = (key: string) => {
       try {
@@ -157,10 +212,23 @@ const credentialHelpId = `${id}-authorization-credential-help`;
       }
     };
 
+    const clearInvalidState = () => {
+      for (const control of [
+        purpose,
+        authorizationReference,
+        controlOfficeReference,
+        attestation,
+      ]) {
+        control?.removeAttribute('aria-invalid');
+      }
+    };
+
     const clearInputs = () => {
-      if (credential) credential.value = '';
+      if (authorizationReference) authorizationReference.value = '';
+      if (controlOfficeReference) controlOfficeReference.value = '';
       if (purpose) purpose.value = '';
       if (attestation) attestation.checked = false;
+      clearInvalidState();
     };
 
     const currentAccessAllows = () => {
@@ -175,13 +243,19 @@ const credentialHelpId = `${id}-authorization-credential-help`;
 
     const updateTrigger = () => {
       if (!trigger) return;
-      trigger.textContent = currentAccessAllows() ? 'Authorization active' : 'Authorize';
+      trigger.textContent = currentAccessAllows()
+        ? 'Access active'
+        : requestAvailable
+          ? (root.dataset.triggerLabel ?? 'Request access')
+          : 'Review access requirements';
     };
 
-    if (trigger && fields && status) {
+    if (trigger && status) {
       trigger.disabled = false;
-      fields.disabled = false;
-      status.textContent = 'Console ready. Authorization values are required.';
+      if (fields) fields.disabled = false;
+      status.textContent = requestAvailable
+        ? 'Console ready. Request values are required.'
+        : 'Separate authorization is required. No local request is available.';
       updateTrigger();
     }
 
@@ -190,11 +264,13 @@ const credentialHelpId = `${id}-authorization-credential-help`;
       clearInputs();
       if (status) {
         status.textContent = currentAccessAllows()
-          ? 'A qualifying temporary authorization is already active.'
-          : 'Console ready. Authorization values are required.';
+          ? 'A qualifying temporary access grant is already active.'
+          : requestAvailable
+            ? 'Console ready. Request values are required.'
+            : 'Separate authorization is required. No local request is available.';
       }
       dialog.showModal();
-      purpose?.focus();
+      (requestAvailable ? purpose : close)?.focus();
     });
 
     const closeDialog = () => {
@@ -209,52 +285,64 @@ const credentialHelpId = `${id}-authorization-credential-help`;
       closeDialog();
     });
 
-    form?.addEventListener('submit', async (event) => {
+    form?.addEventListener('submit', (event) => {
       event.preventDefault();
-      const inputValue = credential?.value ?? '';
-      const hasPurpose = Boolean(purpose?.value);
-      const hasAttestation = Boolean(attestation?.checked);
-
-      if (!form.checkValidity() || !hasPurpose || !hasAttestation) {
-        form.reportValidity();
-        clearInputs();
-        if (status)
-          status.textContent = 'Authorization incomplete. All controls must be confirmed.';
-        return;
-      }
+      clearInvalidState();
 
       if (getValue(TIRN_SESSION_STORAGE_KEY) !== 'accepted') {
         clearInputs();
-        if (status)
-          status.textContent = 'Base staff session not established. Authorization denied.';
+        if (status) status.textContent = 'Base staff session not established. Request denied.';
         return;
       }
 
-      if (requiredLevel !== 'TL-3' || hasAdditionalControl) {
+      if (!requestAvailable || hasAdditionalControl) {
         clearInputs();
         if (status) {
           status.textContent =
-            'The available credential does not satisfy this level, program, or compartment.';
+            'This level, program, or compartment requires separate authorization.';
         }
         return;
       }
 
-      const grant = await verifyAuthorizationCredential(inputValue, Date.now());
-      clearInputs();
-      if (!grant) {
-        if (status)
-          status.textContent = 'Authorization not recognized. No access state was changed.';
+      const result = evaluateAuthorizationRequest(
+        {
+          requiredLevel,
+          purpose: purpose?.value ?? '',
+          authorizationReference: authorizationReference?.value ?? '',
+          controlOfficeReference: controlOfficeReference?.value,
+          attested: Boolean(attestation?.checked),
+        },
+        Date.now(),
+      );
+
+      if (!result.accepted) {
+        const control =
+          result.field === 'purpose'
+            ? purpose
+            : result.field === 'authorizationReference'
+              ? authorizationReference
+              : result.field === 'controlOfficeReference'
+                ? controlOfficeReference
+                : result.field === 'attestation'
+                  ? attestation
+                  : undefined;
+        control?.setAttribute('aria-invalid', 'true');
+        control?.focus();
+        if (status) status.textContent = result.message;
         return;
       }
+
+      clearInputs();
 
       try {
-        sessionStorage.setItem(TIRN_GRANT_STORAGE_KEY, serializeElevatedGrant(grant));
+        sessionStorage.setItem(TIRN_GRANT_STORAGE_KEY, serializeElevatedGrant(result.grant));
       } catch {
-        if (status) status.textContent = 'Session storage unavailable. Authorization not retained.';
+        if (status) status.textContent = 'Session storage unavailable. Access was not retained.';
         return;
       }
 
-      if (status) status.textContent = 'TL-3 temporary authorization accepted for 15 minutes.';
+      if (status)
+        status.textContent = `${result.grant.level} temporary access accepted for 15 minutes.`;
       updateTrigger();
       dialog?.close();
       window.dispatchEvent(new CustomEvent(TIRN_ACCESS_CHANGE_EVENT));
@@ -415,7 +503,7 @@ const credentialHelpId = `${id}-authorization-credential-help`;
     text-transform: uppercase;
   }
 
-  .authorization-dialog input[type='password'],
+  .authorization-dialog input[type='text'],
   .authorization-dialog select {
     width: 100%;
     min-height: 2.75rem;
@@ -425,6 +513,17 @@ const credentialHelpId = `${id}-authorization-credential-help`;
     background: #fff;
     color: #101820;
     font: 400 0.85rem/1.3 var(--font-sans, sans-serif);
+  }
+
+  .authorization-dialog input[aria-invalid='true'],
+  .authorization-dialog select[aria-invalid='true'] {
+    border-color: #8d252c;
+    box-shadow: inset 0 0 0 1px #8d252c;
+  }
+
+  .authorization-dialog__attestation input[aria-invalid='true'] {
+    outline: 2px solid #8d252c;
+    outline-offset: 2px;
   }
 
   .authorization-dialog__attestation {

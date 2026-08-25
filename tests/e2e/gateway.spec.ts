@@ -34,7 +34,7 @@ test('employee gateway issues and verifies a browser-local terminal code', async
   await expect(page.locator('[data-session-state]')).toHaveText(/staff \/ tl-2 base/i);
   expect(await page.evaluate(() => sessionStorage.getItem('tirn-session'))).toBe('accepted');
   await page.locator('[data-session-terminate]').click();
-  await expect(page.locator('[data-session-state]')).toHaveText(/guest \/ released access/i);
+  await expect(page.locator('[data-session-state]')).toHaveText(/guest \/ no staff session/i);
   expect(await page.evaluate(() => sessionStorage.getItem('tirn-session'))).toBeNull();
   expect(nonReadRequests).toEqual([]);
 });

@@ -9,7 +9,7 @@ import {
   validateSitemapDocuments,
   validateScriptPrivacy,
 } from '../../scripts/validate-built-site.mjs';
-import { canonicalUrl, NOINDEX_ROUTES, SITEMAP_ROUTES } from '../../scripts/lib/site-contract.mjs';
+import { canonicalUrl, SITEMAP_ROUTES } from '../../scripts/lib/site-contract.mjs';
 
 function validPage(route = '/contact/') {
   return `<!doctype html>
@@ -33,6 +33,7 @@ describe('built HTML validation', () => {
       'TL-SEC-001 Reference — Endorsements & Facility Conditions | Trinity Institutional Records Network';
     const record = validPage('/records/security/endorsements-and-conditions/')
       .replace('Contact | Trinity Laboratories', longTitle)
+      .replace('index, follow', 'noindex, nofollow, noarchive')
       .replace(
         '<main>',
         '<span data-session-state></span><button data-session-terminate></button><main>',
@@ -56,7 +57,10 @@ describe('built HTML validation', () => {
       expect.stringMatching(/preview HTML must contain/),
     ]);
 
-    const controlledPage = validPage('/portal/').replace('index, follow', 'noindex, nofollow');
+    const controlledPage = validPage('/portal/').replace(
+      'index, follow',
+      'noindex, nofollow, noarchive',
+    );
     expect(validateHtmlPage(controlledPage, '/portal/')).toEqual([]);
     expect(validateHtmlPage(validPage('/portal/'), '/portal/')).toEqual([
       expect.stringMatching(/controlled production HTML must contain/),
@@ -95,17 +99,12 @@ describe('built HTML validation', () => {
     expect(extractSitemapLocations(complete)).toHaveLength(SITEMAP_ROUTES.length);
     expect(validateSitemapDocuments([complete])).toEqual([]);
 
-    const missing = complete.replace(
-      `<url><loc>${canonicalUrl('/records/forms/tl-x595/')}</loc></url>`,
-      '',
-    );
-    expect(validateSitemapDocuments([missing])).toEqual([
-      expect.stringMatching(/records\/forms\/tl-x595/),
-    ]);
+    const missing = complete.replace(`<url><loc>${canonicalUrl('/publications/')}</loc></url>`, '');
+    expect(validateSitemapDocuments([missing])).toEqual([expect.stringMatching(/publications/)]);
 
     const leaked = complete.replace(
       '</urlset>',
-      `<url><loc>${canonicalUrl(NOINDEX_ROUTES[0])}</loc></url></urlset>`,
+      `<url><loc>${canonicalUrl('/records/forms/tl-x595/')}</loc></url></urlset>`,
     );
     expect(validateSitemapDocuments([leaked])).toEqual([
       expect.stringMatching(/must exclude controlled canonical URL/),

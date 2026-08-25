@@ -33,6 +33,17 @@ test('desktop home hero keeps its title clear of the photo-ready media field', a
   expect(titleTextRight).toBeLessThanOrEqual(mediaBox!.x);
 });
 
+test('mobile page hero keeps its institutional index clear of the title', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await visit(page, '/publications/');
+
+  const indexBox = await page.locator('.page-hero__index').boundingBox();
+  const titleBox = await page.locator('.page-hero h1').boundingBox();
+  expect(indexBox).not.toBeNull();
+  expect(titleBox).not.toBeNull();
+  expect(indexBox!.y + indexBox!.height).toBeLessThanOrEqual(titleBox!.y);
+});
+
 test('gateway controls complete their core path using only the keyboard', async ({ page }) => {
   await visit(page, '/employee-access/');
   const badge = page.locator('#badge-id');
@@ -72,6 +83,7 @@ test('reduced-motion preference removes reveal transitions', async ({ page }) =>
     expect(Number.parseFloat(style.transitionDuration)).toBeLessThanOrEqual(0.001);
   }
 
+  await page.addInitScript(() => sessionStorage.setItem('tirn-session', 'accepted'));
   await visit(page, '/records/');
   const recordsPane = page.locator('.main-pane');
   const recordsStyle = await recordsPane.evaluate((element) => {
@@ -134,6 +146,7 @@ test('corporate pages expose clean print output', async ({ page }) => {
 });
 
 test('records pages hide application chrome when printed', async ({ page }) => {
+  await page.addInitScript(() => sessionStorage.setItem('tirn-session', 'accepted'));
   await visit(page, '/records/');
   await page.emulateMedia({ media: 'print' });
   await expect(page.locator('main')).toBeVisible();

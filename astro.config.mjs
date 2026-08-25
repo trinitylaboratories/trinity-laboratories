@@ -2,8 +2,6 @@ import sitemap from '@astrojs/sitemap';
 import starlight from '@astrojs/starlight';
 import { defineConfig } from 'astro/config';
 
-const isIndexable = process.env.PUBLIC_INDEXABLE === 'true';
-
 export default defineConfig({
   site: 'https://trinitylaboratories.org',
   output: 'static',
@@ -21,50 +19,37 @@ export default defineConfig({
       pagefind: true,
       customCss: ['./src/styles/records.css'],
       components: {
+        MarkdownContent: './src/components/records/RecordsMarkdownContent.astro',
+        PageSidebar: './src/components/records/RecordsPageSidebar.astro',
+        PageTitle: './src/components/records/RecordsPageTitle.astro',
         SiteTitle: './src/components/records/TirnSiteTitle.astro',
         ThemeSelect: './src/components/records/NoThemeSelect.astro',
       },
       sidebar: [
         {
-          label: 'Records Gateway',
+          label: 'Institutional Systems',
           items: [
-            { label: 'Dashboard', link: '/records/' },
-            { label: 'Report Register', link: '/records/reports/' },
-            { label: 'Filed Submissions', link: '/records/submissions/' },
+            { label: 'Records Gateway', link: '/records/' },
             { label: 'Staff Portal', link: '/portal/' },
             { label: 'Employee Access', link: '/employee-access/' },
             { label: 'Public Website', link: '/' },
           ],
         },
+      ],
+      head: [
         {
-          label: 'Security',
-          items: [{ autogenerate: { directory: 'records/security' } }],
-        },
-        {
-          label: 'Forms',
-          items: [{ autogenerate: { directory: 'records/forms' } }],
+          tag: 'meta',
+          attrs: {
+            name: 'robots',
+            content: 'noindex, nofollow, noarchive',
+          },
         },
       ],
-      head: isIndexable
-        ? []
-        : [
-            {
-              tag: 'meta',
-              attrs: {
-                name: 'robots',
-                content: 'noindex, nofollow',
-              },
-            },
-          ],
     }),
     sitemap({
       filter: (page) => {
         const pathname = new URL(page).pathname;
-        return (
-          !pathname.startsWith('/portal/') &&
-          !pathname.startsWith('/records/reports/') &&
-          !pathname.startsWith('/records/submissions/')
-        );
+        return !pathname.startsWith('/portal/') && !pathname.startsWith('/records/');
       },
     }),
   ],

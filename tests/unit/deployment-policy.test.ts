@@ -32,8 +32,15 @@ describe('deployment policy', () => {
     expect(scriptDirective).not.toContain("'unsafe-eval'");
     expect(globalHeaders).not.toMatch(/^\s*X-Robots-Tag:/m);
     expect(headers).toMatch(/workers\.dev\/\*\n\s+X-Robots-Tag: noindex/);
-    expect(headers).toMatch(/\/portal\/\*\n\s+X-Robots-Tag: noindex/);
-    expect(headers).toMatch(/\/records\/reports\/\*\n\s+X-Robots-Tag: noindex/);
+    expect(headers).toMatch(/\/portal\/\*\n\s+X-Robots-Tag: noindex, nofollow, noarchive/);
+    expect(headers).toMatch(/\/records\/\*\n\s+X-Robots-Tag: noindex, nofollow, noarchive/);
+    expect(headers).toMatch(
+      /\/downloads\/forms\/\*\n\s+X-Robots-Tag: noindex, nofollow, noarchive/,
+    );
+    expect(headers).toMatch(
+      /\/downloads\/policies\/\*\n\s+X-Robots-Tag: noindex, nofollow, noarchive/,
+    );
+    expect(headers).not.toContain('/records/reports/*');
   });
 
   it('allows emitted inline scripts only by their CSP hashes', () => {

@@ -1,5 +1,11 @@
 import { expect, test } from '@playwright/test';
-import { canonicalUrl, CONTROLLED_ROUTES, SITE_ROUTES, visit } from './support/site';
+import {
+  canonicalUrl,
+  CONTROLLED_ROUTES,
+  INDEXABLE_ROUTES,
+  SITE_ROUTES,
+  visit,
+} from './support/site';
 
 const deploymentEnvironment =
   process.env.SITE_DEPLOYMENT_ENV === 'preview' ? 'preview' : 'production';
@@ -14,10 +20,9 @@ test.describe(`indexing contract (${deploymentEnvironment})`, () => {
       );
 
       const robotsMeta = page.locator('meta[name="robots"]');
-      const metaRobots =
-        (await robotsMeta.count()) > 0
-          ? ((await robotsMeta.first().getAttribute('content')) ?? '')
-          : '';
+      const metaRobots = await robotsMeta.evaluateAll((elements) =>
+        elements.map((element) => element.getAttribute('content') ?? '').join(', '),
+      );
       const robotsHeader = response.headers()['x-robots-tag'] ?? '';
       if (deploymentEnvironment === 'preview') {
         expect(metaRobots.toLowerCase()).toContain('noindex');
@@ -25,9 +30,13 @@ test.describe(`indexing contract (${deploymentEnvironment})`, () => {
           expect(robotsHeader.toLowerCase()).toContain('noindex');
         }
       } else if (CONTROLLED_ROUTES.includes(route as (typeof CONTROLLED_ROUTES)[number])) {
-        expect(metaRobots.toLowerCase()).toContain('noindex');
+        for (const directive of ['noindex', 'nofollow', 'noarchive']) {
+          expect(metaRobots.toLowerCase()).toContain(directive);
+        }
         if (!['127.0.0.1', 'localhost'].includes(new URL(page.url()).hostname)) {
-          expect(robotsHeader.toLowerCase()).toContain('noindex');
+          for (const directive of ['noindex', 'nofollow', 'noarchive']) {
+            expect(robotsHeader.toLowerCase()).toContain(directive);
+          }
         }
       } else {
         expect(metaRobots.toLowerCase()).not.toContain('noindex');
@@ -56,10 +65,21 @@ test.describe(`indexing contract (${deploymentEnvironment})`, () => {
       const childDocuments = await Promise.all(
         childPaths.map(async (path) => (await request.get(path)).text()),
       );
-      const publishedLocations = childDocuments.join('\n');
+      const publishedLocations = childDocuments
+        .flatMap((document) => [...document.matchAll(/<loc>([^<]+)<\/loc>/g)])
+        .map(([, location]) => location);
       for (const route of CONTROLLED_ROUTES) {
         expect(publishedLocations).not.toContain(canonicalUrl(route));
       }
+      expect(
+        publishedLocations.some((location) => new URL(location).pathname.startsWith('/records/')),
+      ).toBe(false);
+      expect(
+        publishedLocations.some((location) => new URL(location).pathname.startsWith('/portal/')),
+      ).toBe(false);
+      expect([...publishedLocations].sort()).toEqual(
+        INDEXABLE_ROUTES.map((route) => canonicalUrl(route)).sort(),
+      );
     }
   });
 });

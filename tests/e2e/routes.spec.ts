@@ -70,6 +70,6 @@ test('records session termination remains available at every supported viewport'
   const terminate = page.locator('[data-session-terminate]');
   await expect(terminate).toBeVisible();
   await terminate.click();
-  await expect(page.locator('[data-session-state]')).toHaveText(/guest \/ unverified/i);
+  await expect(page.locator('[data-session-state]')).toHaveText(/guest \/ no staff session/i);
   expect(await page.evaluate(() => sessionStorage.getItem('tirn-session'))).toBeNull();
 });
