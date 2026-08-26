@@ -7,7 +7,7 @@ const CORPORATE_ROUTES = INDEXABLE_ROUTES.filter((route) => route !== '/employee
 const INTERNAL_FORM_ID =
   /\bTL-(?:101|220|340|470|590|P110|P365|O205|N310|N480|SOP-720|SOP-760|SOP-890|X510|X595)\b/i;
 const CONTROLLED_SUBJECT_LANGUAGE =
-  /restricted phenomena|special access anomalous|nonstandard reality|anomalous emergency|anomalous site expedition|directorate eyes only/i;
+  /restricted phenomena|special access anomalous|nonstandard reality|anomalous emergency|anomalous site expedition|directorate eyes only|TL-RSO-001|Research Subject Oversight Classification System|\bRS-(?:P|[0-7])\b|RS\/Ø/i;
 
 test.describe('corporate information boundary', () => {
   for (const route of CORPORATE_ROUTES) {

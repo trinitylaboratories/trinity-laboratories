@@ -435,12 +435,18 @@ export function validateSubmissionRecord(record, options = {}) {
   return errors;
 }
 
-async function walk(directory, extension) {
+async function walk(directory, extensions) {
+  const acceptedExtensions = Array.isArray(extensions) ? extensions : [extensions];
   const output = [];
   for (const entry of await readdir(directory, { withFileTypes: true })) {
     const target = path.join(directory, entry.name);
-    if (entry.isDirectory()) output.push(...(await walk(target, extension)));
-    else if (entry.isFile() && entry.name.endsWith(extension)) output.push(target);
+    if (entry.isDirectory()) output.push(...(await walk(target, acceptedExtensions)));
+    else if (
+      entry.isFile() &&
+      acceptedExtensions.some((extension) => entry.name.endsWith(extension))
+    ) {
+      output.push(target);
+    }
   }
   return output.sort();
 }
@@ -448,7 +454,7 @@ async function walk(directory, extension) {
 async function readCanonicalDocIds(root) {
   const directory = path.join(root, 'src', 'content', 'docs');
   const ids = new Set();
-  for (const filename of await walk(directory, '.md')) {
+  for (const filename of await walk(directory, ['.md', '.mdx'])) {
     const source = await readFile(filename, 'utf8');
     const frontmatter = source.match(/^---\s*\r?\n([\s\S]*?)\r?\n---/);
     if (!frontmatter) continue;

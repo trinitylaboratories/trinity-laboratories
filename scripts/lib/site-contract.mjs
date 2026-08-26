@@ -54,7 +54,15 @@ export const SECURITY_RECORD_ROUTES = Object.freeze([
   '/records/security/endorsements-and-conditions/',
 ]);
 
-export const RECORD_ROUTES = Object.freeze([...SECURITY_RECORD_ROUTES, ...FORM_ROUTES]);
+export const RESEARCH_RECORD_ROUTES = Object.freeze([
+  '/records/research/subject-oversight-classification/',
+]);
+
+export const RECORD_ROUTES = Object.freeze([
+  ...SECURITY_RECORD_ROUTES,
+  ...RESEARCH_RECORD_ROUTES,
+  ...FORM_ROUTES,
+]);
 
 export const SEARCHABLE_FORM_ROUTES = Object.freeze([
   '/records/forms/tl-101/',
@@ -73,6 +81,7 @@ export const RECORD_INDEX_ROUTES = Object.freeze([
   '/records/',
   '/records/search/',
   '/records/security/',
+  '/records/research/',
   '/records/forms/',
 ]);
 

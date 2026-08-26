@@ -130,7 +130,7 @@ describe('content policy', () => {
     );
   });
 
-  it('rejects search indexing or public-release status on TL-3+ form templates', async () => {
+  it('rejects search indexing or public-release status on TL-3+ records', async () => {
     const root = await fixtureRoot();
     const payload = 'fixture attachment';
     const hash = createHash('sha256').update(payload).digest('hex');
@@ -140,7 +140,7 @@ describe('content policy', () => {
       recordFrontmatter({
         hash,
         level: 'TL-3',
-        recordType: 'form-template',
+        recordType: 'policy',
         publicationState: 'released',
       }),
       'utf8',
@@ -151,7 +151,35 @@ describe('content policy', () => {
     });
     expect(result.errors).toEqual(
       expect.arrayContaining([
-        expect.stringMatching(/TL-3\+ form templates must set pagefind: false/),
+        expect.stringMatching(/TL-3\+ records must set pagefind: false/),
+        expect.stringMatching(/TL-3\+ records may not declare publicationState: released/),
+      ]),
+    );
+  });
+
+  it('applies elevated indexing and release rules to TL/Ø records in MDX', async () => {
+    const root = await fixtureRoot();
+    const payload = 'fixture attachment';
+    const hash = createHash('sha256').update(payload).digest('hex');
+    await writeFile(path.join(root, 'public', 'downloads', 'test.txt'), payload, 'utf8');
+    await writeFile(
+      path.join(root, 'content', 'record.mdx'),
+      recordFrontmatter({
+        hash,
+        level: 'TL/Ø',
+        recordType: 'policy',
+        publicationState: 'released',
+      }),
+      'utf8',
+    );
+
+    const result = await validateContent({
+      contentRoot: path.join(root, 'content'),
+      publicRoot: path.join(root, 'public'),
+    });
+    expect(result.errors).toEqual(
+      expect.arrayContaining([
+        expect.stringMatching(/TL-3\+ records must set pagefind: false/),
         expect.stringMatching(/TL-3\+ records may not declare publicationState: released/),
       ]),
     );

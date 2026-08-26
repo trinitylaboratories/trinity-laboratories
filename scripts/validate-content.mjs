@@ -115,19 +115,12 @@ export async function validateContent({
       typeof informationLevel === 'string' && /^TL-[0-7]$/.test(informationLevel)
         ? Number(informationLevel.slice(3))
         : Number.NaN;
-    if (
-      data.recordType === 'form-template' &&
-      Number.isFinite(informationRank) &&
-      informationRank >= 3 &&
-      data.pagefind !== false
-    ) {
-      errors.push(`${fileName}: TL-3+ form templates must set pagefind: false`);
+    const elevatedInformation =
+      informationLevel === 'TL/Ø' || (Number.isFinite(informationRank) && informationRank >= 3);
+    if (elevatedInformation && data.pagefind !== false) {
+      errors.push(`${fileName}: TL-3+ records must set pagefind: false`);
     }
-    if (
-      data.publicationState === 'released' &&
-      Number.isFinite(informationRank) &&
-      informationRank >= 3
-    ) {
+    if (data.publicationState === 'released' && elevatedInformation) {
       errors.push(`${fileName}: TL-3+ records may not declare publicationState: released`);
     }
 

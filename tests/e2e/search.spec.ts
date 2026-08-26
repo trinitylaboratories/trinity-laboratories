@@ -35,6 +35,19 @@ test('records search returns routine forms while excluding elevated templates', 
       .filter({ hasText: /TL-X595|Directorate Executive Order/i }),
   ).toHaveCount(0);
 
+  await search.fill('TL-RSO-001');
+  await expect(page.locator('.pagefind-ui__message')).toContainText('TL-RSO-001', {
+    timeout: 15_000,
+  });
+  await expect(
+    page.locator('a[href*="/records/research/subject-oversight-classification/"]'),
+  ).toHaveCount(0);
+  await expect(
+    page
+      .locator('.pagefind-ui__result')
+      .filter({ hasText: /TL-RSO-001|Research Subject Oversight Classification System/i }),
+  ).toHaveCount(0);
+
   await search.fill('Routine Research Technical Activity Record');
 
   const result = page

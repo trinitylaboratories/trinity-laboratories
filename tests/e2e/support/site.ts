@@ -82,6 +82,8 @@ export const RECORD_ROUTES = [
   '/records/security/information-classification/',
   '/records/security/physical-access/',
   '/records/security/endorsements-and-conditions/',
+  '/records/research/',
+  '/records/research/subject-oversight-classification/',
   '/records/forms/',
   ...FORM_IDS.map((id) => `/records/forms/${id}/`),
   '/records/reports/',
