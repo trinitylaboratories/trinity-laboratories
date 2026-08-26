@@ -16,7 +16,8 @@ const informationLevel = data.information?.level ?? 'TL-2';
 const standardRank = Number(informationLevel.replace('TL-', ''));
 const protectedRecord =
   Boolean(data.recordId) &&
-  (data.publicationState === 'withheld' ||
+  (data.recordType === 'form-template' ||
+    data.publicationState === 'withheld' ||
     Boolean(data.information?.program || data.information?.compartment) ||
     informationLevel === 'TL/Ø' ||
     !Number.isFinite(standardRank) ||
