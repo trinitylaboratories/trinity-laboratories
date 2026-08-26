@@ -25,10 +25,8 @@ test.describe('corporate information boundary', () => {
     await visit(page, '/publications/');
     const main = page.locator('main');
 
-    await expect(
-      main.getByRole('heading', { name: 'Publications and institutional resources.' }),
-    ).toBeVisible();
-    await expect(main.getByRole('link', { name: 'Contact Trinity' })).toHaveAttribute(
+    await expect(main.getByRole('heading', { name: 'Resources and publications.' })).toBeVisible();
+    await expect(main.getByRole('link', { name: 'Send an inquiry' })).toHaveAttribute(
       'href',
       '/contact/',
     );
@@ -45,14 +43,14 @@ test.describe('corporate information boundary', () => {
     expect(text).not.toMatch(/condition white|public record|system revision/i);
   });
 
-  test('public routes do not expose implementation vocabulary', async ({ page }) => {
-    const forbidden =
-      /static publication|repository review|schema validation|deterministic json|approved merge|generated package|withheld plaintext|browser (?:grant|authorization|storage)|local-only|front-end|pagefind|cloudflare|github|astro|photography pending|media reserved/i;
+  for (const route of CORPORATE_ROUTES) {
+    test(`${route} does not expose implementation vocabulary`, async ({ page }) => {
+      const forbidden =
+        /static publication|repository review|schema validation|deterministic json|approved merge|generated package|withheld plaintext|browser (?:grant|authorization|storage)|local-only|front-end|pagefind|cloudflare|github|astro|photography pending|media reserved/i;
 
-    for (const route of CORPORATE_ROUTES) {
       await visit(page, route);
       const text = (await page.locator('body').innerText()).replace(/\s+/g, ' ');
       expect(text, `${route} should use only institutional copy`).not.toMatch(forbidden);
-    }
-  });
+    });
+  }
 });

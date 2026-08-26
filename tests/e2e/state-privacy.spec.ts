@@ -74,9 +74,9 @@ for (const route of ['/contact/', '/careers/']) {
     await form.locator('input[type="email"]').fill(`${rawMarker.toLowerCase()}@example.test`);
     await form.locator('select').selectOption({ index: 1 });
     await form.locator('textarea').fill(`${rawMarker} ${'local test statement '.repeat(3)}`);
-    await form.getByRole('button', { name: /submit|register/i }).click();
+    await form.getByRole('button', { name: /submit|send/i }).click();
 
-    await expect(form.locator('[data-form-status]')).toContainText(/accepted/i);
+    await expect(form.locator('[data-form-status]')).toContainText(/thank you/i);
     for (const control of await form.locator('input, textarea').all())
       await expect(control).toHaveValue('');
     await expect(form.locator('select')).toHaveValue('');
@@ -154,7 +154,7 @@ test('gateway retains only an opaque session flag and clears it on termination',
   await page.locator('#terminal-code').fill(rawCode);
   await Promise.all([
     page.waitForURL((url) => url.pathname === '/portal/'),
-    page.getByRole('button', { name: /establish session/i }).click(),
+    page.getByRole('button', { name: /sign in/i }).click(),
   ]);
 
   const acceptedState = await browserState(page);

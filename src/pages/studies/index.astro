@@ -20,15 +20,15 @@ const screeningCount = studies.filter((study: StudyData) => study.application !=
   <section class="studies-hero">
     <div class="studies-hero__grid" aria-hidden="true"></div>
     <div class="studies-hero__copy">
-      <p class="eyebrow">Participant studies / public register</p>
-      <h1>Observe ordinary systems carefully.</h1>
+      <p class="eyebrow">Participant studies</p>
+      <h1>Everyday questions, studied carefully.</h1>
       <p>
-        Structured, non-medical studies of everyday instruments, materials, environments, and
-        observation methods.
+        Take part in focused, non-medical studies of everyday instruments, materials, environments,
+        and observation methods.
       </p>
       <div class="button-row">
-        <a class="button button--primary" href="#study-register">Review current studies</a>
-        <a class="button" href="#participation-method">Participation method</a>
+        <a class="button button--primary" href="#study-register">Browse current studies</a>
+        <a class="button" href="#participation-method">How participation works</a>
       </div>
     </div>
     <div class="studies-hero__protocol" aria-label="Study sequence">
@@ -36,19 +36,19 @@ const screeningCount = studies.filter((study: StudyData) => study.application !=
       ></i><span>Compare</span><i aria-hidden="true"></i><span>Review</span>
     </div>
     <div class="studies-hero__register">
-      <span>{String(studies.length).padStart(2, '0')} listed protocols</span>
-      <span>{String(screeningCount).padStart(2, '0')} participation screens</span>
-      <span>Methods office / current register</span>
+      <span>{String(studies.length).padStart(2, '0')} studies</span>
+      <span>{String(screeningCount).padStart(2, '0')} open eligibility checks</span>
+      <span>Current study register</span>
     </div>
   </section>
 
   <section class="section" id="study-register" data-reveal>
     <div class="section__heading">
       <p class="section-label">Current register</p>
-      <h2>Studies by protocol status.</h2>
+      <h2>Find a study that fits.</h2>
       <p>
-        Each entry states the research question, participant commitment, basic eligibility, method,
-        and limits before a participation screen is presented.
+        Each listing explains what the study asks, who can take part, what you’ll do, and how much
+        time it takes before you complete a brief eligibility check.
       </p>
     </div>
     <StudyRegister studies={studies} />
@@ -56,28 +56,33 @@ const screeningCount = studies.filter((study: StudyData) => study.application !=
 
   <section class="section section--dark" id="participation-method" data-reveal>
     <div class="section__heading">
-      <p class="section-label">Participation method</p>
-      <h2>A narrow question and a fixed observation sequence.</h2>
+      <p class="section-label">How participation works</p>
+      <h2>What to expect when you take part.</h2>
       <p>
-        Public studies are intentionally limited in scope. They avoid medical interpretation,
-        precise location data, personal records, photographs, recordings, and device telemetry.
+        Our public studies focus on limited, low-risk observations and ask only for information
+        directly related to the study. We do not request health records, exact locations, photos,
+        recordings, or device telemetry.
       </p>
     </div>
     <ol class="studies-method">
       <li>
-        <small>01</small><strong>Review the protocol</strong><span>Question, scope, and limits</span
+        <small>01</small><strong>Read the study details</strong><span
+          >Question, time, and eligibility</span
         >
       </li>
       <li>
-        <small>02</small><strong>Check eligibility</strong><span>Only listed conditions</span>
-      </li>
-      <li>
-        <small>03</small><strong>Follow the sequence</strong><span>Fixed observation intervals</span
+        <small>02</small><strong>Check whether it fits</strong><span
+          >Equipment, setting, and schedule</span
         >
       </li>
       <li>
-        <small>04</small><strong>Close the series</strong><span
-          >Missed intervals remain missing</span
+        <small>03</small><strong>Follow the study steps</strong><span
+          >Brief, defined observations</span
+        >
+      </li>
+      <li>
+        <small>04</small><strong>Complete the series</strong><span
+          >Leave missed observations blank</span
         >
       </li>
     </ol>
@@ -85,14 +90,14 @@ const screeningCount = studies.filter((study: StudyData) => study.application !=
 
   <section class="section studies-closing" data-reveal>
     <p class="section-label">General questions</p>
-    <h2>Participation begins with the study protocol.</h2>
+    <h2>Not every study will be the right fit.</h2>
     <p>
-      If a protocol does not match the available equipment, setting, or schedule, choose another
-      study or return when a later interval opens.
+      If the equipment, setting, or schedule doesn’t work for you, explore another study or check
+      back later.
     </p>
     <div class="button-row">
-      <a class="button button--primary" href="#study-register">Return to the register</a>
-      <a class="button" href="/contact/">General inquiry</a>
+      <a class="button button--primary" href="#study-register">Browse studies</a>
+      <a class="button" href="/contact/">Ask a question</a>
     </div>
   </section>
 </CorporateLayout>

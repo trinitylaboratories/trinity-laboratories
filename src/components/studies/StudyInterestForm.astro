@@ -12,14 +12,14 @@ const controlId = (fieldId: string) => `study-${studyId.toLowerCase()}-${fieldId
 
 <section class="study-screen" aria-labelledby={`${controlId('heading')}`}>
   <div class="study-screen__heading">
-    <p class="section-label">Participation interest</p>
+    <p class="section-label">Participate in this study</p>
     <h2 id={controlId('heading')}>{application.title}</h2>
     <p>{application.introduction}</p>
   </div>
 
   <form class="study-form" data-study-form data-study-id={studyId} novalidate autocomplete="off">
     <fieldset disabled data-study-fields>
-      <legend>Preliminary conditions</legend>
+      <legend>Eligibility questions</legend>
       <div class="study-form__grid">
         {
           application.fields.map((field) => {
@@ -92,16 +92,21 @@ const controlId = (fieldId: string) => `study-${studyId.toLowerCase()}-${fieldId
         }
       </div>
       <div class="study-form__actions">
-        <button class="button button--primary" type="submit">Complete participation screen</button>
-        <span>{studyId} / preliminary review</span>
+        <button
+          class="button button--primary"
+          type="submit"
+          aria-label="Check my eligibility — complete participation screen"
+          >Check my eligibility</button
+        >
+        <span>{studyId} / eligibility check</span>
       </div>
     </fieldset>
     <p class="study-form__status" role="status" aria-live="polite" data-study-status>
-      Participation screen initialization required.
+      Preparing the eligibility form…
     </p>
   </form>
   <noscript>
-    <p class="study-screen__notice">The participation screen is unavailable on this terminal.</p>
+    <p class="study-screen__notice">The eligibility form is currently unavailable.</p>
   </noscript>
 </section>
 
@@ -120,20 +125,20 @@ const controlId = (fieldId: string) => `study-${studyId.toLowerCase()}-${fieldId
     if (!fields || !status) return;
 
     fields.disabled = false;
-    status.textContent = 'Participation screen ready. Required fields are marked.';
+    status.textContent = 'Ready. Please complete all required fields.';
 
     form.addEventListener('submit', (event) => {
       event.preventDefault();
       if (!form.checkValidity()) {
         form.reportValidity();
-        status.textContent = 'Screen incomplete. Review the marked conditions.';
+        status.textContent = 'Please complete the highlighted fields.';
         status.dataset.state = 'incomplete';
         return;
       }
 
       const reference = issueScreeningReference();
       form.reset();
-      status.textContent = `PRE-SCREEN COMPLETE — ELIGIBILITY PROVISIONAL. NO ENROLLMENT RECORD CREATED. SCREENING REFERENCE: ${reference}.`;
+      status.textContent = `Eligibility provisional. You meet the preliminary criteria. Your reference for this session is ${reference}. This check does not enroll you in the study.`;
       status.dataset.state = 'complete';
     });
   });

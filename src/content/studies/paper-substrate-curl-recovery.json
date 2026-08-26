@@ -4,7 +4,7 @@
   "title": "Paper Substrate Curl Recovery",
   "shortTitle": "Paper curl recovery",
   "researchQuestion": "How does a short indoor conditioning interval affect the visible curl recovery of common uncoated office paper?",
-  "summary": "This materials observation uses ordinary, untreated office paper and a flat reference surface to evaluate whether a small categorical curl measure can be applied consistently outside a laboratory. The current protocol interval is active and is not accepting additional participation screens.",
+  "summary": "This study uses ordinary office paper and a flat indoor surface to see whether visible curl recovery can be recorded consistently outside a laboratory. The current observation period is underway and is not accepting additional participants.",
   "status": "active",
   "phase": "Method confirmation interval",
   "discipline": "Advanced Materials",
@@ -49,7 +49,7 @@
     },
     {
       "code": "04",
-      "title": "Reconcile",
+      "title": "Review",
       "description": "Mark any disturbance and check the observation sequence for missed intervals."
     }
   ],

@@ -28,7 +28,7 @@ test('employee gateway issues and verifies a browser-local terminal code', async
   await form.locator('#terminal-code').fill(code);
   await Promise.all([
     page.waitForURL((url) => url.pathname === '/portal/'),
-    form.getByRole('button', { name: /establish session/i }).click(),
+    form.getByRole('button', { name: /sign in/i }).click(),
   ]);
 
   await expect(page.locator('[data-session-state]')).toHaveText(/staff \/ tl-2 base/i);

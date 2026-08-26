@@ -39,7 +39,7 @@ describe('local terminal protocol', () => {
   it('models incomplete and accepted simulated-form states without retaining values', () => {
     expect(simulatedFormResult(false, 'CUSTOM ACCEPTED')).toEqual({
       accepted: false,
-      message: 'Submission incomplete. Review the marked fields.',
+      message: 'Please complete the highlighted fields.',
       reset: false,
       state: 'incomplete',
     });
@@ -50,7 +50,7 @@ describe('local terminal protocol', () => {
       state: 'success',
     });
     expect(simulatedFormResult(true)).toEqual(
-      expect.objectContaining({ message: 'SUBMISSION ACCEPTED.', reset: true }),
+      expect.objectContaining({ message: 'Thank you. Your form is complete.', reset: true }),
     );
   });
 });

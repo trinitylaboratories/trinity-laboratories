@@ -237,4 +237,57 @@ describe('asset policy', () => {
       expect.stringMatching(/not listed/),
     ]);
   });
+
+  it('limits provenance-backed facility media to WebP derivatives', async () => {
+    const parent = path.join(process.cwd(), '.tools', 'test-results');
+    await mkdir(parent, { recursive: true });
+    const root = await mkdtemp(path.join(parent, 'unit-facility-media-'));
+    temporaryRoots.push(root);
+    const publicRoot = path.join(root, 'public');
+    await mkdir(path.join(publicRoot, 'media', 'facilities'), { recursive: true });
+    const payload = 'webp derivative fixture';
+    await writeFile(
+      path.join(publicRoot, 'media', 'facilities', 'laboratory.webp'),
+      payload,
+      'utf8',
+    );
+    const ledgerPath = path.join(root, 'asset-ledger.json');
+    const entry = {
+      category: 'facility-media',
+      source: {
+        basename: 'laboratory-source.png',
+        sha256: createHash('sha256').update('source PNG fixture').digest('hex'),
+      },
+      derivative: {
+        path: '/media/facilities/laboratory.webp',
+        sha256: createHash('sha256').update(payload).digest('hex'),
+      },
+      mediaType: 'image/webp',
+      license: 'CC BY-NC-SA 4.0',
+      ownership: 'Fixture author',
+      provenance: 'Project-owner-supplied synthetic imagery.',
+      transform: 'Resized and encoded as metadata-free WebP.',
+    };
+    const writeLedger = () =>
+      writeFile(ledgerPath, JSON.stringify({ hashAlgorithm: 'SHA-256', assets: [entry] }), 'utf8');
+
+    await writeLedger();
+    expect((await validateAssetLedger(publicRoot, ledgerPath)).errors).toEqual([]);
+
+    entry.provenance = '';
+    await writeLedger();
+    expect((await validateAssetLedger(publicRoot, ledgerPath)).errors).toEqual([
+      expect.stringMatching(/facility-media requires non-empty provenance/),
+    ]);
+
+    entry.provenance = 'Project-owner-supplied synthetic imagery.';
+    entry.mediaType = 'image/png';
+    await writeLedger();
+    expect((await validateAssetLedger(publicRoot, ledgerPath)).errors).toEqual(
+      expect.arrayContaining([
+        expect.stringMatching(/facility-media does not approve mediaType image\/png/),
+        expect.stringMatching(/mediaType must be image\/webp/),
+      ]),
+    );
+  });
 });

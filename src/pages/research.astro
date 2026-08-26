@@ -1,47 +1,48 @@
 ---
 import CorporateLayout from '../layouts/CorporateLayout.astro';
+import MediaFrame from '../components/MediaFrame.astro';
 import PageHero from '../components/PageHero.astro';
 
 const capabilities = [
   [
     '01',
     'Advanced Materials',
-    'Characterization, controlled evaluation, and performance comparison under defined operating conditions.',
+    'We compare how materials behave under defined conditions, using methods tailored to the question and intended use.',
   ],
   [
     '02',
     'Industrial Instrumentation',
-    'Measurement systems, calibrated assemblies, and interfaces designed for reliable technical observation.',
+    'We develop and evaluate measurement systems, calibrated assemblies, and practical interfaces for reliable observation.',
   ],
   [
     '03',
     'Environmental Analysis',
-    'Sampling and analytical methods for changing physical and environmental conditions.',
+    'We use structured sampling and analytical methods to study changing physical and environmental conditions.',
   ],
   [
     '04',
     'Applied Physics',
-    'Experimental investigation of physical behavior with an emphasis on measurable, reproducible effects.',
+    'We investigate physical behavior through controlled experiments focused on measurable, repeatable effects.',
   ],
   [
     '05',
     'Field Sampling & Geological Research',
-    'Structured collection, custody, and interpretation of material gathered outside the laboratory.',
+    'We plan and document field sampling, material handling, and geological observations from collection through review.',
   ],
   [
     '06',
     'Laboratory Safety Systems',
-    'Access, containment, operating condition, and response systems integrated with research practice.',
+    'We develop practical safety procedures and controls that support consistent laboratory work.',
   ],
   [
     '07',
     'Prototype Evaluation',
-    'Controlled testing of early instruments, assemblies, and technical processes against defined criteria.',
+    'We test early instruments, assemblies, and processes against clear performance criteria.',
   ],
   [
     '08',
     'Contract Research',
-    'Scoped multidisciplinary studies built around an agreed question, method, and reporting standard.',
+    'We develop focused studies around an agreed question, method, schedule, and reporting approach.',
   ],
 ];
 ---
@@ -53,10 +54,21 @@ const capabilities = [
 >
   <PageHero
     eyebrow="Research capabilities"
-    title="One evidence chain. Eight areas of work."
-    intro="Programs can remain within one discipline or combine laboratory, instrumentation, environmental, and field methods."
+    title="Research designed around the question."
+    intro="Some projects stay within one discipline; others combine laboratory testing, instrumentation, environmental analysis, and field methods."
     index="TL / RESEARCH"
   />
+
+  <section class="section research-media" data-reveal>
+    <MediaFrame
+      src="/media/facilities/materials-inspection.webp"
+      aspect="wide"
+      alt="Materials arranged at an inspection station for comparative evaluation"
+      focalPoint="52% 54%"
+      caption="Comparative materials inspection and image-based evaluation."
+      credit="Trinity Laboratories"
+    />
+  </section>
 
   <section class="section capability-index" data-reveal>
     <ol>
@@ -75,15 +87,15 @@ const capabilities = [
   <section class="section section--dark" data-reveal>
     <div class="section__heading">
       <p class="section-label">Program method</p>
-      <h2>Methods are selected for the question—not the department.</h2>
+      <h2>We choose methods to fit the question.</h2>
       <p>
-        Cross-disciplinary work is governed by a single operating record, with explicit handoffs
-        between collection, testing, analysis, and review.
+        When a project crosses disciplines, collection, testing, analysis, and review follow one
+        coordinated plan.
       </p>
     </div>
     <div class="button-row">
       <a class="button button--primary" href="/studies/">View participant studies</a>
-      <a class="button" href="/contact/">Submit an inquiry</a>
+      <a class="button" href="/contact/">Discuss a project</a>
     </div>
   </section>
 </CorporateLayout>
@@ -94,6 +106,11 @@ const capabilities = [
     padding: 0;
     list-style: none;
     border-top: 1px solid var(--ink);
+  }
+
+  .research-media {
+    padding-bottom: 0;
+    border-bottom: 0;
   }
 
   .capability-index li {

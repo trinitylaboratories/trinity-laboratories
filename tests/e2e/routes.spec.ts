@@ -27,13 +27,13 @@ test('unknown routes return the designed 404 response', async ({ page }) => {
   await expect(page.locator('h1')).toHaveCount(1);
 });
 
-test('home uses the supplied 1986 icon in its hero and exposes the careers path', async ({
+test('home uses curated facility media in its hero and exposes the careers path', async ({
   page,
 }) => {
   await visit(page, '/');
   await expect(page.locator('[data-hero-media] img')).toHaveAttribute(
     'src',
-    '/media/brand/trinity-icon.png',
+    '/media/facilities/instrumented-testing.webp',
   );
   await expect(page.getByRole('link', { name: 'View careers' })).toHaveAttribute(
     'href',

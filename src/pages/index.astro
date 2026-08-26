@@ -16,70 +16,67 @@ const capabilities = [
 
 <CorporateLayout
   title="Trinity Laboratories"
-  description="Applied research, instrumentation, and field systems for complex operating environments."
+  description="Trinity Laboratories brings together applied research, technical evaluation, instrumentation, and field work."
 >
   <section class="home-hero">
     <div class="home-hero__grid" aria-hidden="true"></div>
-    <div class="home-hero__media" data-hero-media aria-hidden="true">
+    <div class="home-hero__media" data-hero-media>
       <img
-        src="/media/brand/trinity-icon.png"
-        width="1422"
-        height="1106"
-        alt=""
+        src="/media/facilities/instrumented-testing.webp"
+        width="1600"
+        height="900"
+        alt="Instrumented testing equipment prepared for a controlled laboratory evaluation"
         loading="eager"
         fetchpriority="high"
         decoding="async"
       />
     </div>
     <div class="home-hero__copy">
-      <p class="eyebrow">Trinity Laboratories // Institutional profile</p>
+      <p class="eyebrow">Applied research &amp; technical services</p>
       <h1>Trinity<br />Laboratories</h1>
-      <p class="home-hero__statement">Applied research for complex environments.</p>
+      <p class="home-hero__statement">Careful research for practical questions.</p>
       <div class="button-row">
-        <a class="button button--primary" href="/research/">Review capabilities</a>
-        <a class="button" href="/studies/">Participant studies</a>
-        <a class="button" href="/publications/">Public information</a>
+        <a class="button button--primary" href="/research/">Explore our research</a>
+        <a class="button" href="/studies/">Take part in a study</a>
+        <a class="button" href="/publications/">Publications</a>
       </div>
     </div>
     <div class="home-hero__register">
-      <span>Applied research</span>
+      <span>Laboratory research</span>
       <span>Technical evaluation</span>
-      <span>Field systems</span>
+      <span>Field support</span>
     </div>
   </section>
 
   <section class="section" data-reveal>
     <div class="section__heading">
-      <p class="section-label">01 / Institutional scope</p>
-      <h2>Research that moves between laboratory and field.</h2>
+      <p class="section-label">01 / What we do</p>
+      <h2>From the laboratory to the field.</h2>
       <p>
-        Trinity Laboratories brings experimental work, measurement systems, operational planning,
-        and technical documentation into one controlled research practice.
+        Trinity Laboratories brings together laboratory research, measurement systems, field
+        methods, and clear technical reporting.
       </p>
     </div>
     <div class="editorial-grid">
       <p class="prose-large">
-        Work begins with a measurable question and ends with evidence that can withstand practical
-        conditions.
+        Our work starts with a clear question and ends with findings that can be understood and
+        used.
       </p>
       <div>
         <p>
-          Programs are organized around clear test boundaries, calibrated instruments, reproducible
-          records, and reviewable operating procedures.
+          Each project uses a defined method, appropriate instruments, and documentation that makes
+          the work easier to review and repeat.
         </p>
-        <a class="button" href="/about/">Institutional approach</a>
+        <a class="button" href="/about/">How we work</a>
       </div>
     </div>
   </section>
 
   <section class="section section--dark" data-reveal>
     <div class="section__heading">
-      <p class="section-label">02 / Research capabilities</p>
-      <h2>Eight connected areas of applied work.</h2>
-      <p>
-        Disciplines are presented separately for clarity and coordinated when a program crosses
-        material, environmental, instrument, or field boundaries.
-      </p>
+      <p class="section-label">02 / Areas of expertise</p>
+      <h2>Eight areas of research and technical work.</h2>
+      <p>Projects may focus on one discipline or combine several, depending on the question.</p>
     </div>
     <ol class="ruled-list capability-list">
       {
@@ -95,36 +92,37 @@ const capabilities = [
       }
     </ol>
     <div class="button-row">
-      <a class="button" href="/research/">Open research index</a>
-      <a class="button" href="/studies/">View participant studies</a>
+      <a class="button" href="/research/">Explore our research</a>
+      <a class="button" href="/studies/">Browse participant studies</a>
     </div>
   </section>
 
   <section class="section" data-reveal>
     <div class="section__heading">
-      <p class="section-label">03 / Operating environments</p>
-      <h2>Built for observation, control, and transfer.</h2>
+      <p class="section-label">03 / Facilities</p>
+      <h2>Spaces and systems that support careful work.</h2>
       <p>
-        Laboratory, instrumentation, environmental, and field settings are treated as one continuous
-        evidence chain.
+        Our work moves between laboratory, instrumentation, environmental, and field settings as
+        each project requires.
       </p>
     </div>
     <MediaFrame
+      src="/media/facilities/core-sample-review.webp"
       aspect="wide"
-      alt="Abstract institutional geometry representing laboratory and field observation"
-      label="Observation / measurement / transfer"
-      caption="Laboratory and field systems"
+      alt="Prepared core samples arranged for observation and analytical review"
+      focalPoint="48% 56%"
+      caption="Core sample preparation, observation, and analytical review."
+      credit="Trinity Laboratories"
     />
-    <div class="button-row"><a class="button" href="/facilities/">Review environments</a></div>
+    <div class="button-row"><a class="button" href="/facilities/">Explore our facilities</a></div>
   </section>
 
   <section class="section" data-reveal>
     <div class="section__heading">
       <p class="section-label">04 / Careers</p>
-      <h2>Build careful work into the record.</h2>
+      <h2>Bring your expertise to careful, collaborative work.</h2>
       <p>
-        Review current disciplines and register a professional interest with the appropriate
-        capability area.
+        Explore the disciplines represented across our work and tell us where your experience fits.
       </p>
     </div>
     <div class="button-row">
@@ -133,11 +131,11 @@ const capabilities = [
   </section>
 
   <section class="section closing" data-reveal>
-    <p class="section-label">05 / Information and inquiries</p>
-    <h2>Learn more about our work or direct an institutional inquiry.</h2>
+    <p class="section-label">05 / Learn more</p>
+    <h2>Have a question about our work?</h2>
     <div class="button-row">
       <a class="button button--primary" href="/publications/">Public information</a>
-      <a class="button" href="/contact/">Contact Trinity</a>
+      <a class="button" href="/contact/">Contact us</a>
       <a class="button" href="/employee-access/">Employee access</a>
     </div>
   </section>
@@ -152,7 +150,23 @@ const capabilities = [
     overflow: hidden;
     align-items: end;
     padding: clamp(3.5rem, 8vw, 8rem) var(--page-gutter) clamp(3rem, 7vw, 6rem);
-    background: #e8e5dc;
+    background: var(--blue-black);
+    color: #fff;
+  }
+
+  .home-hero::before {
+    position: absolute;
+    z-index: -2;
+    inset: 0;
+    background:
+      linear-gradient(
+        90deg,
+        rgba(2, 10, 20, 0.94) 0%,
+        rgba(3, 17, 32, 0.78) 43%,
+        rgba(3, 17, 32, 0.16) 78%
+      ),
+      linear-gradient(0deg, rgba(2, 10, 20, 0.68) 0%, transparent 52%);
+    content: '';
   }
 
   .home-hero::after {
@@ -177,9 +191,9 @@ const capabilities = [
   }
 
   .home-hero h1 {
-    max-width: 9ch;
+    max-width: 10ch;
     margin: 1rem 0 0;
-    font-size: clamp(4.5rem, 12vw, 11rem);
+    font-size: clamp(4.1rem, 10vw, 9.4rem);
     font-weight: 520;
     letter-spacing: -0.075em;
     line-height: 0.77;
@@ -190,6 +204,7 @@ const capabilities = [
     max-width: 30rem;
     margin: 2.4rem 0 0;
     font-size: clamp(1.1rem, 2vw, 1.55rem);
+    color: #f1f5fb;
   }
 
   .home-hero__register {
@@ -200,34 +215,45 @@ const capabilities = [
     font: 400 0.64rem/1.2 var(--font-mono);
     letter-spacing: 0.08em;
     text-transform: uppercase;
+    color: #c9d7e8;
   }
 
   .home-hero__grid {
     position: absolute;
-    z-index: -2;
+    z-index: -1;
     inset: 0;
     opacity: 0.18;
     background-image:
-      linear-gradient(rgba(8, 43, 96, 0.5) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(8, 43, 96, 0.5) 1px, transparent 1px);
+      linear-gradient(rgba(255, 255, 255, 0.22) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.22) 1px, transparent 1px);
     background-size: 5rem 5rem;
-    mask-image: linear-gradient(90deg, transparent 5%, #000 65%);
+    mask-image: linear-gradient(90deg, #000 4%, transparent 72%);
   }
 
   .home-hero__media {
     position: absolute;
-    z-index: -1;
-    top: 7%;
-    right: calc(-1.5 * var(--page-gutter));
-    width: min(39vw, 42rem);
-    opacity: 0.94;
-    filter: drop-shadow(0 1.7rem 2.5rem rgba(8, 43, 96, 0.2));
+    z-index: -3;
+    inset: 0;
+    overflow: hidden;
   }
 
   .home-hero__media img {
     display: block;
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
+    object-position: 58% 48%;
+    animation: image-in 1.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+    transform-origin: center;
+  }
+
+  .home-hero .eyebrow {
+    color: #a9cfff;
+  }
+
+  .home-hero .button:not(.button--primary) {
+    border-color: rgba(255, 255, 255, 0.72);
+    color: #fff;
   }
 
   .capability-list {
@@ -263,16 +289,30 @@ const capabilities = [
     }
   }
 
+  @keyframes image-in {
+    from {
+      opacity: 0.72;
+      transform: scale(1.035);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
   @media (max-width: 52rem) {
     .home-hero {
       min-height: calc(100svh - 6.5rem);
     }
 
-    .home-hero__media {
-      top: 4%;
-      right: -18%;
-      width: 74vw;
-      opacity: 0.42;
+    .home-hero::before {
+      background:
+        linear-gradient(90deg, rgba(2, 10, 20, 0.9), rgba(3, 17, 32, 0.54)),
+        linear-gradient(0deg, rgba(2, 10, 20, 0.86) 0%, transparent 70%);
+    }
+
+    .home-hero__media img {
+      object-position: 64% 50%;
     }
 
     .home-hero__register {
