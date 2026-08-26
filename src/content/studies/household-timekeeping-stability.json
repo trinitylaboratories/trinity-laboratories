@@ -4,7 +4,7 @@
   "title": "Household Timekeeping Stability Survey",
   "shortTitle": "Household timekeeping stability",
   "researchQuestion": "What patterns of agreement appear among commonly available clocks during routine indoor use over a fourteen-day interval?",
-  "summary": "The survey examines how ordinary quartz clocks, appliance displays, and network-synchronized devices agree or diverge when read on a fixed schedule. Participants identify devices by broad category only; brands, serial numbers, network records, and exact locations are outside the protocol.",
+  "summary": "This study looks at how ordinary clocks and time displays agree or drift over two weeks. Participants describe each device by broad category only; no brands, serial numbers, network records, or exact locations are requested.",
   "status": "recruiting",
   "phase": "Comparison interval 01",
   "discipline": "Industrial Instrumentation",
@@ -81,8 +81,8 @@
   ],
   "application": {
     "mode": "eligibility-screen",
-    "title": "Timekeeping survey screen",
-    "introduction": "Confirm the available display categories and observation schedule. Completion provides a provisional screening reference only and does not create an enrollment record.",
+    "title": "Eligibility check",
+    "introduction": "Tell us which types of time displays you have and whether the two-week schedule works for you. Completing this check gives you a reference number but does not enroll you.",
     "fields": [
       {
         "id": "adult-confirmation",

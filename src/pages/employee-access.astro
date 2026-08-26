@@ -4,18 +4,18 @@ import CorporateLayout from '../layouts/CorporateLayout.astro';
 
 <CorporateLayout
   title="Employee Access"
-  description="Trinity Laboratories staff systems access terminal."
+  description="Trinity Laboratories employee services sign-in."
   class="access-page"
 >
   <section class="access-shell">
     <div class="access-shell__identity">
-      <p class="eyebrow">Institutional systems</p>
-      <h1>STAFF</h1>
-      <p>Trinity Laboratories Institutional Systems</p>
+      <p class="eyebrow">Staff systems</p>
+      <h1>Employee Access</h1>
+      <p>Trinity Laboratories Employee Services</p>
       <dl>
-        <div><dt>Node</dt><dd>Employee Services Gateway</dd></div>
-        <div><dt>Condition</dt><dd>WHITE</dd></div>
-        <div><dt>Interface</dt><dd>Available</dd></div>
+        <div><dt>Service</dt><dd>Employee Services Gateway</dd></div>
+        <div><dt>Security condition</dt><dd>WHITE</dd></div>
+        <div><dt>System status</dt><dd>Available</dd></div>
       </dl>
     </div>
     <div class="terminal">
@@ -23,7 +23,7 @@ import CorporateLayout from '../layouts/CorporateLayout.astro';
       <form data-gateway-form novalidate autocomplete="off">
         <fieldset disabled data-gateway-fields>
           <label for="badge-id"
-            >Badge identifier
+            >Employee ID
             <input
               id="badge-id"
               type="text"
@@ -36,12 +36,12 @@ import CorporateLayout from '../layouts/CorporateLayout.astro';
             />
           </label>
           <div class="terminal__code-control">
-            <button class="button" type="button" data-generate-code>Issue terminal code</button>
+            <button class="button" type="button" data-generate-code>Generate one-time code</button>
             <output data-terminal-code aria-live="polite">------</output>
-            <small data-code-expiry>Awaiting issue</small>
+            <small data-code-expiry>Not generated</small>
           </div>
           <label for="terminal-code"
-            >One-time terminal code
+            >One-time code
             <input
               id="terminal-code"
               type="text"
@@ -54,10 +54,10 @@ import CorporateLayout from '../layouts/CorporateLayout.astro';
               inputmode="text"
             />
           </label>
-          <button class="button button--primary" type="submit">Establish session</button>
+          <button class="button button--primary" type="submit">Sign in</button>
         </fieldset>
         <p class="terminal__status" role="status" aria-live="polite" data-gateway-status>
-          Terminal initialization required.
+          Preparing secure sign-in…
         </p>
       </form>
     </div>
@@ -84,7 +84,7 @@ import CorporateLayout from '../layouts/CorporateLayout.astro';
   let issuedCode: IssuedTerminalCode = { code: '', expiresAt: 0 };
   let expiryTimer = 0;
 
-  const clearCode = (message = 'Awaiting issue') => {
+  const clearCode = (message = 'Not generated') => {
     issuedCode = { code: '', expiresAt: 0 };
     if (output) output.textContent = '------';
     if (expiry) expiry.textContent = message;
@@ -96,7 +96,7 @@ import CorporateLayout from '../layouts/CorporateLayout.astro';
     const remaining = terminalCodeRemainingMs(issuedCode.expiresAt, Date.now());
     if (!remaining) {
       clearCode('Code expired');
-      if (status) status.textContent = 'Terminal code expired. Issue a new code.';
+      if (status) status.textContent = 'One-time code expired. Generate a new code.';
       return;
     }
     if (expiry) expiry.textContent = `Expires in ${Math.ceil(remaining / 1000)} seconds`;
@@ -104,7 +104,7 @@ import CorporateLayout from '../layouts/CorporateLayout.astro';
 
   if (fields && status) {
     fields.disabled = false;
-    status.textContent = 'Terminal ready. Issue a one-time terminal code to continue.';
+    status.textContent = 'Sign-in ready. Generate a one-time code to continue.';
   }
 
   generate?.addEventListener('click', () => {
@@ -112,7 +112,7 @@ import CorporateLayout from '../layouts/CorporateLayout.astro';
     crypto.getRandomValues(bytes);
     issuedCode = issueTerminalCode(bytes, Date.now());
     if (output) output.textContent = issuedCode.code;
-    if (status) status.textContent = 'One-time terminal code issued.';
+    if (status) status.textContent = 'One-time code generated.';
     window.clearInterval(expiryTimer);
     expiryTimer = window.setInterval(updateExpiry, 1000);
     updateExpiry();
@@ -123,29 +123,29 @@ import CorporateLayout from '../layouts/CorporateLayout.astro';
     event.preventDefault();
     if (!form.checkValidity()) {
       form.reportValidity();
-      if (status) status.textContent = 'Access sequence incomplete.';
+      if (status) status.textContent = 'Please complete both fields.';
       return;
     }
     if (terminalCodeRemainingMs(issuedCode.expiresAt, Date.now()) === 0) {
       clearCode('Code expired');
-      if (status) status.textContent = 'Terminal code expired. Issue a new code.';
+      if (status) status.textContent = 'One-time code expired. Generate a new code.';
       return;
     }
     if (!terminalCodeMatches(codeInput?.value ?? '', issuedCode, Date.now())) {
-      if (status) status.textContent = 'Terminal code not recognized.';
+      if (status) status.textContent = 'One-time code not recognized.';
       if (codeInput) codeInput.value = '';
       return;
     }
 
     if (badge) badge.value = '';
     if (codeInput) codeInput.value = '';
-    clearCode('Session established');
+    clearCode('Signed in');
     try {
       sessionStorage.setItem('tirn-session', 'accepted');
     } catch {
       // Storage holds only the generic local presentation state for this browser tab.
     }
-    if (status) status.textContent = 'SESSION ACCEPTED. OPENING STAFF SERVICES.';
+    if (status) status.textContent = 'Sign-in accepted. Opening staff services.';
     window.setTimeout(() => window.location.assign('/portal/'), 180);
   });
 </script>

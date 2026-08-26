@@ -4,7 +4,7 @@
   "title": "Small-Sensor Display Agreement",
   "shortTitle": "Small-sensor display agreement",
   "researchQuestion": "How consistently do side-by-side consumer temperature and relative-humidity displays settle into the same displayed interval?",
-  "summary": "The completed protocol examined a categorical method for comparing display stabilization and rounding behavior among ordinary consumer sensors placed together under routine indoor conditions. The public summary describes method and scope only and does not certify instruments or publish device-level findings.",
+  "summary": "This completed study tested a simple way to compare how ordinary temperature and humidity displays settle and round their readings when placed side by side. The public summary describes the method only; it does not certify or rank any device.",
   "status": "completed",
   "phase": "Protocol closed",
   "discipline": "Industrial Instrumentation",
@@ -78,7 +78,7 @@
     "Side-by-side placement reduces some environmental variation but does not create a calibrated reference condition.",
     "The protocol cannot support a product ranking, compliance claim, or accuracy certification."
   ],
-  "publicSummary": "The protocol established that an ordinary side-by-side comparison can be documented with fixed stabilization and agreement categories while avoiding unsupported accuracy claims. No device-level result, ranking, or certification is released through the public study page.",
+  "publicSummary": "The study showed that side-by-side consumer displays can be compared consistently using fixed categories for settling time and agreement. It did not assess accuracy, rank products, or certify individual devices.",
   "application": null,
   "relatedRecordIds": [],
   "editorialState": "owner-approved"

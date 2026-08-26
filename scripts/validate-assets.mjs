@@ -72,6 +72,14 @@ const APPROVED_ASSET_CATEGORIES = new Map([
   ],
   ['brand', { mediaTypes: new Set(['image/png', 'image/svg+xml']), prefix: '/media/brand/' }],
   [
+    'facility-media',
+    {
+      mediaTypes: new Set(['image/webp']),
+      prefix: '/media/facilities/',
+      requiresProvenance: true,
+    },
+  ],
+  [
     'third-party-font',
     {
       mediaTypes: new Set(['font/woff', 'font/woff2', 'font/otf', 'text/plain']),
@@ -554,6 +562,12 @@ export async function validateAssetLedger(
         errors.push(
           `${label} ${entry.category} does not approve mediaType ${String(entry.mediaType)}`,
         );
+      }
+      if (
+        categoryPolicy.requiresProvenance &&
+        (typeof entry.provenance !== 'string' || entry.provenance.trim() === '')
+      ) {
+        errors.push(`${label} ${entry.category} requires non-empty provenance`);
       }
     }
     const expectedMediaType = MEDIA_TYPES.get(path.posix.extname(deployedPath).toLowerCase());

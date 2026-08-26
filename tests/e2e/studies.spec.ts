@@ -20,7 +20,7 @@ async function completeScreen(form: Locator) {
   }
 }
 
-test('study register presents six bounded protocols and their current status', async ({ page }) => {
+test('study register presents six studies and their current status', async ({ page }) => {
   await visit(page, '/studies/');
   const register = page.locator('[data-study-register]');
   await expect(register.locator('li')).toHaveCount(6);
@@ -28,7 +28,7 @@ test('study register presents six bounded protocols and their current status', a
   await expect(register).toContainText('Participation open');
   await expect(register).toContainText('Protocol complete');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(
-    'Observe ordinary systems carefully.',
+    'Everyday questions, studied carefully.',
   );
 });
 
@@ -46,13 +46,13 @@ for (const route of STUDY_ROUTES) {
     expect(await form.getAttribute('method')).toBeNull();
     await expect(form.locator('[name]')).toHaveCount(0);
 
-    await form.getByRole('button', { name: 'Complete participation screen' }).click();
-    await expect(status).toContainText(/screen incomplete/i);
+    await form.getByRole('button', { name: 'Check my eligibility' }).click();
+    await expect(status).toHaveText('Please complete the highlighted fields.');
 
     await completeScreen(form);
-    await form.getByRole('button', { name: 'Complete participation screen' }).click();
+    await form.getByRole('button', { name: 'Check my eligibility' }).click();
     await expect(status).toHaveText(
-      /^PRE-SCREEN COMPLETE — ELIGIBILITY PROVISIONAL\. NO ENROLLMENT RECORD CREATED\. SCREENING REFERENCE: [A-HJ-NP-Z2-9]{6}\.$/,
+      /^Eligibility provisional\. You meet the preliminary criteria\. Your reference for this session is [A-HJ-NP-Z2-9]{6}\. This check does not enroll you in the study\.$/,
     );
     await expect(form.locator('input[type="checkbox"]:checked')).toHaveCount(0);
     for (const select of await form.locator('select').all()) {
@@ -70,9 +70,7 @@ test('participation submission is unavailable without JavaScript', async ({ brow
   await visit(page, STUDY_ROUTES[0]);
   const form = page.locator('form[data-study-form]');
   await expect(form.locator('fieldset')).toHaveAttribute('disabled', '');
-  await expect(form.getByRole('button', { name: 'Complete participation screen' })).toBeDisabled();
-  await expect(form.locator('[data-study-status]')).toHaveText(
-    'Participation screen initialization required.',
-  );
+  await expect(form.getByRole('button', { name: 'Check my eligibility' })).toBeDisabled();
+  await expect(form.locator('[data-study-status]')).toHaveText('Preparing the eligibility form…');
   await context.close();
 });

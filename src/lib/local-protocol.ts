@@ -50,14 +50,14 @@ export function simulatedFormResult(
   if (!isValid) {
     return {
       accepted: false,
-      message: 'Submission incomplete. Review the marked fields.',
+      message: 'Please complete the highlighted fields.',
       reset: false,
       state: 'incomplete',
     };
   }
   return {
     accepted: true,
-    message: successMessage || 'SUBMISSION ACCEPTED.',
+    message: successMessage || 'Thank you. Your form is complete.',
     reset: true,
     state: 'success',
   };

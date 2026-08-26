@@ -49,7 +49,7 @@ for (const route of ['/contact/', '/careers/']) {
     );
 
     expect(wasPrevented).toBe(true);
-    await expect(form.locator('[data-form-status]')).toContainText(/accepted/i);
+    await expect(form.locator('[data-form-status]')).toContainText(/thank you/i);
     await page.waitForTimeout(100);
     expect(requests).toEqual([]);
     expect(new URL(page.url()).pathname).toBe(route);

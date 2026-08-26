@@ -4,7 +4,7 @@
   "title": "Indoor Condition Observation Series",
   "shortTitle": "Indoor condition observations",
   "researchQuestion": "How closely do brief room-comfort observations align with ordinary temperature and relative-humidity readings over seven consecutive days?",
-  "summary": "This remote observation series compares a participant's simple description of one indoor environment with readings from an ordinary household thermo-hygrometer. The protocol is concerned with consistency of observation, not health, diagnosis, or building inspection.",
+  "summary": "This seven-day study compares a simple description of room comfort with readings from a household temperature and humidity display, when available. It looks at consistency over time and is not a health assessment or building inspection.",
   "status": "recruiting",
   "phase": "Observation series 02",
   "discipline": "Environmental Analysis",
@@ -81,8 +81,8 @@
   ],
   "application": {
     "mode": "eligibility-screen",
-    "title": "Participation eligibility screen",
-    "introduction": "Confirm the basic study conditions below. Completion provides a provisional screening reference only and does not create an enrollment record.",
+    "title": "Check your eligibility",
+    "introduction": "Answer a few questions about your available room, equipment, and schedule. Completing this check gives you a reference number but does not enroll you.",
     "fields": [
       {
         "id": "adult-confirmation",

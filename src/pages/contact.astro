@@ -6,29 +6,29 @@ import PageHero from '../components/PageHero.astro';
 
 <CorporateLayout
   title="Contact"
-  description="Direct an institutional inquiry to Trinity Laboratories."
+  description="Contact Trinity Laboratories about research, facilities, publications, careers, or general questions."
   active="contact"
 >
   <PageHero
     eyebrow="Contact"
-    title="Direct an inquiry."
-    intro="Route questions by subject so the relevant technical or institutional group can review the request."
+    title="How can we help?"
+    intro="Choose a topic and share a little context about your question."
     index="TL / CONTACT"
   />
 
   <section class="section" data-reveal>
     <div class="section__heading">
-      <p class="section-label">Inquiry routing</p>
-      <h2>Provide the question and operating context.</h2>
+      <p class="section-label">Send an inquiry</p>
+      <h2>Tell us what you’d like to discuss.</h2>
       <p>
-        Research, facility, publication, career, and general institutional inquiries use the same
-        controlled terminal.
+        Use this form for questions about research, facilities, publications, careers, or Trinity
+        Laboratories generally.
       </p>
     </div>
     <LocalForm
       kind="contact"
       submitLabel="Submit inquiry"
-      successMessage="INQUIRY ACCEPTED. TERMINAL CLEARED."
+      successMessage="Thank you. Your form is complete."
     >
       <label for="contact-name"
         >Full name <input id="contact-name" type="text" required autocomplete="off" /></label

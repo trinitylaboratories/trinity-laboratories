@@ -26,10 +26,9 @@ const description = (() => {
   return `${shortened}…`;
 })();
 const participationMessage = {
-  active:
-    'The current observation interval is in progress. No additional participation screen is open.',
-  paused: 'Enrollment is paused while the current protocol presentation is reviewed.',
-  completed: 'This protocol is closed. No current participation screen is available.',
+  active: 'This study is underway and is not accepting additional participants.',
+  paused: 'Participation is paused while we review the study materials.',
+  completed: 'This study has concluded and is no longer accepting participants.',
   recruiting: '',
   'interest-only': '',
 }[study.status];
@@ -77,22 +76,22 @@ const participationMessage = {
   <section class="section study-overview" data-reveal>
     <div class="section__heading">
       <p class="section-label">Study overview</p>
-      <h2>Scope and participant activity.</h2>
+      <h2>What the study involves.</h2>
       <p>{study.summary}</p>
     </div>
     <div class="study-two-column">
       <div>
-        <h3>Participant activities</h3>
+        <h3>What you’ll do</h3>
         <ol class="study-numbered-list">
           {study.participantActivities.map((activity) => <li>{activity}</li>)}
         </ol>
       </div>
       <div>
-        <h3>Basic eligibility</h3>
+        <h3>Who can take part</h3>
         <ul class="study-plain-list">
           {study.eligibility.map((item) => <li>{item}</li>)}
         </ul>
-        <h3>Outside this protocol</h3>
+        <h3>Not part of this study</h3>
         <ul class="study-plain-list study-plain-list--muted">
           {study.exclusions.map((item) => <li>{item}</li>)}
         </ul>
@@ -102,11 +101,11 @@ const participationMessage = {
 
   <section class="section section--dark" id="study-method" data-reveal>
     <div class="section__heading">
-      <p class="section-label">Protocol sequence</p>
-      <h2>One method, applied in order.</h2>
+      <p class="section-label">Study steps</p>
+      <h2>How the study works.</h2>
       <p>
-        The sequence is fixed before an observation interval opens. Missed intervals are identified
-        as missing rather than reconstructed.
+        Please follow the steps in order. If you miss an observation, leave it blank rather than
+        trying to recreate it later.
       </p>
     </div>
     <StudyProtocol steps={study.protocolSteps} />
@@ -114,20 +113,17 @@ const participationMessage = {
 
   <section class="section study-data" data-reveal>
     <div class="section__heading">
-      <p class="section-label">Information scope</p>
-      <h2>Only the listed observations.</h2>
-      <p>
-        The study is designed around broad categories and ordinary equipment. Information outside
-        the protocol is not required.
-      </p>
+      <p class="section-label">Information used</p>
+      <h2>What we ask for.</h2>
+      <p>We ask only for the broad categories and observations listed below.</p>
     </div>
     <div class="study-data__columns">
       <div>
-        <h3>Requested by the protocol</h3>
+        <h3>What we ask you to record</h3>
         <ul>{study.dataRequested.map((item) => <li>{item}</li>)}</ul>
       </div>
       <div>
-        <h3>Not requested</h3>
+        <h3>What we don’t ask for</h3>
         <ul>{study.dataNotRequested.map((item) => <li>{item}</li>)}</ul>
       </div>
     </div>
@@ -135,8 +131,8 @@ const participationMessage = {
 
   <section class="section study-prompts" data-reveal>
     <div class="study-prompts__heading">
-      <p class="section-label">Example prompts</p>
-      <h2>Questions used to keep observations consistent.</h2>
+      <p class="section-label">Sample questions</p>
+      <h2>Examples of what you’ll be asked.</h2>
     </div>
     <ol>
       {
@@ -155,12 +151,12 @@ const participationMessage = {
   <section class="section study-method-notes" data-reveal>
     <div>
       <p class="section-label">Method notes</p>
-      <h2>How the protocol is bounded.</h2>
+      <h2>Why the method is structured this way.</h2>
       <ul>{study.methodNotes.map((note) => <li>{note}</li>)}</ul>
     </div>
     <div>
       <p class="section-label">Limitations</p>
-      <h2>What the study cannot establish.</h2>
+      <h2>What the results cannot show.</h2>
       <ul>{study.limitations.map((limitation) => <li>{limitation}</li>)}</ul>
     </div>
   </section>
@@ -168,8 +164,8 @@ const participationMessage = {
   {
     study.publicSummary && (
       <section class="section study-public-summary" data-reveal>
-        <p class="section-label">Public method summary</p>
-        <h2>Protocol disposition.</h2>
+        <p class="section-label">Study summary</p>
+        <h2>What this study established.</h2>
         <p>{study.publicSummary}</p>
       </section>
     )

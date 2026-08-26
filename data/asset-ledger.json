@@ -1,11 +1,12 @@
 {
   "version": 1,
-  "generatedDate": "2026-08-24",
+  "generatedDate": "2026-08-25",
   "hashAlgorithm": "SHA-256",
   "notes": [
     "Derivative paths are deployed public paths resolved beneath the repository public directory.",
     "Original Trinity policy and form content is licensed CC BY-NC-SA 4.0.",
     "Trinity logos, wordmarks, and icons are reserved marks governed by TRADEMARKS.md.",
+    "Facility media is project-owner-supplied synthetic imagery; source provenance and metadata removal are recorded per derivative.",
     "Credential designs, portraits, newspapers, timeline evidence, narrative evidence, and duplicate source copies are intentionally excluded."
   ],
   "assets": [
@@ -338,6 +339,54 @@
       "mediaType": "image/png",
       "license": "All Rights Reserved; see TRADEMARKS.md.",
       "transform": "Lossless PNG re-encode with bundled Pillow 12.3.0 (optimize=true, compression level 9); ancillary metadata stripped; dimensions preserved."
+    },
+    {
+      "category": "facility-media",
+      "ownership": "Trinity Laboratories project owner; project-owner-supplied synthetic imagery",
+      "source": {
+        "basename": "fac_coreStudy_trinitylabs.png",
+        "sha256": "07ce028a0123b3cf5af77e0c3bf49d39f369787de042babd117b0afe4214c9dd"
+      },
+      "derivative": {
+        "path": "/media/facilities/core-sample-review.webp",
+        "sha256": "ad3e256ee8db2772e5f60dd823dabd715be26b45adcc67a60d4fd0ab65bc309b"
+      },
+      "mediaType": "image/webp",
+      "license": "CC BY-NC-SA 4.0",
+      "provenance": "Project-owner-supplied synthetic imagery generated with OpenAI's image generation service; the source PNG contained C2PA Content Credentials identifying trained-algorithmic media.",
+      "transform": "Project-local sharp 0.35.3 resized the full 1672×941 source to 1600×900 without enlargement or cropping, then encoded lossy WebP at quality 82, effort 6, with smart chroma subsampling; source C2PA caBX metadata was omitted from the derivative."
+    },
+    {
+      "category": "facility-media",
+      "ownership": "Trinity Laboratories project owner; project-owner-supplied synthetic imagery",
+      "source": {
+        "basename": "fac_resoTest_trinitylabs.png",
+        "sha256": "bd967371b720f4864de63fe281d8e3f8c8554193673d0780ff2378292d7d1c4a"
+      },
+      "derivative": {
+        "path": "/media/facilities/instrumented-testing.webp",
+        "sha256": "989c84d8cecdda42d1a9812332a474d20a5ff6d947cb55e02b22d82c025108ba"
+      },
+      "mediaType": "image/webp",
+      "license": "CC BY-NC-SA 4.0",
+      "provenance": "Project-owner-supplied synthetic imagery generated with OpenAI's image generation service; the source PNG contained C2PA Content Credentials identifying trained-algorithmic media.",
+      "transform": "Project-local sharp 0.35.3 resized the full 1672×941 source to 1600×900 without enlargement or cropping, then encoded lossy WebP at quality 82, effort 6, with smart chroma subsampling; source C2PA caBX metadata was omitted from the derivative."
+    },
+    {
+      "category": "facility-media",
+      "ownership": "Trinity Laboratories project owner; project-owner-supplied synthetic imagery",
+      "source": {
+        "basename": "fac_minStudy_trinitylabs.png",
+        "sha256": "fa2247b48e0d1edd031b7bc05f1658f7ab97fd9f8c92533ebd6583e8d3b4c282"
+      },
+      "derivative": {
+        "path": "/media/facilities/materials-inspection.webp",
+        "sha256": "841bde246b204196342f7445279782f1101f339e8b34acff7f036597aef1ebdd"
+      },
+      "mediaType": "image/webp",
+      "license": "CC BY-NC-SA 4.0",
+      "provenance": "Project-owner-supplied synthetic imagery generated with OpenAI's image generation service; the source PNG contained C2PA Content Credentials identifying trained-algorithmic media.",
+      "transform": "Project-local sharp 0.35.3 resized the full 1672×941 source to 1600×900 without enlargement or cropping, then encoded lossy WebP at quality 82, effort 6, with smart chroma subsampling; source C2PA caBX metadata was omitted from the derivative."
     },
     {
       "category": "third-party-font",

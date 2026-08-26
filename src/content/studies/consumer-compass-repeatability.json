@@ -4,7 +4,7 @@
   "title": "Consumer Compass Repeatability Observation",
   "shortTitle": "Compass repeatability observation",
   "researchQuestion": "How repeatable are stationary readings from common consumer compasses when the observation point and reading procedure remain fixed?",
-  "summary": "This field-method interest screen concerns repeatability rather than geographic accuracy. A future observation interval would use one participant-selected, non-sensitive station and categorical reading differences; coordinates, routes, photographs, and property details are not part of the protocol.",
+  "summary": "This proposed study looks at how consistently an ordinary compass can be read from the same stationary point over several days. It compares repeatability rather than geographic accuracy and does not ask for coordinates, routes, photographs, or property details.",
   "status": "interest-only",
   "phase": "Method feasibility registry",
   "discipline": "Field Sampling & Geological Research",
@@ -81,8 +81,8 @@
   ],
   "application": {
     "mode": "interest-screen",
-    "title": "Method feasibility screen",
-    "introduction": "Describe only the broad equipment and setting categories below. Completion provides a provisional screening reference and does not activate or enroll a study interval.",
+    "title": "Study interest check",
+    "introduction": "Tell us what type of compass and general setting you could use. Completing this short check gives you a reference number but does not enroll you in a study.",
     "fields": [
       {
         "id": "adult-confirmation",

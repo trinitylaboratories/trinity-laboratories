@@ -108,11 +108,9 @@ jobs:
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: playwright-diagnostics
-          path: |
-            playwright-report/
-            test-results/
+          path: playwright-report/
           if-no-files-found: ignore
-          retention-days: 7
+          retention-days: 3
 
   bootstrap-windows:
     name: Verify isolated Windows bootstrap

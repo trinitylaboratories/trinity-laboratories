@@ -23,7 +23,7 @@ const { kind, submitLabel, successMessage } = Astro.props;
     data-form-status
     data-success={successMessage}
   >
-    Form controls are loading.
+    Preparing the form…
   </p>
 </form>
 
@@ -36,7 +36,7 @@ const { kind, submitLabel, successMessage } = Astro.props;
     if (!fields || !status) return;
 
     fields.disabled = false;
-    status.textContent = 'Ready for review.';
+    status.textContent = 'Ready.';
 
     form.addEventListener('submit', (event) => {
       event.preventDefault();

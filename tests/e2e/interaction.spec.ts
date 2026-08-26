@@ -19,18 +19,24 @@ test('keyboard users receive a visible focus indicator and working skip link', a
   await expect(page.locator('#main-content')).toBeVisible();
 });
 
-test('desktop home hero keeps its title clear of the photo-ready media field', async ({ page }) => {
+test('desktop home hero layers readable copy over full-bleed facility media', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await visit(page, '/');
 
-  const titleTextRight = await page.locator('.home-hero h1').evaluate((title) => {
-    const range = document.createRange();
-    range.selectNodeContents(title);
-    return Math.max(...Array.from(range.getClientRects(), (rect) => rect.right));
-  });
+  const heroBox = await page.locator('.home-hero').boundingBox();
   const mediaBox = await page.locator('[data-hero-media]').boundingBox();
+  const title = page.locator('.home-hero h1');
+  const titleBox = await title.boundingBox();
+  expect(heroBox).not.toBeNull();
   expect(mediaBox).not.toBeNull();
-  expect(titleTextRight).toBeLessThanOrEqual(mediaBox!.x);
+  expect(titleBox).not.toBeNull();
+  expect(Math.abs(mediaBox!.x - heroBox!.x)).toBeLessThanOrEqual(1);
+  expect(Math.abs(mediaBox!.y - heroBox!.y)).toBeLessThanOrEqual(1);
+  expect(Math.abs(mediaBox!.width - heroBox!.width)).toBeLessThanOrEqual(1);
+  expect(Math.abs(mediaBox!.height - heroBox!.height)).toBeLessThanOrEqual(1);
+  expect(titleBox!.x).toBeGreaterThanOrEqual(heroBox!.x);
+  expect(titleBox!.y).toBeGreaterThanOrEqual(heroBox!.y);
+  await expect(title).toHaveCSS('color', 'rgb(255, 255, 255)');
 });
 
 test('mobile page hero keeps its institutional index clear of the title', async ({ page }) => {
