@@ -39,12 +39,17 @@ test('desktop home hero layers readable copy over full-bleed facility media', as
   await expect(title).toHaveCSS('color', 'rgb(255, 255, 255)');
 });
 
-test('mobile page hero keeps its institutional index clear of the title', async ({ page }) => {
+test('mobile standard page hero keeps its institutional index clear of the title', async ({
+  page,
+}) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await visit(page, '/publications/');
+  await visit(page, '/research/');
 
-  const indexBox = await page.locator('.page-hero__index').boundingBox();
-  const titleBox = await page.locator('.page-hero h1').boundingBox();
+  const hero = page.locator('.page-hero');
+  const indexBox = await hero.locator('.page-hero__index').boundingBox();
+  const titleBox = await hero
+    .getByRole('heading', { level: 1, name: 'Research designed around the question.' })
+    .boundingBox();
   expect(indexBox).not.toBeNull();
   expect(titleBox).not.toBeNull();
   expect(indexBox!.y + indexBox!.height).toBeLessThanOrEqual(titleBox!.y);

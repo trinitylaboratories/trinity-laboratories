@@ -21,19 +21,26 @@ test.describe('corporate information boundary', () => {
     });
   }
 
-  test('publications routes public questions and staff access separately', async ({ page }) => {
+  test('publications keeps public inquiries in content and staff access in the utility header', async ({
+    page,
+  }) => {
     await visit(page, '/publications/');
     const main = page.locator('main');
 
-    await expect(main.getByRole('heading', { name: 'Resources and publications.' })).toBeVisible();
-    await expect(main.getByRole('link', { name: 'Send an inquiry' })).toHaveAttribute(
+    await expect(
+      main.getByRole('heading', {
+        level: 1,
+        name: 'Small findings, clearly documented.',
+      }),
+    ).toBeVisible();
+    await expect(main.getByRole('link', { name: 'Ask a question', exact: true })).toHaveAttribute(
       'href',
       '/contact/',
     );
-    await expect(main.getByRole('link', { name: 'Employee Access' })).toHaveAttribute(
-      'href',
-      '/employee-access/',
-    );
+    await expect(main.getByRole('link', { name: 'Employee Access', exact: true })).toHaveCount(0);
+    await expect(
+      page.getByRole('banner').getByRole('link', { name: 'Employee Access', exact: true }),
+    ).toHaveAttribute('href', '/employee-access/');
   });
 
   test('home uses conventional corporate status language', async ({ page }) => {
