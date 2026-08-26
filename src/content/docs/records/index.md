@@ -9,13 +9,14 @@ The TIRN Records Gateway provides policy references, approved forms, completed r
 
 ## Archive modules
 
-| Module                                     | Contents                                                              |
-| ------------------------------------------ | --------------------------------------------------------------------- |
-| [Security references](/records/security/)  | Information-classification and security-administration references     |
-| [Forms library](/records/forms/)           | Current operational, research, personnel, notice, and procedure forms |
-| [Report register](/records/reports/)       | Completed records subject to their assigned information controls      |
-| [Filed submissions](/records/submissions/) | Records accepted by Records Control                                   |
-| [Global search](/records/search/)          | Released records available to the current staff session               |
+| Module                                        | Contents                                                              |
+| --------------------------------------------- | --------------------------------------------------------------------- |
+| [Security references](/records/security/)     | Information-classification and security-administration references     |
+| [Research administration](/records/research/) | Subject oversight and research-control policy references              |
+| [Forms library](/records/forms/)              | Current operational, research, personnel, notice, and procedure forms |
+| [Report register](/records/reports/)          | Completed records subject to their assigned information controls      |
+| [Filed submissions](/records/submissions/)    | Records accepted by Records Control                                   |
+| [Global search](/records/search/)             | Released records available to the current staff session               |
 
 ## Current holdings
 

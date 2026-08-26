@@ -5,6 +5,7 @@ export const PORTAL_ROUTES: readonly string[];
 export const FORM_IDS: readonly string[];
 export const FORM_ROUTES: readonly string[];
 export const SECURITY_RECORD_ROUTES: readonly string[];
+export const RESEARCH_RECORD_ROUTES: readonly string[];
 export const RECORD_ROUTES: readonly string[];
 export const SEARCHABLE_FORM_ROUTES: readonly string[];
 export const SEARCHABLE_RECORD_ROUTES: readonly string[];

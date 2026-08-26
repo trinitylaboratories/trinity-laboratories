@@ -364,14 +364,28 @@ site-search button {
 
 @media (max-width: 55rem) {
   .sl-markdown-content table {
-    table-layout: fixed;
-    font-size: 0.78rem;
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    table-layout: auto;
+    overscroll-behavior-inline: contain;
+    font-size: 0.8rem;
   }
 
   .sl-markdown-content th,
   .sl-markdown-content td {
-    padding: 0.45rem;
-    overflow-wrap: anywhere;
+    padding: 0.55rem;
+    overflow-wrap: normal;
+    word-break: normal;
+  }
+
+  [data-record-id='TL-RSO-001'] .records-document-content th,
+  [data-record-id='TL-RSO-001'] .records-document-content td {
+    min-width: 10rem;
+  }
+
+  [data-record-id='TL-RSO-001'] .records-document-content :is(th, td):first-child {
+    min-width: 4.5rem;
   }
 
   .tirn-title > a span,

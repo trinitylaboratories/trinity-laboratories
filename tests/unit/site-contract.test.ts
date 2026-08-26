@@ -10,6 +10,7 @@ import {
   PRODUCTION_ORIGIN,
   RECORD_INDEX_ROUTES,
   RECORD_ROUTES,
+  RESEARCH_RECORD_ROUTES,
   REPORT_IDS,
   REPORT_ROUTES,
   routeToOutputPath,
@@ -32,7 +33,7 @@ describe('site contract', () => {
     expect(FORM_IDS).toHaveLength(15);
     expect(new Set(FORM_IDS).size).toBe(15);
     expect(FORM_ROUTES).toHaveLength(15);
-    expect(RECORD_ROUTES).toHaveLength(18);
+    expect(RECORD_ROUTES).toHaveLength(19);
     for (const route of FORM_ROUTES) {
       expect(SITE_ROUTES).toContain(route);
       expect(NOINDEX_ROUTES).toContain(route);
@@ -52,6 +53,10 @@ describe('site contract', () => {
       '/records/security/information-classification/',
       ...SEARCHABLE_FORM_ROUTES,
     ]);
+    expect(SEARCHABLE_RECORD_ROUTES).not.toContain(
+      '/records/research/subject-oversight-classification/',
+    );
+    expect(RESEARCH_RECORD_ROUTES).toEqual(['/records/research/subject-oversight-classification/']);
     for (const route of SEARCHABLE_RECORD_ROUTES) expect(RECORD_ROUTES).toContain(route);
   });
 
@@ -66,6 +71,7 @@ describe('site contract', () => {
     expect(PORTAL_ROUTES).toContain('/portal/personnel/');
     expect(RECORD_INDEX_ROUTES).toContain('/records/');
     expect(RECORD_INDEX_ROUTES).toContain('/records/security/');
+    expect(RECORD_INDEX_ROUTES).toContain('/records/research/');
     for (const route of CONTROLLED_RECORD_ROUTES) {
       expect(route).toMatch(/^\/records\//);
       expect(NOINDEX_ROUTES).toContain(route);

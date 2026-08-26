@@ -51,6 +51,17 @@ but proposals and placeholders must never be presented as established facts with
   **Environmental Analysis**, **Applied Physics**, **Field Sampling & Geological Research**,
   **Laboratory Safety Systems**, **Prototype Evaluation**, and **Contract Research**.
 - Staff-interface copy uses the canonical `TL-3` form rather than the informal abbreviation `T3`.
+- `TL-RSO-001` defines Research Subject Oversight (`RS-*`) as an independent control domain. An
+  RS designation states the minimum subject monitoring, handling, documentation, and review; it
+  never grants TL information eligibility, S physical authority, or permission to interact. The
+  source provides no document-level TL marking, so the website's TL-3/TL-4 presentation is a
+  working disclosure convention rather than a historical crosswalk.
+  The formal record title and generic abstract are safe catalogue metadata. Ordinary classifications
+  are presented at TL-3, RS-5 and RS-6 controls at TL-4, and the remaining Directorate
+  classifications and category are TL-5 withheld. Their plaintext must not enter Git, a build, or
+  client assets. Because the source records a 1987 review date but no later reaffirmation, the
+  current portal catalogues it as archived; that status is a conservative working convention, not a
+  source claim.
 - `TL-340-TRN-001` is an owner-approved controlled-records handling review. It documents an
   ordinary internal quality check without establishing a client, facility, incident, or program.
 - The digitized reports register contains an owner-approved selection of routine internal technical

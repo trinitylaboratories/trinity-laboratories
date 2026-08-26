@@ -1,12 +1,25 @@
-import { readFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 
 import {
   validateSubmissionDirectory,
   validateSubmissionRecord,
 } from '../../scripts/validate-submissions.mjs';
+
+const temporaryRoots: string[] = [];
+
+async function submissionFixtureRoot() {
+  const parent = path.join(process.cwd(), '.tools', 'test-results');
+  await mkdir(parent, { recursive: true });
+  const root = await mkdtemp(path.join(parent, 'unit-submissions-'));
+  temporaryRoots.push(root);
+  await mkdir(path.join(root, 'src', 'content', 'docs', 'forms'), { recursive: true });
+  await mkdir(path.join(root, 'src', 'content', 'docs', 'research'), { recursive: true });
+  await mkdir(path.join(root, 'src', 'content', 'submissions'), { recursive: true });
+  return root;
+}
 
 async function fixture() {
   const filename = path.join(process.cwd(), 'src', 'content', 'submissions', 'tl-340-trn-001.json');
@@ -24,12 +37,48 @@ async function personnelFixture() {
   return JSON.parse(await readFile(filename, 'utf8')) as Record<string, unknown>;
 }
 
+afterEach(async () => {
+  await Promise.all(
+    temporaryRoots
+      .splice(0)
+      .map((root) => rm(root, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 })),
+  );
+});
+
 describe('completed submission policy', () => {
   it('validates the canonical submission directory and its related records', async () => {
     await expect(validateSubmissionDirectory(process.cwd())).resolves.toEqual({
       diagnostics: [],
       files: 34,
       records: 34,
+    });
+  });
+
+  it('resolves related canonical record IDs declared by MDX documents', async () => {
+    const root = await submissionFixtureRoot();
+    const record = await fixture();
+    record.relatedRecords = ['TL-340', 'TL-RSO-001'];
+
+    await writeFile(
+      path.join(root, 'src', 'content', 'docs', 'forms', 'tl-340.md'),
+      '---\nrecordId: TL-340\n---\n',
+      'utf8',
+    );
+    await writeFile(
+      path.join(root, 'src', 'content', 'docs', 'research', 'tl-rso-001.mdx'),
+      '---\nrecordId: TL-RSO-001\n---\n',
+      'utf8',
+    );
+    await writeFile(
+      path.join(root, 'src', 'content', 'submissions', 'tl-340-trn-001.json'),
+      `${JSON.stringify(record, null, 2)}\n`,
+      'utf8',
+    );
+
+    await expect(validateSubmissionDirectory(root)).resolves.toEqual({
+      diagnostics: [],
+      files: 1,
+      records: 1,
     });
   });
 

@@ -3,21 +3,43 @@ type RecordsTitleData = {
   title: string;
   recordId?: string;
   recordType?: string;
+  publicationState?: string;
+  information?: {
+    level?: string;
+    program?: string;
+    compartment?: string;
+  };
 };
 
 const data = Astro.locals.starlightRoute.entry.data as RecordsTitleData;
-const protectedForm = data.recordType === 'form-template' && Boolean(data.recordId);
+const informationLevel = data.information?.level ?? 'TL-2';
+const standardRank = Number(informationLevel.replace('TL-', ''));
+const protectedRecord =
+  Boolean(data.recordId) &&
+  (data.publicationState === 'withheld' ||
+    Boolean(data.information?.program || data.information?.compartment) ||
+    informationLevel === 'TL/Ø' ||
+    !Number.isFinite(standardRank) ||
+    standardRank >= 3);
+const protectedTypeLabel =
+  data.recordType === 'form-template'
+    ? 'form template'
+    : data.recordType === 'policy'
+      ? 'policy'
+      : data.recordType === 'security-reference'
+        ? 'security reference'
+        : 'record';
 ---
 
 <h1 id="_top" tabindex="-1">
   {
-    protectedForm ? (
+    protectedRecord ? (
       <>
         <span data-protected-record-title={data.recordId} hidden>
           {data.title}
         </span>
         <span data-protected-record-title-fallback={data.recordId}>
-          {data.recordId} — Controlled form template
+          {data.recordId} — Controlled {protectedTypeLabel}
         </span>
       </>
     ) : (
