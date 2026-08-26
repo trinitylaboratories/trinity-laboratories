@@ -1,8 +1,9 @@
-import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
 import { afterEach, describe, expect, it } from 'vitest';
 
+import { REPORT_IDS } from '../../scripts/lib/site-contract.mjs';
 import {
   validateSubmissionDirectory,
   validateSubmissionRecord,
@@ -49,9 +50,18 @@ describe('completed submission policy', () => {
   it('validates the canonical submission directory and its related records', async () => {
     await expect(validateSubmissionDirectory(process.cwd())).resolves.toEqual({
       diagnostics: [],
-      files: 34,
-      records: 34,
+      files: 43,
+      records: 43,
     });
+  });
+
+  it('keeps every submission filename in the monitored route contract', async () => {
+    const filenames = (await readdir(path.join('src', 'content', 'submissions')))
+      .filter((filename) => filename.endsWith('.json'))
+      .map((filename) => path.basename(filename, '.json'))
+      .sort();
+
+    expect(filenames).toEqual([...REPORT_IDS].sort());
   });
 
   it('resolves related canonical record IDs declared by MDX documents', async () => {

@@ -2,49 +2,7 @@
 import CorporateLayout from '../layouts/CorporateLayout.astro';
 import MediaFrame from '../components/MediaFrame.astro';
 import PageHero from '../components/PageHero.astro';
-
-const capabilities = [
-  [
-    '01',
-    'Advanced Materials',
-    'We compare how materials behave under defined conditions, using methods tailored to the question and intended use.',
-  ],
-  [
-    '02',
-    'Industrial Instrumentation',
-    'We develop and evaluate measurement systems, calibrated assemblies, and practical interfaces for reliable observation.',
-  ],
-  [
-    '03',
-    'Environmental Analysis',
-    'We use structured sampling and analytical methods to study changing physical and environmental conditions.',
-  ],
-  [
-    '04',
-    'Applied Physics',
-    'We investigate physical behavior through controlled experiments focused on measurable, repeatable effects.',
-  ],
-  [
-    '05',
-    'Field Sampling & Geological Research',
-    'We plan and document field sampling, material handling, and geological observations from collection through review.',
-  ],
-  [
-    '06',
-    'Laboratory Safety Systems',
-    'We develop practical safety procedures and controls that support consistent laboratory work.',
-  ],
-  [
-    '07',
-    'Prototype Evaluation',
-    'We test early instruments, assemblies, and processes against clear performance criteria.',
-  ],
-  [
-    '08',
-    'Contract Research',
-    'We develop focused studies around an agreed question, method, schedule, and reporting approach.',
-  ],
-];
+import { CAPABILITIES } from '../lib/capabilities';
 ---
 
 <CorporateLayout
@@ -73,11 +31,14 @@ const capabilities = [
   <section class="section capability-index" data-reveal>
     <ol>
       {
-        capabilities.map(([index, title, copy]) => (
+        CAPABILITIES.map((capability) => (
           <li>
-            <small>{index}</small>
-            <h2>{title}</h2>
-            <p>{copy}</p>
+            <small>{capability.index}</small>
+            <div>
+              <h2>{capability.title}</h2>
+              <a href={`/research/${capability.slug}/`}>View capability</a>
+            </div>
+            <p>{capability.summary}</p>
           </li>
         ))
       }
@@ -131,6 +92,15 @@ const capabilities = [
     font-size: clamp(1.5rem, 3vw, 3rem);
     font-weight: 500;
     letter-spacing: -0.035em;
+  }
+
+  .capability-index h2 + a {
+    display: inline-block;
+    margin-top: 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
   }
 
   .capability-index p {

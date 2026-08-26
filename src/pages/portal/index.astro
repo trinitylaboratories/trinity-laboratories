@@ -3,6 +3,8 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 
 import PortalPageHeading from '../../components/portal/PortalPageHeading.astro';
 import SessionSummary from '../../components/portal/SessionSummary.astro';
+import AuthorizationDialog from '../../components/records/AuthorizationDialog.astro';
+import { PORTAL_NOTICES, PORTAL_WORK_ITEMS } from '../../lib/portal-operations';
 import {
   catalogueEntryFromDocument,
   catalogueEntryFromSubmission,
@@ -11,10 +13,12 @@ import {
   type RecordCatalogueEntry,
 } from '../../lib/record-catalogue';
 import type { SubmissionRecordData } from '../../lib/submission-schema';
+import { isTemporaryGrantLevel } from '../../lib/tirn-access';
 import PortalLayout from '../../layouts/PortalLayout.astro';
 
 const documents = await getCollection('docs');
 const submissions = await getCollection('submissions');
+const studies = await getCollection('studies');
 const documentEntries: RecordCatalogueEntry[] = documents.flatMap(
   (document: CollectionEntry<'docs'>): RecordCatalogueEntry[] => {
     const entry = catalogueEntryFromDocument(document.id, document.data as CatalogueDocumentData);
@@ -36,21 +40,77 @@ const securityCount = documentEntries.filter(
 const personnelCount = submissionEntries.filter(
   ({ recordFamily }: RecordCatalogueEntry) => recordFamily === 'personnel',
 ).length;
+const openWorkItemCount = PORTAL_WORK_ITEMS.filter(({ state }) => state !== 'controlled').length;
+const controlledWorkItemCount = PORTAL_WORK_ITEMS.length - openWorkItemCount;
 ---
 
 <PortalLayout
   title="Staff Home"
-  description="TIRN Staff Services provides current session status, records references, forms, and authorization controls."
+  description="TIRN Staff Services provides current work items, research administration, records references, forms, and authorization controls."
   active="home"
 >
   <PortalPageHeading
     path="Staff Services / Home"
     title="Staff home"
-    description="Routine access to released records, blank forms, and session authorization controls."
+    description="Review unit work items, current records, research administration, and session authorization controls."
   />
 
   <div class="portal-workspace">
     <div class="portal-workspace__primary">
+      <section class="portal-section" aria-labelledby="work-queue-heading">
+        <p class="portal-section__label">Unit operations</p>
+        <h2 id="work-queue-heading">Current work items</h2>
+        <p>
+          Routine items issued to this staff node. Confirm applicability with the controlling office
+          before acting.
+        </p>
+        <div class="portal-table-wrap">
+          <table class="portal-table portal-work-queue" data-portal-work-queue>
+            <caption>
+              {openWorkItemCount} routine items · {controlledWorkItemCount} controlled review
+            </caption>
+            <thead>
+              <tr><th>Item</th><th>State</th><th>Timing</th><th>Action</th></tr>
+            </thead>
+            <tbody>
+              {
+                PORTAL_WORK_ITEMS.map((item) => (
+                  <tr
+                    data-portal-work-item
+                    data-work-kind={item.kind}
+                    data-required-level={item.requiredLevel}
+                  >
+                    <td class="portal-table__title">
+                      <strong>{item.title}</strong>
+                      <span>{item.detail}</span>
+                      <span>{item.office}</span>
+                    </td>
+                    <td>
+                      <span class="portal-register-state" data-state={item.state}>
+                        {item.state}
+                      </span>
+                    </td>
+                    <td>{item.timing}</td>
+                    <td>
+                      <div class="portal-record-actions">
+                        <a href={item.href}>{item.actionLabel}</a>
+                        {isTemporaryGrantLevel(item.requiredLevel) && (
+                          <AuthorizationDialog
+                            id={`work-item-${item.id}`}
+                            requiredLevel={item.requiredLevel}
+                            triggerLabel="Request access"
+                          />
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+      </section>
+
       <section class="portal-section" aria-labelledby="records-heading">
         <p class="portal-section__label">Records control</p>
         <h2 id="records-heading">Available records services</h2>
@@ -69,6 +129,11 @@ const personnelCount = submissionEntries.filter(
                 <td>Completed reports</td>
                 <td>{submissionEntries.length} registered</td>
                 <td><a href="/records/reports/">Open register</a></td>
+              </tr>
+              <tr>
+                <td>Research administration</td>
+                <td>{studies.length} protocols registered</td>
+                <td><a href="/portal/research/">Open study register</a></td>
               </tr>
               <tr>
                 <td>Personnel files</td>
@@ -159,7 +224,9 @@ const personnelCount = submissionEntries.filter(
           <li><a href="/portal/records/">Filter the canonical records catalogue</a></li>
           <li><a href="/portal/personnel/">Review controlled personnel files</a></li>
           <li><a href="/records/search/">Search TIRN released records</a></li>
-          <li><a href="/records/research/">Review research-administration references</a></li>
+          <li>
+            <a href="/portal/research/">Review research protocols and oversight references</a>
+          </li>
           <li>
             <a href="/records/security/information-classification/">Check information eligibility</a
             >
@@ -175,9 +242,24 @@ const personnelCount = submissionEntries.filter(
       <section class="portal-section" aria-labelledby="notices-heading">
         <p class="portal-section__label">Notices</p>
         <h2 id="notices-heading">Staff notices</h2>
-        <div class="portal-empty">
-          <strong>No active notices</strong>
-          <span>No staff-services notices apply to the current session.</span>
+        <div class="portal-notice-list" data-portal-notices>
+          {
+            PORTAL_NOTICES.map((notice) => (
+              <article data-portal-notice data-notice-kind={notice.kind}>
+                <header>
+                  <strong>{notice.title}</strong>
+                  <span class="portal-register-state" data-state={notice.state}>
+                    {notice.state}
+                  </span>
+                </header>
+                <p>{notice.detail}</p>
+                <footer>
+                  <span>{notice.timing}</span>
+                  <a href={notice.href}>{notice.actionLabel}</a>
+                </footer>
+              </article>
+            ))
+          }
         </div>
       </section>
     </aside>

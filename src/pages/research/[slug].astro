@@ -1,0 +1,300 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+import MediaFrame from '../../components/MediaFrame.astro';
+import PageHero from '../../components/PageHero.astro';
+import CorporateLayout from '../../layouts/CorporateLayout.astro';
+import { CAPABILITIES, type Capability } from '../../lib/capabilities';
+import { projectReleasedSubmission, type PublicTechnicalNote } from '../../lib/publications';
+import type { SubmissionRecordData } from '../../lib/submission-schema';
+
+export async function getStaticPaths() {
+  return CAPABILITIES.map((capability) => ({
+    params: { slug: capability.slug },
+    props: { capability },
+  }));
+}
+
+interface Props {
+  capability: Capability;
+}
+
+const { capability } = Astro.props as Props;
+const releasedNotes: PublicTechnicalNote[] = (await getCollection('submissions'))
+  .map((entry: CollectionEntry<'submissions'>) => entry.data as SubmissionRecordData)
+  .map(projectReleasedSubmission)
+  .filter(
+    (note: PublicTechnicalNote | null): note is PublicTechnicalNote =>
+      note?.discipline === capability.title,
+  )
+  .sort(
+    (left: PublicTechnicalNote, right: PublicTechnicalNote) =>
+      right.archiveDate.localeCompare(left.archiveDate) || left.slug.localeCompare(right.slug),
+  );
+---
+
+<CorporateLayout
+  title={capability.title}
+  description={capability.summary}
+  active="research"
+  class="capability-page"
+>
+  <PageHero
+    eyebrow="Research capability"
+    title={capability.title}
+    intro={capability.summary}
+    index={`TL / RESEARCH / ${capability.index}`}
+  />
+
+  <section class="section capability-introduction" data-reveal>
+    <div class="section__heading">
+      <p class="section-label">Capability overview</p>
+      <h2>Practical questions, defined methods.</h2>
+      <p>{capability.introduction}</p>
+    </div>
+    {
+      capability.media && (
+        <MediaFrame
+          src={capability.media.src}
+          aspect="wide"
+          alt={capability.media.alt}
+          focalPoint={capability.media.focalPoint}
+          caption={capability.media.caption}
+          credit="Trinity Laboratories"
+        />
+      )
+    }
+  </section>
+
+  <section class="section capability-questions" data-reveal>
+    <div class="section__heading">
+      <p class="section-label">Questions we address</p>
+      <h2>Start with the decision the work needs to support.</h2>
+    </div>
+    <ol>
+      {
+        capability.questions.map((question, index) => (
+          <li>
+            <small>{String(index + 1).padStart(2, '0')}</small>
+            <p>{question}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="section section--dark capability-method" data-reveal>
+    <div class="section__heading">
+      <p class="section-label">Typical approach</p>
+      <h2>Methods and project inputs.</h2>
+      <p>Specific methods are selected after the question, material, and intended use are clear.</p>
+    </div>
+    <div class="capability-method__columns">
+      <div>
+        <h3>Methods may include</h3>
+        <ul>{capability.methods.map((method) => <li>{method}</li>)}</ul>
+      </div>
+      <div>
+        <h3>Useful project inputs</h3>
+        <ul>{capability.projectInputs.map((input) => <li>{input}</li>)}</ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section capability-output" data-reveal>
+    <div>
+      <p class="section-label">Typical deliverables</p>
+      <h2>Work that can be reviewed and used.</h2>
+      <ul>{capability.deliverables.map((deliverable) => <li>{deliverable}</li>)}</ul>
+    </div>
+    <div>
+      <p class="section-label">Boundaries</p>
+      <h2>What the work does not assume.</h2>
+      <ul>{capability.limitations.map((limitation) => <li>{limitation}</li>)}</ul>
+    </div>
+  </section>
+
+  <section class="section capability-notes" data-reveal>
+    <div class="section__heading">
+      <p class="section-label">Public technical notes</p>
+      <h2>Examples from the archive.</h2>
+      <p>
+        Released notes show how we frame routine questions, methods, observations, and limitations.
+      </p>
+    </div>
+    <ol>
+      {
+        releasedNotes.map((note: PublicTechnicalNote) => (
+          <li>
+            <time datetime={note.archiveDate}>{note.yearLabel}</time>
+            <div>
+              <h3>{note.title}</h3>
+              <p>{note.summary}</p>
+            </div>
+            <a href={note.href}>Read technical note</a>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="section capability-contact" data-reveal>
+    <div class="section__heading">
+      <p class="section-label">Discuss a project</p>
+      <h2>Tell us what you need to understand.</h2>
+      <p>
+        A useful first conversation covers the question, available material, timing, and intended
+        decision.
+      </p>
+    </div>
+    <div class="button-row">
+      <a class="button button--primary" href="/contact/">Contact Trinity Laboratories</a>
+      <a class="button" href="/research/">All research capabilities</a>
+    </div>
+  </section>
+</CorporateLayout>
+
+<style>
+  .capability-introduction {
+    display: grid;
+    grid-template-columns: minmax(0, 0.72fr) minmax(24rem, 1.28fr);
+    gap: clamp(2rem, 6vw, 7rem);
+    align-items: start;
+  }
+
+  .capability-introduction .section__heading {
+    display: block;
+    margin-bottom: 0;
+  }
+
+  .capability-introduction .section__heading h2 {
+    margin-top: 0.8rem;
+  }
+
+  .capability-introduction .section__heading p:last-child {
+    margin-top: 1.5rem;
+  }
+
+  .capability-questions ol,
+  .capability-notes ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--ink);
+  }
+
+  .capability-questions li {
+    display: grid;
+    grid-template-columns: 5rem minmax(0, 1fr);
+    gap: clamp(1rem, 4vw, 4rem);
+    padding: clamp(1.5rem, 3vw, 2.5rem) 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .capability-questions small,
+  .capability-notes time {
+    font-family: var(--font-mono);
+    color: var(--blue);
+  }
+
+  .capability-questions p {
+    max-width: 52rem;
+    margin: 0;
+    font-size: clamp(1.25rem, 2.3vw, 2.2rem);
+    line-height: 1.25;
+    letter-spacing: -0.025em;
+  }
+
+  .capability-method__columns,
+  .capability-output {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(2rem, 7vw, 8rem);
+  }
+
+  .capability-method h3,
+  .capability-output h2 {
+    margin-top: 0;
+  }
+
+  .capability-method ul,
+  .capability-output ul {
+    margin: 1.5rem 0 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid currentColor;
+  }
+
+  .capability-method li,
+  .capability-output li {
+    padding: 0.9rem 0;
+    border-bottom: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+  }
+
+  .capability-notes li {
+    display: grid;
+    grid-template-columns: 6rem minmax(0, 1fr) auto;
+    gap: clamp(1rem, 4vw, 4rem);
+    align-items: baseline;
+    padding: clamp(1.25rem, 2.5vw, 2rem) 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .capability-notes h3,
+  .capability-notes p {
+    margin: 0;
+  }
+
+  .capability-notes h3 {
+    font-size: clamp(1.2rem, 2vw, 1.7rem);
+  }
+
+  .capability-notes p {
+    max-width: 48rem;
+    margin-top: 0.5rem;
+    color: var(--muted);
+  }
+
+  .capability-notes a {
+    white-space: nowrap;
+  }
+
+  .capability-contact .button-row {
+    margin-top: clamp(2rem, 4vw, 4rem);
+  }
+
+  @media (max-width: 58rem) {
+    .capability-introduction,
+    .capability-method__columns,
+    .capability-output {
+      grid-template-columns: 1fr;
+    }
+
+    .capability-notes li {
+      grid-template-columns: 4rem minmax(0, 1fr);
+    }
+
+    .capability-notes a {
+      grid-column: 2;
+      justify-self: start;
+    }
+  }
+
+  @media (max-width: 38rem) {
+    .capability-questions li,
+    .capability-notes li {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+
+    .capability-notes a {
+      grid-column: 1;
+    }
+  }
+
+  @media print {
+    .capability-contact {
+      display: none;
+    }
+  }
+</style>

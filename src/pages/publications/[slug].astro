@@ -1,0 +1,172 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+import CorporateLayout from '../../layouts/CorporateLayout.astro';
+import { buildPublicPublicationLibrary, type PublicPublication } from '../../lib/publications';
+import type { SubmissionRecordData } from '../../lib/submission-schema';
+import type { StudyData } from '../../lib/study-schema';
+import '../../styles/publications.css';
+
+export async function getStaticPaths() {
+  const submissions = (await getCollection('submissions')).map(
+    (entry: CollectionEntry<'submissions'>) => entry.data as SubmissionRecordData,
+  );
+  const studies = (await getCollection('studies')).map(
+    (entry: CollectionEntry<'studies'>) => entry.data as StudyData,
+  );
+
+  return buildPublicPublicationLibrary(submissions, studies).map((publication) => ({
+    params: { slug: publication.slug },
+    props: { publication },
+  }));
+}
+
+interface Props {
+  publication: PublicPublication;
+}
+
+const { publication } = Astro.props;
+const truncateDocumentTitle = (value: string, maximumLength: number) => {
+  if (value.length <= maximumLength) return value;
+  const shortened = value
+    .slice(0, maximumLength - 1)
+    .replace(/\s+\S*$/, '')
+    .trimEnd();
+  return `${shortened}…`;
+};
+const documentTitle = truncateDocumentTitle(publication.title, 47);
+const description =
+  publication.summary.length <= 178
+    ? publication.summary
+    : `${publication.summary.slice(0, 175).replace(/\s+\S*$/, '')}…`;
+const relatedLinks = [
+  {
+    eyebrow: 'Related capability',
+    label: publication.discipline,
+    href: publication.capabilityHref,
+  },
+  publication.kind === 'study-summary'
+    ? {
+        eyebrow: 'Completed protocol',
+        label: publication.relatedStudy.label,
+        href: publication.relatedStudy.href,
+      }
+    : {
+        eyebrow: 'Current participation',
+        label: 'Browse participant studies',
+        href: '/studies/',
+      },
+];
+---
+
+<CorporateLayout
+  title={documentTitle}
+  description={description}
+  active="publications"
+  class="publication-document-page"
+>
+  <div class="publication-print-masthead" aria-hidden="true">
+    <span>Trinity Laboratories / Public technical library</span>
+    <span>{publication.kindLabel}</span>
+  </div>
+
+  <section class="publication-detail-hero">
+    <div>
+      <p class="eyebrow">Publications / {publication.kindLabel}</p>
+      <h1>{publication.title}</h1>
+      <p class="publication-detail-hero__summary">{publication.summary}</p>
+      <div class="button-row publication-detail-actions">
+        <button class="button button--primary" type="button" data-print-publication>
+          Print this note
+        </button>
+        <a class="button" href="/publications/">All publications</a>
+      </div>
+    </div>
+    <dl class="publication-detail-hero__meta" aria-label="Publication details">
+      <div><dt>Type</dt><dd>{publication.kindLabel}</dd></div>
+      <div><dt>Discipline</dt><dd>{publication.discipline}</dd></div>
+      <div>
+        <dt>{publication.kind === 'technical-note' ? 'Archive date' : 'Status'}</dt>
+        <dd>{publication.dateLabel}</dd>
+      </div>
+    </dl>
+  </section>
+
+  <article class="section publication-document" data-publication-detail>
+    <aside class="publication-document__rail">
+      <p class="section-label">Public note</p>
+      <p>
+        This publication presents a bounded observation for general context. It is not a client
+        report, product certification, or statement of universal performance.
+      </p>
+      <a class="button" href={publication.capabilityHref}>Related research</a>
+    </aside>
+
+    <div class="publication-document__body">
+      <section class="publication-document__section">
+        <small>01</small>
+        <h2>{publication.kind === 'technical-note' ? 'Approach' : 'Study method'}</h2>
+        {
+          publication.kind === 'technical-note' ? (
+            <p>{publication.method}</p>
+          ) : (
+            <ul>
+              {publication.method.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          )
+        }
+      </section>
+
+      <section class="publication-document__section">
+        <small>02</small>
+        <h2>{publication.kind === 'technical-note' ? 'Observation' : 'Public finding'}</h2>
+        <p>{publication.observation}</p>
+      </section>
+
+      <section class="publication-document__section">
+        <small>03</small>
+        <h2>Scope and interpretation</h2>
+        {
+          publication.kind === 'technical-note' ? (
+            <p>{publication.scope}</p>
+          ) : (
+            <ul>
+              {publication.scope.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          )
+        }
+      </section>
+    </div>
+  </article>
+
+  <section class="section section--dark" data-reveal>
+    <div class="section__heading">
+      <p class="section-label">Continue reading</p>
+      <h2>Related research and participation.</h2>
+      <p>
+        See the broader capability behind this publication or continue to current and completed
+        participant studies.
+      </p>
+    </div>
+    <div class="publication-related">
+      {
+        relatedLinks.map((link) => (
+          <a href={link.href}>
+            <small>{link.eyebrow}</small>
+            <strong>{link.label} ↗</strong>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <script>
+    document.querySelector('[data-print-publication]')?.addEventListener('click', () => {
+      window.print();
+    });
+  </script>
+</CorporateLayout>

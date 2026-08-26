@@ -1,0 +1,58 @@
+{
+  "recordId": "TL-101-PP-2601",
+  "formId": "TL-101",
+  "title": "Indoor Condition Observation Series — Enrollment Administration",
+  "recordType": "completed-report",
+  "recordFamily": "research",
+  "status": "active",
+  "revision": "1.0",
+  "effectiveDate": "2026-07-28",
+  "controllingOffice": "Participant Programs Office",
+  "publicationState": "controlled",
+  "information": {
+    "level": "TL-2"
+  },
+  "tags": [
+    "participant-programs",
+    "study-administration",
+    "enrollment",
+    "environmental-analysis",
+    "tl-101"
+  ],
+  "summary": "Current protocol-administration record for the seven-day Indoor Condition Observation Series and its public eligibility screen.",
+  "relatedRecords": ["TL-101", "TL-RSO-001"],
+  "sections": [
+    {
+      "id": "administrative-record",
+      "title": "ADMINISTRATIVE RECORD",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Study reference:** ST-26-014\n\n**Protocol revision:** 2.1\n\n**Responsible unit:** Participant Programs Office\n\n**Administrative state:** Participation open\n\n**Effective date:** 2026-07-28\n\n**Personnel record:** Role-only working copy"
+    },
+    {
+      "id": "purpose-and-scope",
+      "title": "PURPOSE & SCOPE",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Objective:** Maintain the approved public protocol, eligibility questions, and seven-day observation instructions for ordinary indoor condition observations.\n\n**Scope limitation:** Preliminary screening issues a temporary reference only. This administrative copy contains no applicant identity, contact information, exact location, or submitted observation values."
+    },
+    {
+      "id": "method-and-observations",
+      "title": "METHOD & OBSERVATIONS",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Administrative review:** Confirmed the study question, three daily observation windows, fixed response categories, and the optional use of a household temperature or humidity display.\n\n**Observation:** Eligibility language requests broad schedule, room, and equipment categories only. Health, address, photograph, recording, and device-telemetry requests remain excluded."
+    },
+    {
+      "id": "disposition",
+      "title": "DISPOSITION",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Disposition:** Continue the current public eligibility screen and protocol materials.\n\n**Next review:** Confirm wording and schedule assumptions before the next protocol revision.\n\n**Review status:** Current materials approved for public display."
+    }
+  ]
+}

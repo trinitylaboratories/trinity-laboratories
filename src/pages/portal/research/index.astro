@@ -1,0 +1,351 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+import PortalPageHeading from '../../../components/portal/PortalPageHeading.astro';
+import SessionSummary from '../../../components/portal/SessionSummary.astro';
+import AuthorizationDialog from '../../../components/records/AuthorizationDialog.astro';
+import {
+  catalogueEntryFromDocument,
+  type CatalogueDocumentData,
+} from '../../../lib/record-catalogue';
+import {
+  relatedReportsForStudy,
+  researchStudyRegistryEntry,
+  selectResearchReports,
+  sortResearchStudyRegistry,
+} from '../../../lib/portal-research';
+import type { StudyData } from '../../../lib/study-schema';
+import { submissionHref, type SubmissionRecordData } from '../../../lib/submission-schema';
+import { isTemporaryGrantLevel, type TirnLevel } from '../../../lib/tirn-access';
+import PortalLayout from '../../../layouts/PortalLayout.astro';
+
+const documents = await getCollection('docs');
+const allSubmissions: SubmissionRecordData[] = (await getCollection('submissions')).map(
+  (submission: CollectionEntry<'submissions'>) => submission.data as SubmissionRecordData,
+);
+const studies = sortResearchStudyRegistry(
+  (await getCollection('studies')).map((study: CollectionEntry<'studies'>) =>
+    researchStudyRegistryEntry(study.data as StudyData),
+  ),
+);
+const researchReports = selectResearchReports(allSubmissions);
+const relatedReports = new Map(
+  studies.map((study) => [study.studyId, relatedReportsForStudy(study, allSubmissions)]),
+);
+
+const policyDocument = documents.find(
+  (document: CollectionEntry<'docs'>) => document.data.recordId === 'TL-RSO-001',
+);
+const oversightPolicy = policyDocument
+  ? catalogueEntryFromDocument(policyDocument.id, policyDocument.data as CatalogueDocumentData)
+  : null;
+
+if (!oversightPolicy) {
+  throw new Error('TL-RSO-001 must be available to the research-administration registry.');
+}
+
+const policyRequiredLevel = (oversightPolicy.informationLevel ?? 'TL-3') as TirnLevel;
+const intakeOpenCount = studies.filter(({ status }) =>
+  ['recruiting', 'interest-only'].includes(status),
+).length;
+const activeProtocolCount = studies.filter(({ status }) => status === 'active').length;
+---
+
+<PortalLayout
+  title="Research Administration"
+  description="Review protocol status, research oversight references, and completed research records through TIRN Staff Services."
+  active="research"
+>
+  <PortalPageHeading
+    path="Staff Services / Research"
+    title="Research administration"
+    description="Review public protocol status, governing references, and completed research records available through this staff node."
+  />
+
+  <div class="portal-workspace">
+    <div class="portal-workspace__primary">
+      <section class="portal-section" aria-labelledby="protocol-register-heading">
+        <p class="portal-section__label">Protocol control</p>
+        <h2 id="protocol-register-heading">Study register</h2>
+        <p>
+          The register reflects approved public protocol descriptions and current enrollment state.
+          Participant-identifying material is not displayed on this node.
+        </p>
+        <div class="portal-table-wrap">
+          <table class="portal-table portal-research-register" data-research-study-register>
+            <caption>Current and archived participant-study protocols</caption>
+            <thead>
+              <tr>
+                <th>Protocol</th>
+                <th>Study</th>
+                <th>Status</th>
+                <th>Phase / revision</th>
+                <th>Public intake</th>
+                <th>Linked records</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                studies.map((study) => {
+                  const linkedReports = relatedReports.get(study.studyId) ?? [];
+                  return (
+                    <tr data-research-study-row data-study-status={study.status}>
+                      <td class="portal-table__identifier">{study.studyId}</td>
+                      <td class="portal-table__title">
+                        <a href={`/studies/${study.slug}/`}>{study.shortTitle}</a>
+                        <span>{study.discipline}</span>
+                        <span>{study.controllingOffice}</span>
+                      </td>
+                      <td>
+                        <span class="portal-register-state" data-state={study.status}>
+                          {study.statusLabel}
+                        </span>
+                      </td>
+                      <td>
+                        {study.phase}
+                        <span class="portal-table__secondary">
+                          Protocol revision {study.protocolRevision}
+                        </span>
+                      </td>
+                      <td>{study.publicIntakeLabel}</td>
+                      <td>
+                        {linkedReports.length > 0 ? (
+                          <ul class="portal-inline-records" aria-label="Linked completed records">
+                            {linkedReports.map((report) => (
+                              <li>
+                                <a href={submissionHref(report.recordId)}>{report.recordId}</a>
+                              </li>
+                            ))}
+                          </ul>
+                        ) : (
+                          <span class="portal-muted-status">None registered</span>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })
+              }
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="portal-section" aria-labelledby="oversight-reference-heading">
+        <p class="portal-section__label">Laboratory control</p>
+        <h2 id="oversight-reference-heading">Oversight reference</h2>
+        <p>
+          This archived framework remains available for control comparison. Current protocol orders
+          and instructions issued by the controlling office govern active work.
+        </p>
+        <dl
+          class="portal-summary portal-policy-summary"
+          data-research-policy
+          data-required-level={policyRequiredLevel}
+        >
+          <div><dt>Record</dt><dd>{oversightPolicy.recordId}</dd></div>
+          <div>
+            <dt>Title</dt>
+            <dd>
+              <span data-research-policy-detail hidden>{oversightPolicy.title}</span>
+              <span data-research-policy-fallback>Controlled policy — eligibility required</span>
+            </dd>
+          </div>
+          <div>
+            <dt>Status</dt>
+            <dd>
+              <span data-research-policy-detail hidden>{oversightPolicy.status}</span>
+              <span data-research-policy-fallback>Controlled</span>
+            </dd>
+          </div>
+          <div>
+            <dt>Revision</dt>
+            <dd>
+              <span data-research-policy-detail hidden>{oversightPolicy.revision}</span>
+              <span data-research-policy-fallback>Available after authorization</span>
+            </dd>
+          </div>
+          <div>
+            <dt>Effective</dt>
+            <dd>
+              <span data-research-policy-detail hidden>
+                {oversightPolicy.effectiveDate ?? 'Undated'}
+              </span>
+              <span data-research-policy-fallback>Available after authorization</span>
+            </dd>
+          </div>
+          <div><dt>Eligibility</dt><dd>{policyRequiredLevel}</dd></div>
+          <div>
+            <dt>Office</dt>
+            <dd>
+              <span data-research-policy-detail hidden>{oversightPolicy.controllingOffice}</span>
+              <span data-research-policy-fallback>Control office withheld</span>
+            </dd>
+          </div>
+        </dl>
+        <div class="portal-record-actions portal-policy-actions">
+          <a class="portal-button" href={oversightPolicy.href}>Review control record</a>
+          {
+            isTemporaryGrantLevel(policyRequiredLevel) && (
+              <AuthorizationDialog
+                id="research-oversight-policy"
+                requiredLevel={policyRequiredLevel}
+                triggerLabel="Request access"
+              />
+            )
+          }
+        </div>
+      </section>
+
+      <section class="portal-section" aria-labelledby="research-reports-heading">
+        <p class="portal-section__label">Registered output</p>
+        <h2 id="research-reports-heading">Related completed reports</h2>
+        <p>
+          Research-family reports support the methods and control environment used across current
+          and archived protocols. A report is linked to a specific study only when its protocol row
+          lists that record.
+        </p>
+        <div class="portal-table-wrap">
+          <table class="portal-table portal-report-register" data-research-report-register>
+            <caption>Completed research-family records, newest effective date first</caption>
+            <thead>
+              <tr>
+                <th>Record</th>
+                <th>Title</th>
+                <th>Status</th>
+                <th>Effective</th>
+                <th>Office</th>
+                <th>Access</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                researchReports.map((report) => (
+                  <tr
+                    data-research-report-row
+                    data-required-level={report.information.level}
+                    data-publication-state={report.publicationState}
+                  >
+                    <td class="portal-table__identifier">
+                      <a href={submissionHref(report.recordId)}>{report.recordId}</a>
+                    </td>
+                    <td class="portal-table__title">
+                      <span data-research-report-title hidden>
+                        {report.title}
+                      </span>
+                      <span data-research-report-title-fallback>
+                        Controlled report — eligibility required
+                      </span>
+                    </td>
+                    <td>
+                      <span class="portal-register-state" data-state={report.status}>
+                        {report.status}
+                      </span>
+                    </td>
+                    <td>
+                      <time datetime={report.effectiveDate}>{report.effectiveDate}</time>
+                    </td>
+                    <td>{report.controllingOffice}</td>
+                    <td>
+                      <div class="portal-record-actions">
+                        <a href={submissionHref(report.recordId)}>Review record</a>
+                        {isTemporaryGrantLevel(report.information.level) && (
+                          <AuthorizationDialog
+                            id={`research-report-${report.recordId.toLowerCase()}`}
+                            requiredLevel={report.information.level}
+                            triggerLabel="Request access"
+                          />
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <aside class="portal-workspace__aside" aria-label="Research register context">
+      <SessionSummary />
+      <section class="portal-section" aria-labelledby="research-summary-heading">
+        <p class="portal-section__label">Register summary</p>
+        <h2 id="research-summary-heading">Research status</h2>
+        <dl class="portal-summary">
+          <div><dt>Protocols</dt><dd>{studies.length}</dd></div>
+          <div><dt>Public intake open</dt><dd>{intakeOpenCount}</dd></div>
+          <div><dt>In progress</dt><dd>{activeProtocolCount}</dd></div>
+          <div><dt>Completed reports</dt><dd>{researchReports.length}</dd></div>
+          <div><dt>Oversight reference</dt><dd>{policyRequiredLevel}</dd></div>
+        </dl>
+      </section>
+      <section class="portal-section" aria-labelledby="register-use-heading">
+        <p class="portal-section__label">Handling</p>
+        <h2 id="register-use-heading">Register use</h2>
+        <p>
+          Enrollment status does not establish protocol assignment, subject contact, record access,
+          or authority to alter an approved method.
+        </p>
+        <ul class="portal-actions">
+          <li><a href="/portal/forms/">Open approved forms</a></li>
+          <li><a href="/portal/authorizations/">Review information eligibility</a></li>
+          <li><a href="/records/search/">Search released records</a></li>
+        </ul>
+      </section>
+    </aside>
+  </div>
+</PortalLayout>
+
+<script>
+  import {
+    accessAllows,
+    resolveTirnAccess,
+    TIRN_ACCESS_CHANGE_EVENT,
+    TIRN_GRANT_STORAGE_KEY,
+    TIRN_SESSION_STORAGE_KEY,
+    type TirnLevel,
+  } from '../../../lib/tirn-access';
+
+  const readResearchAccessValue = (key: string) => {
+    try {
+      return sessionStorage.getItem(key);
+    } catch {
+      return null;
+    }
+  };
+
+  const refreshResearchAccess = () => {
+    const state = resolveTirnAccess(
+      readResearchAccessValue(TIRN_SESSION_STORAGE_KEY),
+      readResearchAccessValue(TIRN_GRANT_STORAGE_KEY),
+      Date.now(),
+    );
+    document.querySelectorAll<HTMLElement>('[data-research-report-row]').forEach((row) => {
+      const requiredLevel = (row.dataset.requiredLevel || 'TL-2') as TirnLevel;
+      const authorized =
+        row.dataset.publicationState !== 'withheld' && accessAllows(state, requiredLevel);
+      const title = row.querySelector<HTMLElement>('[data-research-report-title]');
+      const fallback = row.querySelector<HTMLElement>('[data-research-report-title-fallback]');
+      if (title) title.hidden = !authorized;
+      if (fallback) fallback.hidden = authorized;
+    });
+
+    const policy = document.querySelector<HTMLElement>('[data-research-policy]');
+    if (policy) {
+      const requiredLevel = (policy.dataset.requiredLevel || 'TL-3') as TirnLevel;
+      const authorized = accessAllows(state, requiredLevel);
+      policy.querySelectorAll<HTMLElement>('[data-research-policy-detail]').forEach((detail) => {
+        detail.hidden = !authorized;
+      });
+      policy
+        .querySelectorAll<HTMLElement>('[data-research-policy-fallback]')
+        .forEach((fallback) => {
+          fallback.hidden = authorized;
+        });
+    }
+  };
+
+  refreshResearchAccess();
+  window.addEventListener(TIRN_ACCESS_CHANGE_EVENT, refreshResearchAccess);
+  window.setInterval(refreshResearchAccess, 1000);
+</script>

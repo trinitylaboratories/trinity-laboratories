@@ -40,6 +40,7 @@
     "validate:site": "node scripts/validate-built-site.mjs --dist dist",
     "validate:site:production": "node scripts/validate-built-site.mjs --environment production --dist dist",
     "validate:site:preview": "node scripts/validate-built-site.mjs --environment preview --dist dist",
+    "verify:production": "node scripts/verify-indexability.mjs --url https://trinitylaboratories.org --environment production",
     "prepare:deploy": "node scripts/prepare-deploy.mjs --dist dist",
     "prepare:deploy:production": "node scripts/prepare-deploy.mjs --environment production --dist dist",
     "audit": "npm audit --audit-level=high",

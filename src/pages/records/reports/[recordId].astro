@@ -23,9 +23,17 @@ const elevated =
   Boolean(submission.information.program || submission.information.compartment) ||
   !Number.isFinite(standardRank) ||
   standardRank >= 3;
-const documentTitle = elevated
+const requestedDocumentTitle = elevated
   ? `${submission.recordId} — Controlled report`
   : `${submission.recordId} — ${submission.title}`;
+const documentTitle = (() => {
+  if (requestedDocumentTitle.length <= 80) return requestedDocumentTitle;
+  const shortened = requestedDocumentTitle
+    .slice(0, 79)
+    .replace(/\s+\S*$/, '')
+    .trimEnd();
+  return `${shortened}…`;
+})();
 const documentDescription = elevated
   ? 'Controlled TIRN report. Descriptive metadata requires the displayed information eligibility.'
   : submission.summary;

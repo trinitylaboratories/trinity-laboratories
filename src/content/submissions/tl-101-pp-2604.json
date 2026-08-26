@@ -1,0 +1,52 @@
+{
+  "recordId": "TL-101-PP-2604",
+  "formId": "TL-101",
+  "title": "Paper Substrate Curl Recovery — Active Protocol Review",
+  "recordType": "completed-report",
+  "recordFamily": "research",
+  "status": "active",
+  "revision": "1.0",
+  "effectiveDate": "2026-08-18",
+  "controllingOffice": "Participant Programs Office",
+  "publicationState": "controlled",
+  "information": {
+    "level": "TL-2"
+  },
+  "tags": ["participant-programs", "study-administration", "active-study", "materials", "tl-101"],
+  "summary": "Current administrative record for the active Paper Substrate Curl Recovery protocol and its forty-eight-hour observation sequence.",
+  "relatedRecords": ["TL-101", "TL-RSO-001"],
+  "sections": [
+    {
+      "id": "administrative-record",
+      "title": "ADMINISTRATIVE RECORD",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Study reference:** ST-26-031\n\n**Protocol revision:** 1.0\n\n**Responsible unit:** Participant Programs Office\n\n**Administrative state:** Study in progress\n\n**Effective date:** 2026-08-18\n\n**Personnel record:** Role-only working copy"
+    },
+    {
+      "id": "purpose-and-scope",
+      "title": "PURPOSE & SCOPE",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Objective:** Maintain the approved materials-observation sequence while the study remains active and unavailable to additional participants.\n\n**Scope limitation:** This administrative record contains no participant identity, contact detail, exact location, photograph, or individual observation value."
+    },
+    {
+      "id": "method-and-observations",
+      "title": "METHOD & OBSERVATIONS",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Administrative review:** Confirmed the four-observation sequence, forty-eight-hour interval, fixed broad response categories, and instructions for an undisturbed paper sample.\n\n**Observation:** The public page correctly identifies the protocol as active and provides method information without presenting an eligibility screen."
+    },
+    {
+      "id": "disposition",
+      "title": "DISPOSITION",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Disposition:** Maintain active-study status and retain the current method page.\n\n**Next review:** Complete the ordinary protocol closeout check before publishing any bounded result summary.\n\n**Review status:** Active protocol materials remain current."
+    }
+  ]
+}

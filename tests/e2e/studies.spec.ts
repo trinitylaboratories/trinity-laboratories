@@ -1,11 +1,6 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
+import { STUDY_FORM_ROUTES } from '../../scripts/lib/site-contract.mjs';
 import { visit } from './support/site';
-
-const STUDY_ROUTES = [
-  '/studies/indoor-condition-observation/',
-  '/studies/household-timekeeping-stability/',
-  '/studies/consumer-compass-repeatability/',
-] as const;
 
 async function completeScreen(form: Locator) {
   for (const checkbox of await form.locator('input[type="checkbox"]').all()) {
@@ -32,7 +27,7 @@ test('study register presents six studies and their current status', async ({ pa
   );
 });
 
-for (const route of STUDY_ROUTES) {
+for (const route of STUDY_FORM_ROUTES) {
   test(`${route} participation screen validates, resets, and issues only an opaque reference`, async ({
     page,
   }) => {
@@ -67,7 +62,7 @@ for (const route of STUDY_ROUTES) {
 test('participation submission is unavailable without JavaScript', async ({ browser }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page: Page = await context.newPage();
-  await visit(page, STUDY_ROUTES[0]);
+  await visit(page, STUDY_FORM_ROUTES[0]);
   const form = page.locator('form[data-study-form]');
   await expect(form.locator('fieldset')).toHaveAttribute('disabled', '');
   await expect(form.getByRole('button', { name: 'Check my eligibility' })).toBeDisabled();

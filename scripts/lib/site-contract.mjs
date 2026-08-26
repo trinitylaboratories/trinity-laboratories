@@ -1,10 +1,47 @@
 export const PRODUCTION_ORIGIN = 'https://trinitylaboratories.org';
 export const PRODUCTION_HOST = new URL(PRODUCTION_ORIGIN).host;
 
+export const CAPABILITY_SLUGS = Object.freeze([
+  'advanced-materials',
+  'industrial-instrumentation',
+  'environmental-analysis',
+  'applied-physics',
+  'field-sampling-geological-research',
+  'laboratory-safety-systems',
+  'prototype-evaluation',
+  'contract-research',
+]);
+
+export const CAPABILITY_ROUTES = Object.freeze(
+  CAPABILITY_SLUGS.map((slug) => `/research/${slug}/`),
+);
+
+export const PUBLICATION_IDS = Object.freeze([
+  'tl-101-am-8701',
+  'tl-101-cr-8801',
+  'tl-101-ii-8902',
+  'tl-101-ap-9303',
+  'tl-101-fs-9901',
+  'tl-101-pe-0002',
+  'tl-101-ea-0102',
+  'tl-101-ii-0503',
+  'tl-101-ea-0904',
+  'tl-101-am-1305',
+  'tl-101-ls-1904',
+  'tl-101-ls-2201',
+  'tl-101-ins-001',
+  'st-24-018',
+]);
+
+export const PUBLICATION_ROUTES = Object.freeze(
+  PUBLICATION_IDS.map((publicationId) => `/publications/${publicationId}/`),
+);
+
 export const CORE_ROUTES = Object.freeze([
   '/',
   '/about/',
   '/research/',
+  ...CAPABILITY_ROUTES,
   '/studies/',
   '/studies/indoor-condition-observation/',
   '/studies/household-timekeeping-stability/',
@@ -14,6 +51,7 @@ export const CORE_ROUTES = Object.freeze([
   '/studies/small-sensor-display-agreement/',
   '/facilities/',
   '/publications/',
+  ...PUBLICATION_ROUTES,
   '/careers/',
   '/contact/',
   '/employee-access/',
@@ -22,6 +60,7 @@ export const CORE_ROUTES = Object.freeze([
 export const PORTAL_ROUTES = Object.freeze([
   '/portal/',
   '/portal/records/',
+  '/portal/research/',
   '/portal/personnel/',
   '/portal/authorizations/',
   '/portal/forms/',
@@ -120,6 +159,15 @@ export const REPORT_IDS = Object.freeze([
   'tl-p110-per-1110',
   'tl-p110-per-1806',
   'tl-p110-per-2402',
+  'tl-101-pp-2401',
+  'tl-101-pp-2501',
+  'tl-101-pp-2601',
+  'tl-101-pp-2602',
+  'tl-101-pp-2603',
+  'tl-101-pp-2604',
+  'tl-o205-ops-2601',
+  'tl-o205-fs-2602',
+  'tl-o205-arc-2603',
 ]);
 
 export const REPORT_ROUTES = Object.freeze([
