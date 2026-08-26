@@ -80,6 +80,6 @@
     "The protocol can describe recovery patterns but cannot assign a manufacturing cause."
   ],
   "application": null,
-  "relatedRecordIds": [],
+  "relatedRecordIds": ["TL-101-PP-2604"],
   "editorialState": "owner-approved"
 }

@@ -1,0 +1,52 @@
+{
+  "recordId": "TL-101-PP-2401",
+  "formId": "TL-101",
+  "title": "Small-Sensor Display Agreement — Protocol Closeout",
+  "recordType": "completed-report",
+  "recordFamily": "research",
+  "status": "archived",
+  "revision": "1.0",
+  "effectiveDate": "2024-11-21",
+  "controllingOffice": "Participant Programs Office",
+  "publicationState": "controlled",
+  "information": {
+    "level": "TL-2"
+  },
+  "tags": ["participant-programs", "study-administration", "closeout", "instrumentation", "tl-101"],
+  "summary": "Administrative closeout record for the completed Small-Sensor Display Agreement protocol and its approved public method summary.",
+  "relatedRecords": ["TL-101", "TL-RSO-001"],
+  "sections": [
+    {
+      "id": "administrative-record",
+      "title": "ADMINISTRATIVE RECORD",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Study reference:** ST-24-018\n\n**Protocol revision:** 1.1\n\n**Responsible unit:** Participant Programs Office\n\n**Administrative state:** Protocol complete\n\n**Effective date:** 2024-11-21\n\n**Personnel record:** Role-only archive copy"
+    },
+    {
+      "id": "purpose-and-scope",
+      "title": "PURPOSE & SCOPE",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Objective:** Confirm completion of the approved tabletop display-comparison protocol, reconcile the required observation materials, and prepare a bounded public result summary.\n\n**Scope limitation:** This record contains protocol administration only. It contains no participant identities, contact details, device identifiers, exact locations, or individual response data."
+    },
+    {
+      "id": "method-and-observations",
+      "title": "METHOD & OBSERVATIONS",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Administrative review:** The protocol sequence, fixed response categories, stated exclusions, and public limitations were compared with the final approved study materials.\n\n**Observation:** Required closeout elements were present and the public summary remained limited to method-level findings. No product ranking, accuracy certification, or individual device result was released."
+    },
+    {
+      "id": "disposition",
+      "title": "DISPOSITION",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Disposition:** Archive the protocol administration record and retain the approved public summary with the study register.\n\n**Follow-up:** Any future display-comparison series requires a new protocol revision and separate participation review.\n\n**Review status:** Administrative closeout complete."
+    }
+  ]
+}

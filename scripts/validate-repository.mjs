@@ -23,6 +23,7 @@ const REQUIRED_FILES = Object.freeze([
   '.github/workflows/ci.yml',
   '.github/workflows/codeql.yml',
   '.github/workflows/dependency-review.yml',
+  '.github/workflows/production-health.yml',
 ]);
 
 const REQUIRED_PACKAGE_SCRIPTS = Object.freeze([
@@ -40,6 +41,7 @@ const REQUIRED_PACKAGE_SCRIPTS = Object.freeze([
   'validate:submissions',
   'validate:dist',
   'validate:site',
+  'verify:production',
   'prepare:deploy',
 ]);
 
@@ -167,6 +169,33 @@ export function validateCiSource(source, fileName = '.github/workflows/ci.yml') 
   return errors;
 }
 
+export function validateProductionHealthSource(
+  source,
+  fileName = '.github/workflows/production-health.yml',
+) {
+  const errors = [];
+  const requirements = [
+    ['scheduled trigger', /^\s*schedule\s*:/m],
+    ['manual trigger', /^\s*workflow_dispatch\s*:/m],
+    ['workflow concurrency', /^concurrency\s*:/m],
+    ['pinned project Node version', /^\s*node-version-file\s*:\s*\.node-version\s*$/m],
+    [
+      'production verifier command',
+      /node scripts\/verify-indexability\.mjs\s+--url https:\/\/trinitylaboratories\.org\s+--environment production/m,
+    ],
+  ];
+  for (const [label, pattern] of requirements) {
+    if (!pattern.test(source)) errors.push(`${fileName}: missing ${label}`);
+  }
+  if (!/^permissions:\s*\r?\n\s+contents:\s*read\s*$/m.test(source)) {
+    errors.push(`${fileName}: production monitoring must use contents: read only`);
+  }
+  if (/\bsecrets\s*\./i.test(source) || /^\s*[A-Za-z-]+\s*:\s*write\s*$/im.test(source)) {
+    errors.push(`${fileName}: production monitoring must not use secrets or write permissions`);
+  }
+  return errors;
+}
+
 export function validateLocalLauncherSource(source, fileName = 'scripts/run-local.ps1') {
   const errors = [];
   const requirements = [
@@ -228,6 +257,12 @@ export function validatePackageManifest(manifest, fileName = 'package.json') {
   }
   if (manifest.scripts?.['cf:install'] !== 'node scripts/install-locked.mjs') {
     errors.push(`${fileName}: cf:install must use the bounded project-local install wrapper`);
+  }
+  if (
+    manifest.scripts?.['verify:production'] !==
+    'node scripts/verify-indexability.mjs --url https://trinitylaboratories.org --environment production'
+  ) {
+    errors.push(`${fileName}: verify:production must use the canonical external verifier`);
   }
   for (const [script, command] of Object.entries({
     check: 'node scripts/run-astro.mjs check',
@@ -487,6 +522,8 @@ export async function validateRepository(projectRoot = process.cwd()) {
     errors.push(...validateWorkflowSource(source, workflowFile));
     if (workflowFile === '.github/workflows/ci.yml') {
       errors.push(...validateCiSource(source, workflowFile));
+    } else if (workflowFile === '.github/workflows/production-health.yml') {
+      errors.push(...validateProductionHealthSource(source, workflowFile));
     }
   }
 

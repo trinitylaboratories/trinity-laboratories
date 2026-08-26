@@ -80,6 +80,6 @@
     "The current pause concerns protocol presentation and does not imply a finding."
   ],
   "application": null,
-  "relatedRecordIds": [],
+  "relatedRecordIds": ["TL-101-PP-2501"],
   "editorialState": "owner-approved"
 }

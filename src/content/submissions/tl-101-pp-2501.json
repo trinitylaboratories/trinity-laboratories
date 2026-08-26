@@ -1,0 +1,58 @@
+{
+  "recordId": "TL-101-PP-2501",
+  "formId": "TL-101",
+  "title": "Diagram Recall and Route Notation — Enrollment Review",
+  "recordType": "completed-report",
+  "recordFamily": "research",
+  "status": "active",
+  "revision": "1.0",
+  "effectiveDate": "2025-06-12",
+  "controllingOffice": "Participant Programs Office",
+  "publicationState": "controlled",
+  "information": {
+    "level": "TL-2"
+  },
+  "tags": [
+    "participant-programs",
+    "study-administration",
+    "enrollment-review",
+    "prototype-evaluation",
+    "tl-101"
+  ],
+  "summary": "Current administrative record for the paused Diagram Recall and Route Notation enrollment screen and protocol-material review.",
+  "relatedRecords": ["TL-101", "TL-RSO-001"],
+  "sections": [
+    {
+      "id": "administrative-record",
+      "title": "ADMINISTRATIVE RECORD",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Study reference:** ST-25-009\n\n**Protocol revision:** 1.0\n\n**Responsible unit:** Participant Programs Office\n\n**Administrative state:** Enrollment paused\n\n**Effective date:** 2025-06-12\n\n**Personnel record:** Role-only working copy"
+    },
+    {
+      "id": "purpose-and-scope",
+      "title": "PURPOSE & SCOPE",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Objective:** Maintain the protocol in a paused enrollment state while the diagram set, response timing, and participant instructions receive ordinary materials review.\n\n**Scope limitation:** This administrative copy contains no enrollment record, participant roster, contact details, or response data."
+    },
+    {
+      "id": "method-and-observations",
+      "title": "METHOD & OBSERVATIONS",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Administrative review:** Confirmed that the public page accurately describes one short diagram-recall and route-notation session and does not imply active enrollment.\n\n**Observation:** Public protocol language and exclusions remain suitable for display. The participation screen remains unavailable while the material set is under review."
+    },
+    {
+      "id": "disposition",
+      "title": "DISPOSITION",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Disposition:** Retain the protocol in paused status.\n\n**Next review:** Reconcile the next diagram-set revision with timing instructions before reopening an eligibility screen.\n\n**Review status:** Administrative review remains open."
+    }
+  ]
+}

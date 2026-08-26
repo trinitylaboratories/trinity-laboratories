@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
+  CAPABILITY_ROUTES,
+  CAPABILITY_SLUGS,
   canonicalUrl,
   CONTROLLED_RECORD_ROUTES,
   CORE_ROUTES,
@@ -8,6 +10,8 @@ import {
   NOINDEX_ROUTES,
   PORTAL_ROUTES,
   PRODUCTION_ORIGIN,
+  PUBLICATION_IDS,
+  PUBLICATION_ROUTES,
   RECORD_INDEX_ROUTES,
   RECORD_ROUTES,
   RESEARCH_RECORD_ROUTES,
@@ -66,8 +70,9 @@ describe('site contract', () => {
   });
 
   it('keeps every records and staff route outside the public sitemap contract', () => {
-    expect(PORTAL_ROUTES).toHaveLength(6);
+    expect(PORTAL_ROUTES).toHaveLength(7);
     expect(PORTAL_ROUTES).toContain('/portal/records/');
+    expect(PORTAL_ROUTES).toContain('/portal/research/');
     expect(PORTAL_ROUTES).toContain('/portal/personnel/');
     expect(RECORD_INDEX_ROUTES).toContain('/records/');
     expect(RECORD_INDEX_ROUTES).toContain('/records/security/');
@@ -83,27 +88,31 @@ describe('site contract', () => {
   });
 
   it('publishes only corporate routes and partitions every required route exactly once', () => {
-    expect(CORE_ROUTES).toEqual([
-      '/',
-      '/about/',
-      '/research/',
-      '/studies/',
-      '/studies/indoor-condition-observation/',
-      '/studies/household-timekeeping-stability/',
-      '/studies/consumer-compass-repeatability/',
-      '/studies/paper-substrate-curl-recovery/',
-      '/studies/diagram-recall-route-notation/',
-      '/studies/small-sensor-display-agreement/',
-      '/facilities/',
-      '/publications/',
-      '/careers/',
-      '/contact/',
-      '/employee-access/',
-    ]);
+    expect(CORE_ROUTES).toContain('/');
+    expect(CORE_ROUTES).toContain('/about/');
+    expect(CORE_ROUTES).toContain('/research/');
+    expect(CORE_ROUTES).toContain('/studies/');
+    expect(CORE_ROUTES).toContain('/facilities/');
+    expect(CORE_ROUTES).toContain('/publications/');
+    expect(CORE_ROUTES).toContain('/careers/');
+    expect(CORE_ROUTES).toContain('/contact/');
+    expect(CORE_ROUTES).toContain('/employee-access/');
+    expect(CORE_ROUTES).toHaveLength(37);
     expect(SITEMAP_ROUTES).toEqual(CORE_ROUTES);
     expect(SITEMAP_ROUTES.every((route) => !/^\/(?:portal|records)\//.test(route))).toBe(true);
     expect(new Set(SITE_ROUTES).size).toBe(SITE_ROUTES.length);
     expect(SITE_ROUTES).toEqual([...SITEMAP_ROUTES, ...NOINDEX_ROUTES]);
+  });
+
+  it('publishes all capability and public technical-note routes', () => {
+    expect(CAPABILITY_SLUGS).toHaveLength(8);
+    expect(CAPABILITY_ROUTES).toHaveLength(8);
+    expect(PUBLICATION_IDS).toHaveLength(14);
+    expect(PUBLICATION_ROUTES).toHaveLength(14);
+    for (const route of [...CAPABILITY_ROUTES, ...PUBLICATION_ROUTES]) {
+      expect(SITEMAP_ROUTES).toContain(route);
+      expect(NOINDEX_ROUTES).not.toContain(route);
+    }
   });
 
   it('publishes the complete studies register and keeps study screens local', () => {
@@ -115,9 +124,9 @@ describe('site contract', () => {
   });
 
   it('registers the historical and personnel report corpus exactly once', () => {
-    expect(REPORT_IDS).toHaveLength(34);
+    expect(REPORT_IDS).toHaveLength(43);
     expect(new Set(REPORT_IDS).size).toBe(REPORT_IDS.length);
-    expect(REPORT_ROUTES).toHaveLength(36);
+    expect(REPORT_ROUTES).toHaveLength(45);
     for (const recordId of REPORT_IDS) {
       expect(REPORT_ROUTES).toContain(`/records/reports/${recordId}/`);
     }

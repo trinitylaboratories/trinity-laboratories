@@ -1,14 +1,6 @@
 import { expect, test } from '@playwright/test';
+import { PORTAL_ROUTES } from '../../scripts/lib/site-contract.mjs';
 import { visit } from './support/site';
-
-const PORTAL_ROUTES = [
-  '/portal/',
-  '/portal/records/',
-  '/portal/personnel/',
-  '/portal/authorizations/',
-  '/portal/forms/',
-  '/portal/help/',
-] as const;
 
 test.describe('staff portal', () => {
   for (const route of PORTAL_ROUTES) {
@@ -59,13 +51,14 @@ test.describe('staff portal', () => {
       '/portal/forms/',
       '/portal/help/',
       '/portal/authorizations/',
+      '/portal/research/',
       '/records/submissions/',
       '/records/forms/',
       '/records/security/physical-access/',
       '/records/security/endorsements-and-conditions/',
     ];
     const forbidden =
-      /static publication|repository review|schema validation|deterministic json|approved merge|generated package|publication package|withheld plaintext|browser (?:grant|authorization|storage)|local-only|front-end|pagefind|cloudflare|github|astro|photography pending|media reserved/i;
+      /static publication|repository review|schema validation|deterministic json|approved merge|generated package|publication package|withheld plaintext|browser(?:-local| grant| authorization| storage)|applicant inbox|network record|local-only|front-end|pagefind|cloudflare|github|astro|photography pending|media reserved/i;
 
     for (const route of routes) {
       await visit(page, route);

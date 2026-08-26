@@ -129,20 +129,46 @@ Protect `main` in the repository settings:
 Keep GitHub Actions permissions read-only except for a workflow with a documented need. Cloudflare
 deployment credentials should remain in Cloudflare's native Git integration, not GitHub Actions.
 
+## Production health monitoring
+
+`.github/workflows/production-health.yml` performs a read-only production check once per day and
+also supports a manual **Run workflow** action. It checks the public deployment only: it has no
+Cloudflare credential, receives no GitHub secret, cannot deploy or roll back, and keeps repository
+permissions at `contents: read`.
+
+The monitor uses the Node version pinned by `.node-version` and the repository's external verifier.
+It requires successful HTTPS responses at the canonical apex, confirms the root HSTS policy, checks
+every required route and canonical URL, validates production robots and sitemap behavior, confirms
+controlled-route `noindex` headers and metadata, and verifies that `www` returns one permanent
+redirect while preserving path and query.
+
+Run the same check locally after an intentional production release or DNS/redirect change:
+
+```powershell
+.\scripts\run-local.ps1 verify:production
+```
+
+On Linux or macOS, run `npm run verify:production`. A failed scheduled check should be rerun once to
+rule out a transient network failure. Treat a repeated failure as an operational incident: compare
+the active Cloudflare deployment with the last green commit, preserve the failed workflow log, and
+follow the rollback procedure below when a recent release caused the regression. GitHub's normal
+workflow-failure notifications provide alerting without a paid monitoring service or write access.
+
 ## Release verification
 
 For production, verify:
 
 1. the Workers build and GitHub required checks succeeded for the same commit;
-2. the apex returns HTTPS with the expected certificate;
-3. `www` redirects once to the same path and query at the apex;
-4. canonical URLs, sitemap, and `robots.txt` use the apex;
-5. public pages, `/employee-access/`, `/portal/`, `/records/`, controlled-report presentation,
+2. the manually dispatched **Production health** workflow passes after the deployment is active;
+3. the apex returns HTTPS with the expected certificate;
+4. `www` redirects once to the same path and query at the apex;
+5. canonical URLs, sitemap, and `robots.txt` use the apex;
+6. public pages, `/employee-access/`, `/portal/`, `/records/`, controlled-report presentation,
    search, downloads, and the custom 404 work;
-6. a fresh browser context loads no analytics beacon or third-party request; and
-7. employee and authorization controls make no request containing entered values, store only
+7. a fresh browser context loads no analytics beacon or third-party request; and
+8. employee and authorization controls make no request containing entered values, store only
    allowlisted generic session/grant state, and clear that state on termination; and
-8. portal and controlled-record routes are absent from the production sitemap and return
+9. portal and controlled-record routes are absent from the production sitemap and return
    `X-Robots-Tag: noindex`.
 
 ## Rollback
@@ -152,4 +178,5 @@ version and use **Rollback**. Confirm the apex and critical routes immediately a
 
 Then revert the faulty Git commit through a pull request. A dashboard rollback changes the active
 Cloudflare version but does not repair `main`; without the Git revert, the next build can redeploy the
-fault. Run the release-verification checklist again after the corrective deployment.
+fault. Manually dispatch **Production health**, then run the full release-verification checklist
+again after the corrective deployment.

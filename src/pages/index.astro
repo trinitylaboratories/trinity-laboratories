@@ -1,17 +1,7 @@
 ---
 import CorporateLayout from '../layouts/CorporateLayout.astro';
 import MediaFrame from '../components/MediaFrame.astro';
-
-const capabilities = [
-  'Advanced Materials',
-  'Industrial Instrumentation',
-  'Environmental Analysis',
-  'Applied Physics',
-  'Field Sampling & Geological Research',
-  'Laboratory Safety Systems',
-  'Prototype Evaluation',
-  'Contract Research',
-];
+import { CAPABILITIES } from '../lib/capabilities';
 ---
 
 <CorporateLayout
@@ -80,13 +70,13 @@ const capabilities = [
     </div>
     <ol class="ruled-list capability-list">
       {
-        capabilities.map((capability, index) => (
+        CAPABILITIES.map((capability) => (
           <li>
-            <>
-              <small>{String(index + 1).padStart(2, '0')}</small>
-              <strong>{capability}</strong>
+            <a href={`/research/${capability.slug}/`}>
+              <small>{capability.index}</small>
+              <strong>{capability.title}</strong>
               <span aria-hidden="true">↗</span>
-            </>
+            </a>
           </li>
         ))
       }
@@ -258,6 +248,17 @@ const capabilities = [
 
   .capability-list {
     max-width: calc(var(--content-max) - 2 * var(--page-gutter));
+  }
+
+  .capability-list li {
+    display: block;
+    min-height: 0;
+    padding: 0;
+    border-bottom: 0;
+  }
+
+  .capability-list a {
+    color: inherit;
   }
 
   .closing h2 {

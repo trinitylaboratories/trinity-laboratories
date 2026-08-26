@@ -6,7 +6,7 @@ import '../styles/portal.css';
 interface Props {
   title: string;
   description: string;
-  active?: 'home' | 'records' | 'personnel' | 'authorizations' | 'forms' | 'help';
+  active?: 'home' | 'records' | 'research' | 'personnel' | 'authorizations' | 'forms' | 'help';
 }
 
 const { title, description, active } = Astro.props;
@@ -15,6 +15,7 @@ const fullTitle = `${title} | TIRN Staff Services`;
 const navItems = [
   { id: 'home', href: '/portal/', label: 'Staff home' },
   { id: 'records', href: '/portal/records/', label: 'Records' },
+  { id: 'research', href: '/portal/research/', label: 'Research' },
   { id: 'personnel', href: '/portal/personnel/', label: 'Personnel' },
   { id: 'authorizations', href: '/portal/authorizations/', label: 'Authorizations' },
   { id: 'forms', href: '/portal/forms/', label: 'Forms' },

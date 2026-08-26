@@ -1,60 +1,182 @@
 ---
+import { getCollection, type CollectionEntry } from 'astro:content';
+
 import CorporateLayout from '../layouts/CorporateLayout.astro';
-import PageHero from '../components/PageHero.astro';
+import {
+  buildPublicPublicationLibrary,
+  type PublicPublicationDiscipline,
+} from '../lib/publications';
+import type { SubmissionRecordData } from '../lib/submission-schema';
+import type { StudyData } from '../lib/study-schema';
+import '../styles/publications.css';
+
+const submissions = (await getCollection('submissions')).map(
+  (entry: CollectionEntry<'submissions'>) => entry.data as SubmissionRecordData,
+);
+const studies = (await getCollection('studies')).map(
+  (entry: CollectionEntry<'studies'>) => entry.data as StudyData,
+);
+const publications = buildPublicPublicationLibrary(submissions, studies);
+const disciplines = [...new Set(publications.map((publication) => publication.discipline))].sort(
+  (left, right) => left.localeCompare(right),
+) as PublicPublicationDiscipline[];
+const technicalNotes = publications.filter((publication) => publication.kind === 'technical-note');
+const archiveYears = technicalNotes.map((publication) => Number(publication.yearLabel));
+const archiveRange = `${Math.min(...archiveYears)}–${Math.max(...archiveYears)}`;
 ---
 
 <CorporateLayout
   title="Publications"
-  description="Research, facility, and publication resources from Trinity Laboratories."
+  description="Public technical notes and completed study summaries from Trinity Laboratories."
   active="publications"
 >
-  <PageHero
-    eyebrow="Public information"
-    title="Resources and publications."
-    intro="Explore our research areas, facilities, and approach, or contact us with a specific question."
-    index="TL / PUBLICATIONS"
-  />
-
-  <section class="section" data-reveal>
-    <div class="section__heading">
-      <p class="section-label">Explore</p>
-      <h2>Start with the area that interests you.</h2>
+  <section class="publications-hero">
+    <div class="publications-hero__copy">
+      <p class="eyebrow">Technical library</p>
+      <h1>Small findings, clearly documented.</h1>
       <p>
-        Learn how Trinity Laboratories approaches research, where the work happens, and which
-        technical areas we support.
+        Browse public notes from routine laboratory checks, method comparisons, field-support work,
+        and completed participant studies.
+      </p>
+      <div class="button-row">
+        <a class="button button--primary" href="#publication-register">Browse the register</a>
+        <a class="button" href="/research/">Explore our research</a>
+      </div>
+    </div>
+    <dl class="publications-hero__ledger" aria-label="Publication library summary">
+      <div><dt>Public items</dt><dd>{String(publications.length).padStart(2, '0')}</dd></div>
+      <div><dt>Technical notes</dt><dd>{String(technicalNotes.length).padStart(2, '0')}</dd></div>
+      <div><dt>Archive span</dt><dd>{archiveRange}</dd></div>
+      <div><dt>Disciplines</dt><dd>{String(disciplines.length).padStart(2, '0')}</dd></div>
+    </dl>
+  </section>
+
+  <section class="section" id="publication-register" data-reveal>
+    <div class="section__heading">
+      <p class="section-label">Public register</p>
+      <h2>Technical notes and study summaries.</h2>
+      <p>
+        These short publications share bounded observations and practical method findings. They are
+        written for context, not as product certifications or client reports.
       </p>
     </div>
-    <ul class="ruled-list">
-      <li>
-        <small>01</small><strong>About Trinity Laboratories</strong><a href="/about/"
-          >About Trinity ↗</a
-        >
-      </li>
-      <li>
-        <small>02</small><strong>Research capabilities</strong><a href="/research/"
-          >Explore research ↗</a
-        >
-      </li>
-      <li>
-        <small>03</small><strong>Laboratory and field environments</strong><a href="/facilities/"
-          >Explore facilities ↗</a
-        >
-      </li>
-    </ul>
+
+    <div data-publication-library>
+      <div class="publication-controls" aria-label="Filter publications">
+        <label>
+          Search the library
+          <input
+            type="search"
+            autocomplete="off"
+            placeholder="Title, topic, or discipline"
+            aria-controls="publication-list"
+            data-publication-search
+          />
+        </label>
+        <label>
+          Discipline
+          <select aria-controls="publication-list" data-publication-discipline>
+            <option value="">All disciplines</option>
+            {disciplines.map((discipline) => <option value={discipline}>{discipline}</option>)}
+          </select>
+        </label>
+        <button class="button" type="button" data-publication-reset>Reset filters</button>
+        <div class="publication-controls__status">
+          <span aria-live="polite" data-publication-count>
+            Showing {publications.length} of {publications.length} public items
+          </span>
+          <span>Newest technical notes shown first</span>
+        </div>
+      </div>
+
+      <div class="publication-register" data-publication-register>
+        <div class="publication-register__head" aria-hidden="true">
+          <span>Date</span><span>Publication</span><span>Discipline</span><span>Type</span><span
+          ></span>
+        </div>
+        <ol id="publication-list">
+          {
+            publications.map((publication) => (
+              <li
+                data-publication-item
+                data-discipline={publication.discipline}
+                data-search={`${publication.title} ${publication.summary} ${publication.discipline} ${publication.kindLabel}`.toLocaleLowerCase()}
+              >
+                <a class="publication-register__row" href={publication.href}>
+                  <span class="publication-register__date">{publication.yearLabel}</span>
+                  <span class="publication-register__title">
+                    <strong>{publication.title}</strong>
+                    <small>{publication.summary}</small>
+                  </span>
+                  <span class="publication-register__discipline">{publication.discipline}</span>
+                  <span class="publication-register__kind">{publication.kindLabel}</span>
+                  <span class="publication-register__arrow" aria-hidden="true">
+                    ↗
+                  </span>
+                </a>
+              </li>
+            ))
+          }
+        </ol>
+        <p class="publication-register__empty" data-publication-empty hidden>
+          No public items match those filters. Try a broader search or another discipline.
+        </p>
+      </div>
+    </div>
   </section>
 
   <section class="section section--dark" data-reveal>
     <div class="section__heading">
-      <p class="section-label">Questions</p>
-      <h2>Looking for something specific?</h2>
+      <p class="section-label">Related work</p>
+      <h2>See the methods behind the library.</h2>
       <p>
-        Public information varies by subject and availability. Contact us with a question, or use
-        Employee Access for internal resources.
+        Explore our research capabilities and participant studies, or contact us if you have a
+        question about a public note.
       </p>
     </div>
     <div class="button-row">
-      <a class="button button--primary" href="/contact/">Send an inquiry</a>
-      <a class="button" href="/employee-access/">Employee Access</a>
+      <a class="button button--primary" href="/research/">Research capabilities</a>
+      <a class="button" href="/studies/">Participant studies</a>
+      <a class="button" href="/contact/">Ask a question</a>
     </div>
   </section>
+
+  <script>
+    const library = document.querySelector<HTMLElement>('[data-publication-library]');
+
+    if (library) {
+      const search = library.querySelector<HTMLInputElement>('[data-publication-search]');
+      const discipline = library.querySelector<HTMLSelectElement>('[data-publication-discipline]');
+      const reset = library.querySelector<HTMLButtonElement>('[data-publication-reset]');
+      const count = library.querySelector<HTMLElement>('[data-publication-count]');
+      const empty = library.querySelector<HTMLElement>('[data-publication-empty]');
+      const items = [...library.querySelectorAll<HTMLElement>('[data-publication-item]')];
+
+      const update = () => {
+        const query = search?.value.trim().toLocaleLowerCase() ?? '';
+        const selectedDiscipline = discipline?.value ?? '';
+        let visible = 0;
+
+        for (const item of items) {
+          const matchesSearch = !query || (item.dataset.search ?? '').includes(query);
+          const matchesDiscipline =
+            !selectedDiscipline || item.dataset.discipline === selectedDiscipline;
+          item.hidden = !(matchesSearch && matchesDiscipline);
+          if (!item.hidden) visible += 1;
+        }
+
+        if (count) count.textContent = `Showing ${visible} of ${items.length} public items`;
+        if (empty) empty.hidden = visible !== 0;
+      };
+
+      search?.addEventListener('input', update);
+      discipline?.addEventListener('change', update);
+      reset?.addEventListener('click', () => {
+        if (search) search.value = '';
+        if (discipline) discipline.value = '';
+        update();
+        search?.focus();
+      });
+    }
+  </script>
 </CorporateLayout>

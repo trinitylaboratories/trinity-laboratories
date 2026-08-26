@@ -1,0 +1,69 @@
+{
+  "recordId": "TL-O205-OPS-2601",
+  "formId": "TL-O205",
+  "title": "Instrument Verification Bench Service Window",
+  "recordType": "completed-report",
+  "recordFamily": "operations",
+  "status": "active",
+  "revision": "1.0",
+  "effectiveDate": "2026-08-25",
+  "controllingOffice": "Laboratory Operations",
+  "publicationState": "controlled",
+  "information": {
+    "level": "TL-2"
+  },
+  "tags": ["operations", "instrumentation", "service-window", "verification", "tl-o205"],
+  "summary": "Temporary coordination order for routine service and verification work at a general instrument bench.",
+  "relatedRecords": ["TL-O205", "TL-101-INS-001"],
+  "sections": [
+    {
+      "id": "order-control",
+      "title": "ORDER CONTROL",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Order no.:** OPS-2601\n\n**Issuing division:** Laboratory Operations\n\n**Effective:** 2026-08-25 / opening shift\n\n**Expiration:** Release of the reserved bench following completion of the service list\n\n**Issuing authority:** Operations Coordinator (role)\n\n**Distribution:** Instrumentation and affected bench users"
+    },
+    {
+      "id": "purpose",
+      "title": "PURPOSE",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Operational requirement:** Reserve one general verification bench for scheduled inspection, cable review, and reference-check activity.\n\n**Reason:** Consolidating routine service tasks reduces repeated setup and keeps ordinary project work on available benches.\n\n**Desired end state:** Bench returned to normal scheduling with service entries reconciled."
+    },
+    {
+      "id": "directed-actions",
+      "title": "DIRECTED ACTIONS",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Personnel affected:** Instrumentation staff and scheduled bench users.\n\n**Required action:** Check the current bench schedule before setup; route verification work to the reserved position; retain ordinary service records.\n\n**Prohibited action:** Do not relocate active project material into the service area.\n\n**Record to maintain:** Equipment service and verification log."
+    },
+    {
+      "id": "authority-termination",
+      "title": "AUTHORITY & TERMINATION",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Exceptions authorized by:** Operations Coordinator (role).\n\n**Automatic termination:** Completion of the scheduled verification list and bench-release check.\n\n**Extension requires:** Updated service window and affected-user notice.\n\n**Order status:** Active."
+    },
+    {
+      "id": "special-instructions-shift-notes",
+      "title": "SPECIAL INSTRUCTIONS / SHIFT NOTES",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "Keep temporary service labels with the applicable instrument. Leave unrelated project schedules unchanged. Record unresolved items for the next ordinary service interval."
+    },
+    {
+      "id": "issuer-receiving-supervisor-acknowledgment",
+      "title": "ISSUER / RECEIVING SUPERVISOR ACKNOWLEDGMENT",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "Laboratory Operations issued the coordination order. Instrumentation supervision acknowledged the service window by role."
+    }
+  ],
+  "facilityCondition": "WHITE"
+}

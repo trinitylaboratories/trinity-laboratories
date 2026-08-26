@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
+import { STUDY_FORM_ROUTES } from '../../scripts/lib/site-contract.mjs';
 import { visit } from './support/site';
 
 type PrivacyCalls = { beacons: string[]; fetches: string[] };
@@ -93,11 +94,7 @@ for (const route of ['/contact/', '/careers/']) {
   });
 }
 
-for (const route of [
-  '/studies/indoor-condition-observation/',
-  '/studies/household-timekeeping-stability/',
-  '/studies/consumer-compass-repeatability/',
-]) {
+for (const route of STUDY_FORM_ROUTES) {
   test(`${route} screening creates no request or durable browser state`, async ({
     context,
     page,

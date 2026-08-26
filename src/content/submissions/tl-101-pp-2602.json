@@ -1,0 +1,58 @@
+{
+  "recordId": "TL-101-PP-2602",
+  "formId": "TL-101",
+  "title": "Household Timekeeping Stability Survey — Enrollment Administration",
+  "recordType": "completed-report",
+  "recordFamily": "research",
+  "status": "active",
+  "revision": "1.0",
+  "effectiveDate": "2026-08-04",
+  "controllingOffice": "Participant Programs Office",
+  "publicationState": "controlled",
+  "information": {
+    "level": "TL-2"
+  },
+  "tags": [
+    "participant-programs",
+    "study-administration",
+    "enrollment",
+    "instrumentation",
+    "tl-101"
+  ],
+  "summary": "Current protocol-administration record for the Household Timekeeping Stability Survey and its fourteen-day observation schedule.",
+  "relatedRecords": ["TL-101", "TL-RSO-001"],
+  "sections": [
+    {
+      "id": "administrative-record",
+      "title": "ADMINISTRATIVE RECORD",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Study reference:** ST-26-021\n\n**Protocol revision:** 1.2\n\n**Responsible unit:** Participant Programs Office\n\n**Administrative state:** Participation open\n\n**Effective date:** 2026-08-04\n\n**Personnel record:** Role-only working copy"
+    },
+    {
+      "id": "purpose-and-scope",
+      "title": "PURPOSE & SCOPE",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Objective:** Maintain the approved public protocol and schedule-eligibility screen for broad, non-identifying observations of ordinary household time displays.\n\n**Scope limitation:** This administrative copy contains no enrollment record, household address, account information, device identity, photographs, or individual readings."
+    },
+    {
+      "id": "method-and-observations",
+      "title": "METHOD & OBSERVATIONS",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Administrative review:** Confirmed the twice-weekly observation schedule, broad display categories, and instruction to leave missed observations blank.\n\n**Observation:** Public eligibility fields remain limited to age confirmation, display availability, and schedule suitability. The study does not request network-connected device data."
+    },
+    {
+      "id": "disposition",
+      "title": "DISPOSITION",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Disposition:** Continue the current eligibility screen and fourteen-day protocol materials.\n\n**Next review:** Recheck observation-window wording at the next scheduled revision.\n\n**Review status:** Current materials approved for public display."
+    }
+  ]
+}

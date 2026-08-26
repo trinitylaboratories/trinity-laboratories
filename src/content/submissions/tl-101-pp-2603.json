@@ -1,0 +1,58 @@
+{
+  "recordId": "TL-101-PP-2603",
+  "formId": "TL-101",
+  "title": "Consumer Compass Repeatability Observation — Interest Review",
+  "recordType": "completed-report",
+  "recordFamily": "research",
+  "status": "active",
+  "revision": "1.0",
+  "effectiveDate": "2026-08-11",
+  "controllingOffice": "Participant Programs Office",
+  "publicationState": "controlled",
+  "information": {
+    "level": "TL-2"
+  },
+  "tags": [
+    "participant-programs",
+    "study-administration",
+    "interest-screening",
+    "field-methods",
+    "tl-101"
+  ],
+  "summary": "Current administrative record for the Consumer Compass Repeatability Observation interest screen and stationary-reading protocol.",
+  "relatedRecords": ["TL-101", "TL-RSO-001"],
+  "sections": [
+    {
+      "id": "administrative-record",
+      "title": "ADMINISTRATIVE RECORD",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Study reference:** ST-26-027\n\n**Protocol revision:** 1.0\n\n**Responsible unit:** Participant Programs Office\n\n**Administrative state:** Interest screening\n\n**Effective date:** 2026-08-11\n\n**Personnel record:** Role-only working copy"
+    },
+    {
+      "id": "purpose-and-scope",
+      "title": "PURPOSE & SCOPE",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Objective:** Maintain a limited public interest screen for a stationary consumer-compass observation method conducted on nonconsecutive days.\n\n**Scope limitation:** Interest screening does not enroll a participant. No precise location, travel pattern, device identifier, photograph, or individual reading is received through this network."
+    },
+    {
+      "id": "method-and-observations",
+      "title": "METHOD & OBSERVATIONS",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Administrative review:** Confirmed the fixed-position instruction, five-reading sequence, nonconsecutive-day schedule, and broad equipment categories.\n\n**Observation:** The public screen establishes only general equipment and schedule suitability. It does not request coordinates or motion data."
+    },
+    {
+      "id": "disposition",
+      "title": "DISPOSITION",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Disposition:** Retain interest-screening status while the participation schedule is evaluated.\n\n**Next review:** Confirm the fixed-position instructions before a recruiting revision is considered.\n\n**Review status:** Interest materials approved for public display."
+    }
+  ]
+}

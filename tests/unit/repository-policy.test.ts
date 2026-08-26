@@ -9,6 +9,7 @@ import {
   validateCiSource,
   validateLocalLauncherSource,
   validatePackageManifest,
+  validateProductionHealthSource,
   validateWranglerConfig,
   validateWorkflowSource,
 } from '../../scripts/validate-repository.mjs';
@@ -39,6 +40,28 @@ jobs:
       'utf8',
     );
     expect(validateCiSource(source)).toEqual([]);
+  });
+
+  it('locks production monitoring to scheduled, manual, read-only verification', async () => {
+    const source = await readFile(
+      path.join(process.cwd(), '.github', 'workflows', 'production-health.yml'),
+      'utf8',
+    );
+    expect(validateWorkflowSource(source, 'production-health.yml')).toEqual([]);
+    expect(validateProductionHealthSource(source)).toEqual([]);
+    expect(
+      validateProductionHealthSource(
+        'permissions:\n  issues: write\njobs:\n  monitor:\n    run: echo ${{ secrets.TOKEN }}\n',
+        'unsafe-health.yml',
+      ),
+    ).toEqual(
+      expect.arrayContaining([
+        expect.stringMatching(/scheduled trigger/),
+        expect.stringMatching(/manual trigger/),
+        expect.stringMatching(/read only/),
+        expect.stringMatching(/must not use secrets or write permissions/),
+      ]),
+    );
   });
 
   it('locks the safe Windows clean-path launcher controls', async () => {
@@ -108,6 +131,7 @@ jobs:
         'validate:submissions',
         'validate:dist',
         'validate:site',
+        'verify:production',
         'prepare:deploy',
       ].map((name) => [name, 'test']),
     );
@@ -120,6 +144,8 @@ jobs:
       'npm run record-desk:validate && npm run validate:submissions && npm run build && npm run prepare:deploy && npm run validate:dist && npm run validate:site';
     requiredScripts['cf:deploy'] = 'node scripts/deploy-site.mjs';
     requiredScripts['cf:install'] = 'node scripts/install-locked.mjs';
+    requiredScripts['verify:production'] =
+      'node scripts/verify-indexability.mjs --url https://trinitylaboratories.org --environment production';
     expect(
       validatePackageManifest({
         private: true,

@@ -1,0 +1,69 @@
+{
+  "recordId": "TL-O205-FS-2602",
+  "formId": "TL-O205",
+  "title": "Field Kit Return and Inspection Sequence",
+  "recordType": "completed-report",
+  "recordFamily": "operations",
+  "status": "active",
+  "revision": "1.0",
+  "effectiveDate": "2026-08-26",
+  "controllingOffice": "Field Operations",
+  "publicationState": "controlled",
+  "information": {
+    "level": "TL-2"
+  },
+  "tags": ["operations", "field-support", "equipment-return", "inspection", "tl-o205"],
+  "summary": "Temporary routing order for returned field kits, ordinary inspection, and equipment-log reconciliation.",
+  "relatedRecords": ["TL-O205", "TL-SOP-720-FS-001"],
+  "sections": [
+    {
+      "id": "order-control",
+      "title": "ORDER CONTROL",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Order no.:** FS-2602\n\n**Issuing division:** Field Operations\n\n**Effective:** 2026-08-26 / return intake\n\n**Expiration:** Completion of the current return and inspection reconciliation\n\n**Issuing authority:** Field Operations Coordinator (role)\n\n**Distribution:** Field teams, sample intake, and equipment support"
+    },
+    {
+      "id": "purpose",
+      "title": "PURPOSE",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Operational requirement:** Route returned field kits through one inspection and log-reconciliation sequence before equipment is returned to ordinary storage.\n\n**Reason:** Several routine returns fall within the same service interval.\n\n**Desired end state:** Returned equipment checked, consumables reconciled, and unresolved maintenance items recorded."
+    },
+    {
+      "id": "directed-actions",
+      "title": "DIRECTED ACTIONS",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Personnel affected:** Returning field staff, intake staff, and equipment support.\n\n**Required action:** Preserve kit labels through intake; compare contents with the issue log; separate service items from ready equipment.\n\n**Prohibited action:** Do not return unchecked items directly to general issue storage.\n\n**Record to maintain:** Field-kit issue, return, and service log."
+    },
+    {
+      "id": "authority-termination",
+      "title": "AUTHORITY & TERMINATION",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Exceptions authorized by:** Field Operations Coordinator (role).\n\n**Automatic termination:** All listed kits reconciled or transferred to an ordinary service record.\n\n**Extension requires:** Updated return list and revised completion date.\n\n**Order status:** Active."
+    },
+    {
+      "id": "special-instructions-shift-notes",
+      "title": "SPECIAL INSTRUCTIONS / SHIFT NOTES",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "This order covers equipment routing only. Sample custody, analytical intake, and project records continue under their controlling procedures."
+    },
+    {
+      "id": "issuer-receiving-supervisor-acknowledgment",
+      "title": "ISSUER / RECEIVING SUPERVISOR ACKNOWLEDGMENT",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "Field Operations issued the return sequence. Intake and equipment-support supervision acknowledged by role."
+    }
+  ],
+  "facilityCondition": "WHITE"
+}
