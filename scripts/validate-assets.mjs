@@ -419,58 +419,73 @@ export async function validateAssetRoot(root) {
 
   for (const relativeFile of files) {
     const absoluteFile = path.join(absoluteRoot, relativeFile);
-    const fileStats = await lstat(absoluteFile);
-    const extension = path.extname(relativeFile).toLowerCase();
-    totalBytes += fileStats.size;
+    const fileHandle = await open(absoluteFile, 'r');
+    try {
+      const fileStats = await fileHandle.stat();
+      const pathStats = await lstat(absoluteFile);
+      const extension = path.extname(relativeFile).toLowerCase();
 
-    if (fileStats.isSymbolicLink()) {
-      errors.push(`${relativeFile}: symbolic links are prohibited in deployable assets`);
-      continue;
-    }
-
-    for (const [label, pattern] of FORBIDDEN_RELEASE_NAME_PATTERNS) {
-      if (pattern.test(relativeFile))
-        errors.push(`${relativeFile}: ${label} is outside the approved v1 release`);
-    }
-
-    if (/\s/.test(relativeFile))
-      errors.push(`${relativeFile}: asset paths may not contain whitespace`);
-    if (FORBIDDEN_EXTENSIONS.has(extension)) {
-      errors.push(`${relativeFile}: '${extension}' files are prohibited in deployable assets`);
-    }
-    if (fileStats.size > ASSET_LIMITS.maxFileBytes) {
-      errors.push(`${relativeFile}: exceeds Cloudflare's 25 MiB per-file limit`);
-    }
-
-    const budget = TYPE_BUDGETS.get(extension);
-    if (budget && fileStats.size > budget) {
-      errors.push(
-        `${relativeFile}: ${formatBytes(fileStats.size)} exceeds the ${formatBytes(budget)} ${extension} budget`,
-      );
-    }
-
-    if (extension === '.svg' && fileStats.size <= ASSET_LIMITS.maxFileBytes) {
-      errors.push(...validateSvg(await readFile(absoluteFile, 'utf8'), relativeFile));
-    }
-    if (extension === '.css' && fileStats.size <= ASSET_LIMITS.maxFileBytes) {
-      errors.push(...validateStylesheet(await readFile(absoluteFile, 'utf8'), relativeFile));
-    }
-    if (extension === '.docx' && fileStats.size <= ASSET_LIMITS.maxFileBytes) {
-      errors.push(...validateDocxArchive(await readFile(absoluteFile), relativeFile));
-    }
-    if (extension === '.pdf' && fileStats.size <= ASSET_LIMITS.maxFileBytes) {
-      errors.push(...validatePdfPrivacy(await readFile(absoluteFile), relativeFile));
-    }
-    if (extension === '.png' && fileStats.size <= ASSET_LIMITS.maxFileBytes) {
-      errors.push(...validatePngPrivacy(await readFile(absoluteFile), relativeFile));
-    }
-    if (extension === '.webp' && fileStats.size <= ASSET_LIMITS.maxFileBytes) {
-      const fileHandle = await open(absoluteFile, 'r');
-      try {
-        errors.push(...validateWebpPrivacy(await fileHandle.readFile(), relativeFile));
-      } finally {
-        await fileHandle.close();
+      if (pathStats.isSymbolicLink()) {
+        errors.push(`${relativeFile}: symbolic links are prohibited in deployable assets`);
+        continue;
       }
+      if (
+        fileStats.dev !== pathStats.dev ||
+        fileStats.ino !== pathStats.ino ||
+        fileStats.size !== pathStats.size ||
+        fileStats.mtimeMs !== pathStats.mtimeMs
+      ) {
+        errors.push(`${relativeFile}: file changed while the asset validator was reading it`);
+        continue;
+      }
+      if (!fileStats.isFile()) {
+        errors.push(`${relativeFile}: deployable assets must be regular files`);
+        continue;
+      }
+
+      totalBytes += fileStats.size;
+
+      for (const [label, pattern] of FORBIDDEN_RELEASE_NAME_PATTERNS) {
+        if (pattern.test(relativeFile))
+          errors.push(`${relativeFile}: ${label} is outside the approved v1 release`);
+      }
+
+      if (/\s/.test(relativeFile))
+        errors.push(`${relativeFile}: asset paths may not contain whitespace`);
+      if (FORBIDDEN_EXTENSIONS.has(extension)) {
+        errors.push(`${relativeFile}: '${extension}' files are prohibited in deployable assets`);
+      }
+      if (fileStats.size > ASSET_LIMITS.maxFileBytes) {
+        errors.push(`${relativeFile}: exceeds Cloudflare's 25 MiB per-file limit`);
+      }
+
+      const budget = TYPE_BUDGETS.get(extension);
+      if (budget && fileStats.size > budget) {
+        errors.push(
+          `${relativeFile}: ${formatBytes(fileStats.size)} exceeds the ${formatBytes(budget)} ${extension} budget`,
+        );
+      }
+
+      if (extension === '.svg' && fileStats.size <= ASSET_LIMITS.maxFileBytes) {
+        errors.push(...validateSvg(await fileHandle.readFile('utf8'), relativeFile));
+      }
+      if (extension === '.css' && fileStats.size <= ASSET_LIMITS.maxFileBytes) {
+        errors.push(...validateStylesheet(await fileHandle.readFile('utf8'), relativeFile));
+      }
+      if (extension === '.docx' && fileStats.size <= ASSET_LIMITS.maxFileBytes) {
+        errors.push(...validateDocxArchive(await fileHandle.readFile(), relativeFile));
+      }
+      if (extension === '.pdf' && fileStats.size <= ASSET_LIMITS.maxFileBytes) {
+        errors.push(...validatePdfPrivacy(await fileHandle.readFile(), relativeFile));
+      }
+      if (extension === '.png' && fileStats.size <= ASSET_LIMITS.maxFileBytes) {
+        errors.push(...validatePngPrivacy(await fileHandle.readFile(), relativeFile));
+      }
+      if (extension === '.webp' && fileStats.size <= ASSET_LIMITS.maxFileBytes) {
+        errors.push(...validateWebpPrivacy(await fileHandle.readFile(), relativeFile));
+      }
+    } finally {
+      await fileHandle.close();
     }
   }
 
