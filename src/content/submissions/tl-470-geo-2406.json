@@ -1,0 +1,82 @@
+{
+  "recordId": "TL-470-GEO-2406",
+  "formId": "TL-470",
+  "title": "Upland Pattern Field Instrument Survey",
+  "recordType": "completed-report",
+  "recordFamily": "research",
+  "status": "active",
+  "revision": "1.1",
+  "effectiveDate": "2024-06-21",
+  "controllingOffice": "Field Sampling & Geological Research",
+  "publicationState": "controlled",
+  "information": {
+    "level": "TL-6"
+  },
+  "tags": ["controlled-area", "upland-survey", "subsurface-patterning", "geophysics", "tl-470"],
+  "summary": "Controlled area assessment. Descriptive metadata and report contents require the displayed information eligibility.",
+  "relatedRecords": ["TL-470", "TL-470-GEO-0307"],
+  "evidence": [
+    {
+      "id": "western-detail-plate",
+      "label": "Western detail plate A",
+      "mode": "withheld",
+      "summary": "The reviewed image plate remains with the coordinate and access schedule held by the controlling office."
+    },
+    {
+      "id": "eastern-detail-plate",
+      "label": "Eastern detail plate B",
+      "mode": "withheld",
+      "summary": "The reviewed image plate remains with the coordinate and access schedule held by the controlling office."
+    }
+  ],
+  "sections": [
+    {
+      "id": "survey-basis",
+      "title": "SURVEY BASIS",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Archive interval:** Two dry-season image reviews followed by a limited non-intrusive instrument traverse\n\n**Instrumentation:** Orthographic image comparison, differential surface profile, shallow ground-penetrating radar, paired broadband magnetometers, and an off-site regional reference logger\n\n**Study boundary:** A coded upland pattern field containing discontinuous rectangular relief, exposed stone, and saturated margins."
+    },
+    {
+      "id": "observed-variance",
+      "title": "OBSERVED VARIANCE",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Surface form:** Repeated right-angle edges and short parallel rises remained visible under different soil-moisture conditions but did not form a complete wall or drainage plan.\n\n**Radar response:** Three shallow planar reflectors followed the strongest surface edges and ended abruptly within otherwise uniform substrate. No continuous void was resolved.\n\n**Magnetic response:** Two stationary packages recorded the same low-amplitude broadband pulse sequence during one traverse. The sequence was absent from the regional reference instrument and did not recur the following day."
+    },
+    {
+      "id": "interpretive-limits",
+      "title": "INTERPRETIVE LIMITS",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Ordinary explanations retained:** Historic extraction, frost-sorted ground, collapsed shallow workings, transient electromagnetic interference, and instrument coupling remain plausible.\n\n**Unresolved point:** The paired magnetic packages agreed in timing and amplitude despite separate power and logging systems. One event is insufficient to assign a continuing field source."
+    },
+    {
+      "id": "disposition",
+      "title": "DISPOSITION",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Finding:** Incomplete geometric surface pattern with limited shallow reflectors and one unassigned locally correlated magnetic event\n\n**Action:** Preserve non-invasive baselines and repeat only with a regional reference package operating before site arrival.\n\n**Field restriction:** Excavation, marking, and unattended instrumentation are not authorized by this record."
+    },
+    {
+      "id": "coordinate-schedule",
+      "title": "COORDINATE & ACCESS SCHEDULE",
+      "summary": "Coordinates, access route, and detailed instrument stationing remain with the controlling office.",
+      "disclosure": {
+        "mode": "withheld"
+      }
+    },
+    {
+      "id": "directorate-control-schedule",
+      "title": "DIRECTORATE CONTROL SCHEDULE",
+      "summary": "Named assignment, release scope, and handling instructions remain with the controlling office.",
+      "disclosure": {
+        "mode": "withheld"
+      }
+    }
+  ]
+}

@@ -6,7 +6,7 @@ export const BASE_STAFF_LEVEL = 'TL-2' as const;
 export const DEMONSTRATION_GRANT_LEVEL = 'TL-3' as const;
 export const TEMPORARY_GRANT_SCOPE = 'records-review' as const;
 export const ELEVATED_GRANT_TTL_MS = 15 * 60 * 1000;
-export const TEMPORARY_GRANT_LEVELS = ['TL-3', 'TL-4'] as const;
+export const TEMPORARY_GRANT_LEVELS = ['TL-3', 'TL-4', 'TL-5', 'TL-6'] as const;
 export const AUTHORIZATION_PURPOSES = [
   'record-review',
   'required-training',
@@ -15,6 +15,8 @@ export const AUTHORIZATION_PURPOSES = [
 
 export const AUTHORIZATION_REFERENCE_EXAMPLE = 'TL3-ABC123';
 export const CONTROL_OFFICE_REFERENCE_EXAMPLE = 'CO-ABC123';
+export const DIRECTORATE_RELEASE_REFERENCE_EXAMPLE = 'DR-ABC123';
+export const ISOLATION_REFERENCE_EXAMPLE = 'IR-ABC123';
 
 export const TIRN_LEVELS = [
   'TL-0',
@@ -45,6 +47,8 @@ export interface AuthorizationRequest {
   purpose: string;
   authorizationReference: string;
   controlOfficeReference?: string;
+  directorateReleaseReference?: string;
+  isolationReference?: string;
   attested: boolean;
 }
 
@@ -53,7 +57,13 @@ export type AuthorizationRequestResult =
   | {
       accepted: false;
       field:
-        'level' | 'purpose' | 'authorizationReference' | 'controlOfficeReference' | 'attestation';
+        | 'level'
+        | 'purpose'
+        | 'authorizationReference'
+        | 'controlOfficeReference'
+        | 'directorateReleaseReference'
+        | 'isolationReference'
+        | 'attestation';
       message: string;
     };
 
@@ -95,12 +105,20 @@ export function createElevatedGrant(level: TirnLevel, now: number): ElevatedGran
 
 export function authorizationReferenceMatchesLevel(value: string, level: TirnLevel): boolean {
   if (!isTemporaryGrantLevel(level)) return false;
-  const match = normalizeAuthorizationReference(value).match(/^TL([34])-[A-Z0-9]{6,12}$/);
+  const match = normalizeAuthorizationReference(value).match(/^TL([3-6])-[A-Z0-9]{6,12}$/);
   return Boolean(match && `TL-${match[1]}` === level);
 }
 
 export function isControlOfficeReference(value: string): boolean {
   return /^CO-[A-Z0-9]{6,12}$/.test(normalizeAuthorizationReference(value));
+}
+
+export function isDirectorateReleaseReference(value: string): boolean {
+  return /^DR-[A-Z0-9]{6,12}$/.test(normalizeAuthorizationReference(value));
+}
+
+export function isIsolationReference(value: string): boolean {
+  return /^IR-[A-Z0-9]{6,12}$/.test(normalizeAuthorizationReference(value));
 }
 
 export function evaluateAuthorizationRequest(
@@ -132,13 +150,32 @@ export function evaluateAuthorizationRequest(
   }
 
   if (
-    request.requiredLevel === 'TL-4' &&
+    levelAllows(request.requiredLevel, 'TL-4') &&
     !isControlOfficeReference(request.controlOfficeReference ?? '')
   ) {
     return {
       accepted: false,
       field: 'controlOfficeReference',
       message: 'Enter a control-office reference in the CO-XXXXXX format.',
+    };
+  }
+
+  if (
+    levelAllows(request.requiredLevel, 'TL-5') &&
+    !isDirectorateReleaseReference(request.directorateReleaseReference ?? '')
+  ) {
+    return {
+      accepted: false,
+      field: 'directorateReleaseReference',
+      message: 'Enter a Directorate release reference in the DR-XXXXXX format.',
+    };
+  }
+
+  if (request.requiredLevel === 'TL-6' && !isIsolationReference(request.isolationReference ?? '')) {
+    return {
+      accepted: false,
+      field: 'isolationReference',
+      message: 'Enter an isolation-register reference in the IR-XXXXXX format.',
     };
   }
 

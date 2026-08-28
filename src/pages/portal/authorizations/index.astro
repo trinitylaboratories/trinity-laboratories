@@ -8,7 +8,7 @@ import PortalLayout from '../../../layouts/PortalLayout.astro';
 
 <PortalLayout
   title="Authorizations"
-  description="Review TIRN eligibility and establish temporary TL-3 or TL-4 information access."
+  description="Review TIRN eligibility and establish temporary TL-3 through TL-6 information access."
   active="authorizations"
 >
   <PortalPageHeading
@@ -24,8 +24,9 @@ import PortalLayout from '../../../layouts/PortalLayout.astro';
         <h2 id="authorization-principle-heading">Eligibility is not permission</h2>
         <p>
           The base staff session establishes TL-2 information eligibility. A qualifying request may
-          establish temporary TL-3 or TL-4 access for the controlled records below. Program,
-          compartment, physical, and need-to-know requirements remain independent.
+          establish temporary TL-3 through TL-6 access for the controlled records below. Higher
+          levels require progressively stronger release references. Program, compartment, physical,
+          and need-to-know requirements remain independent.
         </p>
         <div class="portal-callout">
           Temporary grants expire after 15 minutes and are removed when the staff session is
@@ -88,6 +89,42 @@ import PortalLayout from '../../../layouts/PortalLayout.astro';
       </ControlledSection>
 
       <ControlledSection
+        id="directorate-review-five"
+        title="Directorate-controlled review acknowledgment"
+        mode="authorize"
+        requiredLevel="TL-5"
+        summary="Temporary TL-5 access, control-office and Directorate release references, and affirmed need-to-know are required."
+      >
+        <p>
+          Confirm the assigned record, authorized working purpose, and current release instruction
+          before beginning Directorate-controlled review. Do not extend the review to related
+          records unless they are listed in the same assignment.
+        </p>
+        <p>
+          Relinquish the temporary grant when the assigned review is complete or when the stated
+          working purpose no longer applies.
+        </p>
+      </ControlledSection>
+
+      <ControlledSection
+        id="isolated-review-six"
+        title="Isolated-record review acknowledgment"
+        mode="authorize"
+        requiredLevel="TL-6"
+        summary="Temporary TL-6 access, control-office and Directorate release references, an isolation-register reference, and affirmed need-to-know are required."
+      >
+        <p>
+          Review is limited to the isolated record identified by the assigned access instruction.
+          Department, position, facility authority, and prior access do not establish permission for
+          another isolated record.
+        </p>
+        <p>
+          End the review immediately if the displayed record differs from the assignment or if any
+          required control reference is withdrawn.
+        </p>
+      </ControlledSection>
+
+      <ControlledSection
         id="separate-source-example"
         title="Separately controlled source record"
         mode="withheld"
@@ -107,8 +144,10 @@ import PortalLayout from '../../../layouts/PortalLayout.astro';
           <div><dt>TL-0–TL-2</dt><dd>Base staff session</dd></div>
           <div><dt>TL-3</dt><dd>Authorization reference required</dd></div>
           <div><dt>TL-4</dt><dd>Authorization and control-office references required</dd></div>
+          <div><dt>TL-5</dt><dd>Control-office and Directorate release required</dd></div>
+          <div><dt>TL-6</dt><dd>Directorate and isolation-register release required</dd></div>
           <div><dt>Program / compartment</dt><dd>Separate authorization required</dd></div>
-          <div><dt>TL-5 and above</dt><dd>Separate authorization required</dd></div>
+          <div><dt>TL-7 / TL/Ø</dt><dd>Not available at this node</dd></div>
           <div><dt>Withheld body</dt><dd>Held by controlling office</dd></div>
         </dl>
       </section>

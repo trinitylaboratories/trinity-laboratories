@@ -34,16 +34,18 @@ import PortalLayout from '../../../layouts/PortalLayout.astro';
 
       <section class="portal-section" aria-labelledby="elevation-help-heading">
         <p class="portal-section__label">Controlled information</p>
-        <h2 id="elevation-help-heading">Request temporary TL-3 or TL-4 access</h2>
+        <h2 id="elevation-help-heading">Request temporary controlled access</h2>
         <ol>
           <li>Open a controlled section or record and select <strong>Request access</strong>.</li>
           <li>Select the working purpose and enter the assigned authorization reference.</li>
-          <li>For TL-4, also enter the independent control-office reference.</li>
+          <li>For TL-4 and above, enter the independent control-office reference.</li>
+          <li>For TL-5 and TL-6, enter the assigned Directorate release reference.</li>
+          <li>For TL-6, also enter the named-access isolation-register reference.</li>
           <li>Affirm need-to-know and evaluate the request.</li>
           <li>Relinquish the grant when review is complete.</li>
         </ol>
         <p class="portal-callout portal-callout--warning">
-          Temporary session authorization does not satisfy TL-5+, named program, compartment,
+          Temporary session authorization does not satisfy TL-7, TL/Ø, named program, compartment,
           endorsement, or physical-access requirements.
         </p>
       </section>
@@ -79,7 +81,8 @@ import PortalLayout from '../../../layouts/PortalLayout.astro';
               <tr>
                 <td>Separate grant required</td>
                 <td
-                  >The record requires a level, program, or compartment unavailable at this node.</td
+                  >The record requires TL-7, TL/Ø, a program, or a compartment unavailable at this
+                  node.</td
                 >
                 <td>Use the released metadata only.</td>
               </tr>

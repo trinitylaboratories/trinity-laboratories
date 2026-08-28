@@ -88,6 +88,33 @@ export type SubmissionStatus = (typeof SUBMISSION_STATUSES)[number];
 export type RecordFamily = (typeof RECORD_FAMILIES)[number];
 export type FormTemplateId = (typeof FORM_TEMPLATE_IDS)[number];
 
+interface SubmissionEvidencePlateBase {
+  id: string;
+  label: string;
+}
+
+export interface AvailableSubmissionEvidencePlate extends SubmissionEvidencePlateBase {
+  mode: 'available';
+  path: string;
+  mediaType: 'image/webp';
+  sourceFilename: string;
+  sha256: string;
+  width: number;
+  height: number;
+  alt: string;
+  caption: string;
+  credit: string;
+}
+
+export interface WithheldSubmissionEvidencePlate extends SubmissionEvidencePlateBase {
+  mode: 'withheld';
+  /** Safe extent note only. The source path and evidence plaintext must not enter this record. */
+  summary: string;
+}
+
+export type SubmissionEvidencePlate =
+  AvailableSubmissionEvidencePlate | WithheldSubmissionEvidencePlate;
+
 export type DisclosureRule =
   | { mode: 'open' }
   | {
@@ -142,6 +169,8 @@ export interface SubmissionRecordData {
   summary: string;
   relatedRecords: string[];
   sections: SubmissionSection[];
+  /** Controlled illustrative material. The renderer must keep it inert until record authorization. */
+  evidence?: SubmissionEvidencePlate[];
 }
 
 export function submissionHref(recordId: string): string {

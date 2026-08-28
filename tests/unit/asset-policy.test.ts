@@ -13,6 +13,7 @@ import {
   validatePngPrivacy,
   validateStylesheet,
   validateSvg,
+  validateWebpPrivacy,
 } from '../../scripts/validate-assets.mjs';
 
 const temporaryRoots: string[] = [];
@@ -52,6 +53,30 @@ describe('asset policy', () => {
       offset += part.length;
     }
     return png;
+  };
+
+  const webpChunk = (type: string, data = new Uint8Array()) => {
+    const padding = data.length % 2;
+    const chunk = new Uint8Array(8 + data.length + padding);
+    chunk.set(new TextEncoder().encode(type), 0);
+    new DataView(chunk.buffer).setUint32(4, data.length, true);
+    chunk.set(data, 8);
+    return chunk;
+  };
+
+  const webpFixture = (...extraChunks: Uint8Array[]) => {
+    const chunks = [...extraChunks, webpChunk('VP8 ')];
+    const total = 12 + chunks.reduce((sum, chunk) => sum + chunk.length, 0);
+    const webp = new Uint8Array(total);
+    webp.set(new TextEncoder().encode('RIFF'), 0);
+    new DataView(webp.buffer).setUint32(4, total - 8, true);
+    webp.set(new TextEncoder().encode('WEBP'), 8);
+    let offset = 12;
+    for (const chunk of chunks) {
+      webp.set(chunk, offset);
+      offset += chunk.length;
+    }
+    return webp;
   };
 
   it('rejects active SVG and remote CSS', () => {
@@ -180,6 +205,25 @@ describe('asset policy', () => {
     expect(validatePngPrivacy(pngFixture(), 'clean.png')).toEqual([]);
   });
 
+  it('rejects WebP EXIF, XMP, and ICC metadata chunks', () => {
+    const metadata = webpFixture(
+      webpChunk('EXIF', new TextEncoder().encode('private metadata')),
+      webpChunk('XMP ', new TextEncoder().encode('source packet')),
+      webpChunk('ICCP', new TextEncoder().encode('color profile')),
+    );
+    expect(validateWebpPrivacy(metadata, 'unsafe.webp')).toEqual(
+      expect.arrayContaining([
+        expect.stringMatching(/metadata chunk "EXIF"/),
+        expect.stringMatching(/metadata chunk "XMP "/),
+        expect.stringMatching(/metadata chunk "ICCP"/),
+      ]),
+    );
+    expect(validateWebpPrivacy(webpFixture(), 'clean.webp')).toEqual([]);
+    expect(
+      validateWebpPrivacy(metadata.subarray(0, metadata.length - 2), 'truncated.webp'),
+    ).toEqual(expect.arrayContaining([expect.stringMatching(/RIFF length|truncated WebP chunk/)]));
+  });
+
   it('formats byte counts for actionable output', () => {
     expect(formatBytes(8)).toBe('8 B');
     expect(formatBytes(2048)).toBe('2.0 KiB');
@@ -289,5 +333,52 @@ describe('asset policy', () => {
         expect.stringMatching(/mediaType must be image\/webp/),
       ]),
     );
+  });
+
+  it('allows provenance-backed controlled geospatial WebP derivatives only in the portal', async () => {
+    const parent = path.join(process.cwd(), '.tools', 'test-results');
+    await mkdir(parent, { recursive: true });
+    const root = await mkdtemp(path.join(parent, 'unit-geospatial-media-'));
+    temporaryRoots.push(root);
+    const publicRoot = path.join(root, 'public');
+    await mkdir(path.join(publicRoot, 'portal', 'media', 'geospatial'), { recursive: true });
+    const payload = 'controlled geospatial derivative fixture';
+    await writeFile(
+      path.join(publicRoot, 'portal', 'media', 'geospatial', 'survey-frame.webp'),
+      payload,
+      'utf8',
+    );
+    const ledgerPath = path.join(root, 'asset-ledger.json');
+    const ledger = {
+      hashAlgorithm: 'SHA-256',
+      assets: [
+        {
+          category: 'controlled-geospatial',
+          source: {
+            basename: 'survey-frame-source.jpg',
+            sha256: createHash('sha256').update('source image fixture').digest('hex'),
+          },
+          derivative: {
+            path: '/portal/media/geospatial/survey-frame.webp',
+            sha256: createHash('sha256').update(payload).digest('hex'),
+          },
+          mediaType: 'image/webp',
+          license: 'Third-party noncommercial terms',
+          ownership: 'Fixture imagery provider',
+          attribution: 'Imagery provider fixture attribution',
+          provenance: 'Provider-attributed geospatial image supplied for controlled review.',
+          transform: 'Metadata-free WebP derivative with attribution retained.',
+        },
+      ],
+    };
+    await writeFile(ledgerPath, JSON.stringify(ledger), 'utf8');
+
+    expect((await validateAssetLedger(publicRoot, ledgerPath)).errors).toEqual([]);
+
+    delete (ledger.assets[0] as { attribution?: string }).attribution;
+    await writeFile(ledgerPath, JSON.stringify(ledger), 'utf8');
+    expect((await validateAssetLedger(publicRoot, ledgerPath)).errors).toEqual([
+      expect.stringMatching(/controlled-geospatial requires non-empty attribution/),
+    ]);
   });
 });

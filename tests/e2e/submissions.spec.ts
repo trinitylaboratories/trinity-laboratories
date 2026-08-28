@@ -4,6 +4,7 @@ import { captureRuntimeErrors, visit } from './support/site';
 
 const REPORT_ROUTE = '/records/reports/tl-340-trn-001/';
 const STRUCTURED_REPORT_ROUTE = '/records/reports/tl-101-ins-001/';
+const TL6_AREA_REPORT_ROUTE = '/records/reports/tl-470-geo-2406/';
 
 async function establishStaffSession(page: Page) {
   await page.addInitScript(() => sessionStorage.setItem('tirn-session', 'accepted'));
@@ -119,6 +120,57 @@ test('a generic TL-3 review grant reveals authorized controlled content only', a
   await expect(withheldSection.locator('[data-controlled-withheld]')).toBeVisible();
   await expect(withheldSection).toContainText('Source content held by controlling office');
   await expect(withheldSection.locator('[data-controlled-content]')).toHaveCount(0);
+});
+
+test('TL-6 authorization mounts withheld area descriptors without requesting evidence images', async ({
+  page,
+}) => {
+  const evidenceImageRequests: string[] = [];
+  page.on('request', (request) => {
+    const requestUrl = new URL(request.url());
+    if (
+      request.resourceType() === 'image' &&
+      requestUrl.pathname.startsWith('/portal/media/geospatial/')
+    ) {
+      evidenceImageRequests.push(requestUrl.pathname);
+    }
+  });
+
+  await establishStaffSession(page);
+  await visit(page, TL6_AREA_REPORT_ROUTE);
+
+  const controlledRecord = page.locator('[data-controlled-record="TL-470-GEO-2406"]');
+  const recordLock = controlledRecord.locator(':scope > [data-controlled-locked]');
+  const evidenceGallery = controlledRecord.locator('[data-evidence-gallery]');
+  const evidenceContent = evidenceGallery.locator('[data-evidence-content]');
+
+  await expect(controlledRecord).toHaveAttribute('data-access-state', 'locked');
+  await expect(evidenceGallery).toHaveAttribute('data-evidence-state', 'inert');
+  await expect(evidenceContent.locator(':scope > *')).toHaveCount(0);
+  await expect(evidenceGallery.locator('img')).toHaveCount(0);
+  expect(evidenceImageRequests).toEqual([]);
+
+  await recordLock.locator('[data-authorize-trigger]').click();
+  const authorizationDialog = recordLock.locator('[data-authorization-dialog]');
+  const form = authorizationDialog.locator('[data-authorization-form]');
+  await form.locator('[data-authorization-purpose]').selectOption('record-review');
+  await form.locator('[data-authorization-reference]').fill('TL6-24B6D8');
+  await form.locator('[data-control-office-reference]').fill('CO-24B6D8');
+  await form.locator('[data-directorate-release-reference]').fill('DR-24B6D8');
+  await form.locator('[data-isolation-reference]').fill('IR-24B6D8');
+  await form.locator('[data-authorization-attestation]').check();
+  await form.getByRole('button', { name: /evaluate request/i }).click();
+
+  await expect(authorizationDialog).not.toBeVisible();
+  await expect(controlledRecord).toHaveAttribute('data-access-state', 'authorized');
+  await expect(
+    controlledRecord.getByRole('heading', { name: 'Upland Pattern Field Instrument Survey' }),
+  ).toBeVisible();
+  await expect(evidenceGallery).toHaveAttribute('data-evidence-state', 'loaded');
+  await expect(evidenceContent.locator('.submission-evidence__plate--withheld')).toHaveCount(2);
+  await expect(evidenceContent.getByText('Source plate held by controlling office')).toHaveCount(2);
+  await expect(evidenceGallery.locator('img')).toHaveCount(0);
+  expect(evidenceImageRequests).toEqual([]);
 });
 
 test('Pagefind indexes released report fields but excludes controlled body text', async ({

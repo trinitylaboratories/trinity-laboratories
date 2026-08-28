@@ -28,6 +28,9 @@ async function expectNoPersistentPrivateState(
 ) {
   const state = await page.evaluate(async () => ({
     grant: sessionStorage.getItem('tirn-grant'),
+    sessionStorage: Object.fromEntries(
+      Object.keys(sessionStorage).map((key) => [key, sessionStorage.getItem(key)]),
+    ),
     localStorage: Object.keys(localStorage),
     indexedDatabases: indexedDB.databases ? await indexedDB.databases() : [],
   }));
@@ -227,6 +230,182 @@ test.describe('browser-local authorization controls', () => {
       expiresAt: expect.any(Number),
     });
     await expectNoPersistentPrivateState(context, page, [rawReference, rawControlReference]);
+    expect(interactionRequests).toEqual([]);
+  });
+
+  test('TL-5 requires level, control-office, and Directorate references without retaining them', async ({
+    context,
+    page,
+  }) => {
+    await establishBaseSession(page);
+    const interactionRequests: string[] = [];
+    let observeRequests = false;
+    page.on('request', (request) => {
+      if (observeRequests) interactionRequests.push(`${request.method()} ${request.url()}`);
+    });
+
+    await visit(page, '/portal/authorizations/');
+    const gate = page.locator('[data-controlled-section="directorate-review-five"]');
+    await gate.locator('[data-authorize-trigger]').click();
+    const dialog = gate.locator('[data-authorization-dialog]');
+    const form = dialog.locator('[data-authorization-form]');
+    const rawReference = 'TL5-51A7B9';
+    const rawControlReference = 'CO-51A7B9';
+    const rawDirectorateReference = 'DR-51A7B9';
+
+    await expect(form.locator('[data-authorization-reference]')).toHaveAttribute(
+      'placeholder',
+      'TL5-ABC123',
+    );
+    await expect(form.locator('[data-control-office-reference]')).toHaveCount(1);
+    await expect(form.locator('[data-directorate-release-reference]')).toHaveCount(1);
+    await expect(form.locator('[data-isolation-reference]')).toHaveCount(0);
+
+    await form.locator('[data-authorization-purpose]').selectOption('record-review');
+    await form.locator('[data-authorization-reference]').fill(rawReference);
+    await form.locator('[data-authorization-attestation]').check();
+    await form.getByRole('button', { name: /evaluate request/i }).click();
+    await expect(dialog.locator('[data-auth-status]')).toHaveText(
+      'Enter a control-office reference in the CO-XXXXXX format.',
+    );
+    await expect(form.locator('[data-control-office-reference]')).toBeFocused();
+
+    await form.locator('[data-control-office-reference]').fill(rawControlReference);
+    await form.getByRole('button', { name: /evaluate request/i }).click();
+    await expect(dialog.locator('[data-auth-status]')).toHaveText(
+      'Enter a Directorate release reference in the DR-XXXXXX format.',
+    );
+    await expect(form.locator('[data-directorate-release-reference]')).toBeFocused();
+
+    await form.locator('[data-directorate-release-reference]').fill(rawDirectorateReference);
+    observeRequests = true;
+    await form.getByRole('button', { name: /evaluate request/i }).click();
+
+    await expect(dialog).not.toBeVisible();
+    await expect(gate.locator('[data-controlled-content]')).toBeVisible();
+    await expect(form.locator('[data-authorization-purpose]')).toHaveValue('');
+    await expect(form.locator('[data-authorization-reference]')).toHaveValue('');
+    await expect(form.locator('[data-control-office-reference]')).toHaveValue('');
+    await expect(form.locator('[data-directorate-release-reference]')).toHaveValue('');
+    await expect(form.locator('[data-authorization-attestation]')).not.toBeChecked();
+    const grant = await page.evaluate(() =>
+      JSON.parse(sessionStorage.getItem('tirn-grant') ?? 'null'),
+    );
+    expect(grant).toEqual({
+      version: 1,
+      level: 'TL-5',
+      scope: 'records-review',
+      expiresAt: expect.any(Number),
+    });
+    await expectNoPersistentPrivateState(context, page, [
+      rawReference,
+      rawControlReference,
+      rawDirectorateReference,
+    ]);
+    const documentText = await page.locator('body').textContent();
+    for (const rawValue of [rawReference, rawControlReference, rawDirectorateReference]) {
+      expect(documentText).not.toContain(rawValue);
+    }
+    expect(interactionRequests).toEqual([]);
+  });
+
+  test('TL-6 also requires isolation-register confirmation and clears every request value', async ({
+    context,
+    page,
+  }) => {
+    await establishBaseSession(page);
+    const interactionRequests: string[] = [];
+    let observeRequests = false;
+    page.on('request', (request) => {
+      if (observeRequests) interactionRequests.push(`${request.method()} ${request.url()}`);
+    });
+
+    await visit(page, '/portal/authorizations/');
+    const gate = page.locator('[data-controlled-section="isolated-review-six"]');
+    await gate.locator('[data-authorize-trigger]').click();
+    const dialog = gate.locator('[data-authorization-dialog]');
+    const form = dialog.locator('[data-authorization-form]');
+    const rawReference = 'TL6-83C2D4';
+    const rawControlReference = 'CO-83C2D4';
+    const rawDirectorateReference = 'DR-83C2D4';
+    const rawIsolationReference = 'IR-83C2D4';
+
+    await expect(form.locator('[data-authorization-reference]')).toHaveAttribute(
+      'placeholder',
+      'TL6-ABC123',
+    );
+    await expect(form.locator('[data-control-office-reference]')).toHaveCount(1);
+    await expect(form.locator('[data-directorate-release-reference]')).toHaveCount(1);
+    await expect(form.locator('[data-isolation-reference]')).toHaveCount(1);
+
+    await form.locator('[data-authorization-purpose]').selectOption('record-review');
+    await form.locator('[data-authorization-reference]').fill('TL5-83C2D4');
+    await form.locator('[data-authorization-attestation]').check();
+    await form.getByRole('button', { name: /evaluate request/i }).click();
+    await expect(dialog.locator('[data-auth-status]')).toHaveText(
+      'Enter a TL-6 authorization reference in the TL6-XXXXXX format.',
+    );
+    await expect(form.locator('[data-authorization-reference]')).toBeFocused();
+
+    await form.locator('[data-authorization-reference]').fill(rawReference);
+    await form.getByRole('button', { name: /evaluate request/i }).click();
+    await expect(dialog.locator('[data-auth-status]')).toHaveText(
+      'Enter a control-office reference in the CO-XXXXXX format.',
+    );
+    await expect(form.locator('[data-control-office-reference]')).toBeFocused();
+
+    await form.locator('[data-control-office-reference]').fill(rawControlReference);
+    await form.getByRole('button', { name: /evaluate request/i }).click();
+    await expect(dialog.locator('[data-auth-status]')).toHaveText(
+      'Enter a Directorate release reference in the DR-XXXXXX format.',
+    );
+    await expect(form.locator('[data-directorate-release-reference]')).toBeFocused();
+
+    await form.locator('[data-directorate-release-reference]').fill(rawDirectorateReference);
+    await form.getByRole('button', { name: /evaluate request/i }).click();
+    await expect(dialog.locator('[data-auth-status]')).toHaveText(
+      'Enter an isolation-register reference in the IR-XXXXXX format.',
+    );
+    await expect(form.locator('[data-isolation-reference]')).toBeFocused();
+
+    await form.locator('[data-isolation-reference]').fill(rawIsolationReference);
+    observeRequests = true;
+    await form.getByRole('button', { name: /evaluate request/i }).click();
+
+    await expect(dialog).not.toBeVisible();
+    await expect(gate.locator('[data-controlled-content]')).toBeVisible();
+    await expect(form.locator('[data-authorization-purpose]')).toHaveValue('');
+    await expect(form.locator('[data-authorization-reference]')).toHaveValue('');
+    await expect(form.locator('[data-control-office-reference]')).toHaveValue('');
+    await expect(form.locator('[data-directorate-release-reference]')).toHaveValue('');
+    await expect(form.locator('[data-isolation-reference]')).toHaveValue('');
+    await expect(form.locator('[data-authorization-attestation]')).not.toBeChecked();
+    const grant = await page.evaluate(() =>
+      JSON.parse(sessionStorage.getItem('tirn-grant') ?? 'null'),
+    );
+    expect(grant).toEqual({
+      version: 1,
+      level: 'TL-6',
+      scope: 'records-review',
+      expiresAt: expect.any(Number),
+    });
+    await expectNoPersistentPrivateState(context, page, [
+      rawReference,
+      rawControlReference,
+      rawDirectorateReference,
+      rawIsolationReference,
+      'TL5-83C2D4',
+    ]);
+    const documentText = await page.locator('body').textContent();
+    for (const rawValue of [
+      rawReference,
+      rawControlReference,
+      rawDirectorateReference,
+      rawIsolationReference,
+      'TL5-83C2D4',
+    ]) {
+      expect(documentText).not.toContain(rawValue);
+    }
     expect(interactionRequests).toEqual([]);
   });
 

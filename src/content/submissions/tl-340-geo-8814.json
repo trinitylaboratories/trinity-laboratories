@@ -1,0 +1,68 @@
+{
+  "recordId": "TL-340-GEO-8814",
+  "formId": "TL-340",
+  "title": "Sector K-14 Masonry Heat-Retention Survey",
+  "recordType": "completed-report",
+  "recordFamily": "research",
+  "status": "archived",
+  "revision": "2.0",
+  "effectiveDate": "1988-11-04",
+  "controllingOffice": "Applied Physics",
+  "publicationState": "controlled",
+  "information": {
+    "level": "TL-5"
+  },
+  "tags": ["controlled-area", "thermal-survey", "masonry", "field-instrumentation", "tl-340"],
+  "summary": "Controlled area assessment. Descriptive metadata and report contents require the displayed information eligibility.",
+  "relatedRecords": ["TL-340"],
+  "evidence": [
+    {
+      "id": "orthographic-survey-plate",
+      "label": "Orthographic survey plate A",
+      "mode": "withheld",
+      "summary": "The reviewed image plate remains with the coordinate and access schedule held by the controlling office."
+    }
+  ],
+  "sections": [
+    {
+      "id": "survey-basis",
+      "title": "SURVEY BASIS",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Archive interval:** Six evening passes completed during two dry-weather field periods\n\n**Instrumentation:** Calibrated long-wave infrared radiometer, contact thermistors, portable weather station, and survey control targets\n\n**Study boundary:** Exterior masonry and immediately adjacent exposed ground within the assigned sector; no interior access was included."
+    },
+    {
+      "id": "observed-variance",
+      "title": "OBSERVED VARIANCE",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Thermal response:** A compact central surface region reached the expected daytime peak but returned heat more slowly than the comparison surfaces after local sunset.\n\n**Phase residual:** Corrected cooling curves retained an 18-to-26-minute lag across four of six passes. The residual did not track measured wind direction or surface shade.\n\n**Spatial form:** The strongest response remained inside the same projected surface boundary and weakened smoothly toward the outer faces."
+    },
+    {
+      "id": "interpretive-limits",
+      "title": "INTERPRETIVE LIMITS",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Ordinary explanations retained:** Unmapped void space, differing stone density, repair material, and surface-emissivity error remain sufficient explanations.\n\n**Unresolved point:** No single modeled combination reproduced both the observed phase lag and its repeatable spatial boundary. The archive does not establish an unusual energy source or hazardous condition."
+    },
+    {
+      "id": "disposition",
+      "title": "DISPOSITION",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Finding:** Repeatable low-amplitude thermal persistence; mechanism not assigned\n\n**Action:** Retain passive comparison data and repeat only when independent conservation or subsurface information becomes available.\n\n**Field restriction:** No intrusive sampling authorized under this record."
+    },
+    {
+      "id": "coordinate-schedule",
+      "title": "COORDINATE & ACCESS SCHEDULE",
+      "summary": "Location references and third-party access documentation remain with the controlling office.",
+      "disclosure": {
+        "mode": "withheld"
+      }
+    }
+  ]
+}

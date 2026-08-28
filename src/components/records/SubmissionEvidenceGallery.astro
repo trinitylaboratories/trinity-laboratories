@@ -1,0 +1,272 @@
+---
+import type { SubmissionEvidencePlate } from '../../lib/submission-schema';
+
+interface Props {
+  evidence: SubmissionEvidencePlate[];
+}
+
+const { evidence } = Astro.props;
+const payload = JSON.stringify(evidence).replace(/[<>&]/g, (character) => {
+  if (character === '<') return '\\u003c';
+  if (character === '>') return '\\u003e';
+  return '\\u0026';
+});
+---
+
+{
+  evidence.length > 0 && (
+    <section class="submission-evidence" data-evidence-gallery data-evidence-state="inert">
+      <template data-evidence-payload>{payload}</template>
+      <div data-evidence-content />
+    </section>
+  )
+}
+
+<script>
+  import type { SubmissionEvidencePlate } from '../../lib/submission-schema';
+  import { TIRN_ACCESS_CHANGE_EVENT } from '../../lib/tirn-access';
+
+  let evidenceGallerySequence = 0;
+
+  const readEvidencePayload = (root: HTMLElement): SubmissionEvidencePlate[] => {
+    const template = root.querySelector<HTMLTemplateElement>('[data-evidence-payload]');
+    const serialized = template?.content.textContent ?? '';
+    if (!serialized) return [];
+    try {
+      const parsed: unknown = JSON.parse(serialized);
+      return Array.isArray(parsed) ? (parsed as SubmissionEvidencePlate[]) : [];
+    } catch {
+      return [];
+    }
+  };
+
+  const addTextElement = (
+    parent: HTMLElement,
+    tag: 'h2' | 'p' | 'small',
+    className: string,
+    text: string,
+  ) => {
+    const element = document.createElement(tag);
+    element.className = className;
+    element.textContent = text;
+    parent.append(element);
+    return element;
+  };
+
+  const loadEvidence = (root: HTMLElement) => {
+    if (root.dataset.evidenceState === 'loaded') return;
+    const content = root.querySelector<HTMLElement>('[data-evidence-content]');
+    if (!content) return;
+    const plates = readEvidencePayload(root);
+    if (plates.length === 0) return;
+
+    const heading = addTextElement(
+      content,
+      'h2',
+      'submission-evidence__heading',
+      'Supporting evidence',
+    );
+    heading.id = `submission-evidence-heading-${++evidenceGallerySequence}`;
+    const gallery = document.createElement('div');
+    gallery.className = 'submission-evidence__plates';
+    gallery.setAttribute('aria-labelledby', heading.id);
+
+    plates.forEach((plate, index) => {
+      if (plate.mode === 'withheld') {
+        const descriptor = document.createElement('article');
+        descriptor.className = 'submission-evidence__plate submission-evidence__plate--withheld';
+        addTextElement(
+          descriptor,
+          'p',
+          'submission-evidence__label',
+          `${String(index + 1).padStart(2, '0')} / ${plate.label}`,
+        );
+        addTextElement(
+          descriptor,
+          'p',
+          'submission-evidence__withheld-title',
+          'Source plate held by controlling office',
+        );
+        addTextElement(descriptor, 'p', 'submission-evidence__withheld-summary', plate.summary);
+        gallery.append(descriptor);
+        return;
+      }
+
+      const figure = document.createElement('figure');
+      figure.className = 'submission-evidence__plate';
+
+      const plateHeading = addTextElement(
+        figure,
+        'p',
+        'submission-evidence__label',
+        `${String(index + 1).padStart(2, '0')} / ${plate.label}`,
+      );
+      plateHeading.id = `evidence-${plate.id}-label`;
+
+      const image = document.createElement('img');
+      image.className = 'submission-evidence__image';
+      image.width = plate.width;
+      image.height = plate.height;
+      image.loading = 'lazy';
+      image.decoding = 'async';
+      image.alt = plate.alt;
+      image.src = plate.path;
+      image.setAttribute('aria-describedby', `evidence-${plate.id}-caption`);
+      figure.append(image);
+
+      const caption = document.createElement('figcaption');
+      caption.className = 'submission-evidence__caption';
+      caption.id = `evidence-${plate.id}-caption`;
+      addTextElement(caption, 'p', 'submission-evidence__caption-text', plate.caption);
+      addTextElement(caption, 'small', 'submission-evidence__credit', plate.credit);
+      figure.append(caption);
+      gallery.append(figure);
+    });
+
+    content.append(gallery);
+    root.dataset.evidenceState = 'loaded';
+  };
+
+  const unloadEvidence = (root: HTMLElement) => {
+    if (root.dataset.evidenceState !== 'loaded') return;
+    root.querySelectorAll<HTMLImageElement>('[data-evidence-content] img').forEach((image) => {
+      image.removeAttribute('src');
+      image.removeAttribute('alt');
+      image.removeAttribute('aria-describedby');
+    });
+    root.querySelector<HTMLElement>('[data-evidence-content]')?.replaceChildren();
+    root.dataset.evidenceState = 'inert';
+  };
+
+  const initializeEvidenceGallery = (root: HTMLElement) => {
+    if (root.dataset.evidenceInitialized === 'true') return;
+    root.dataset.evidenceInitialized = 'true';
+    const controlledRecord = root.closest<HTMLElement>('[data-controlled-record]');
+    if (!controlledRecord) return;
+
+    const refresh = () => {
+      if (controlledRecord.dataset.accessState === 'authorized') loadEvidence(root);
+      else unloadEvidence(root);
+    };
+
+    const observer = new MutationObserver(refresh);
+    observer.observe(controlledRecord, {
+      attributes: true,
+      attributeFilter: ['data-access-state'],
+    });
+    window.addEventListener(TIRN_ACCESS_CHANGE_EVENT, () => queueMicrotask(refresh));
+    refresh();
+  };
+
+  document
+    .querySelectorAll<HTMLElement>('[data-evidence-gallery]')
+    .forEach(initializeEvidenceGallery);
+</script>
+
+<style>
+  .submission-evidence {
+    margin-top: 2.5rem;
+    border-top: 1px solid #7e8993;
+    padding-top: 1.25rem;
+  }
+
+  .submission-evidence__heading {
+    margin: 0 0 1rem;
+    border: 0;
+    padding: 0;
+    color: #17283b;
+    font-size: 1.15rem;
+  }
+
+  .submission-evidence__plates {
+    display: grid;
+    gap: 2rem;
+  }
+
+  .submission-evidence__plate {
+    margin: 0;
+    border-bottom: 1px solid #b9c1c8;
+    padding-bottom: 1.25rem;
+  }
+
+  .submission-evidence__plate--withheld {
+    border: 1px solid #8d969f;
+    padding: 1rem;
+    background: #eef1f3;
+  }
+
+  .submission-evidence__label {
+    margin: 0 0 0.55rem;
+    color: #4d5a66;
+    font: 600 0.64rem/1.35 var(--sl-font-mono);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .submission-evidence__image {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid #6f7a84;
+    background: #111a23;
+  }
+
+  .submission-evidence__caption {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(10rem, auto);
+    gap: 1rem;
+    align-items: start;
+    padding-top: 0.75rem;
+  }
+
+  .submission-evidence__caption-text,
+  .submission-evidence__credit {
+    margin: 0;
+  }
+
+  .submission-evidence__caption-text {
+    color: #303b45;
+    font-size: 0.82rem;
+  }
+
+  .submission-evidence__withheld-title,
+  .submission-evidence__withheld-summary {
+    max-width: 58rem;
+    margin: 0;
+  }
+
+  .submission-evidence__withheld-title {
+    color: #6b1f24;
+    font: 700 0.69rem/1.35 var(--sl-font-mono);
+    letter-spacing: 0.055em;
+    text-transform: uppercase;
+  }
+
+  .submission-evidence__withheld-summary {
+    margin-top: 0.45rem;
+    color: #3d4954;
+    font-size: 0.8rem;
+  }
+
+  .submission-evidence__credit {
+    color: #596570;
+    font: 400 0.64rem/1.45 var(--sl-font-mono);
+    text-align: right;
+  }
+
+  @media (max-width: 40rem) {
+    .submission-evidence__caption {
+      grid-template-columns: 1fr;
+    }
+
+    .submission-evidence__credit {
+      text-align: left;
+    }
+  }
+
+  @media print {
+    .submission-evidence__plate {
+      break-inside: avoid;
+    }
+  }
+</style>

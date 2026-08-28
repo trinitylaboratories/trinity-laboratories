@@ -80,6 +80,15 @@ const APPROVED_ASSET_CATEGORIES = new Map([
     },
   ],
   [
+    'controlled-geospatial',
+    {
+      mediaTypes: new Set(['image/webp']),
+      prefix: '/portal/media/geospatial/',
+      requiresProvenance: true,
+      requiresAttribution: true,
+    },
+  ],
+  [
     'third-party-font',
     {
       mediaTypes: new Set(['font/woff', 'font/woff2', 'font/otf', 'text/plain']),
@@ -356,6 +365,42 @@ export function validatePngPrivacy(bytes, fileName) {
   return [...new Set(errors)];
 }
 
+export function validateWebpPrivacy(bytes, fileName) {
+  const errors = [];
+  const ascii = (start, end) => String.fromCharCode(...bytes.subarray(start, end));
+  if (bytes.length < 12 || ascii(0, 4) !== 'RIFF' || ascii(8, 12) !== 'WEBP') {
+    return [`${fileName}: malformed WebP RIFF signature`];
+  }
+
+  const header = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+  if (header.getUint32(4, true) + 8 !== bytes.length) {
+    errors.push(`${fileName}: WebP RIFF length does not match the file size`);
+  }
+
+  const forbiddenChunks = new Set(['EXIF', 'XMP ', 'ICCP']);
+  let offset = 12;
+  while (offset < bytes.length) {
+    if (bytes.length - offset < 8) {
+      errors.push(`${fileName}: truncated WebP chunk header`);
+      break;
+    }
+    const view = new DataView(bytes.buffer, bytes.byteOffset + offset, bytes.length - offset);
+    const type = ascii(offset, offset + 4);
+    const dataLength = view.getUint32(4, true);
+    const paddedLength = dataLength + (dataLength % 2);
+    if (8 + paddedLength > bytes.length - offset) {
+      errors.push(`${fileName}: truncated WebP chunk payload`);
+      break;
+    }
+    if (forbiddenChunks.has(type)) {
+      errors.push(`${fileName}: WebP metadata chunk ${JSON.stringify(type)} is prohibited`);
+    }
+    offset += 8 + paddedLength;
+  }
+
+  return [...new Set(errors)];
+}
+
 export async function validateAssetRoot(root) {
   const absoluteRoot = path.resolve(root);
   const errors = [];
@@ -418,6 +463,9 @@ export async function validateAssetRoot(root) {
     }
     if (extension === '.png' && fileStats.size <= ASSET_LIMITS.maxFileBytes) {
       errors.push(...validatePngPrivacy(await readFile(absoluteFile), relativeFile));
+    }
+    if (extension === '.webp' && fileStats.size <= ASSET_LIMITS.maxFileBytes) {
+      errors.push(...validateWebpPrivacy(await readFile(absoluteFile), relativeFile));
     }
   }
 
@@ -568,6 +616,12 @@ export async function validateAssetLedger(
         (typeof entry.provenance !== 'string' || entry.provenance.trim() === '')
       ) {
         errors.push(`${label} ${entry.category} requires non-empty provenance`);
+      }
+      if (
+        categoryPolicy.requiresAttribution &&
+        (typeof entry.attribution !== 'string' || entry.attribution.trim() === '')
+      ) {
+        errors.push(`${label} ${entry.category} requires non-empty attribution`);
       }
     }
     const expectedMediaType = MEDIA_TYPES.get(path.posix.extname(deployedPath).toLowerCase());

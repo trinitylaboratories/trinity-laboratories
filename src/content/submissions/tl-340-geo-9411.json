@@ -1,0 +1,80 @@
+{
+  "recordId": "TL-340-GEO-9411",
+  "formId": "TL-340",
+  "title": "Blackwater Reach Clock-Correlation Survey",
+  "recordType": "completed-report",
+  "recordFamily": "research",
+  "status": "archived",
+  "revision": "1.2",
+  "effectiveDate": "1994-08-19",
+  "controllingOffice": "Field Sampling & Geological Research",
+  "publicationState": "controlled",
+  "information": {
+    "level": "TL-5"
+  },
+  "tags": [
+    "controlled-area",
+    "riparian-survey",
+    "timing-correlation",
+    "field-instrumentation",
+    "tl-340"
+  ],
+  "summary": "Controlled area assessment. Descriptive metadata and report contents require the displayed information eligibility.",
+  "relatedRecords": ["TL-340"],
+  "evidence": [
+    {
+      "id": "reach-overview-plate",
+      "label": "Reach overview plate A",
+      "mode": "withheld",
+      "summary": "The reviewed image plate remains with the coordinate and access schedule held by the controlling office."
+    },
+    {
+      "id": "station-approach-plate",
+      "label": "Station approach plate B",
+      "mode": "withheld",
+      "summary": "The reviewed image plate remains with the coordinate and access schedule held by the controlling office."
+    }
+  ],
+  "sections": [
+    {
+      "id": "survey-basis",
+      "title": "SURVEY BASIS",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Archive interval:** Three pedestrian traverses and one stationary overnight run\n\n**Instrumentation:** Independent quartz timebases, fluxgate magnetometer, VLF receiver, barometric recorder, and paired environmental loggers\n\n**Study boundary:** A coded riparian reach and its ordinary vehicle-access corridor; property and geographic identifiers are retained separately."
+    },
+    {
+      "id": "observed-variance",
+      "title": "OBSERVED VARIANCE",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Timing residual:** Two isolated timebases accumulated the same 42-to-96-millisecond offset while passing through a roughly 220-metre survey band. Both returned to their established drift rates after removal.\n\n**Field correlation:** The interval coincided with a low-amplitude change in the local magnetic background. No matching change appeared on the stationary reference package.\n\n**Repeatability:** Direction and walking speed changed the duration of the observation but not its mapped entry and exit points."
+    },
+    {
+      "id": "interpretive-limits",
+      "title": "INTERPRETIVE LIMITS",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Ordinary explanations retained:** Receiver coupling, temperature compensation error, buried utility material, and an unrecorded ferrous source remain plausible.\n\n**Unresolved point:** Bench testing reproduced neither the shared offset nor its recovery profile. The report does not claim a change to civil time or a biological effect."
+    },
+    {
+      "id": "disposition",
+      "title": "DISPOSITION",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Finding:** Localized instrument-correlation variance; source unconfirmed\n\n**Action:** Maintain the reach as a passive comparison site and require redundant clocks for any later survey.\n\n**Personnel control:** No exposure limitation is indicated beyond ordinary remote-field procedures."
+    },
+    {
+      "id": "coordinate-schedule",
+      "title": "COORDINATE & ACCESS SCHEDULE",
+      "summary": "Location references and land-access documentation remain with the controlling office.",
+      "disclosure": {
+        "mode": "withheld"
+      }
+    }
+  ]
+}
