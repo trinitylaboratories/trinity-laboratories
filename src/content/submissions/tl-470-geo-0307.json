@@ -1,0 +1,76 @@
+{
+  "recordId": "TL-470-GEO-0307",
+  "formId": "TL-470",
+  "title": "Kilnfield Linear Feature Assessment",
+  "recordType": "completed-report",
+  "recordFamily": "research",
+  "status": "archived",
+  "revision": "3.1",
+  "effectiveDate": "2003-05-27",
+  "controllingOffice": "Field Sampling & Geological Research",
+  "publicationState": "controlled",
+  "information": {
+    "level": "TL-6"
+  },
+  "tags": ["controlled-area", "surface-patterning", "soil-moisture", "remote-sensing", "tl-470"],
+  "summary": "Controlled area assessment. Descriptive metadata and report contents require the displayed information eligibility.",
+  "relatedRecords": ["TL-470", "TL-470-GEO-2406"],
+  "evidence": [
+    {
+      "id": "seasonal-comparison-plate",
+      "label": "Seasonal comparison plate A",
+      "mode": "withheld",
+      "summary": "The reviewed image plate remains with the coordinate and land-use schedule held by the controlling office."
+    }
+  ],
+  "sections": [
+    {
+      "id": "survey-basis",
+      "title": "SURVEY BASIS",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Archive interval:** Wet-season and dry-season remote-imagery comparison with two limited ground-control visits\n\n**Instrumentation:** Multispectral image set, soil-conductivity sled, shallow magnetometer array, and manual surface profile\n\n**Study boundary:** A coded floodplain sector containing repeated linear relief and discontinuous vegetation bands."
+    },
+    {
+      "id": "observed-variance",
+      "title": "OBSERVED VARIANCE",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Geometric response:** Twenty-seven linear segments retained a common 3.6-metre spacing despite crossing present drainage and cultivation boundaries. Eleven terminated at near-right-angle returns.\n\n**Subsurface response:** Shallow conductivity and magnetic gradients followed selected segments but did not identify masonry, continuous metal, or a modern pipe network.\n\n**Seasonal behavior:** Vegetation contrast reversed between wet and dry observations while the geometric boundary remained stable."
+    },
+    {
+      "id": "interpretive-limits",
+      "title": "INTERPRETIVE LIMITS",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Ordinary explanations retained:** Historic drainage, former planting beds, buried combustion features, and repeated soil compaction can account for most observations.\n\n**Unresolved point:** Available land-use material does not explain the full spacing pattern or its continuity across later surface changes. No age, builder, or original function is assigned."
+    },
+    {
+      "id": "disposition",
+      "title": "DISPOSITION",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Finding:** Persistent surface pattern of possible anthropogenic origin; source and age undetermined\n\n**Action:** Preserve non-invasive baselines. Intrusive work requires a separate archaeological and land-access review.\n\n**Hazard status:** No field hazard above ordinary floodplain conditions was established."
+    },
+    {
+      "id": "coordinate-schedule",
+      "title": "COORDINATE & LAND-USE SCHEDULE",
+      "summary": "Coordinates, ownership references, and source imagery remain with the controlling office.",
+      "disclosure": {
+        "mode": "withheld"
+      }
+    },
+    {
+      "id": "directorate-control-schedule",
+      "title": "DIRECTORATE CONTROL SCHEDULE",
+      "summary": "Named assignment, release scope, and handling instructions remain with the controlling office.",
+      "disclosure": {
+        "mode": "withheld"
+      }
+    }
+  ]
+}

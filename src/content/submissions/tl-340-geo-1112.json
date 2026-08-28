@@ -1,0 +1,68 @@
+{
+  "recordId": "TL-340-GEO-1112",
+  "formId": "TL-340",
+  "title": "Pale Basin Regrowth Exclusion Review",
+  "recordType": "completed-report",
+  "recordFamily": "research",
+  "status": "active",
+  "revision": "2.4",
+  "effectiveDate": "2011-09-16",
+  "controllingOffice": "Environmental Analysis",
+  "publicationState": "controlled",
+  "information": {
+    "level": "TL-5"
+  },
+  "tags": ["controlled-area", "regrowth-monitoring", "soil-analysis", "boreal-fieldwork", "tl-340"],
+  "summary": "Controlled area assessment. Descriptive metadata and report contents require the displayed information eligibility.",
+  "relatedRecords": ["TL-340", "TL-340-GEO-9411", "TL-470-GEO-1909"],
+  "evidence": [
+    {
+      "id": "basin-overview-plate",
+      "label": "Basin overview plate A",
+      "mode": "withheld",
+      "summary": "The reviewed image plate remains with the coordinate and sample schedule held by the controlling office."
+    }
+  ],
+  "sections": [
+    {
+      "id": "survey-basis",
+      "title": "SURVEY BASIS",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Archive interval:** Five growing-season image comparisons with two soil and vegetation sampling visits\n\n**Instrumentation:** Multispectral imagery, shallow resistivity transects, soil moisture and temperature profiles, nutrient and metals panels, targeted residue screening, and fungal culture\n\n**Study boundary:** An irregular pale-surface basin within managed boreal cover; the access route and local identifiers are held separately."
+    },
+    {
+      "id": "observed-variance",
+      "title": "OBSERVED VARIANCE",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Regrowth response:** Pioneer vegetation repeatedly established along the perimeter but showed reduced survival after crossing the stable central boundary.\n\n**Soil response:** Moisture, pH, major nutrients, and soluble salts remained within the range of nearby disturbed ground. Electrical resistivity was consistently elevated at shallow depth.\n\n**Targeted screen:** No residue on the current analytical list, fungal isolate, or measured metal burden explained the observed boundary."
+    },
+    {
+      "id": "interpretive-limits",
+      "title": "INTERPRETIVE LIMITS",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Ordinary explanations retained:** Compacted mineral fill, seasonal frost behavior, past aggregate storage, and an untested organic contaminant remain plausible.\n\n**Unresolved point:** The central resistivity response remained stable while the visible surface and drainage margins changed. The record does not establish toxicity outside the marked sampling boundary."
+    },
+    {
+      "id": "disposition",
+      "title": "DISPOSITION",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Finding:** Persistent regrowth exclusion associated with a shallow high-resistivity substrate\n\n**Action:** Continue remote seasonal comparison and avoid disturbing the central substrate without an approved sampling plan.\n\n**Review status:** Active for passive comparison; formal review resumes when new imagery, access, or analytical data becomes available.\n\n**Personnel control:** Ordinary field PPE and dust control remain sufficient for perimeter work."
+    },
+    {
+      "id": "coordinate-schedule",
+      "title": "COORDINATE & SAMPLE SCHEDULE",
+      "summary": "Location references, custody details, and retained sample identifiers remain with the controlling office.",
+      "disclosure": {
+        "mode": "withheld"
+      }
+    }
+  ]
+}

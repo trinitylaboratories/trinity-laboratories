@@ -72,6 +72,10 @@ but proposals and placeholders must never be presented as established facts with
   `TL-P110-PER-1110`, `TL-P110-PER-1806`, and `TL-P110-PER-2402` are wholly fictional. Their
   published records may contain only professional assignment information and must omit contact,
   residential, government-identifier, access-media, signature, portrait, health, and family data.
+- The controlled-area aliases and findings in records `TL-340-GEO-8814`, `TL-340-GEO-9411`,
+  `TL-470-GEO-0307`, `TL-340-GEO-1112`, `TL-470-GEO-1909`, and `TL-470-GEO-2406` are approved
+  fictional record content. They must remain location-neutral, avoid coordinates and real property
+  claims, and present ordinary technical explanations alongside any unresolved observation.
 
 ## Staff portal and disclosure states
 
@@ -112,6 +116,13 @@ Do not rewrite historical source files to make an approved digital crosswalk app
 
 Duplicate files should have one canonical published copy. Externally sourced material with unclear
 rights remains excluded even when it is narratively useful.
+
+The Google Earth geospatial reference captures supplied on 2026-08-28 are private production
+references only. Their required Google and imagery-provider attribution was cropped from the
+captures, so they must not enter `public/`, Git, a build artifact, or the asset ledger as publishable
+derivatives. A future replacement may be reviewed only when the complete on-image attribution is
+preserved, the exact provider credit is repeated beside the plate, and the intended static
+noncommercial use is documented.
 
 ## Writing and presentation
 

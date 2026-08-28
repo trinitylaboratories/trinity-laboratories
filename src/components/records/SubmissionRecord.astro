@@ -3,6 +3,7 @@ import { publicationDisclosureMode, type SubmissionRecordData } from '../../lib/
 import ControlledRecord from './ControlledRecord.astro';
 import ControlledSection from './ControlledSection.astro';
 import RecordHeader from './RecordHeader.astro';
+import SubmissionEvidenceGallery from './SubmissionEvidenceGallery.astro';
 import SubmissionSectionBody from './SubmissionSectionBody.astro';
 
 interface Props {
@@ -106,6 +107,7 @@ const controlSummary =
             ),
           )}
         </div>
+        <SubmissionEvidenceGallery evidence={submission.evidence ?? []} />
         <footer class="submission-record__relations">
           <h2>Related records</h2>
           <ul>

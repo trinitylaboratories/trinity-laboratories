@@ -56,6 +56,45 @@ const submissionSectionSchema = z.union([
     .strict(),
 ]);
 
+const availableSubmissionEvidencePlateSchema = z
+  .object({
+    id: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
+    label: z.string().trim().min(1).max(120),
+    mode: z.literal('available'),
+    path: z.string().regex(/^\/portal\/media\/geospatial\/[a-z0-9][a-z0-9/_-]*\.webp$/),
+    mediaType: z.literal('image/webp'),
+    sourceFilename: z
+      .string()
+      .trim()
+      .min(1)
+      .max(180)
+      .refine(
+        (value) => !/[\\/:]/.test(value) && !['.', '..'].includes(value),
+        'Expected a source basename, not a path.',
+      ),
+    sha256: z.string().regex(/^[a-f0-9]{64}$/),
+    width: z.number().int().min(1).max(12_000),
+    height: z.number().int().min(1).max(12_000),
+    alt: z.string().trim().min(1).max(300),
+    caption: z.string().trim().min(1).max(500),
+    credit: z.string().trim().min(1).max(240),
+  })
+  .strict();
+
+const withheldSubmissionEvidencePlateSchema = z
+  .object({
+    id: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
+    label: z.string().trim().min(1).max(120),
+    mode: z.literal('withheld'),
+    summary: z.string().trim().min(1).max(300),
+  })
+  .strict();
+
+const submissionEvidencePlateSchema = z.discriminatedUnion('mode', [
+  availableSubmissionEvidencePlateSchema,
+  withheldSubmissionEvidencePlateSchema,
+]);
+
 const submissionSchema = z
   .object({
     recordId: z.string().regex(/^TL-[A-Z0-9]+(?:-[A-Z0-9]+)+$/),
@@ -90,6 +129,7 @@ const submissionSchema = z
       .max(30)
       .default([]),
     sections: z.array(submissionSectionSchema).min(1),
+    evidence: z.array(submissionEvidencePlateSchema).min(1).max(8).optional(),
   })
   .strict()
   .superRefine((record, context) => {
@@ -128,6 +168,55 @@ const submissionSchema = z
         });
       }
       sectionIds.add(section.id);
+    }
+
+    if (record.evidence) {
+      if (record.publicationState !== 'controlled') {
+        context.addIssue({
+          code: 'custom',
+          message: 'Evidence plates require a controlled publication state.',
+          path: ['evidence'],
+        });
+      }
+
+      const rank = Number(record.information.level.replace('TL-', ''));
+      if (Number.isFinite(rank) && rank < 3) {
+        context.addIssue({
+          code: 'custom',
+          message: 'Evidence plates require TL-3 or higher information classification.',
+          path: ['evidence'],
+        });
+      }
+
+      const ids = new Set<string>();
+      const paths = new Set<string>();
+      const hashes = new Set<string>();
+      for (const [index, plate] of record.evidence.entries()) {
+        if (ids.has(plate.id)) {
+          context.addIssue({
+            code: 'custom',
+            message: `Duplicate evidence id: ${plate.id}`,
+            path: ['evidence', index, 'id'],
+          });
+        }
+        ids.add(plate.id);
+
+        if (plate.mode === 'available') {
+          for (const [key, value, seen] of [
+            ['path', plate.path, paths],
+            ['sha256', plate.sha256, hashes],
+          ] as const) {
+            if (seen.has(value)) {
+              context.addIssue({
+                code: 'custom',
+                message: `Duplicate evidence ${key}: ${value}`,
+                path: ['evidence', index, key],
+              });
+            }
+            seen.add(value);
+          }
+        }
+      }
     }
 
     if (record.publicationState === 'withheld') {

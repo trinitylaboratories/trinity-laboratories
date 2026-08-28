@@ -1,6 +1,8 @@
 ---
 import {
   CONTROL_OFFICE_REFERENCE_EXAMPLE,
+  DIRECTORATE_RELEASE_REFERENCE_EXAMPLE,
+  ISOLATION_REFERENCE_EXAMPLE,
   isTemporaryGrantLevel,
   type TirnLevel,
 } from '../../lib/tirn-access';
@@ -21,13 +23,17 @@ const {
   triggerLabel = 'Request access',
 } = Astro.props;
 const requestAvailable = isTemporaryGrantLevel(requiredLevel) && !program && !compartment;
-const requiresControlOfficeReference = requiredLevel === 'TL-4';
+const requiresControlOfficeReference = ['TL-4', 'TL-5', 'TL-6'].includes(requiredLevel);
+const requiresDirectorateReleaseReference = ['TL-5', 'TL-6'].includes(requiredLevel);
+const requiresIsolationReference = requiredLevel === 'TL-6';
 const authorizationReferenceExample = `${requiredLevel.replace('-', '')}-ABC123`;
 const dialogId = `${id}-authorization-dialog`;
 const dialogTitleId = `${id}-authorization-title`;
 const dialogDescriptionId = `${id}-authorization-description`;
 const referenceHelpId = `${id}-authorization-reference-help`;
 const controlOfficeHelpId = `${id}-control-office-reference-help`;
+const directorateReleaseHelpId = `${id}-directorate-release-reference-help`;
+const isolationHelpId = `${id}-isolation-reference-help`;
 ---
 
 <div
@@ -75,6 +81,14 @@ const controlOfficeHelpId = `${id}-control-office-reference-help`;
         <div>
           <dt>Control-office confirmation</dt>
           <dd>{requiresControlOfficeReference ? 'Required' : 'Not required'}</dd>
+        </div>
+        <div>
+          <dt>Directorate release</dt>
+          <dd>{requiresDirectorateReleaseReference ? 'Required' : 'Not required'}</dd>
+        </div>
+        <div>
+          <dt>Isolation-register confirmation</dt>
+          <dd>{requiresIsolationReference ? 'Required' : 'Not required'}</dd>
         </div>
         <div><dt>Grant duration</dt><dd>15 minutes</dd></div>
       </dl>
@@ -138,7 +152,50 @@ const controlOfficeHelpId = `${id}-control-office-reference-help`;
                     aria-describedby={controlOfficeHelpId}
                   />
                   <span class="authorization-dialog__field-help" id={controlOfficeHelpId}>
-                    TL-4 requests require an independent CO-XXXXXX release reference.
+                    {requiredLevel} requests require an independent CO-XXXXXX control-office
+                    reference.
+                  </span>
+                </label>
+              )}
+
+              {requiresDirectorateReleaseReference && (
+                <label>
+                  Directorate release reference
+                  <input
+                    type="text"
+                    data-directorate-release-reference
+                    required
+                    minlength="9"
+                    maxlength="15"
+                    autocomplete="off"
+                    autocapitalize="characters"
+                    spellcheck="false"
+                    placeholder={DIRECTORATE_RELEASE_REFERENCE_EXAMPLE}
+                    aria-describedby={directorateReleaseHelpId}
+                  />
+                  <span class="authorization-dialog__field-help" id={directorateReleaseHelpId}>
+                    Directorate-controlled requests require a DR-XXXXXX release reference.
+                  </span>
+                </label>
+              )}
+
+              {requiresIsolationReference && (
+                <label>
+                  Isolation-register reference
+                  <input
+                    type="text"
+                    data-isolation-reference
+                    required
+                    minlength="9"
+                    maxlength="15"
+                    autocomplete="off"
+                    autocapitalize="characters"
+                    spellcheck="false"
+                    placeholder={ISOLATION_REFERENCE_EXAMPLE}
+                    aria-describedby={isolationHelpId}
+                  />
+                  <span class="authorization-dialog__field-help" id={isolationHelpId}>
+                    Isolated records require an IR-XXXXXX named-access register reference.
                   </span>
                 </label>
               )}
@@ -198,6 +255,10 @@ const controlOfficeHelpId = `${id}-control-office-reference-help`;
     const controlOfficeReference = root.querySelector<HTMLInputElement>(
       '[data-control-office-reference]',
     );
+    const directorateReleaseReference = root.querySelector<HTMLInputElement>(
+      '[data-directorate-release-reference]',
+    );
+    const isolationReference = root.querySelector<HTMLInputElement>('[data-isolation-reference]');
     const attestation = root.querySelector<HTMLInputElement>('[data-authorization-attestation]');
     const status = root.querySelector<HTMLElement>('[data-auth-status]');
     const requiredLevel = (root.dataset.requiredLevel || 'TL-3') as TirnLevel;
@@ -217,6 +278,8 @@ const controlOfficeHelpId = `${id}-control-office-reference-help`;
         purpose,
         authorizationReference,
         controlOfficeReference,
+        directorateReleaseReference,
+        isolationReference,
         attestation,
       ]) {
         control?.removeAttribute('aria-invalid');
@@ -226,6 +289,8 @@ const controlOfficeHelpId = `${id}-control-office-reference-help`;
     const clearInputs = () => {
       if (authorizationReference) authorizationReference.value = '';
       if (controlOfficeReference) controlOfficeReference.value = '';
+      if (directorateReleaseReference) directorateReleaseReference.value = '';
+      if (isolationReference) isolationReference.value = '';
       if (purpose) purpose.value = '';
       if (attestation) attestation.checked = false;
       clearInvalidState();
@@ -310,6 +375,8 @@ const controlOfficeHelpId = `${id}-control-office-reference-help`;
           purpose: purpose?.value ?? '',
           authorizationReference: authorizationReference?.value ?? '',
           controlOfficeReference: controlOfficeReference?.value,
+          directorateReleaseReference: directorateReleaseReference?.value,
+          isolationReference: isolationReference?.value,
           attested: Boolean(attestation?.checked),
         },
         Date.now(),
@@ -323,9 +390,13 @@ const controlOfficeHelpId = `${id}-control-office-reference-help`;
               ? authorizationReference
               : result.field === 'controlOfficeReference'
                 ? controlOfficeReference
-                : result.field === 'attestation'
-                  ? attestation
-                  : undefined;
+                : result.field === 'directorateReleaseReference'
+                  ? directorateReleaseReference
+                  : result.field === 'isolationReference'
+                    ? isolationReference
+                    : result.field === 'attestation'
+                      ? attestation
+                      : undefined;
         control?.setAttribute('aria-invalid', 'true');
         control?.focus();
         if (status) status.textContent = result.message;

@@ -156,10 +156,10 @@ test.describe('staff portal', () => {
     await visit(page, '/portal/records/');
     const catalogueRows = page.locator('[data-catalogue-row]');
     const tl3CatalogueRow = catalogueRows.filter({
-      has: page.getByRole('link', { name: 'TL-P365' }),
+      has: page.getByRole('link', { name: 'TL-P365', exact: true }),
     });
     const tl4CatalogueRow = catalogueRows.filter({
-      has: page.getByRole('link', { name: 'TL-470' }),
+      has: page.getByRole('link', { name: 'TL-470', exact: true }),
     });
     await expect(tl3CatalogueRow.locator('[data-catalogue-title]')).toBeVisible();
     await expect(tl4CatalogueRow.locator('[data-catalogue-title]')).toBeHidden();

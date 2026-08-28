@@ -1,0 +1,82 @@
+{
+  "recordId": "TL-470-GEO-1909",
+  "formId": "TL-470",
+  "title": "North Canopy Controlled-Growth Variance Review",
+  "recordType": "completed-report",
+  "recordFamily": "research",
+  "status": "active",
+  "revision": "1.6",
+  "effectiveDate": "2019-10-08",
+  "controllingOffice": "Environmental Analysis",
+  "publicationState": "controlled",
+  "information": {
+    "level": "TL-6"
+  },
+  "tags": [
+    "controlled-area",
+    "controlled-growth",
+    "spectral-analysis",
+    "environmental-monitoring",
+    "tl-470"
+  ],
+  "summary": "Controlled area assessment. Descriptive metadata and report contents require the displayed information eligibility.",
+  "relatedRecords": ["TL-470", "TL-340-GEO-1112"],
+  "evidence": [
+    {
+      "id": "complex-overview-plate",
+      "label": "Complex overview plate A",
+      "mode": "withheld",
+      "summary": "The reviewed image plate remains with the facility and operator schedule held by the controlling office."
+    }
+  ],
+  "sections": [
+    {
+      "id": "survey-basis",
+      "title": "SURVEY BASIS",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Archive interval:** Four production cycles reviewed against control-house environmental and utility logs\n\n**Instrumentation:** Fixed active near-infrared reflectance cameras, portable active reflectance meter, leaf-temperature references, independent illuminance loggers, and isolated power-quality monitors\n\n**Study boundary:** Three enclosed growth bays and one matched control bay within an otherwise ordinary horticultural complex."
+    },
+    {
+      "id": "observed-variance",
+      "title": "OBSERVED VARIANCE",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Canopy response:** The three study bays showed a synchronized near-infrared reflectance change during seven unprogrammed overnight intervals. The control bay did not.\n\n**Systems comparison:** Lighting, irrigation, ventilation, carbon-dioxide, and utility logs showed no common command or interruption at the onset times.\n\n**Physical outcome:** Growth rate and harvest mass remained within the facility's ordinary production range; no tissue abnormality was retained."
+    },
+    {
+      "id": "interpretive-limits",
+      "title": "INTERPRETIVE LIMITS",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Ordinary explanations retained:** Shared sensor calibration, undocumented control-network traffic, thermal lag, and cultivar response remain plausible.\n\n**Unresolved point:** Portable instruments confirmed five of the seven events after the fixed cameras were independently recalibrated. No external radiative source was identified."
+    },
+    {
+      "id": "disposition",
+      "title": "DISPOSITION",
+      "disclosure": {
+        "mode": "open"
+      },
+      "body": "**Finding:** Low-amplitude synchronized canopy response without a matched facility-control event\n\n**Action:** Retain isolated logging and compare against future maintenance and cultivar changes. No production interruption is directed.\n\n**Review status:** Active for passive comparison; formal review resumes after a new confirmed event, major controls revision, or cultivar change.\n\n**Release limit:** Product, operator, and property identifiers are outside this archive copy."
+    },
+    {
+      "id": "facility-schedule",
+      "title": "FACILITY & OPERATOR SCHEDULE",
+      "summary": "Facility identity, operational logs, and third-party contacts remain with the controlling office.",
+      "disclosure": {
+        "mode": "withheld"
+      }
+    },
+    {
+      "id": "directorate-control-schedule",
+      "title": "DIRECTORATE CONTROL SCHEDULE",
+      "summary": "Named assignment, release scope, and handling instructions remain with the controlling office.",
+      "disclosure": {
+        "mode": "withheld"
+      }
+    }
+  ]
+}

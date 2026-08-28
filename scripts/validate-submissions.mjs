@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -62,6 +63,8 @@ const STATUSES = new Set(['active', 'archived', 'superseded']);
 const PUBLICATION_STATES = new Set(['released', 'controlled', 'withheld']);
 const RECORD_ID_PATTERN = /^TL-[A-Z0-9]+(?:-[A-Z0-9]+)+$/;
 const SECTION_ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const EVIDENCE_PATH_PATTERN = /^\/portal\/media\/geospatial\/[a-z0-9][a-z0-9/_-]*\.webp$/;
+const SHA256_PATTERN = /^[a-f0-9]{64}$/;
 const PERSONNEL_ID_PATTERN = /^TL-P110-PER-(\d{4})$/;
 const PERSONNEL_TITLE_PATTERN = /^Personnel Assignment Record — File (\d{4})$/;
 const PERSONNEL_SUMMARY =
@@ -104,6 +107,7 @@ const RECORD_KEYS = new Set([
   'summary',
   'relatedRecords',
   'sections',
+  'evidence',
 ]);
 const REQUIRED_RECORD_KEYS = [
   'recordId',
@@ -290,6 +294,106 @@ function validateSections(value, publicationState, errors) {
   }
 }
 
+function validateEvidence(value, record, errors) {
+  if (!Array.isArray(value) || value.length === 0) {
+    errors.push('record.evidence: expected between 1 and 8 evidence plates');
+    return;
+  }
+  if (value.length > 8) errors.push('record.evidence: exceeds 8 evidence plates');
+  if (record.publicationState !== 'controlled') {
+    errors.push('record.evidence: evidence plates require a controlled publication state');
+  }
+  const rank = Number(String(record.information?.level ?? '').replace('TL-', ''));
+  if (Number.isFinite(rank) && rank < 3) {
+    errors.push('record.evidence: evidence plates require TL-3 or higher classification');
+  }
+
+  const seen = {
+    id: new Set(),
+    path: new Set(),
+    sha256: new Set(),
+  };
+  for (const [index, plate] of value.entries()) {
+    const location = `record.evidence[${index}]`;
+    if (!isObject(plate)) {
+      errors.push(`${location}: expected an object`);
+      continue;
+    }
+    const mode = plate.mode;
+    const keys =
+      mode === 'withheld'
+        ? new Set(['id', 'label', 'mode', 'summary'])
+        : new Set([
+            'id',
+            'label',
+            'mode',
+            'path',
+            'mediaType',
+            'sourceFilename',
+            'sha256',
+            'width',
+            'height',
+            'alt',
+            'caption',
+            'credit',
+          ]);
+    rejectUnknownKeys(plate, keys, location, errors);
+    requireKeys(plate, [...keys], location, errors);
+    requireString(plate.id, `${location}.id`, errors, 80);
+    if (typeof plate.id === 'string' && !SECTION_ID_PATTERN.test(plate.id)) {
+      errors.push(`${location}.id: must be a lowercase kebab-case identifier`);
+    }
+    requireString(plate.label, `${location}.label`, errors, 120);
+    if (!['available', 'withheld'].includes(mode)) {
+      errors.push(`${location}.mode: expected "available" or "withheld"`);
+    }
+
+    if (mode === 'withheld') {
+      requireString(plate.summary, `${location}.summary`, errors, 300);
+      if (seen.id.has(plate.id)) errors.push(`${location}.id: duplicate evidence id`);
+      seen.id.add(plate.id);
+      continue;
+    }
+
+    requireString(plate.path, `${location}.path`, errors, 240);
+    if (typeof plate.path === 'string' && !EVIDENCE_PATH_PATTERN.test(plate.path)) {
+      errors.push(
+        `${location}.path: expected a project-local WebP beneath /portal/media/geospatial/`,
+      );
+    }
+    if (plate.mediaType !== 'image/webp') {
+      errors.push(`${location}.mediaType: must be "image/webp"`);
+    }
+    requireString(plate.sourceFilename, `${location}.sourceFilename`, errors, 180);
+    if (
+      typeof plate.sourceFilename === 'string' &&
+      (/[\\/:]/.test(plate.sourceFilename) || ['.', '..'].includes(plate.sourceFilename))
+    ) {
+      errors.push(`${location}.sourceFilename: expected a source basename, not a path`);
+    }
+    requireString(plate.sha256, `${location}.sha256`, errors, 64);
+    if (typeof plate.sha256 === 'string' && !SHA256_PATTERN.test(plate.sha256)) {
+      errors.push(`${location}.sha256: expected a lowercase SHA-256 value`);
+    }
+    for (const dimension of ['width', 'height']) {
+      const dimensionValue = plate[dimension];
+      if (!Number.isInteger(dimensionValue) || dimensionValue < 1 || dimensionValue > 12_000) {
+        errors.push(`${location}.${dimension}: expected an integer from 1 through 12000`);
+      }
+    }
+    requireString(plate.alt, `${location}.alt`, errors, 300);
+    requireString(plate.caption, `${location}.caption`, errors, 500);
+    requireString(plate.credit, `${location}.credit`, errors, 240);
+
+    for (const key of ['id', 'path', 'sha256']) {
+      if (seen[key].has(plate[key])) {
+        errors.push(`${location}.${key}: duplicate evidence ${key}`);
+      }
+      seen[key].add(plate[key]);
+    }
+  }
+}
+
 function validatePersonnelRecord(record, errors) {
   if (record.recordFamily !== 'personnel') return;
 
@@ -307,6 +411,9 @@ function validatePersonnelRecord(record, errors) {
   }
   if (hasOwn(record, 'facilityCondition')) {
     errors.push('record.facilityCondition: personnel records must not publish facility conditions');
+  }
+  if (hasOwn(record, 'evidence')) {
+    errors.push('record.evidence: personnel records must not publish evidence plates');
   }
   if (record.controllingOffice !== 'Personnel Office') {
     errors.push(
@@ -431,6 +538,7 @@ export function validateSubmissionRecord(record, options = {}) {
   }
 
   validateSections(record.sections, record.publicationState, errors);
+  if (hasOwn(record, 'evidence')) validateEvidence(record.evidence, record, errors);
   validatePersonnelRecord(record, errors);
   return errors;
 }
@@ -462,6 +570,79 @@ async function readCanonicalDocIds(root) {
     if (isObject(parsed) && typeof parsed.recordId === 'string') ids.add(parsed.recordId);
   }
   return ids;
+}
+
+async function validateAvailableEvidenceAssets(root, records) {
+  const references = records.flatMap(({ filename, record }) => {
+    if (!Array.isArray(record?.evidence)) return [];
+    return record.evidence.flatMap((plate, index) =>
+      isObject(plate) &&
+      plate.mode === 'available' &&
+      typeof plate.path === 'string' &&
+      EVIDENCE_PATH_PATTERN.test(plate.path) &&
+      typeof plate.sha256 === 'string' &&
+      SHA256_PATTERN.test(plate.sha256)
+        ? [{ filename, index, plate }]
+        : [],
+    );
+  });
+  if (references.length === 0) return [];
+
+  const diagnostics = [];
+  const ledgerFilename = path.join(root, 'data', 'asset-ledger.json');
+  let ledger;
+  try {
+    ledger = JSON.parse(await readFile(ledgerFilename, 'utf8'));
+  } catch (error) {
+    const detail = error?.code === 'ENOENT' ? 'file is missing' : 'file is not valid JSON';
+    return [`data/asset-ledger.json: required for available evidence plates (${detail})`];
+  }
+
+  const ledgerAssets = Array.isArray(ledger?.assets) ? ledger.assets : [];
+  const publicRoot = path.resolve(root, 'public');
+  for (const { filename, index, plate } of references) {
+    const relativeRecord = path.relative(root, filename);
+    const location = `${relativeRecord}: record.evidence[${index}]`;
+    const derivative = path.resolve(publicRoot, `.${plate.path}`);
+    const relativeDerivative = path.relative(publicRoot, derivative);
+    if (
+      relativeDerivative.startsWith('..') ||
+      path.isAbsolute(relativeDerivative) ||
+      relativeDerivative.length === 0
+    ) {
+      diagnostics.push(`${location}.path: derivative resolves outside the public asset root`);
+      continue;
+    }
+
+    let bytes;
+    try {
+      bytes = await readFile(derivative);
+    } catch (error) {
+      const detail = error?.code === 'ENOENT' ? 'is missing' : 'could not be read';
+      diagnostics.push(`${location}.path: derivative ${detail}`);
+      bytes = null;
+    }
+    if (bytes) {
+      const actualHash = createHash('sha256').update(bytes).digest('hex');
+      if (actualHash !== plate.sha256) {
+        diagnostics.push(`${location}.sha256: does not match the public derivative bytes`);
+      }
+    }
+
+    const matchingLedgerAsset = ledgerAssets.find(
+      (asset) =>
+        isObject(asset) &&
+        isObject(asset.derivative) &&
+        asset.derivative.path === plate.path &&
+        asset.derivative.sha256 === plate.sha256,
+    );
+    if (!matchingLedgerAsset) {
+      diagnostics.push(
+        `${location}.path: no asset-ledger entry matches the evidence path and SHA-256`,
+      );
+    }
+  }
+  return diagnostics;
 }
 
 export async function validateSubmissionDirectory(root = process.cwd()) {
@@ -499,6 +680,8 @@ export async function validateSubmissionDirectory(root = process.cwd()) {
       diagnostics.push(`${relative}: ${message}`);
     }
   }
+
+  diagnostics.push(...(await validateAvailableEvidenceAssets(root, records)));
 
   return { diagnostics, files: filenames.length, records: records.length };
 }

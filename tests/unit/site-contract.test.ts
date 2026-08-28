@@ -124,9 +124,9 @@ describe('site contract', () => {
   });
 
   it('registers the historical and personnel report corpus exactly once', () => {
-    expect(REPORT_IDS).toHaveLength(43);
+    expect(REPORT_IDS).toHaveLength(49);
     expect(new Set(REPORT_IDS).size).toBe(REPORT_IDS.length);
-    expect(REPORT_ROUTES).toHaveLength(45);
+    expect(REPORT_ROUTES).toHaveLength(51);
     for (const recordId of REPORT_IDS) {
       expect(REPORT_ROUTES).toContain(`/records/reports/${recordId}/`);
     }

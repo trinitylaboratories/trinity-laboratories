@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { lstat, readFile } from 'node:fs/promises';
+import { lstat, open, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { strFromU8, unzipSync } from 'fflate';
 import { isMain, optionalString, parseArgs, printErrors } from './lib/cli.mjs';
@@ -77,6 +77,15 @@ const APPROVED_ASSET_CATEGORIES = new Map([
       mediaTypes: new Set(['image/webp']),
       prefix: '/media/facilities/',
       requiresProvenance: true,
+    },
+  ],
+  [
+    'controlled-geospatial',
+    {
+      mediaTypes: new Set(['image/webp']),
+      prefix: '/portal/media/geospatial/',
+      requiresProvenance: true,
+      requiresAttribution: true,
     },
   ],
   [
@@ -356,6 +365,42 @@ export function validatePngPrivacy(bytes, fileName) {
   return [...new Set(errors)];
 }
 
+export function validateWebpPrivacy(bytes, fileName) {
+  const errors = [];
+  const ascii = (start, end) => String.fromCharCode(...bytes.subarray(start, end));
+  if (bytes.length < 12 || ascii(0, 4) !== 'RIFF' || ascii(8, 12) !== 'WEBP') {
+    return [`${fileName}: malformed WebP RIFF signature`];
+  }
+
+  const header = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+  if (header.getUint32(4, true) + 8 !== bytes.length) {
+    errors.push(`${fileName}: WebP RIFF length does not match the file size`);
+  }
+
+  const forbiddenChunks = new Set(['EXIF', 'XMP ', 'ICCP']);
+  let offset = 12;
+  while (offset < bytes.length) {
+    if (bytes.length - offset < 8) {
+      errors.push(`${fileName}: truncated WebP chunk header`);
+      break;
+    }
+    const view = new DataView(bytes.buffer, bytes.byteOffset + offset, bytes.length - offset);
+    const type = ascii(offset, offset + 4);
+    const dataLength = view.getUint32(4, true);
+    const paddedLength = dataLength + (dataLength % 2);
+    if (8 + paddedLength > bytes.length - offset) {
+      errors.push(`${fileName}: truncated WebP chunk payload`);
+      break;
+    }
+    if (forbiddenChunks.has(type)) {
+      errors.push(`${fileName}: WebP metadata chunk ${JSON.stringify(type)} is prohibited`);
+    }
+    offset += 8 + paddedLength;
+  }
+
+  return [...new Set(errors)];
+}
+
 export async function validateAssetRoot(root) {
   const absoluteRoot = path.resolve(root);
   const errors = [];
@@ -374,50 +419,73 @@ export async function validateAssetRoot(root) {
 
   for (const relativeFile of files) {
     const absoluteFile = path.join(absoluteRoot, relativeFile);
-    const fileStats = await lstat(absoluteFile);
-    const extension = path.extname(relativeFile).toLowerCase();
-    totalBytes += fileStats.size;
+    const fileHandle = await open(absoluteFile, 'r');
+    try {
+      const fileStats = await fileHandle.stat();
+      const pathStats = await lstat(absoluteFile);
+      const extension = path.extname(relativeFile).toLowerCase();
 
-    if (fileStats.isSymbolicLink()) {
-      errors.push(`${relativeFile}: symbolic links are prohibited in deployable assets`);
-      continue;
-    }
+      if (pathStats.isSymbolicLink()) {
+        errors.push(`${relativeFile}: symbolic links are prohibited in deployable assets`);
+        continue;
+      }
+      if (
+        fileStats.dev !== pathStats.dev ||
+        fileStats.ino !== pathStats.ino ||
+        fileStats.size !== pathStats.size ||
+        fileStats.mtimeMs !== pathStats.mtimeMs
+      ) {
+        errors.push(`${relativeFile}: file changed while the asset validator was reading it`);
+        continue;
+      }
+      if (!fileStats.isFile()) {
+        errors.push(`${relativeFile}: deployable assets must be regular files`);
+        continue;
+      }
 
-    for (const [label, pattern] of FORBIDDEN_RELEASE_NAME_PATTERNS) {
-      if (pattern.test(relativeFile))
-        errors.push(`${relativeFile}: ${label} is outside the approved v1 release`);
-    }
+      totalBytes += fileStats.size;
 
-    if (/\s/.test(relativeFile))
-      errors.push(`${relativeFile}: asset paths may not contain whitespace`);
-    if (FORBIDDEN_EXTENSIONS.has(extension)) {
-      errors.push(`${relativeFile}: '${extension}' files are prohibited in deployable assets`);
-    }
-    if (fileStats.size > ASSET_LIMITS.maxFileBytes) {
-      errors.push(`${relativeFile}: exceeds Cloudflare's 25 MiB per-file limit`);
-    }
+      for (const [label, pattern] of FORBIDDEN_RELEASE_NAME_PATTERNS) {
+        if (pattern.test(relativeFile))
+          errors.push(`${relativeFile}: ${label} is outside the approved v1 release`);
+      }
 
-    const budget = TYPE_BUDGETS.get(extension);
-    if (budget && fileStats.size > budget) {
-      errors.push(
-        `${relativeFile}: ${formatBytes(fileStats.size)} exceeds the ${formatBytes(budget)} ${extension} budget`,
-      );
-    }
+      if (/\s/.test(relativeFile))
+        errors.push(`${relativeFile}: asset paths may not contain whitespace`);
+      if (FORBIDDEN_EXTENSIONS.has(extension)) {
+        errors.push(`${relativeFile}: '${extension}' files are prohibited in deployable assets`);
+      }
+      if (fileStats.size > ASSET_LIMITS.maxFileBytes) {
+        errors.push(`${relativeFile}: exceeds Cloudflare's 25 MiB per-file limit`);
+      }
 
-    if (extension === '.svg' && fileStats.size <= ASSET_LIMITS.maxFileBytes) {
-      errors.push(...validateSvg(await readFile(absoluteFile, 'utf8'), relativeFile));
-    }
-    if (extension === '.css' && fileStats.size <= ASSET_LIMITS.maxFileBytes) {
-      errors.push(...validateStylesheet(await readFile(absoluteFile, 'utf8'), relativeFile));
-    }
-    if (extension === '.docx' && fileStats.size <= ASSET_LIMITS.maxFileBytes) {
-      errors.push(...validateDocxArchive(await readFile(absoluteFile), relativeFile));
-    }
-    if (extension === '.pdf' && fileStats.size <= ASSET_LIMITS.maxFileBytes) {
-      errors.push(...validatePdfPrivacy(await readFile(absoluteFile), relativeFile));
-    }
-    if (extension === '.png' && fileStats.size <= ASSET_LIMITS.maxFileBytes) {
-      errors.push(...validatePngPrivacy(await readFile(absoluteFile), relativeFile));
+      const budget = TYPE_BUDGETS.get(extension);
+      if (budget && fileStats.size > budget) {
+        errors.push(
+          `${relativeFile}: ${formatBytes(fileStats.size)} exceeds the ${formatBytes(budget)} ${extension} budget`,
+        );
+      }
+
+      if (extension === '.svg' && fileStats.size <= ASSET_LIMITS.maxFileBytes) {
+        errors.push(...validateSvg(await fileHandle.readFile('utf8'), relativeFile));
+      }
+      if (extension === '.css' && fileStats.size <= ASSET_LIMITS.maxFileBytes) {
+        errors.push(...validateStylesheet(await fileHandle.readFile('utf8'), relativeFile));
+      }
+      if (extension === '.docx' && fileStats.size <= ASSET_LIMITS.maxFileBytes) {
+        errors.push(...validateDocxArchive(await fileHandle.readFile(), relativeFile));
+      }
+      if (extension === '.pdf' && fileStats.size <= ASSET_LIMITS.maxFileBytes) {
+        errors.push(...validatePdfPrivacy(await fileHandle.readFile(), relativeFile));
+      }
+      if (extension === '.png' && fileStats.size <= ASSET_LIMITS.maxFileBytes) {
+        errors.push(...validatePngPrivacy(await fileHandle.readFile(), relativeFile));
+      }
+      if (extension === '.webp' && fileStats.size <= ASSET_LIMITS.maxFileBytes) {
+        errors.push(...validateWebpPrivacy(await fileHandle.readFile(), relativeFile));
+      }
+    } finally {
+      await fileHandle.close();
     }
   }
 
@@ -568,6 +636,12 @@ export async function validateAssetLedger(
         (typeof entry.provenance !== 'string' || entry.provenance.trim() === '')
       ) {
         errors.push(`${label} ${entry.category} requires non-empty provenance`);
+      }
+      if (
+        categoryPolicy.requiresAttribution &&
+        (typeof entry.attribution !== 'string' || entry.attribution.trim() === '')
+      ) {
+        errors.push(`${label} ${entry.category} requires non-empty attribution`);
       }
     }
     const expectedMediaType = MEDIA_TYPES.get(path.posix.extname(deployedPath).toLowerCase());

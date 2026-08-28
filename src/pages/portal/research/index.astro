@@ -29,6 +29,12 @@ const studies = sortResearchStudyRegistry(
   ),
 );
 const researchReports = selectResearchReports(allSubmissions);
+const controlledAreaReports = researchReports.filter((report) =>
+  report.tags.includes('controlled-area'),
+);
+const protocolReports = researchReports.filter(
+  (report) => !report.tags.includes('controlled-area'),
+);
 const relatedReports = new Map(
   studies.map((study) => [study.studyId, relatedReportsForStudy(study, allSubmissions)]),
 );
@@ -196,9 +202,78 @@ const activeProtocolCount = studies.filter(({ status }) => status === 'active').
         </div>
       </section>
 
+      <section class="portal-section" aria-labelledby="area-register-heading">
+        <p class="portal-section__label">Field sciences control</p>
+        <h2 id="area-register-heading">Controlled area register</h2>
+        <p>
+          This register identifies active and archived area-assessment files. Geographic references,
+          access routes, and source plates remain inside each file's applicable information
+          boundary.
+        </p>
+        <div class="portal-table-wrap">
+          <table class="portal-table portal-report-register" data-controlled-area-register>
+            <caption>Location-controlled field-assessment records</caption>
+            <thead>
+              <tr>
+                <th>Record</th>
+                <th>Descriptive title</th>
+                <th>Status</th>
+                <th>Effective</th>
+                <th>Office</th>
+                <th>Access</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                controlledAreaReports.map((report) => (
+                  <tr
+                    data-research-report-row
+                    data-required-level={report.information.level}
+                    data-publication-state={report.publicationState}
+                  >
+                    <td class="portal-table__identifier">
+                      <a href={submissionHref(report.recordId)}>{report.recordId}</a>
+                    </td>
+                    <td class="portal-table__title">
+                      <span data-research-report-title hidden>
+                        {report.title}
+                      </span>
+                      <span data-research-report-title-fallback>
+                        Controlled area file — eligibility required
+                      </span>
+                    </td>
+                    <td>
+                      <span class="portal-register-state" data-state={report.status}>
+                        {report.status}
+                      </span>
+                    </td>
+                    <td>
+                      <time datetime={report.effectiveDate}>{report.effectiveDate}</time>
+                    </td>
+                    <td>{report.controllingOffice}</td>
+                    <td>
+                      <div class="portal-record-actions">
+                        <a href={submissionHref(report.recordId)}>Review file</a>
+                        {isTemporaryGrantLevel(report.information.level) && (
+                          <AuthorizationDialog
+                            id={`area-report-${report.recordId.toLowerCase()}`}
+                            requiredLevel={report.information.level}
+                            triggerLabel="Request access"
+                          />
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+      </section>
+
       <section class="portal-section" aria-labelledby="research-reports-heading">
         <p class="portal-section__label">Registered output</p>
-        <h2 id="research-reports-heading">Related completed reports</h2>
+        <h2 id="research-reports-heading">Protocol and methods reports</h2>
         <p>
           Research-family reports support the methods and control environment used across current
           and archived protocols. A report is linked to a specific study only when its protocol row
@@ -206,7 +281,7 @@ const activeProtocolCount = studies.filter(({ status }) => status === 'active').
         </p>
         <div class="portal-table-wrap">
           <table class="portal-table portal-report-register" data-research-report-register>
-            <caption>Completed research-family records, newest effective date first</caption>
+            <caption>Completed protocol and methods records, newest effective date first</caption>
             <thead>
               <tr>
                 <th>Record</th>
@@ -219,7 +294,7 @@ const activeProtocolCount = studies.filter(({ status }) => status === 'active').
             </thead>
             <tbody>
               {
-                researchReports.map((report) => (
+                protocolReports.map((report) => (
                   <tr
                     data-research-report-row
                     data-required-level={report.information.level}
@@ -276,6 +351,7 @@ const activeProtocolCount = studies.filter(({ status }) => status === 'active').
           <div><dt>Public intake open</dt><dd>{intakeOpenCount}</dd></div>
           <div><dt>In progress</dt><dd>{activeProtocolCount}</dd></div>
           <div><dt>Completed reports</dt><dd>{researchReports.length}</dd></div>
+          <div><dt>Controlled area files</dt><dd>{controlledAreaReports.length}</dd></div>
           <div><dt>Oversight reference</dt><dd>{policyRequiredLevel}</dd></div>
         </dl>
       </section>

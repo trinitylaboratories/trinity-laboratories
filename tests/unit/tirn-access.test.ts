@@ -6,11 +6,15 @@ import {
   BASE_STAFF_LEVEL,
   CONTROL_OFFICE_REFERENCE_EXAMPLE,
   createElevatedGrant,
+  DIRECTORATE_RELEASE_REFERENCE_EXAMPLE,
   TEMPORARY_GRANT_SCOPE,
   ELEVATED_GRANT_TTL_MS,
   evaluateAuthorizationRequest,
   formatGrantRemaining,
   isControlOfficeReference,
+  isDirectorateReleaseReference,
+  isIsolationReference,
+  ISOLATION_REFERENCE_EXAMPLE,
   levelAllows,
   normalizeAuthorizationReference,
   parseElevatedGrant,
@@ -54,10 +58,18 @@ describe('TIRN local access requests', () => {
     expect(authorizationReferenceMatchesLevel('TL4-ABC123', 'TL-3')).toBe(false);
     expect(authorizationReferenceMatchesLevel('TL3-SHORT', 'TL-3')).toBe(false);
     expect(authorizationReferenceMatchesLevel('TL3-ABC123', 'TL-5')).toBe(false);
+    expect(authorizationReferenceMatchesLevel('TL5-ABC123', 'TL-5')).toBe(true);
+    expect(authorizationReferenceMatchesLevel('TL6-ABC123', 'TL-6')).toBe(true);
     expect(isControlOfficeReference(` ${CONTROL_OFFICE_REFERENCE_EXAMPLE.toLowerCase()} `)).toBe(
       true,
     );
     expect(isControlOfficeReference('TL4-ABC123')).toBe(false);
+    expect(
+      isDirectorateReleaseReference(` ${DIRECTORATE_RELEASE_REFERENCE_EXAMPLE.toLowerCase()} `),
+    ).toBe(true);
+    expect(isDirectorateReleaseReference('CO-ABC123')).toBe(false);
+    expect(isIsolationReference(` ${ISOLATION_REFERENCE_EXAMPLE.toLowerCase()} `)).toBe(true);
+    expect(isIsolationReference('DR-ABC123')).toBe(false);
   });
 
   it('returns field-specific incomplete results without reflecting entered values', () => {
@@ -80,7 +92,7 @@ describe('TIRN local access requests', () => {
     });
   });
 
-  it('requires an independent control-office reference for TL-4', () => {
+  it('requires an independent control-office reference for TL-4 and above', () => {
     const incomplete = evaluateAuthorizationRequest(
       request({
         requiredLevel: 'TL-4',
@@ -103,9 +115,69 @@ describe('TIRN local access requests', () => {
       NOW,
     );
     expect(accepted).toEqual({ accepted: true, grant: grant('TL-4') });
+
+    const higherLevel = evaluateAuthorizationRequest(
+      request({
+        requiredLevel: 'TL-5',
+        authorizationReference: 'TL5-ABC123',
+      }),
+      NOW,
+    );
+    expect(higherLevel).toEqual({
+      accepted: false,
+      field: 'controlOfficeReference',
+      message: 'Enter a control-office reference in the CO-XXXXXX format.',
+    });
   });
 
-  it('issues only generic temporary state and keeps TL-5+ unavailable', () => {
+  it('requires a Directorate release for TL-5 and an isolation reference for TL-6', () => {
+    const tl5Request = {
+      requiredLevel: 'TL-5' as const,
+      authorizationReference: 'TL5-ABC123',
+      controlOfficeReference: CONTROL_OFFICE_REFERENCE_EXAMPLE,
+    };
+    expect(evaluateAuthorizationRequest(request(tl5Request), NOW)).toEqual({
+      accepted: false,
+      field: 'directorateReleaseReference',
+      message: 'Enter a Directorate release reference in the DR-XXXXXX format.',
+    });
+    expect(
+      evaluateAuthorizationRequest(
+        request({
+          ...tl5Request,
+          directorateReleaseReference: DIRECTORATE_RELEASE_REFERENCE_EXAMPLE,
+        }),
+        NOW,
+      ),
+    ).toEqual({ accepted: true, grant: grant('TL-5') });
+
+    const tl6Request = {
+      requiredLevel: 'TL-6' as const,
+      authorizationReference: 'TL6-ABC123',
+      controlOfficeReference: CONTROL_OFFICE_REFERENCE_EXAMPLE,
+      directorateReleaseReference: DIRECTORATE_RELEASE_REFERENCE_EXAMPLE,
+    };
+    expect(evaluateAuthorizationRequest(request(tl6Request), NOW)).toEqual({
+      accepted: false,
+      field: 'isolationReference',
+      message: 'Enter an isolation-register reference in the IR-XXXXXX format.',
+    });
+    const accepted = evaluateAuthorizationRequest(
+      request({ ...tl6Request, isolationReference: ISOLATION_REFERENCE_EXAMPLE }),
+      NOW,
+    );
+    expect(accepted).toEqual({ accepted: true, grant: grant('TL-6') });
+    for (const rawValue of [
+      tl6Request.authorizationReference,
+      tl6Request.controlOfficeReference,
+      tl6Request.directorateReleaseReference,
+      ISOLATION_REFERENCE_EXAMPLE,
+    ]) {
+      expect(JSON.stringify(accepted)).not.toContain(rawValue);
+    }
+  });
+
+  it('issues only generic temporary state through TL-6', () => {
     const rawReference = 'TL3-RAW91F7';
     const accepted = evaluateAuthorizationRequest(
       request({ authorizationReference: rawReference, purpose: 'records-administration' }),
@@ -116,8 +188,9 @@ describe('TIRN local access requests', () => {
     expect(JSON.stringify(accepted)).not.toContain('records-administration');
     expect(accepted).toEqual({ accepted: true, grant: grant('TL-3') });
 
-    expect(createElevatedGrant('TL-5', NOW)).toBeNull();
-    expect(evaluateAuthorizationRequest(request({ requiredLevel: 'TL-5' }), NOW)).toEqual({
+    expect(createElevatedGrant('TL-5', NOW)).toEqual(grant('TL-5'));
+    expect(createElevatedGrant('TL-6', NOW)).toEqual(grant('TL-6'));
+    expect(evaluateAuthorizationRequest(request({ requiredLevel: 'TL-7' }), NOW)).toEqual({
       accepted: false,
       field: 'level',
       message: 'This information level requires separate authorization.',
@@ -132,8 +205,8 @@ describe('TIRN generic session state', () => {
     expect(BASE_STAFF_LEVEL).toBe('TL-2');
   });
 
-  it('round-trips strict TL-3 and TL-4 grant shapes', () => {
-    for (const level of ['TL-3', 'TL-4'] as const) {
+  it('round-trips strict TL-3 through TL-6 grant shapes', () => {
+    for (const level of ['TL-3', 'TL-4', 'TL-5', 'TL-6'] as const) {
       const serialized = serializeElevatedGrant(grant(level));
       expect(JSON.parse(serialized)).toEqual(grant(level));
       expect(parseElevatedGrant(serialized, NOW)).toEqual(grant(level));
@@ -149,7 +222,7 @@ describe('TIRN generic session state', () => {
       ),
     ).toBeNull();
     expect(parseElevatedGrant('{not-json', NOW)).toBeNull();
-    expect(parseElevatedGrant(JSON.stringify({ ...grant(), level: 'TL-5' }), NOW)).toBeNull();
+    expect(parseElevatedGrant(JSON.stringify({ ...grant(), level: 'TL-7' }), NOW)).toBeNull();
     expect(
       parseElevatedGrant(JSON.stringify({ ...grant(), purpose: 'forbidden' }), NOW),
     ).toBeNull();
@@ -158,6 +231,15 @@ describe('TIRN generic session state', () => {
     ).toBeNull();
     expect(
       parseElevatedGrant(JSON.stringify({ ...grant(), controlOfficeReference: 'forbidden' }), NOW),
+    ).toBeNull();
+    expect(
+      parseElevatedGrant(
+        JSON.stringify({ ...grant(), directorateReleaseReference: 'forbidden' }),
+        NOW,
+      ),
+    ).toBeNull();
+    expect(
+      parseElevatedGrant(JSON.stringify({ ...grant(), isolationReference: 'forbidden' }), NOW),
     ).toBeNull();
     expect(
       parseElevatedGrant(JSON.stringify({ ...grant(), badgeId: 'forbidden' }), NOW),
@@ -181,7 +263,7 @@ describe('TIRN generic session state', () => {
     });
   });
 
-  it('allows TL-4 to satisfy TL-3 while keeping TL-5 and TL/Ø unavailable', () => {
+  it('applies generic temporary eligibility hierarchically through TL-6', () => {
     expect(levelAllows('TL-4', 'TL-3')).toBe(true);
     expect(levelAllows('TL-3', 'TL-4')).toBe(false);
     expect(levelAllows('TL-7', 'TL/Ø')).toBe(false);
@@ -197,6 +279,17 @@ describe('TIRN generic session state', () => {
     expect(accessAllows(tl4Staff, 'TL-4')).toBe(true);
     expect(accessAllows(tl4Staff, 'TL-5')).toBe(false);
     expect(accessAllows(tl4Staff, 'TL/Ø')).toBe(false);
+
+    const tl5Staff = resolveTirnAccess('accepted', serializeElevatedGrant(grant('TL-5')), NOW);
+    expect(accessAllows(tl5Staff, 'TL-4')).toBe(true);
+    expect(accessAllows(tl5Staff, 'TL-5')).toBe(true);
+    expect(accessAllows(tl5Staff, 'TL-6')).toBe(false);
+
+    const tl6Staff = resolveTirnAccess('accepted', serializeElevatedGrant(grant('TL-6')), NOW);
+    expect(accessAllows(tl6Staff, 'TL-5')).toBe(true);
+    expect(accessAllows(tl6Staff, 'TL-6')).toBe(true);
+    expect(accessAllows(tl6Staff, 'TL-7')).toBe(false);
+    expect(accessAllows(tl6Staff, 'TL/Ø')).toBe(false);
   });
 
   it('formats remaining grant time for the staff header', () => {
