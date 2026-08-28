@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { lstat, readFile } from 'node:fs/promises';
+import { lstat, open, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { strFromU8, unzipSync } from 'fflate';
 import { isMain, optionalString, parseArgs, printErrors } from './lib/cli.mjs';
@@ -465,7 +465,12 @@ export async function validateAssetRoot(root) {
       errors.push(...validatePngPrivacy(await readFile(absoluteFile), relativeFile));
     }
     if (extension === '.webp' && fileStats.size <= ASSET_LIMITS.maxFileBytes) {
-      errors.push(...validateWebpPrivacy(await readFile(absoluteFile), relativeFile));
+      const fileHandle = await open(absoluteFile, 'r');
+      try {
+        errors.push(...validateWebpPrivacy(await fileHandle.readFile(), relativeFile));
+      } finally {
+        await fileHandle.close();
+      }
     }
   }
 
