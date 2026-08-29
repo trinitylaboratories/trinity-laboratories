@@ -25,8 +25,16 @@
     {
       "id": "complex-overview-plate",
       "label": "Complex overview plate A",
-      "mode": "withheld",
-      "summary": "The reviewed image plate remains with the facility and operator schedule held by the controlling office."
+      "mode": "available",
+      "path": "/portal/media/geospatial/north-canopy-complex.webp",
+      "mediaType": "image/webp",
+      "sourceFilename": "googleearth_LxccGXvwk9.jpg",
+      "sha256": "01c8ee792bc3905dc8e393d26aa1d3a8a1bebda1059db86a0f4c4c59e19d7222",
+      "width": 1600,
+      "height": 955,
+      "alt": "Overhead context image of a large enclosed-growth complex and surrounding woodland, fields, and roads.",
+      "caption": "Current registry context view of the coded growth complex, added during 2026 digitization. It is not original 2019 facility evidence.",
+      "credit": "Reference capture supplied by the project owner. Imagery © Google and respective imagery providers."
     }
   ],
   "sections": [
@@ -44,7 +52,7 @@
       "disclosure": {
         "mode": "open"
       },
-      "body": "**Canopy response:** The three study bays showed a synchronized near-infrared reflectance change during seven unprogrammed overnight intervals. The control bay did not.\n\n**Systems comparison:** Lighting, irrigation, ventilation, carbon-dioxide, and utility logs showed no common command or interruption at the onset times.\n\n**Physical outcome:** Growth rate and harvest mass remained within the facility's ordinary production range; no tissue abnormality was retained."
+      "body": "**Canopy response:** The three study bays showed a synchronized near-infrared reflectance change during seven unprogrammed overnight intervals. The control bay did not.\n\n**Systems comparison:** Lighting, irrigation, ventilation, carbon-dioxide, and utility logs showed no common command or interruption at the onset times.\n\n**Physical outcome:** Growth rate and harvest mass remained within the facility's ordinary production range; retained tissue samples showed no abnormality."
     },
     {
       "id": "interpretive-limits",

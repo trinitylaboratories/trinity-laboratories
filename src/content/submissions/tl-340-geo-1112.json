@@ -19,8 +19,16 @@
     {
       "id": "basin-overview-plate",
       "label": "Basin overview plate A",
-      "mode": "withheld",
-      "summary": "The reviewed image plate remains with the coordinate and sample schedule held by the controlling office."
+      "mode": "available",
+      "path": "/portal/media/geospatial/pale-basin.webp",
+      "mediaType": "image/webp",
+      "sourceFilename": "googleearth_Z6uwu1GsF7.jpg",
+      "sha256": "0a78a6c43ff77347475f36bbce29ce3f4defd65f990243f5029325969fa6c984",
+      "width": 1600,
+      "height": 774,
+      "alt": "Overhead context image of an irregular pale clearing within boreal forest near unpaved access routes and small lakes.",
+      "caption": "Current registry context view of the coded basin, added during 2026 digitization. It is not original 2011 monitoring imagery.",
+      "credit": "Reference capture supplied by the project owner. Imagery © Google and respective imagery providers."
     }
   ],
   "sections": [

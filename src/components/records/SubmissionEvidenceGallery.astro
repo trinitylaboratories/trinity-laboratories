@@ -6,7 +6,21 @@ interface Props {
 }
 
 const { evidence } = Astro.props;
-const payload = JSON.stringify(evidence).replace(/[<>&]/g, (character) => {
+const renderableEvidence = evidence.map((plate) => {
+  if (plate.mode === 'withheld') return plate;
+  return {
+    id: plate.id,
+    label: plate.label,
+    mode: plate.mode,
+    path: plate.path,
+    width: plate.width,
+    height: plate.height,
+    alt: plate.alt,
+    caption: plate.caption,
+    credit: plate.credit,
+  };
+});
+const payload = JSON.stringify(renderableEvidence).replace(/[<>&]/g, (character) => {
   if (character === '<') return '\\u003c';
   if (character === '>') return '\\u003e';
   return '\\u0026';
@@ -26,15 +40,20 @@ const payload = JSON.stringify(evidence).replace(/[<>&]/g, (character) => {
   import type { SubmissionEvidencePlate } from '../../lib/submission-schema';
   import { TIRN_ACCESS_CHANGE_EVENT } from '../../lib/tirn-access';
 
+  type AvailableEvidencePlate = Extract<SubmissionEvidencePlate, { mode: 'available' }>;
+  type RenderableEvidencePlate =
+    | Extract<SubmissionEvidencePlate, { mode: 'withheld' }>
+    | Omit<AvailableEvidencePlate, 'mediaType' | 'sourceFilename' | 'sha256'>;
+
   let evidenceGallerySequence = 0;
 
-  const readEvidencePayload = (root: HTMLElement): SubmissionEvidencePlate[] => {
+  const readEvidencePayload = (root: HTMLElement): RenderableEvidencePlate[] => {
     const template = root.querySelector<HTMLTemplateElement>('[data-evidence-payload]');
     const serialized = template?.content.textContent ?? '';
     if (!serialized) return [];
     try {
       const parsed: unknown = JSON.parse(serialized);
-      return Array.isArray(parsed) ? (parsed as SubmissionEvidencePlate[]) : [];
+      return Array.isArray(parsed) ? (parsed as RenderableEvidencePlate[]) : [];
     } catch {
       return [];
     }
@@ -163,7 +182,7 @@ const payload = JSON.stringify(evidence).replace(/[<>&]/g, (character) => {
     .forEach(initializeEvidenceGallery);
 </script>
 
-<style>
+<style is:global>
   .submission-evidence {
     margin-top: 2.5rem;
     border-top: 1px solid #7e8993;
@@ -213,7 +232,7 @@ const payload = JSON.stringify(evidence).replace(/[<>&]/g, (character) => {
 
   .submission-evidence__caption {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(10rem, auto);
+    grid-template-columns: minmax(0, 3fr) minmax(12rem, 2fr);
     gap: 1rem;
     align-items: start;
     padding-top: 0.75rem;
@@ -222,6 +241,7 @@ const payload = JSON.stringify(evidence).replace(/[<>&]/g, (character) => {
   .submission-evidence__caption-text,
   .submission-evidence__credit {
     margin: 0;
+    overflow-wrap: anywhere;
   }
 
   .submission-evidence__caption-text {

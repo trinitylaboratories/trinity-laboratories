@@ -25,14 +25,30 @@
     {
       "id": "reach-overview-plate",
       "label": "Reach overview plate A",
-      "mode": "withheld",
-      "summary": "The reviewed image plate remains with the coordinate and access schedule held by the controlling office."
+      "mode": "available",
+      "path": "/portal/media/geospatial/blackwater-reach.webp",
+      "mediaType": "image/webp",
+      "sourceFilename": "googleearth_uvChPmTPna.jpg",
+      "sha256": "e568b769d62c0f46adbcbe7b648e7fa521b0bdfe790515e43d26014a3aedfd5b",
+      "width": 1600,
+      "height": 756,
+      "alt": "Overhead context image of a forested river corridor beside a narrow access road and clearing.",
+      "caption": "Current registry context view associated with the coded reach, added during 2026 digitization. It is not original 1994 field imagery.",
+      "credit": "Reference capture supplied by the project owner. Imagery © Google and respective imagery providers."
     },
     {
       "id": "station-approach-plate",
       "label": "Station approach plate B",
-      "mode": "withheld",
-      "summary": "The reviewed image plate remains with the coordinate and access schedule held by the controlling office."
+      "mode": "available",
+      "path": "/portal/media/geospatial/blackwater-station.webp",
+      "mediaType": "image/webp",
+      "sourceFilename": "googleearth_yIVxCeRk05.jpg",
+      "sha256": "74940d08b8bbc9e25f6b9e8b9606b7dfc4141a975c56fdbeaabe4ca44f937886",
+      "width": 1600,
+      "height": 727,
+      "alt": "Overhead context image of a small cleared field station surrounded by dense forest and access tracks.",
+      "caption": "Current registry context view associated with the coded station approach, added during 2026 digitization. It is not original 1994 field imagery.",
+      "credit": "Reference capture supplied by the project owner. Imagery © Google and respective imagery providers."
     }
   ],
   "sections": [

@@ -1,12 +1,13 @@
 {
   "version": 1,
-  "generatedDate": "2026-08-25",
+  "generatedDate": "2026-08-28",
   "hashAlgorithm": "SHA-256",
   "notes": [
     "Derivative paths are deployed public paths resolved beneath the repository public directory.",
     "Original Trinity policy and form content is licensed CC BY-NC-SA 4.0.",
     "Trinity logos, wordmarks, and icons are reserved marks governed by TRADEMARKS.md.",
     "Facility media is project-owner-supplied synthetic imagery; source provenance and metadata removal are recorded per derivative.",
+    "Controlled geospatial media consists of project-owner-approved modern context plates; detailed source attribution is maintained in the external publication register and no historical capture provenance is claimed.",
     "Credential designs, portraits, newspapers, timeline evidence, narrative evidence, and duplicate source copies are intentionally excluded."
   ],
   "assets": [
@@ -387,6 +388,142 @@
       "license": "CC BY-NC-SA 4.0",
       "provenance": "Project-owner-supplied synthetic imagery generated with OpenAI's image generation service; the source PNG contained C2PA Content Credentials identifying trained-algorithmic media.",
       "transform": "Project-local sharp 0.35.3 resized the full 1672×941 source to 1600×900 without enlargement or cropping, then encoded lossy WebP at quality 82, effort 6, with smart chroma subsampling; source C2PA caBX metadata was omitted from the derivative."
+    },
+    {
+      "category": "controlled-geospatial",
+      "ownership": "Google and applicable imagery providers; rights retained by their respective owners",
+      "source": {
+        "basename": "googleearth_UmDDwFZkxq.jpg",
+        "sha256": "3502f68b79993ec3c6e156668c269b24d74cb12b7b531b336da691ca22145018"
+      },
+      "derivative": {
+        "path": "/portal/media/geospatial/sector-k14-masonry.webp",
+        "sha256": "58d8a50e5a064d973e0efc3e4aa3604d1b173542548ca166b139de4813433fcb"
+      },
+      "mediaType": "image/webp",
+      "license": "Google Earth and applicable imagery-provider terms; excluded from repository licenses.",
+      "attribution": "Google Earth; detailed imagery-provider attribution is maintained by the project owner in the external publication register.",
+      "provenance": "Project-owner-supplied modern Google Earth reference capture approved on 2026-08-28 as a context plate associated with fictional record TL-340-GEO-8814. It is not represented as a contemporaneous capture of the record date.",
+      "transform": "Project-local sharp 0.35.3 preserved the 1409×793 source dimensions without enlargement and encoded lossy WebP at quality 82, effort 6; source metadata was omitted from the derivative."
+    },
+    {
+      "category": "controlled-geospatial",
+      "ownership": "Google and applicable imagery providers; rights retained by their respective owners",
+      "source": {
+        "basename": "googleearth_uvChPmTPna.jpg",
+        "sha256": "bb83a3e0477c363c577c6aa201e39a9ea9098e6092a4bc67d51e4b3b07a75db3"
+      },
+      "derivative": {
+        "path": "/portal/media/geospatial/blackwater-reach.webp",
+        "sha256": "e568b769d62c0f46adbcbe7b648e7fa521b0bdfe790515e43d26014a3aedfd5b"
+      },
+      "mediaType": "image/webp",
+      "license": "Google Earth and applicable imagery-provider terms; excluded from repository licenses.",
+      "attribution": "Google Earth; detailed imagery-provider attribution is maintained by the project owner in the external publication register.",
+      "provenance": "Project-owner-supplied modern Google Earth reference capture approved on 2026-08-28 as a context plate associated with fictional record TL-340-GEO-9411. It is not represented as a contemporaneous capture of the record date.",
+      "transform": "Project-local sharp 0.35.3 resized the full 1860×879 source to 1600×756 without enlargement or cropping, then encoded lossy WebP at quality 82, effort 6; source metadata was omitted from the derivative."
+    },
+    {
+      "category": "controlled-geospatial",
+      "ownership": "Google and applicable imagery providers; rights retained by their respective owners",
+      "source": {
+        "basename": "googleearth_yIVxCeRk05.jpg",
+        "sha256": "0ff5f981be393e759fd8c6b1a57f1c42880c32a2c445ca6aacc6aa02e82ca580"
+      },
+      "derivative": {
+        "path": "/portal/media/geospatial/blackwater-station.webp",
+        "sha256": "74940d08b8bbc9e25f6b9e8b9606b7dfc4141a975c56fdbeaabe4ca44f937886"
+      },
+      "mediaType": "image/webp",
+      "license": "Google Earth and applicable imagery-provider terms; excluded from repository licenses.",
+      "attribution": "Google Earth; detailed imagery-provider attribution is maintained by the project owner in the external publication register.",
+      "provenance": "Project-owner-supplied modern Google Earth reference capture approved on 2026-08-28 as a context plate associated with fictional record TL-340-GEO-9411. It is not represented as a contemporaneous capture of the record date.",
+      "transform": "Project-local sharp 0.35.3 resized the full 1942×882 source to 1600×727 without enlargement or cropping, then encoded lossy WebP at quality 82, effort 6; source metadata was omitted from the derivative."
+    },
+    {
+      "category": "controlled-geospatial",
+      "ownership": "Google and applicable imagery providers; rights retained by their respective owners",
+      "source": {
+        "basename": "googleearth_7mHy5BPt3N.jpg",
+        "sha256": "ae6a4ee652d2ec67c4eef40cdeccd1cf4650ee286080fa35b8448131d0d0953d"
+      },
+      "derivative": {
+        "path": "/portal/media/geospatial/kilnfield-array.webp",
+        "sha256": "b8c8302a0333b458f9276908718db06dee29db05f22a3799bbd5df4563dac080"
+      },
+      "mediaType": "image/webp",
+      "license": "Google Earth and applicable imagery-provider terms; excluded from repository licenses.",
+      "attribution": "Google Earth; detailed imagery-provider attribution is maintained by the project owner in the external publication register.",
+      "provenance": "Project-owner-supplied modern Google Earth reference capture approved on 2026-08-28 as a context plate associated with fictional record TL-470-GEO-0307. It is not represented as a contemporaneous capture of the record date.",
+      "transform": "Project-local sharp 0.35.3 resized the full 1994×998 source to 1600×801 without enlargement or cropping, then encoded lossy WebP at quality 82, effort 6; source metadata was omitted from the derivative."
+    },
+    {
+      "category": "controlled-geospatial",
+      "ownership": "Google and applicable imagery providers; rights retained by their respective owners",
+      "source": {
+        "basename": "googleearth_Z6uwu1GsF7.jpg",
+        "sha256": "92d39212b5c4c1b93790ed090862a36cc1c7f6a0ed9271f2c1ab77de91146ffe"
+      },
+      "derivative": {
+        "path": "/portal/media/geospatial/pale-basin.webp",
+        "sha256": "0a78a6c43ff77347475f36bbce29ce3f4defd65f990243f5029325969fa6c984"
+      },
+      "mediaType": "image/webp",
+      "license": "Google Earth and applicable imagery-provider terms; excluded from repository licenses.",
+      "attribution": "Google Earth; detailed imagery-provider attribution is maintained by the project owner in the external publication register.",
+      "provenance": "Project-owner-supplied modern Google Earth reference capture approved on 2026-08-28 as a context plate associated with fictional record TL-340-GEO-1112. It is not represented as a contemporaneous capture of the record date.",
+      "transform": "Project-local sharp 0.35.3 resized the full 1962×949 source to 1600×774 without enlargement or cropping, then encoded lossy WebP at quality 82, effort 6; source metadata was omitted from the derivative."
+    },
+    {
+      "category": "controlled-geospatial",
+      "ownership": "Google and applicable imagery providers; rights retained by their respective owners",
+      "source": {
+        "basename": "googleearth_LxccGXvwk9.jpg",
+        "sha256": "2c2186b37927b56a8d9729026d8793b39c48d5b89f5edb768de6aeb354bed87c"
+      },
+      "derivative": {
+        "path": "/portal/media/geospatial/north-canopy-complex.webp",
+        "sha256": "01c8ee792bc3905dc8e393d26aa1d3a8a1bebda1059db86a0f4c4c59e19d7222"
+      },
+      "mediaType": "image/webp",
+      "license": "Google Earth and applicable imagery-provider terms; excluded from repository licenses.",
+      "attribution": "Google Earth; detailed imagery-provider attribution is maintained by the project owner in the external publication register.",
+      "provenance": "Project-owner-supplied modern Google Earth reference capture approved on 2026-08-28 as a context plate associated with fictional record TL-470-GEO-1909. It is not represented as a contemporaneous capture of the record date.",
+      "transform": "Project-local sharp 0.35.3 resized the full 1780×1062 source to 1600×955 without enlargement or cropping, then encoded lossy WebP at quality 82, effort 6; source metadata was omitted from the derivative."
+    },
+    {
+      "category": "controlled-geospatial",
+      "ownership": "Google and applicable imagery providers; rights retained by their respective owners",
+      "source": {
+        "basename": "googleearth_a7v5aO4NHL.jpg",
+        "sha256": "24fed07b640ba27e8d5c8ceebf1330d8584926b2105bf034adaa76f6d615ed04"
+      },
+      "derivative": {
+        "path": "/portal/media/geospatial/upland-pattern-west.webp",
+        "sha256": "b086ca0ba013c09487bbbcbf47913eef9146e36ba8feca25df0491222729d2ef"
+      },
+      "mediaType": "image/webp",
+      "license": "Google Earth and applicable imagery-provider terms; excluded from repository licenses.",
+      "attribution": "Google Earth; detailed imagery-provider attribution is maintained by the project owner in the external publication register.",
+      "provenance": "Project-owner-supplied modern Google Earth reference capture approved on 2026-08-28 as a context plate associated with fictional record TL-470-GEO-2406. It is not represented as a contemporaneous capture of the record date.",
+      "transform": "Project-local sharp 0.35.3 resized the full 1659×656 source to 1600×633 without enlargement or cropping, then encoded lossy WebP at quality 82, effort 6; source metadata was omitted from the derivative."
+    },
+    {
+      "category": "controlled-geospatial",
+      "ownership": "Google and applicable imagery providers; rights retained by their respective owners",
+      "source": {
+        "basename": "googleearth_m9RWVul7Kh.jpg",
+        "sha256": "4f36f3f37eb322a0e881525ff3220407d24d7af440edfe7911d15877e94e30a7"
+      },
+      "derivative": {
+        "path": "/portal/media/geospatial/upland-pattern-east.webp",
+        "sha256": "5c53f174d38f6f9db39dc77d9975a0c2af73503e5e821537abfe1307961124bb"
+      },
+      "mediaType": "image/webp",
+      "license": "Google Earth and applicable imagery-provider terms; excluded from repository licenses.",
+      "attribution": "Google Earth; detailed imagery-provider attribution is maintained by the project owner in the external publication register.",
+      "provenance": "Project-owner-supplied modern Google Earth reference capture approved on 2026-08-28 as a context plate associated with fictional record TL-470-GEO-2406. It is not represented as a contemporaneous capture of the record date.",
+      "transform": "Project-local sharp 0.35.3 resized the full 2027×900 source to 1600×710 without enlargement or cropping, then encoded lossy WebP at quality 82, effort 6; source metadata was omitted from the derivative."
     },
     {
       "category": "third-party-font",

@@ -19,8 +19,16 @@
     {
       "id": "seasonal-comparison-plate",
       "label": "Seasonal comparison plate A",
-      "mode": "withheld",
-      "summary": "The reviewed image plate remains with the coordinate and land-use schedule held by the controlling office."
+      "mode": "available",
+      "path": "/portal/media/geospatial/kilnfield-array.webp",
+      "mediaType": "image/webp",
+      "sourceFilename": "googleearth_7mHy5BPt3N.jpg",
+      "sha256": "b8c8302a0333b458f9276908718db06dee29db05f22a3799bbd5df4563dac080",
+      "width": 1600,
+      "height": 801,
+      "alt": "Overhead context image of low-relief fields crossed by linear surface features beside a river.",
+      "caption": "Current registry context view of the coded comparison sector, added during 2026 digitization. It is not original 2003 comparison imagery.",
+      "credit": "Reference capture supplied by the project owner. Imagery © Google and respective imagery providers."
     }
   ],
   "sections": [

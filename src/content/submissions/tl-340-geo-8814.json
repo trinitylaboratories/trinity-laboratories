@@ -19,8 +19,16 @@
     {
       "id": "orthographic-survey-plate",
       "label": "Orthographic survey plate A",
-      "mode": "withheld",
-      "summary": "The reviewed image plate remains with the coordinate and access schedule held by the controlling office."
+      "mode": "available",
+      "path": "/portal/media/geospatial/sector-k14-masonry.webp",
+      "mediaType": "image/webp",
+      "sourceFilename": "googleearth_UmDDwFZkxq.jpg",
+      "sha256": "58d8a50e5a064d973e0efc3e4aa3604d1b173542548ca166b139de4813433fcb",
+      "width": 1409,
+      "height": 793,
+      "alt": "Overhead context image of a large masonry structure bordered by access roads and excavated ground.",
+      "caption": "Current registry context view of the coded masonry survey sector, added during the 2026 archive digitization. It is not an original 1988 survey plate.",
+      "credit": "Reference capture supplied by the project owner. Imagery © Google and respective imagery providers."
     }
   ],
   "sections": [

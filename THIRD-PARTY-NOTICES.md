@@ -39,6 +39,20 @@ IBM Plex remains copyright its respective authors and is not relicensed under th
 creative-content licenses. Retain the OFL license notice with redistributed font files, and do not
 use a Reserved Font Name except as permitted by the OFL.
 
+## Controlled geospatial reference plates
+
+The WebP files under `public/portal/media/geospatial/` are optimized derivatives of modern Google
+Earth reference captures supplied and approved for publication by the project owner. Google Earth
+and the applicable imagery providers retain their respective rights; these files are not licensed
+under this repository's MIT or CC terms.
+
+The plates are used as present-day registry and context material associated with fictional
+controlled-area records. They are not presented as contemporaneous captures of the records' dates
+or as evidence of a real event, location, property, or condition. Detailed source and
+imagery-provider attribution is maintained by the project owner in the external publication
+register. The authoritative per-file source hashes, transformations, general credit, and deployed
+paths are recorded in `data/asset-ledger.json`.
+
 ## Local reference material
 
 `/_IgnoreThis/` is excluded from Git and is not covered by this notice as distributed project
