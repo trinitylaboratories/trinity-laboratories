@@ -122,9 +122,13 @@ test('a generic TL-3 review grant reveals authorized controlled content only', a
   await expect(withheldSection.locator('[data-controlled-content]')).toHaveCount(0);
 });
 
-test('TL-6 authorization mounts withheld area descriptors without requesting evidence images', async ({
+test('TL-6 authorization loads area evidence only for the active grant and unloads it on expiry', async ({
   page,
 }) => {
+  const evidencePaths = [
+    '/portal/media/geospatial/upland-pattern-west.webp',
+    '/portal/media/geospatial/upland-pattern-east.webp',
+  ];
   const evidenceImageRequests: string[] = [];
   page.on('request', (request) => {
     const requestUrl = new URL(request.url());
@@ -136,8 +140,18 @@ test('TL-6 authorization mounts withheld area descriptors without requesting evi
     }
   });
 
+  await page.clock.install({ time: new Date('2026-08-28T12:00:00Z') });
   await establishStaffSession(page);
   await visit(page, TL6_AREA_REPORT_ROUTE);
+
+  const pageMarkup = await page.content();
+  expect(pageMarkup).not.toContain('googleearth_');
+  expect(pageMarkup).not.toContain(
+    'b086ca0ba013c09487bbbcbf47913eef9146e36ba8feca25df0491222729d2ef',
+  );
+  expect(pageMarkup).not.toContain(
+    '5c53f174d38f6f9db39dc77d9975a0c2af73503e5e821537abfe1307961124bb',
+  );
 
   const controlledRecord = page.locator('[data-controlled-record="TL-470-GEO-2406"]');
   const recordLock = controlledRecord.locator(':scope > [data-controlled-locked]');
@@ -167,10 +181,44 @@ test('TL-6 authorization mounts withheld area descriptors without requesting evi
     controlledRecord.getByRole('heading', { name: 'Upland Pattern Field Instrument Survey' }),
   ).toBeVisible();
   await expect(evidenceGallery).toHaveAttribute('data-evidence-state', 'loaded');
-  await expect(evidenceContent.locator('.submission-evidence__plate--withheld')).toHaveCount(2);
-  await expect(evidenceContent.getByText('Source plate held by controlling office')).toHaveCount(2);
+  await expect(evidenceContent.locator('.submission-evidence__plate--withheld')).toHaveCount(0);
+
+  const evidenceImages = evidenceGallery.locator('img');
+  await expect(evidenceImages).toHaveCount(2);
+  for (const [index, path] of evidencePaths.entries()) {
+    await expect(evidenceImages.nth(index)).toHaveAttribute('src', path);
+    await evidenceImages.nth(index).scrollIntoViewIfNeeded();
+    await expect(evidenceImages.nth(index)).toBeVisible();
+    const imageLayout = await evidenceImages.nth(index).evaluate((image) => {
+      const raster = image as HTMLImageElement;
+      return {
+        containerWidth: raster.closest('figure')?.getBoundingClientRect().width ?? 0,
+        naturalWidth: raster.naturalWidth,
+        renderedWidth: raster.getBoundingClientRect().width,
+      };
+    });
+    expect(imageLayout.containerWidth).toBeGreaterThan(0);
+    expect(imageLayout.renderedWidth).toBeLessThanOrEqual(imageLayout.containerWidth + 1);
+    expect(imageLayout.renderedWidth).toBeLessThan(imageLayout.naturalWidth);
+  }
+  await expect.poll(() => [...evidenceImageRequests].sort()).toEqual([...evidencePaths].sort());
+
+  const captions = evidenceContent.locator('.submission-evidence__caption-text');
+  const credits = evidenceContent.locator('.submission-evidence__credit');
+  await expect(captions).toHaveCount(2);
+  await expect(credits).toHaveCount(2);
+  for (let index = 0; index < 2; index += 1) {
+    await expect(captions.nth(index)).toBeVisible();
+    await expect(captions.nth(index)).not.toBeEmpty();
+    await expect(credits.nth(index)).toBeVisible();
+    await expect(credits.nth(index)).toContainText('Imagery © Google');
+  }
+
+  await page.clock.fastForward(15 * 60 * 1000 + 1_000);
+  await expect(controlledRecord).toHaveAttribute('data-access-state', 'locked');
+  await expect(evidenceGallery).toHaveAttribute('data-evidence-state', 'inert');
+  await expect(evidenceContent.locator(':scope > *')).toHaveCount(0);
   await expect(evidenceGallery.locator('img')).toHaveCount(0);
-  expect(evidenceImageRequests).toEqual([]);
 });
 
 test('Pagefind indexes released report fields but excludes controlled body text', async ({

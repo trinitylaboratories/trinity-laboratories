@@ -19,14 +19,30 @@
     {
       "id": "western-detail-plate",
       "label": "Western detail plate A",
-      "mode": "withheld",
-      "summary": "The reviewed image plate remains with the coordinate and access schedule held by the controlling office."
+      "mode": "available",
+      "path": "/portal/media/geospatial/upland-pattern-west.webp",
+      "mediaType": "image/webp",
+      "sourceFilename": "googleearth_a7v5aO4NHL.jpg",
+      "sha256": "b086ca0ba013c09487bbbcbf47913eef9146e36ba8feca25df0491222729d2ef",
+      "width": 1600,
+      "height": 633,
+      "alt": "Oblique aerial detail of discontinuous rectangular ground relief across rocky upland terrain.",
+      "caption": "Current registry detail of the coded western survey sector, added during 2026 digitization. It is not original 2024 traverse imagery.",
+      "credit": "Reference capture supplied by the project owner. Imagery © Google and respective imagery providers."
     },
     {
       "id": "eastern-detail-plate",
       "label": "Eastern detail plate B",
-      "mode": "withheld",
-      "summary": "The reviewed image plate remains with the coordinate and access schedule held by the controlling office."
+      "mode": "available",
+      "path": "/portal/media/geospatial/upland-pattern-east.webp",
+      "mediaType": "image/webp",
+      "sourceFilename": "googleearth_m9RWVul7Kh.jpg",
+      "sha256": "5c53f174d38f6f9db39dc77d9975a0c2af73503e5e821537abfe1307961124bb",
+      "width": 1600,
+      "height": 710,
+      "alt": "Oblique aerial detail of patterned upland ground adjoining dark saturated margins.",
+      "caption": "Current registry detail of the coded eastern survey sector, added during 2026 digitization. It is not original 2024 traverse imagery.",
+      "credit": "Reference capture supplied by the project owner. Imagery © Google and respective imagery providers."
     }
   ],
   "sections": [

@@ -117,12 +117,15 @@ Do not rewrite historical source files to make an approved digital crosswalk app
 Duplicate files should have one canonical published copy. Externally sourced material with unclear
 rights remains excluded even when it is narratively useful.
 
-The Google Earth geospatial reference captures supplied on 2026-08-28 are private production
-references only. Their required Google and imagery-provider attribution was cropped from the
-captures, so they must not enter `public/`, Git, a build artifact, or the asset ledger as publishable
-derivatives. A future replacement may be reviewed only when the complete on-image attribution is
-preserved, the exact provider credit is repeated beside the plate, and the intended static
-noncommercial use is documented.
+The project owner approved the Google Earth geospatial reference captures supplied on 2026-08-28
+for controlled portal publication. Their optimized derivatives are modern registry and context
+plates associated with the fictional controlled-area records; they are not represented as captures
+contemporaneous with a report date or as proof of a described event. Do not derive coordinates,
+real-place identifications, property claims, or historical provenance from them. Google Earth and
+the applicable imagery providers retain their rights. The project owner maintains the detailed
+source attribution and publication authorization in an external publication register; the
+repository asset ledger records each reviewed source hash, derivative hash, general credit, and
+transformation. These files remain excluded from the repository's MIT and CC licenses.
 
 ## Writing and presentation
 
