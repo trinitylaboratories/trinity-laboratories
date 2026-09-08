@@ -2,6 +2,18 @@ import type { StudyData } from './study-schema';
 import { studyStatusLabel } from './study-schema';
 import type { SubmissionRecordData } from './submission-schema';
 
+const INFORMATION_LEVEL_ORDER = [
+  'TL-0',
+  'TL-1',
+  'TL-2',
+  'TL-3',
+  'TL-4',
+  'TL-5',
+  'TL-6',
+  'TL-7',
+  'TL/Ø',
+] as const;
+
 export interface ResearchStudyRegistryEntry {
   studyId: string;
   slug: string;
@@ -59,6 +71,20 @@ export function selectResearchReports(
         right.effectiveDate.localeCompare(left.effectiveDate) ||
         left.recordId.localeCompare(right.recordId),
     );
+}
+
+export function sortResearchReportsByInformationLevel(
+  submissions: readonly SubmissionRecordData[],
+): SubmissionRecordData[] {
+  const order = new Map(INFORMATION_LEVEL_ORDER.map((level, index) => [level, index]));
+
+  return [...submissions].sort(
+    (left, right) =>
+      (order.get(left.information.level) ?? Number.MAX_SAFE_INTEGER) -
+        (order.get(right.information.level) ?? Number.MAX_SAFE_INTEGER) ||
+      left.effectiveDate.localeCompare(right.effectiveDate) ||
+      left.recordId.localeCompare(right.recordId),
+  );
 }
 
 export function relatedReportsForStudy(

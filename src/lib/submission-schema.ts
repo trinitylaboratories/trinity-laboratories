@@ -10,6 +10,18 @@ export const CLASSIFICATION_LEVELS = [
   'TL/Ø',
 ] as const;
 
+export const CLASSIFICATION_LABELS = {
+  'TL-0': 'General Release',
+  'TL-1': 'Institutional',
+  'TL-2': 'Controlled Research',
+  'TL-3': 'Restricted',
+  'TL-4': 'Special Access',
+  'TL-5': 'Directorate Control',
+  'TL-6': 'Isolated',
+  'TL-7': 'Null Record',
+  'TL/Ø': 'Null Access',
+} as const satisfies Readonly<Record<(typeof CLASSIFICATION_LEVELS)[number], string>>;
+
 export const ELEVATED_CLASSIFICATION_LEVELS = [
   'TL-3',
   'TL-4',
@@ -87,6 +99,10 @@ export type DisclosureMode = (typeof DISCLOSURE_MODES)[number];
 export type SubmissionStatus = (typeof SUBMISSION_STATUSES)[number];
 export type RecordFamily = (typeof RECORD_FAMILIES)[number];
 export type FormTemplateId = (typeof FORM_TEMPLATE_IDS)[number];
+
+export function classificationLabel(level: ClassificationLevel): string {
+  return CLASSIFICATION_LABELS[level];
+}
 
 interface SubmissionEvidencePlateBase {
   id: string;

@@ -4,6 +4,7 @@ import {
   relatedReportsForStudy,
   researchStudyRegistryEntry,
   selectResearchReports,
+  sortResearchReportsByInformationLevel,
   sortResearchStudyRegistry,
 } from '../../src/lib/portal-research';
 import type { StudyData } from '../../src/lib/study-schema';
@@ -72,6 +73,29 @@ describe('portal research registry helpers', () => {
     );
     expect(relatedReportsForStudy(entry, reports).map(({ recordId }) => recordId)).toEqual([
       'TL-220-EA-001',
+    ]);
+  });
+
+  it('orders controlled findings from routine to increasingly restricted handling', () => {
+    const reports = [
+      {
+        ...submission('TL-470-GEO-2406', '2024-06-21'),
+        information: { level: 'TL-6' },
+      },
+      {
+        ...submission('TL-340-GEO-9411', '1994-11-18'),
+        information: { level: 'TL-5' },
+      },
+      {
+        ...submission('TL-340-GEO-8814', '1988-11-04'),
+        information: { level: 'TL-4' },
+      },
+    ] as SubmissionRecordData[];
+
+    expect(sortResearchReportsByInformationLevel(reports).map(({ recordId }) => recordId)).toEqual([
+      'TL-340-GEO-8814',
+      'TL-340-GEO-9411',
+      'TL-470-GEO-2406',
     ]);
   });
 });

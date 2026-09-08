@@ -10,7 +10,7 @@
   "controllingOffice": "Applied Physics",
   "publicationState": "controlled",
   "information": {
-    "level": "TL-5"
+    "level": "TL-4"
   },
   "tags": ["controlled-area", "thermal-survey", "masonry", "field-instrumentation", "tl-340"],
   "summary": "Controlled area assessment. Descriptive metadata and report contents require the displayed information eligibility.",
@@ -46,7 +46,7 @@
       "disclosure": {
         "mode": "open"
       },
-      "body": "**Thermal response:** A compact central surface region reached the expected daytime peak but returned heat more slowly than the comparison surfaces after local sunset.\n\n**Phase residual:** Corrected cooling curves retained an 18-to-26-minute lag across four of six passes. The residual did not track measured wind direction or surface shade.\n\n**Spatial form:** The strongest response remained inside the same projected surface boundary and weakened smoothly toward the outer faces."
+      "body": "**Thermal response:** A compact central surface region reached the expected daytime peak but returned heat more slowly than the comparison surfaces after local sunset.\n\n**Phase residual:** Corrected cooling curves retained an 18-to-26-minute lag across four of six passes. The residual did not track measured wind direction, surface shade, or contact-temperature error.\n\n**Energy balance:** On two passes, integrated outward heat flux exceeded the upper modeled daytime absorption value by 5.8 and 6.4 percent after the stated emissivity and weather uncertainty was applied.\n\n**Spatial form:** The strongest response remained inside the same projected surface boundary and weakened smoothly toward the outer faces."
     },
     {
       "id": "interpretive-limits",
@@ -54,7 +54,7 @@
       "disclosure": {
         "mode": "open"
       },
-      "body": "**Ordinary explanations retained:** Unmapped void space, differing stone density, repair material, and surface-emissivity error remain sufficient explanations.\n\n**Unresolved point:** No single modeled combination reproduced both the observed phase lag and its repeatable spatial boundary. The archive does not establish an unusual energy source or hazardous condition."
+      "body": "**Ordinary explanations retained:** Unmapped void space, differing stone density, repair material, and surface-emissivity error remain viable explanations for the cooling lag.\n\n**Unresolved point:** Those explanations did not reproduce the positive energy residual or its stable surface boundary. No source was identified, and the available measurements do not establish a hazardous condition."
     },
     {
       "id": "disposition",
@@ -62,7 +62,7 @@
       "disclosure": {
         "mode": "open"
       },
-      "body": "**Finding:** Repeatable low-amplitude thermal persistence; mechanism not assigned\n\n**Action:** Retain passive comparison data and repeat only when independent conservation or subsurface information becomes available.\n\n**Field restriction:** No intrusive sampling authorized under this record."
+      "body": "**Finding:** Reproducible positive thermal residual within a stable surface boundary; source and transfer mechanism unassigned\n\n**Action:** Retain passive comparison data and repeat with an independent radiometer and subsurface density profile when access permits.\n\n**Field restriction:** No intrusive sampling authorized under this record."
     },
     {
       "id": "coordinate-schedule",

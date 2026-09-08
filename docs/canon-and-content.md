@@ -76,6 +76,11 @@ but proposals and placeholders must never be presented as established facts with
   `TL-470-GEO-0307`, `TL-340-GEO-1112`, `TL-470-GEO-1909`, and `TL-470-GEO-2406` are approved
   fictional record content. They must remain location-neutral, avoid coordinates and real property
   claims, and present ordinary technical explanations alongside any unresolved observation.
+- Controlled scientific records follow an owner-approved disclosure progression. TL-3 remains
+  principally operational; TL-4 may document a reproducible but unassigned effect; TL-5 may state
+  a corroborated non-standard finding; and TL-6 may state an exceptional finding directly when the
+  record also gives the measurement basis, controls, limits, and procedural disposition. Public
+  corporate copy does not summarize or promote those findings.
 
 ## Staff portal and disclosure states
 

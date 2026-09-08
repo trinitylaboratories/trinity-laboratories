@@ -60,7 +60,7 @@
       "disclosure": {
         "mode": "open"
       },
-      "body": "**Surface form:** Repeated right-angle edges and short parallel rises remained visible under different soil-moisture conditions but did not form a complete wall or drainage plan.\n\n**Radar response:** Three shallow planar reflectors followed the strongest surface edges and ended abruptly within otherwise uniform substrate. No continuous void was resolved.\n\n**Magnetic response:** Two stationary packages recorded the same low-amplitude broadband pulse sequence during one traverse. The sequence was absent from the regional reference instrument and did not recur the following day."
+      "body": "**Surface form:** Repeated right-angle edges and short parallel rises remained visible under different soil-moisture conditions but did not form a complete wall or drainage plan.\n\n**Radar response:** Three shallow planar reflectors followed the strongest surface edges. On the return traverse 22 minutes later, all three appeared 0.31 to 0.47 metres shallower while surface control points and antenna separation remained within survey tolerance. A swapped antenna pair reproduced the changed depth.\n\n**Magnetic response:** Two battery-isolated packages recorded the same three-part broadband pulse sequence immediately before the changed radar return. The sequence was absent from the off-site reference instrument.\n\n**Recovery:** The following-day traverse placed all three reflectors at their original depth. Surface profile, moisture, and control-station elevation did not change detectably."
     },
     {
       "id": "interpretive-limits",
@@ -68,7 +68,7 @@
       "disclosure": {
         "mode": "open"
       },
-      "body": "**Ordinary explanations retained:** Historic extraction, frost-sorted ground, collapsed shallow workings, transient electromagnetic interference, and instrument coupling remain plausible.\n\n**Unresolved point:** The paired magnetic packages agreed in timing and amplitude despite separate power and logging systems. One event is insufficient to assign a continuing field source."
+      "body": "**Ordinary explanations tested:** Historic extraction and frost-sorted ground can explain the static surface pattern. Antenna coupling, calibration drift, surface control error, transient interference, and soil-moisture change were tested during the return and following-day traverses.\n\n**Confirmed exception:** The data show a reversible vertical translation of three subsurface reflectors without corresponding surface displacement or a measured change in propagation velocity. The magnetic sequence is temporally associated but is not established as the cause."
     },
     {
       "id": "disposition",
@@ -76,7 +76,7 @@
       "disclosure": {
         "mode": "open"
       },
-      "body": "**Finding:** Incomplete geometric surface pattern with limited shallow reflectors and one unassigned locally correlated magnetic event\n\n**Action:** Preserve non-invasive baselines and repeat only with a regional reference package operating before site arrival.\n\n**Field restriction:** Excavation, marking, and unattended instrumentation are not authorized by this record."
+      "body": "**Finding:** Reversible translation of shallow planar reflectors, independently reproduced during the event and accompanied by a local three-part magnetic pulse sequence. No physical displacement mechanism was observed.\n\n**Action:** Preserve non-invasive baselines. A repeat traverse requires dual radar systems, independent clocks, continuous surface metrology, and a regional reference package operating before site arrival.\n\n**Field restriction:** Excavation, permanent marking, and unattended instrumentation are not authorized by this record."
     },
     {
       "id": "coordinate-schedule",

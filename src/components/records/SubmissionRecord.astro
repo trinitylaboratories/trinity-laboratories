@@ -80,6 +80,9 @@ const controlSummary =
                 title={section.title}
                 summary={section.summary}
                 mode="withheld"
+                requiredLevel={submission.information.level}
+                program={submission.information.program}
+                compartment={submission.information.compartment}
               />
             ) : section.disclosure.mode === 'authorize' ? (
               <div data-pagefind-ignore>
@@ -101,6 +104,7 @@ const controlSummary =
                 title={section.title}
                 summary={section.summary}
                 mode="open"
+                openLabel={recordMode === 'open' ? 'Released section' : 'Authorized record section'}
               >
                 <SubmissionSectionBody body={section.body ?? ''} />
               </ControlledSection>

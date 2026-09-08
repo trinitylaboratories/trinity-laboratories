@@ -66,7 +66,7 @@
       "disclosure": {
         "mode": "open"
       },
-      "body": "**Timing residual:** Two isolated timebases accumulated the same 42-to-96-millisecond offset while passing through a roughly 220-metre survey band. Both returned to their established drift rates after removal.\n\n**Field correlation:** The interval coincided with a low-amplitude change in the local magnetic background. No matching change appeared on the stationary reference package.\n\n**Repeatability:** Direction and walking speed changed the duration of the observation but not its mapped entry and exit points."
+      "body": "**Timing residual:** Two oven-controlled quartz timebases on independent batteries and loggers accumulated same-direction offsets of 42 to 96 milliseconds while passing through a roughly 220-metre survey band. Raw oscillator counts contained no missing samples. Both units returned to their established drift rates after removal but retained the accumulated offset.\n\n**Field correlation:** Each onset coincided with a 1.7-to-2.3-nanotesla departure in the local magnetic trace. No matching change appeared on the stationary reference package.\n\n**Repeatability:** Direction and walking speed changed the duration of the observation but not its mapped entry and exit points. Across three traverses, the two timebases agreed on boundary crossing within 3 milliseconds."
     },
     {
       "id": "interpretive-limits",
@@ -74,7 +74,7 @@
       "disclosure": {
         "mode": "open"
       },
-      "body": "**Ordinary explanations retained:** Receiver coupling, temperature compensation error, buried utility material, and an unrecorded ferrous source remain plausible.\n\n**Unresolved point:** Bench testing reproduced neither the shared offset nor its recovery profile. The report does not claim a change to civil time or a biological effect."
+      "body": "**Ordinary explanations tested:** Receiver coupling, temperature compensation error, buried utility material, and an unrecorded ferrous source were evaluated in bench and control-route trials. None reproduced the shared step change or the fixed entry and exit boundary.\n\n**Interpretive limit:** The record establishes a location-bound discontinuity in the instrument timebases, not a change to civil time or a biological effect. The coupling mechanism remains unknown."
     },
     {
       "id": "disposition",
@@ -82,7 +82,7 @@
       "disclosure": {
         "mode": "open"
       },
-      "body": "**Finding:** Localized instrument-correlation variance; source unconfirmed\n\n**Action:** Maintain the reach as a passive comparison site and require redundant clocks for any later survey.\n\n**Personnel control:** No exposure limitation is indicated beyond ordinary remote-field procedures."
+      "body": "**Finding:** Repeatable, location-bound timebase discontinuity corroborated by two isolated instruments and a local magnetic excursion\n\n**Action:** Maintain the reach as a passive comparison site. Later work requires three independent timebases, a continuously operating remote reference, and pre-registered boundary criteria.\n\n**Personnel control:** No exposure limitation is indicated beyond ordinary remote-field procedures."
     },
     {
       "id": "coordinate-schedule",

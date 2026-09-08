@@ -180,6 +180,12 @@ test('TL-6 authorization loads area evidence only for the active grant and unloa
   await expect(
     controlledRecord.getByRole('heading', { name: 'Upland Pattern Field Instrument Survey' }),
   ).toBeVisible();
+  await expect(controlledRecord.getByText('Authorized record section').first()).toBeVisible();
+  await expect(
+    controlledRecord
+      .locator('[data-controlled-section="coordinate-schedule"]')
+      .getByText(/Required: TL-6/),
+  ).toBeVisible();
   await expect(evidenceGallery).toHaveAttribute('data-evidence-state', 'loaded');
   await expect(evidenceContent.locator('.submission-evidence__plate--withheld')).toHaveCount(0);
 
@@ -189,6 +195,11 @@ test('TL-6 authorization loads area evidence only for the active grant and unloa
     await expect(evidenceImages.nth(index)).toHaveAttribute('src', path);
     await evidenceImages.nth(index).scrollIntoViewIfNeeded();
     await expect(evidenceImages.nth(index)).toBeVisible();
+    await expect
+      .poll(() =>
+        evidenceImages.nth(index).evaluate((image) => (image as HTMLImageElement).naturalWidth),
+      )
+      .toBeGreaterThan(0);
     const imageLayout = await evidenceImages.nth(index).evaluate((image) => {
       const raster = image as HTMLImageElement;
       return {

@@ -46,7 +46,7 @@
       "disclosure": {
         "mode": "open"
       },
-      "body": "**Regrowth response:** Pioneer vegetation repeatedly established along the perimeter but showed reduced survival after crossing the stable central boundary.\n\n**Soil response:** Moisture, pH, major nutrients, and soluble salts remained within the range of nearby disturbed ground. Electrical resistivity was consistently elevated at shallow depth.\n\n**Targeted screen:** No residue on the current analytical list, fungal isolate, or measured metal burden explained the observed boundary."
+      "body": "**Regrowth response:** Pioneer vegetation repeatedly established along the perimeter but showed reduced survival after crossing the stable central boundary. During the second visit, paired transplant baskets placed across the boundary showed a 61-percent reduction in root extension on the central side within 30 hours.\n\n**Reversibility:** Affected baskets resumed ordinary extension after removal. Central-grid soil supported normal germination when transferred to the perimeter control station.\n\n**Soil response:** Moisture, pH, major nutrients, soluble salts, and measured temperature remained within the range of nearby disturbed ground. Electrical resistivity was consistently elevated at shallow depth.\n\n**Targeted screen:** No residue on the current analytical list, fungal isolate, or measured metal burden explained the observed boundary."
     },
     {
       "id": "interpretive-limits",
@@ -54,7 +54,7 @@
       "disclosure": {
         "mode": "open"
       },
-      "body": "**Ordinary explanations retained:** Compacted mineral fill, seasonal frost behavior, past aggregate storage, and an untested organic contaminant remain plausible.\n\n**Unresolved point:** The central resistivity response remained stable while the visible surface and drainage margins changed. The record does not establish toxicity outside the marked sampling boundary."
+      "body": "**Ordinary explanations retained:** Compacted mineral fill, seasonal frost behavior, past aggregate storage, and an untested organic contaminant remain plausible contributors to the long-term surface condition.\n\n**Unresolved point:** The short-interval transplant response followed the surveyed boundary rather than soil origin, moisture, temperature, or visible drainage. The current record does not identify a chemical or biological carrier."
     },
     {
       "id": "disposition",
@@ -62,7 +62,7 @@
       "disclosure": {
         "mode": "open"
       },
-      "body": "**Finding:** Persistent regrowth exclusion associated with a shallow high-resistivity substrate\n\n**Action:** Continue remote seasonal comparison and avoid disturbing the central substrate without an approved sampling plan.\n\n**Review status:** Active for passive comparison; formal review resumes when new imagery, access, or analytical data becomes available.\n\n**Personnel control:** Ordinary field PPE and dust control remain sufficient for perimeter work."
+      "body": "**Finding:** Location-dependent, reversible suppression of plant growth associated with—but not transferred by—the central substrate samples\n\n**Action:** Continue remote seasonal comparison. Any repeat transplant work requires continuous environmental logging and a blinded off-site soil control.\n\n**Review status:** Active for passive comparison; formal review resumes when new imagery, access, or analytical data becomes available.\n\n**Personnel control:** Ordinary field PPE and dust control remain sufficient for perimeter work."
     },
     {
       "id": "coordinate-schedule",
