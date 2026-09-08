@@ -10,6 +10,7 @@ interface Props {
   program?: string;
   compartment?: string;
   summary?: string;
+  openLabel?: string;
 }
 
 const {
@@ -20,6 +21,7 @@ const {
   program,
   compartment,
   summary = 'This section requires additional information authorization.',
+  openLabel = 'Released section',
 } = Astro.props;
 const headingId = `${id}-heading`;
 ---
@@ -35,7 +37,7 @@ const headingId = `${id}-heading`;
   aria-labelledby={headingId}
 >
   <header class="tirn-controlled__header">
-    <p>{mode === 'open' ? 'Released section' : `${requiredLevel} controlled section`}</p>
+    <p>{mode === 'open' ? openLabel : `${requiredLevel} controlled section`}</p>
     <h2 id={headingId} tabindex="-1" data-controlled-heading>{title}</h2>
   </header>
 

@@ -52,7 +52,7 @@
       "disclosure": {
         "mode": "open"
       },
-      "body": "**Canopy response:** The three study bays showed a synchronized near-infrared reflectance change during seven unprogrammed overnight intervals. The control bay did not.\n\n**Systems comparison:** Lighting, irrigation, ventilation, carbon-dioxide, and utility logs showed no common command or interruption at the onset times.\n\n**Physical outcome:** Growth rate and harvest mass remained within the facility's ordinary production range; retained tissue samples showed no abnormality."
+      "body": "**Canopy response:** The three study bays entered a synchronized high-assimilation spectral state during seven unprogrammed overnight intervals. The control bay did not. Measured photosynthetically active radiation remained below detector threshold.\n\n**Physiological confirmation:** Portable fluorometry and gas-exchange sampling confirmed five events. Carbon-dioxide uptake increased and leaf temperature fell by 1.1 to 1.6 degrees Celsius while the bays remained dark.\n\n**Systems comparison:** Lighting, irrigation, ventilation, carbon-dioxide, control-network, and utility logs showed no common command, interruption, or unmetered input at the onset times.\n\n**Mass balance:** Destructive samples taken after two events carried 1.8 and 2.2 percent more dry mass than matched controls. The excess was absent 36 hours later without recorded shedding or measurable change in collected drain water."
     },
     {
       "id": "interpretive-limits",
@@ -60,7 +60,7 @@
       "disclosure": {
         "mode": "open"
       },
-      "body": "**Ordinary explanations retained:** Shared sensor calibration, undocumented control-network traffic, thermal lag, and cultivar response remain plausible.\n\n**Unresolved point:** Portable instruments confirmed five of the seven events after the fixed cameras were independently recalibrated. No external radiative source was identified."
+      "body": "**Ordinary explanations tested:** Shared sensor calibration, undocumented control-network traffic, thermal lag, cultivar response, stray illumination, and sampling bias were addressed through independent instruments, isolated controls, and blinded dry-mass handling.\n\n**Confirmed exception:** The monitored canopies entered a photosynthetically active state without measurable incident light and produced a temporary dry-mass increase without a recorded carbon, water, or nutrient source. No transfer pathway was identified."
     },
     {
       "id": "disposition",
@@ -68,7 +68,7 @@
       "disclosure": {
         "mode": "open"
       },
-      "body": "**Finding:** Low-amplitude synchronized canopy response without a matched facility-control event\n\n**Action:** Retain isolated logging and compare against future maintenance and cultivar changes. No production interruption is directed.\n\n**Review status:** Active for passive comparison; formal review resumes after a new confirmed event, major controls revision, or cultivar change.\n\n**Release limit:** Product, operator, and property identifiers are outside this archive copy."
+      "body": "**Finding:** Repeatable light-independent assimilation response with a reversible positive dry-mass residual across three isolated bays\n\n**Action:** Maintain continuous isolated logging. The next confirmed interval requires sealed-atmosphere sampling, duplicate photon counters, and pre-weighed tissue custody. Affected material is excluded from ordinary production disposition pending control-office review.\n\n**Review status:** Active on event trigger. Automatic instrument capture remains in service.\n\n**Release limit:** Product, operator, and property identifiers are outside this archive copy."
     },
     {
       "id": "facility-schedule",

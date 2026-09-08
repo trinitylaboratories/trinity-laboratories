@@ -12,10 +12,15 @@ import {
   relatedReportsForStudy,
   researchStudyRegistryEntry,
   selectResearchReports,
+  sortResearchReportsByInformationLevel,
   sortResearchStudyRegistry,
 } from '../../../lib/portal-research';
 import type { StudyData } from '../../../lib/study-schema';
-import { submissionHref, type SubmissionRecordData } from '../../../lib/submission-schema';
+import {
+  classificationLabel,
+  submissionHref,
+  type SubmissionRecordData,
+} from '../../../lib/submission-schema';
 import { isTemporaryGrantLevel, type TirnLevel } from '../../../lib/tirn-access';
 import PortalLayout from '../../../layouts/PortalLayout.astro';
 
@@ -29,8 +34,8 @@ const studies = sortResearchStudyRegistry(
   ),
 );
 const researchReports = selectResearchReports(allSubmissions);
-const controlledAreaReports = researchReports.filter((report) =>
-  report.tags.includes('controlled-area'),
+const controlledAreaReports = sortResearchReportsByInformationLevel(
+  researchReports.filter((report) => report.tags.includes('controlled-area')),
 );
 const protocolReports = researchReports.filter(
   (report) => !report.tags.includes('controlled-area'),
@@ -206,9 +211,9 @@ const activeProtocolCount = studies.filter(({ status }) => status === 'active').
         <p class="portal-section__label">Field sciences control</p>
         <h2 id="area-register-heading">Controlled area register</h2>
         <p>
-          This register identifies active and archived area-assessment files. Geographic references,
-          access routes, and source plates remain inside each file's applicable information
-          boundary.
+          This register identifies active and archived area-assessment files in ascending handling
+          order. Geographic references, access routes, and source plates remain inside each file's
+          applicable information boundary.
         </p>
         <div class="portal-table-wrap">
           <table class="portal-table portal-report-register" data-controlled-area-register>
@@ -216,6 +221,7 @@ const activeProtocolCount = studies.filter(({ status }) => status === 'active').
             <thead>
               <tr>
                 <th>Record</th>
+                <th>Information</th>
                 <th>Descriptive title</th>
                 <th>Status</th>
                 <th>Effective</th>
@@ -233,6 +239,12 @@ const activeProtocolCount = studies.filter(({ status }) => status === 'active').
                   >
                     <td class="portal-table__identifier">
                       <a href={submissionHref(report.recordId)}>{report.recordId}</a>
+                    </td>
+                    <td>
+                      <strong>{report.information.level}</strong>
+                      <span class="portal-table__secondary">
+                        {classificationLabel(report.information.level)}
+                      </span>
                     </td>
                     <td class="portal-table__title">
                       <span data-research-report-title hidden>

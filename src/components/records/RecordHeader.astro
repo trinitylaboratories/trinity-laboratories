@@ -7,6 +7,7 @@ import type {
   PublicationState,
   SubmissionStatus,
 } from '../../lib/submission-schema';
+import { classificationLabel } from '../../lib/submission-schema';
 
 interface Props {
   recordId: string;
@@ -92,6 +93,7 @@ const dateLabel = new Intl.DateTimeFormat('en-US', {
       <dt>Information</dt>
       <dd data-pagefind-filter="classification">
         {information.level}
+        <small>{classificationLabel(information.level)}</small>
         {
           (information.program || information.compartment) && (
             <small data-record-header-sensitive hidden={metadataControlled}>
