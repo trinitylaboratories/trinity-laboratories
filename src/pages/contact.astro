@@ -12,18 +12,15 @@ import PageHero from '../components/PageHero.astro';
   <PageHero
     eyebrow="Contact"
     title="How can we help?"
-    intro="Choose a topic and share a little context about your question."
+    intro="Tell us what you’re working on and what you’d like to find out."
     index="TL / CONTACT"
   />
 
   <section class="section" data-reveal>
     <div class="section__heading">
       <p class="section-label">Send an inquiry</p>
-      <h2>Tell us what you’d like to discuss.</h2>
-      <p>
-        Use this form for questions about research, facilities, publications, careers, or Trinity
-        Laboratories generally.
-      </p>
+      <h2>Start with your question.</h2>
+      <p>Ask about a project, our facilities, publications, or working with Trinity.</p>
     </div>
     <LocalForm
       kind="contact"
@@ -45,7 +42,7 @@ import PageHero from '../components/PageHero.astro';
         >Email address <input id="contact-email" type="email" required autocomplete="off" /></label
       >
       <label for="contact-category"
-        >Inquiry category
+        >What is your question about?
         <select id="contact-category" required>
           <option value="">Select a category</option><option>Research</option><option
             >Facilities</option

@@ -48,7 +48,7 @@ test('mobile standard page hero keeps its institutional index clear of the title
   const hero = page.locator('.page-hero');
   const indexBox = await hero.locator('.page-hero__index').boundingBox();
   const titleBox = await hero
-    .getByRole('heading', { level: 1, name: 'Research designed around the question.' })
+    .getByRole('heading', { level: 1, name: 'What do you need to find out?' })
     .boundingBox();
   expect(indexBox).not.toBeNull();
   expect(titleBox).not.toBeNull();

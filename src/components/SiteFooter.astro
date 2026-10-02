@@ -30,4 +30,31 @@ import BrandMark from './BrandMark.astro';
     <span>© 2026 Trinity Laboratories contributors</span>
     <span>Research • Testing • Field services</span>
   </div>
+  <p class="builder-credit">
+    Built with ❤️ by{' '}
+    <a
+      href="https://jpowersfreelancing.com/"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="JPowersFreelancing (opens in a new tab)">JPowersFreelancing</a
+    >
+  </p>
 </footer>
+
+<style>
+  .builder-credit {
+    grid-column: 1 / -1;
+    margin: 1.5rem 0 0;
+    text-align: right;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    font-weight: 400;
+    letter-spacing: normal;
+    text-transform: none;
+  }
+  .builder-credit a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+</style>
