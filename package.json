@@ -54,8 +54,8 @@
     "validate": "npm run validate:repo && npm run validate:assets && npm run validate:content && npm run record-desk:validate && npm run validate:submissions && npm run audit && npm run lint && npm run check && npm run test:unit && npm run build:production && npm run prepare:deploy:production && npm run validate:dist && npm run validate:site:production"
   },
   "dependencies": {
-    "@astrojs/sitemap": "^3.7.3",
-    "@astrojs/starlight": "^0.41.7",
+    "@astrojs/sitemap": "^3.7.4",
+    "@astrojs/starlight": "^0.42.4",
     "@pagefind/default-ui": "^1.5.2",
     "astro": "^7.3.5"
   },
