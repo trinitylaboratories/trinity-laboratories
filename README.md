@@ -32,6 +32,8 @@ or retaining participant information. They are not recruitment for real human-su
 - **Cloudflare Workers Static Assets** serves the generated `dist/` directory.
 - **Cloudflare Workers Builds** validates and builds previews and production from `main`.
   GitHub provides version control and pull-request review; repository Actions are disabled.
+  Automatic Dependabot updates are disabled too, because they use Actions runners even when
+  repository Actions are off. Review dependency alerts and the project-local npm audit manually.
 - **TIRN Filing Workstation** uses the pinned local Node runtime and repository content schemas; it
   binds only to `127.0.0.1` and has no hosted service.
 

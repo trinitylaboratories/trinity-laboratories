@@ -14,9 +14,9 @@ import {
 
 describe('repository policy', () => {
   it('accepts a repository with no Actions workflows', () => {
-    expect(validateNoActionsFiles(['.github/dependabot.yml', 'scripts/build-site.mjs'])).toEqual(
-      [],
-    );
+    expect(
+      validateNoActionsFiles(['.github/ISSUE_TEMPLATE/bug.md', 'scripts/build-site.mjs']),
+    ).toEqual([]);
   });
 
   it('rejects new workflow files, including alternate extensions and Windows paths', () => {
@@ -31,6 +31,14 @@ describe('repository policy', () => {
           `${file}: GitHub Actions workflows are prohibited; use native Cloudflare Workers Builds`,
       ),
     );
+  });
+
+  it('rejects Dependabot configs that can bypass Actions disablement', () => {
+    for (const file of ['.github/dependabot.yml', '.github/dependabot.yaml']) {
+      expect(validateNoActionsFiles([file])).toEqual([
+        `${file}: automatic dependency updates use Actions runners; review dependencies locally`,
+      ]);
+    }
   });
 
   it('locks the safe Windows clean-path launcher controls', async () => {

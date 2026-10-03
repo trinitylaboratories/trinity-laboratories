@@ -11,7 +11,7 @@ change the static deployment model.
 
 The operating target is $0: static assets and Workers Builds must remain within their current free
 allowances. GitHub is used for version control and pull-request review only: repository Actions are
-disabled and no Actions workflow files may be committed. Domain renewal is the expected recurring
+disabled and no Actions workflows or Dependabot updater configuration may be committed. Domain renewal is the expected recurring
 cost. Recheck
 the official [Cloudflare static-asset limits](https://developers.cloudflare.com/workers/static-assets/billing-and-limitations/),
 and [Workers Builds pricing](https://developers.cloudflare.com/workers/ci-cd/builds/limits-and-pricing/)
@@ -127,8 +127,11 @@ Protect `main` in the repository settings:
 - block force pushes and branch deletion; and
 - leave the organization owner configured to bypass the rules for emergency recovery.
 
-Keep GitHub Actions disabled at repository level. The repository validator rejects new Actions
-workflow files. Cloudflare deployment credentials remain in Cloudflare's native Git integration.
+Keep GitHub Actions and automatic Dependabot security updates disabled at repository level. No
+Dependabot version-update configuration is committed: those updater jobs bypass repository Actions
+disablement and run on GitHub-hosted runners. Read-only advisory alerts and secret-scanning/push
+protection stay unchanged. The repository validator rejects new Actions workflows and Dependabot
+updater configurations. Cloudflare deployment credentials remain in Cloudflare's native Git integration.
 The required Cloudflare check is tied to app ID `85455`; it must succeed for the pull request's
 current commit before merging. No Actions-dependent required checks remain.
 
@@ -140,7 +143,7 @@ and results in the pull request:
 ```powershell
 & .\.tools\node\node.exe .\node_modules\prettier\bin\prettier.cjs --check .
 .\scripts\run-local.ps1 validate
-.\scripts\run-local.ps1 test:unit:coverage
+.\scripts\run-local.ps1 test:unit:coverage -- --maxWorkers=1
 .\scripts\run-local.ps1 test:e2e
 ```
 
@@ -149,14 +152,16 @@ type, unit-test, build, and output-policy checks through `cf:build`. The full br
 coverage gate remain local; do not move the long browser run into the free build allowance.
 
 The Windows formatter runs from the physical repository path because Prettier refuses the
-launcher's junction as its `.` input. On Linux or macOS, use `npm run format:check` and the
+launcher's junction as its `.` input. Single-worker coverage avoids Windows temp-file cleanup
+locks. On Linux or macOS, use `npm run format:check` and the
 equivalent npm commands for the remaining checks.
 
 Actions-based CodeQL, Gitleaks Git-history scanning, dependency/license review, Windows bootstrap
 CI, external-link checking, and daily production monitoring are no longer automated. The local
 repository validator still checks tracked files for common secret patterns, but this is not an
-equivalent replacement for a Git-history secret scan. npm Dependabot updates remain enabled;
-review their advisories and license changes before merging. Re-run local bootstrap/install checks
+equivalent replacement for a Git-history secret scan. Automatic dependency updates are also
+disabled; review advisory alerts, run the project-local npm audit, and review dependency and license
+changes before merging. Re-run local bootstrap/install checks
 when changing tooling, and manually review external links and security-sensitive changes.
 
 The local production-health check uses the Node version pinned by `.node-version` and the external verifier.
