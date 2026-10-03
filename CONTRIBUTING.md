@@ -45,6 +45,10 @@ navigation, responsive behavior, the employee gateway, search, or another browse
 interaction. The equivalent non-Windows commands are `npm run browser:install` and
 `npm run test:e2e`.
 
+Automatic dependency-update pull requests are disabled to keep GitHub runner-free. When updating
+dependencies, review advisory alerts, npm audit output, changed packages and licenses, then run the
+same local release checks. Do not add Dependabot configuration or Actions workflows.
+
 ## Content and asset contributions
 
 - Preserve exact supplied form codes, titles, classification terms, and physical-access terms.

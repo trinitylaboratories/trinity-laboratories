@@ -19,7 +19,6 @@ const REQUIRED_FILES = Object.freeze([
   'package-lock.json',
   'wrangler.jsonc',
   'scripts/run-local.ps1',
-  '.github/dependabot.yml',
 ]);
 
 const REQUIRED_PACKAGE_SCRIPTS = Object.freeze([
@@ -91,12 +90,20 @@ const TEXT_EXTENSIONS = new Set([
 ]);
 
 export function validateNoActionsFiles(files) {
-  return files
-    .filter((file) => /^\.github\/workflows\/.*\.ya?ml$/i.test(file.replaceAll('\\', '/')))
-    .map(
-      (file) =>
+  return files.flatMap((file) => {
+    const normalized = file.replaceAll('\\', '/');
+    if (/^\.github\/workflows\/.*\.ya?ml$/i.test(normalized)) {
+      return [
         `${file}: GitHub Actions workflows are prohibited; use native Cloudflare Workers Builds`,
-    );
+      ];
+    }
+    if (/^\.github\/dependabot\.ya?ml$/i.test(normalized)) {
+      return [
+        `${file}: automatic dependency updates use Actions runners; review dependencies locally`,
+      ];
+    }
+    return [];
+  });
 }
 
 export function validateLocalLauncherSource(source, fileName = 'scripts/run-local.ps1') {
