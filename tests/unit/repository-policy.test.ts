@@ -6,61 +6,30 @@ import {
   findLeakedLocalPaths,
   stripJsonComments,
   stripJsonTrailingCommas,
-  validateCiSource,
+  validateNoActionsFiles,
   validateLocalLauncherSource,
   validatePackageManifest,
-  validateProductionHealthSource,
   validateWranglerConfig,
-  validateWorkflowSource,
 } from '../../scripts/validate-repository.mjs';
 
-const pinnedSha = '0123456789abcdef0123456789abcdef01234567';
-
 describe('repository policy', () => {
-  it('accepts pinned read-only workflows with bounded jobs', () => {
-    const workflow = `name: CI
-on: push
-permissions:
-  contents: read
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@${pinnedSha}
-        with:
-          persist-credentials: false
-`;
-    expect(validateWorkflowSource(workflow, 'ci.yml')).toEqual([]);
+  it('accepts a repository with no Actions workflows', () => {
+    expect(validateNoActionsFiles(['.github/dependabot.yml', 'scripts/build-site.mjs'])).toEqual(
+      [],
+    );
   });
 
-  it('locks the complete CI policy surface', async () => {
-    const source = await readFile(
-      path.join(process.cwd(), '.github', 'workflows', 'ci.yml'),
-      'utf8',
-    );
-    expect(validateCiSource(source)).toEqual([]);
-  });
-
-  it('locks production monitoring to scheduled, manual, read-only verification', async () => {
-    const source = await readFile(
-      path.join(process.cwd(), '.github', 'workflows', 'production-health.yml'),
-      'utf8',
-    );
-    expect(validateWorkflowSource(source, 'production-health.yml')).toEqual([]);
-    expect(validateProductionHealthSource(source)).toEqual([]);
-    expect(
-      validateProductionHealthSource(
-        'permissions:\n  issues: write\njobs:\n  monitor:\n    run: echo ${{ secrets.TOKEN }}\n',
-        'unsafe-health.yml',
+  it('rejects new workflow files, including alternate extensions and Windows paths', () => {
+    const files = [
+      '.github/workflows/ci.yml',
+      '.github/workflows/health.yaml',
+      '.github\\workflows\\nested\\test.YML',
+    ];
+    expect(validateNoActionsFiles(files)).toEqual(
+      files.map(
+        (file) =>
+          `${file}: GitHub Actions workflows are prohibited; use native Cloudflare Workers Builds`,
       ),
-    ).toEqual(
-      expect.arrayContaining([
-        expect.stringMatching(/scheduled trigger/),
-        expect.stringMatching(/manual trigger/),
-        expect.stringMatching(/read only/),
-        expect.stringMatching(/must not use secrets or write permissions/),
-      ]),
     );
   });
 
@@ -81,37 +50,6 @@ jobs:
       items: [1],
       url: 'https://example.test/,}',
     });
-  });
-
-  it('rejects mutable actions and privilege-escalating triggers', () => {
-    const workflow = `on:
-  pull_request_target:
-permissions: write-all
-jobs:
-  unsafe:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-`;
-    expect(validateWorkflowSource(workflow, 'unsafe.yml')).toEqual(
-      expect.arrayContaining([
-        expect.stringMatching(/pull_request_target/),
-        expect.stringMatching(/write permissions/),
-        expect.stringMatching(/full commit SHA/),
-        expect.stringMatching(/persist-credentials/),
-        expect.stringMatching(/timeout-minutes/),
-      ]),
-    );
-  });
-
-  it('keeps Cloudflare credentials and deployment outside GitHub Actions', () => {
-    const workflow = `permissions:\n  contents: read\njobs:\n  deploy:\n    runs-on: ubuntu-latest\n    timeout-minutes: 5\n    steps:\n      - run: wrangler deploy\n        env:\n          CLOUDFLARE_API_TOKEN: placeholder\n`;
-    expect(validateWorkflowSource(workflow, 'deploy.yml')).toEqual(
-      expect.arrayContaining([
-        expect.stringMatching(/must not receive Cloudflare credentials/),
-        expect.stringMatching(/native Cloudflare Workers Builds/),
-      ]),
-    );
   });
 
   it('requires the complete local validation surface in package metadata', () => {
@@ -141,7 +79,7 @@ jobs:
     requiredScripts.preview = 'node scripts/run-astro.mjs preview';
     requiredScripts.sync = 'node scripts/run-astro.mjs sync';
     requiredScripts['cf:build'] =
-      'npm run record-desk:validate && npm run validate:submissions && npm run build && npm run prepare:deploy && npm run validate:dist && npm run validate:site';
+      'npm run validate:repo && npm run validate:assets && npm run validate:content && npm run record-desk:validate && npm run validate:submissions && npm run audit && npm run lint && npm run check && npm run test:unit && npm run build && npm run prepare:deploy && npm run validate:dist && npm run validate:site';
     requiredScripts['cf:deploy'] = 'node scripts/deploy-site.mjs';
     requiredScripts['cf:install'] = 'node scripts/install-locked.mjs';
     requiredScripts['verify:production'] =
@@ -155,6 +93,22 @@ jobs:
         scripts: requiredScripts,
       }),
     ).toEqual([]);
+    requiredScripts['cf:build'] = 'npm run build';
+    expect(
+      validatePackageManifest({
+        private: true,
+        license: 'MIT',
+        packageManager: 'npm@11.17.0',
+        engines: { node: '24.19.0', npm: '11.17.0' },
+        scripts: requiredScripts,
+      }),
+    ).toEqual(
+      expect.arrayContaining([
+        expect.stringMatching(/cf:build must run audit/),
+        expect.stringMatching(/cf:build must run test:unit/),
+        expect.stringMatching(/cf:build must run validate:site/),
+      ]),
+    );
   });
 
   it('detects credential-shaped content without embedding a real credential', () => {
