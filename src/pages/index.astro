@@ -24,16 +24,17 @@ import { CAPABILITIES } from '../lib/capabilities';
     <div class="home-hero__copy">
       <p class="eyebrow">Applied research &amp; technical services</p>
       <h1>Trinity<br />Laboratories</h1>
-      <p class="home-hero__statement">Careful research for practical questions.</p>
+      <p class="home-hero__statement">
+        Research and testing to help you understand what comes next.
+      </p>
       <div class="button-row">
         <a class="button button--primary" href="/research/">Explore our research</a>
-        <a class="button" href="/studies/">Take part in a study</a>
-        <a class="button" href="/publications/">Publications</a>
+        <a class="button" href="/contact/">Discuss your project</a>
       </div>
     </div>
     <div class="home-hero__register">
       <span>Laboratory research</span>
-      <span>Technical evaluation</span>
+      <span>Testing and measurement</span>
       <span>Field support</span>
     </div>
   </section>
@@ -43,19 +44,17 @@ import { CAPABILITIES } from '../lib/capabilities';
       <p class="section-label">01 / What we do</p>
       <h2>From the laboratory to the field.</h2>
       <p>
-        Trinity Laboratories brings together laboratory research, measurement systems, field
-        methods, and clear technical reporting.
+        We test materials, check instruments, and study conditions in the laboratory and the field.
       </p>
     </div>
     <div class="editorial-grid">
       <p class="prose-large">
-        Our work starts with a clear question and ends with findings that can be understood and
-        used.
+        Start with the question you need to answer. We help plan the work and explain the findings.
       </p>
       <div>
         <p>
-          Each project uses a defined method, appropriate instruments, and documentation that makes
-          the work easier to review and repeat.
+          You get a clear account of what was tested, what we found, and what the results can—and
+          cannot—tell you.
         </p>
         <a class="button" href="/about/">How we work</a>
       </div>
@@ -65,8 +64,8 @@ import { CAPABILITIES } from '../lib/capabilities';
   <section class="section section--dark" data-reveal>
     <div class="section__heading">
       <p class="section-label">02 / Areas of expertise</p>
-      <h2>Eight areas of research and technical work.</h2>
-      <p>Projects may focus on one discipline or combine several, depending on the question.</p>
+      <h2>The right expertise for your question.</h2>
+      <p>Eight research areas. One agreed plan for the work.</p>
     </div>
     <ol class="ruled-list capability-list">
       {
@@ -74,7 +73,12 @@ import { CAPABILITIES } from '../lib/capabilities';
           <li>
             <a href={`/research/${capability.slug}/`}>
               <small>{capability.index}</small>
-              <strong>{capability.title}</strong>
+              <div>
+                <>
+                  <strong>{capability.title}</strong>
+                  <p>{capability.summary}</p>
+                </>
+              </div>
               <span aria-hidden="true">↗</span>
             </a>
           </li>
@@ -83,17 +87,15 @@ import { CAPABILITIES } from '../lib/capabilities';
     </ol>
     <div class="button-row">
       <a class="button" href="/research/">Explore our research</a>
-      <a class="button" href="/studies/">Browse participant studies</a>
     </div>
   </section>
 
   <section class="section" data-reveal>
     <div class="section__heading">
       <p class="section-label">03 / Facilities</p>
-      <h2>Spaces and systems that support careful work.</h2>
+      <h2>Equipped for the work at hand.</h2>
       <p>
-        Our work moves between laboratory, instrumentation, environmental, and field settings as
-        each project requires.
+        From preparing samples to reviewing measurements, each stage has its own tools and checks.
       </p>
     </div>
     <MediaFrame
@@ -110,10 +112,8 @@ import { CAPABILITIES } from '../lib/capabilities';
   <section class="section" data-reveal>
     <div class="section__heading">
       <p class="section-label">04 / Careers</p>
-      <h2>Bring your expertise to careful, collaborative work.</h2>
-      <p>
-        Explore the disciplines represented across our work and tell us where your experience fits.
-      </p>
+      <h2>Bring your experience. Work across disciplines.</h2>
+      <p>Find where your research, engineering, or field experience fits.</p>
     </div>
     <div class="button-row">
       <a class="button button--primary" href="/careers/">View careers</a>
@@ -122,11 +122,10 @@ import { CAPABILITIES } from '../lib/capabilities';
 
   <section class="section closing" data-reveal>
     <p class="section-label">05 / Learn more</p>
-    <h2>Have a question about our work?</h2>
+    <h2>What would you like to understand?</h2>
     <div class="button-row">
-      <a class="button button--primary" href="/publications/">Public information</a>
-      <a class="button" href="/contact/">Contact us</a>
-      <a class="button" href="/employee-access/">Employee access</a>
+      <a class="button button--primary" href="/contact/">Discuss your project</a>
+      <a class="button" href="/publications/">Browse publications</a>
     </div>
   </section>
 </CorporateLayout>
@@ -183,15 +182,15 @@ import { CAPABILITIES } from '../lib/capabilities';
   .home-hero h1 {
     max-width: 10ch;
     margin: 1rem 0 0;
-    font-size: clamp(4.1rem, 10vw, 9.4rem);
+    font-size: clamp(2.8rem, 9.4vw, 8.75rem);
     font-weight: 520;
-    letter-spacing: -0.075em;
-    line-height: 0.77;
+    letter-spacing: -0.065em;
+    line-height: 0.94;
     animation: hero-in 800ms 120ms cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
   .home-hero__statement {
-    max-width: 30rem;
+    max-width: 32rem;
     margin: 2.4rem 0 0;
     font-size: clamp(1.1rem, 2vw, 1.55rem);
     color: #f1f5fb;
@@ -259,6 +258,23 @@ import { CAPABILITIES } from '../lib/capabilities';
 
   .capability-list a {
     color: inherit;
+  }
+
+  .capability-list strong {
+    font-size: clamp(1.2rem, 2vw, 1.8rem);
+    font-weight: 500;
+    letter-spacing: -0.025em;
+  }
+
+  .capability-list p {
+    max-width: 56ch;
+    margin: 0.5rem 0 0;
+    color: #bdc9d7;
+    font-size: 0.95rem;
+  }
+
+  .capability-list a:hover strong {
+    color: #8fc2ff;
   }
 
   .closing h2 {

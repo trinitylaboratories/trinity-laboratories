@@ -30,8 +30,8 @@ or retaining participant information. They are not recruitment for real human-su
 - **TypeScript and Astro content collections** validate structured record metadata.
 - **Plain and scoped CSS** provide the visual system without a client framework.
 - **Cloudflare Workers Static Assets** serves the generated `dist/` directory.
-- **GitHub Actions** validates pull requests; Cloudflare Workers Builds handles previews and
-  production deployment from `main`.
+- **Cloudflare Workers Builds** validates and builds previews and production from `main`.
+  GitHub provides version control and pull-request review; repository Actions are disabled.
 - **TIRN Filing Workstation** uses the pinned local Node runtime and repository content schemas; it
   binds only to `127.0.0.1` and has no hosted service.
 
@@ -64,7 +64,7 @@ The repository name intentionally begins with `#`, which Vite otherwise interpre
 fragment on Windows. `scripts/run-local.ps1` gives only its child command a verified clean-path
 alias, invokes the exact project-local npm executable, and removes the alias in `finally`. It
 refuses to replace or remove any path or drive mapping whose type and target do not match what it
-created. Use this launcher for local Windows npm scripts; GitHub Actions and Cloudflare builds use
+created. Use this launcher for local Windows npm scripts; Cloudflare builds use
 ordinary npm commands because their clone paths do not contain `#`.
 
 On another operating system, install the Node version in `.node-version` using an isolated version

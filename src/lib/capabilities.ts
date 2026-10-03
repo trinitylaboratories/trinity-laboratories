@@ -25,7 +25,7 @@ export const CAPABILITIES: readonly Capability[] = Object.freeze([
     slug: 'advanced-materials',
     title: 'Advanced Materials',
     summary:
-      'Comparative material studies built around clearly defined conditions and practical use questions.',
+      'Compare materials and understand how they behave under the conditions you need to test.',
     introduction:
       'We examine how material samples change, recover, adhere, or remain stable under a defined observation plan. The work is scoped to the material, environment, and decision the study needs to support.',
     questions: [
@@ -65,8 +65,7 @@ export const CAPABILITIES: readonly Capability[] = Object.freeze([
     index: '02',
     slug: 'industrial-instrumentation',
     title: 'Industrial Instrumentation',
-    summary:
-      'Measurement-system evaluation focused on repeatability, stability, and clear operator interpretation.',
+    summary: 'Check whether instruments give consistent readings and are clear to use.',
     introduction:
       'We develop and assess practical measurement arrangements, from individual displays to assembled test setups. Each evaluation distinguishes instrument behavior from the limits of the reference method.',
     questions: [
@@ -106,8 +105,7 @@ export const CAPABILITIES: readonly Capability[] = Object.freeze([
     index: '03',
     slug: 'environmental-analysis',
     title: 'Environmental Analysis',
-    summary:
-      'Structured sampling and measurement for physical and environmental conditions that change over time.',
+    summary: 'Sample and measure environmental conditions to understand how they change over time.',
     introduction:
       'We use defined collection intervals, handling controls, and analytical checks to describe environmental observations without extending the result beyond what the sampling plan can support.',
     questions: [
@@ -142,7 +140,7 @@ export const CAPABILITIES: readonly Capability[] = Object.freeze([
     slug: 'applied-physics',
     title: 'Applied Physics',
     summary:
-      'Controlled experiments that turn physical behavior into measurable, repeatable observations.',
+      'Investigate a physical question through controlled tests and repeatable measurements.',
     introduction:
       'We isolate a practical physical question, select observable quantities, and build a test sequence that can be repeated and reviewed. Emphasis stays on measured behavior rather than unsupported mechanism.',
     questions: [
@@ -177,7 +175,7 @@ export const CAPABILITIES: readonly Capability[] = Object.freeze([
     slug: 'field-sampling-geological-research',
     title: 'Field Sampling & Geological Research',
     summary:
-      'Field observation, sample handling, and geological documentation from collection through review.',
+      'Collect samples and field observations, with clear records from collection to review.',
     introduction:
       'We plan field work so that observations, samples, and context remain connected throughout collection, return, preparation, and technical review. The record is designed to remain understandable after the field team has left the site.',
     questions: [
@@ -217,8 +215,7 @@ export const CAPABILITIES: readonly Capability[] = Object.freeze([
     index: '06',
     slug: 'laboratory-safety-systems',
     title: 'Laboratory Safety Systems',
-    summary:
-      'Practical procedures, checks, and work controls that support consistent laboratory activity.',
+    summary: 'Review the procedures and everyday checks that support consistent laboratory work.',
     introduction:
       'We evaluate the ordinary systems that help laboratory work remain organized and repeatable: inspection routes, work-surface controls, readiness checks, and clearly documented response steps.',
     questions: [
@@ -252,8 +249,7 @@ export const CAPABILITIES: readonly Capability[] = Object.freeze([
     index: '07',
     slug: 'prototype-evaluation',
     title: 'Prototype Evaluation',
-    summary:
-      'Early evaluation of instruments, assemblies, and work processes against defined performance questions.',
+    summary: 'Test an early design and find out what needs attention before the next revision.',
     introduction:
       'We help turn a prototype into a testable set of questions. Evaluations focus on observable performance, repeatability, inspection, and the practical limits of an early design.',
     questions: [
@@ -287,8 +283,7 @@ export const CAPABILITIES: readonly Capability[] = Object.freeze([
     index: '08',
     slug: 'contract-research',
     title: 'Contract Research',
-    summary:
-      'Focused studies organized around an agreed question, method, schedule, and reporting need.',
+    summary: 'Plan a focused study around your question, schedule, and reporting needs.',
     introduction:
       'We structure small applied-research projects so that scope, decisions, and limitations remain clear from intake through final reporting. Work may draw on several Trinity capabilities when the question requires it.',
     questions: [

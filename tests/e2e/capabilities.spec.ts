@@ -12,7 +12,7 @@ test('research index links every approved public capability', async ({ page }) =
       capabilityIndex
         .locator('li')
         .filter({ hasText: capability.title })
-        .getByRole('link', { name: 'View capability', exact: true }),
+        .getByRole('link', { name: 'Explore this area', exact: true }),
     ).toHaveAttribute('href', `/research/${capability.slug}/`);
   }
 });

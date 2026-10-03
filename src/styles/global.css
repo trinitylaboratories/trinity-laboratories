@@ -145,11 +145,11 @@ a {
   place-items: center;
   padding: 0 0.75rem;
   color: #29313a;
-  font-size: 0.76rem;
+  font-size: 0.875rem;
   font-weight: 650;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.01em;
   text-decoration: none;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .site-header nav a::after {
@@ -202,11 +202,11 @@ a {
 .page-hero {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(8rem, 0.45fr) minmax(0, 1.55fr) minmax(16rem, 0.8fr);
+  grid-template-columns: minmax(0, 1.5fr) minmax(16rem, 0.7fr);
   gap: clamp(1.5rem, 4vw, 4.5rem);
   align-items: end;
   max-width: var(--content-max);
-  min-height: 27rem;
+  min-height: 24rem;
   margin: 0 auto;
   padding: clamp(4rem, 9vw, 8rem) var(--page-gutter) clamp(2.5rem, 6vw, 5rem);
   border-bottom: 1px solid var(--ink);
@@ -222,13 +222,17 @@ a {
   text-transform: uppercase;
 }
 
+.page-hero__index {
+  grid-column: 1 / -1;
+}
+
 .page-hero h1 {
   max-width: 14ch;
   margin: 0.7rem 0 0;
   font-size: clamp(3rem, 7vw, 7rem);
   font-weight: 500;
   letter-spacing: -0.055em;
-  line-height: 0.93;
+  line-height: 1.02;
 }
 
 .page-hero__intro {
@@ -352,10 +356,10 @@ a {
   padding: 0.75rem 1.1rem;
   background: transparent;
   color: inherit;
-  font: 650 0.73rem/1 var(--font-mono);
-  letter-spacing: 0.08em;
+  font: 600 0.95rem/1.2 var(--font-sans);
+  letter-spacing: normal;
   text-decoration: none;
-  text-transform: uppercase;
+  text-transform: none;
   cursor: pointer;
   transition:
     background 160ms ease,
@@ -661,12 +665,10 @@ html[data-js-enabled] [data-reveal][data-visible] {
     gap: 0.75rem;
   }
 
-  .page-hero,
   .section__heading {
     grid-template-columns: 8rem 1fr;
   }
 
-  .page-hero__intro,
   .section__heading > :last-child {
     grid-column: 2;
   }
@@ -691,7 +693,7 @@ html[data-js-enabled] [data-reveal][data-visible] {
   }
 
   .page-hero {
-    min-height: 25rem;
+    min-height: 20rem;
     align-content: end;
   }
 

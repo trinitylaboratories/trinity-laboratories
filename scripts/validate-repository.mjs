@@ -20,10 +20,6 @@ const REQUIRED_FILES = Object.freeze([
   'wrangler.jsonc',
   'scripts/run-local.ps1',
   '.github/dependabot.yml',
-  '.github/workflows/ci.yml',
-  '.github/workflows/codeql.yml',
-  '.github/workflows/dependency-review.yml',
-  '.github/workflows/production-health.yml',
 ]);
 
 const REQUIRED_PACKAGE_SCRIPTS = Object.freeze([
@@ -94,106 +90,13 @@ const TEXT_EXTENSIONS = new Set([
   '.yml',
 ]);
 
-export function validateWorkflowSource(source, fileName = 'workflow.yml') {
-  const errors = [];
-
-  if (!/^permissions\s*:/m.test(source)) {
-    errors.push(`${fileName}: declare explicit top-level permissions`);
-  }
-  if (/^\s*pull_request_target\s*:/m.test(source)) {
-    errors.push(`${fileName}: pull_request_target is prohibited`);
-  }
-  if (
-    /permissions\s*:\s*write-all/i.test(source) ||
-    /^\s*contents\s*:\s*write\s*$/im.test(source)
-  ) {
-    errors.push(`${fileName}: broad or contents write permissions are prohibited`);
-  }
-  if (/\bCLOUDFLARE_(?:API_TOKEN|ACCOUNT_ID)\b/i.test(source)) {
-    errors.push(`${fileName}: GitHub Actions must not receive Cloudflare credentials`);
-  }
-  if (/cloudflare\/wrangler-action@|\bwrangler\s+(?:deploy|versions\s+upload)\b/i.test(source)) {
-    errors.push(`${fileName}: deployment belongs to native Cloudflare Workers Builds`);
-  }
-
-  const externalUses = [...source.matchAll(/^\s*-?\s*uses:\s*([^\s#]+)/gm)].map((match) =>
-    match[1].replace(/["']/g, ''),
-  );
-
-  for (const action of externalUses) {
-    if (action.startsWith('./') || action.startsWith('docker://')) continue;
-    const separator = action.lastIndexOf('@');
-    const revision = separator === -1 ? '' : action.slice(separator + 1);
-    if (!/^[0-9a-f]{40}$/i.test(revision)) {
-      errors.push(`${fileName}: action must be pinned to a full commit SHA: ${action}`);
-    }
-  }
-
-  if (externalUses.some((action) => action.startsWith('actions/checkout@'))) {
-    if (!/^\s*persist-credentials\s*:\s*false\s*$/im.test(source)) {
-      errors.push(`${fileName}: checkout must set persist-credentials: false`);
-    }
-  }
-
-  const runnerJobs = (source.match(/^\s*runs-on\s*:/gm) ?? []).length;
-  const boundedJobs = (source.match(/^\s*timeout-minutes\s*:/gm) ?? []).length;
-  if (boundedJobs < runnerJobs) {
-    errors.push(`${fileName}: every runner job must define timeout-minutes`);
-  }
-
-  return errors;
-}
-
-export function validateCiSource(source, fileName = '.github/workflows/ci.yml') {
-  const errors = [];
-  if (
-    !source.includes(
-      'gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz',
-    ) ||
-    !source.includes('551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb')
-  ) {
-    errors.push(`${fileName}: Gitleaks must use the locked release and SHA-256 checksum`);
-  }
-  if (!/lycheeverse\/lychee-action@[0-9a-f]{40}/i.test(source)) {
-    errors.push(`${fileName}: built HTML and Markdown require a pinned external-link check`);
-  }
-  for (const requirement of [
-    ['Windows bootstrap job', /bootstrap-windows:/],
-    ['checksum-verifying bootstrap', /\.\s+\.\/scripts\/bootstrap\.ps1/],
-    ['project-local clean install', /\.tools\/node\/npm\.cmd ci --ignore-scripts/],
-    ['lint gate', /npm run lint/],
-    ['deployable asset gate', /npm run validate:dist/],
-  ]) {
-    if (!requirement[1].test(source)) errors.push(`${fileName}: missing ${requirement[0]}`);
-  }
-  return errors;
-}
-
-export function validateProductionHealthSource(
-  source,
-  fileName = '.github/workflows/production-health.yml',
-) {
-  const errors = [];
-  const requirements = [
-    ['scheduled trigger', /^\s*schedule\s*:/m],
-    ['manual trigger', /^\s*workflow_dispatch\s*:/m],
-    ['workflow concurrency', /^concurrency\s*:/m],
-    ['pinned project Node version', /^\s*node-version-file\s*:\s*\.node-version\s*$/m],
-    [
-      'production verifier command',
-      /node scripts\/verify-indexability\.mjs\s+--url https:\/\/trinitylaboratories\.org\s+--environment production/m,
-    ],
-  ];
-  for (const [label, pattern] of requirements) {
-    if (!pattern.test(source)) errors.push(`${fileName}: missing ${label}`);
-  }
-  if (!/^permissions:\s*\r?\n\s+contents:\s*read\s*$/m.test(source)) {
-    errors.push(`${fileName}: production monitoring must use contents: read only`);
-  }
-  if (/\bsecrets\s*\./i.test(source) || /^\s*[A-Za-z-]+\s*:\s*write\s*$/im.test(source)) {
-    errors.push(`${fileName}: production monitoring must not use secrets or write permissions`);
-  }
-  return errors;
+export function validateNoActionsFiles(files) {
+  return files
+    .filter((file) => /^\.github\/workflows\/.*\.ya?ml$/i.test(file.replaceAll('\\', '/')))
+    .map(
+      (file) =>
+        `${file}: GitHub Actions workflows are prohibited; use native Cloudflare Workers Builds`,
+    );
 }
 
 export function validateLocalLauncherSource(source, fileName = 'scripts/run-local.ps1') {
@@ -275,8 +178,15 @@ export function validatePackageManifest(manifest, fileName = 'package.json') {
     }
   }
   for (const command of [
+    'validate:repo',
+    'validate:assets',
+    'validate:content',
     'record-desk:validate',
     'validate:submissions',
+    'audit',
+    'lint',
+    'check',
+    'test:unit',
     'build',
     'prepare:deploy',
     'validate:dist',
@@ -479,6 +389,7 @@ export async function validateRepository(projectRoot = process.cwd()) {
   }
 
   const files = await trackedFiles(projectRoot);
+  const presentFiles = [];
   for (const relativeFile of files) {
     const normalized = `/${toPosix(relativeFile)}`;
     const baseName = path.posix.basename(normalized);
@@ -496,6 +407,7 @@ export async function validateRepository(projectRoot = process.cwd()) {
     const absoluteFile = path.join(projectRoot, relativeFile);
     const fileStats = await lstat(absoluteFile).catch(() => null);
     if (!fileStats) continue;
+    presentFiles.push(relativeFile);
 
     if (fileStats.isSymbolicLink()) {
       const target = await realpath(absoluteFile).catch(() => null);
@@ -516,16 +428,10 @@ export async function validateRepository(projectRoot = process.cwd()) {
     }
   }
 
-  const workflowFiles = files.filter((file) => /^\.github\/workflows\/[^/]+\.ya?ml$/i.test(file));
-  for (const workflowFile of workflowFiles) {
-    const source = await readFile(path.join(projectRoot, workflowFile), 'utf8');
-    errors.push(...validateWorkflowSource(source, workflowFile));
-    if (workflowFile === '.github/workflows/ci.yml') {
-      errors.push(...validateCiSource(source, workflowFile));
-    } else if (workflowFile === '.github/workflows/production-health.yml') {
-      errors.push(...validateProductionHealthSource(source, workflowFile));
-    }
-  }
+  const workflowFiles = presentFiles.filter((file) =>
+    /^\.github\/workflows\/.*\.ya?ml$/i.test(file),
+  );
+  errors.push(...validateNoActionsFiles(presentFiles));
 
   const packagePath = path.join(projectRoot, 'package.json');
   if (await pathExists(packagePath)) {

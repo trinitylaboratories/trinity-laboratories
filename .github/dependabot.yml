@@ -1,4 +1,4 @@
-# Weekly, repository-scoped dependency maintenance for this public static site.
+# Weekly npm-only maintenance. GitHub Actions remain disabled for this static site.
 version: 2
 updates:
   - package-ecosystem: npm
@@ -16,18 +16,5 @@ updates:
           - '*'
       development-dependencies:
         dependency-type: development
-        patterns:
-          - '*'
-
-  - package-ecosystem: github-actions
-    directory: /
-    schedule:
-      interval: weekly
-      day: monday
-      time: '09:15'
-      timezone: America/New_York
-    open-pull-requests-limit: 3
-    groups:
-      github-actions:
         patterns:
           - '*'

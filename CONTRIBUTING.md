@@ -36,7 +36,10 @@ Before submitting a code change, run:
 .\scripts\run-local.ps1 validate
 ```
 
-On Linux or macOS, run `npm run validate`. On Windows, run
+On Linux or macOS, run `npm run validate`. GitHub Actions are disabled; record the local checks
+and their commit in the pull request. Cloudflare's native build is the required remote check, not a
+replacement for browser testing. Before a release, also run the formatter, `test:unit:coverage`,
+and the full `test:e2e` suite locally as described in `docs/deployment.md`. On Windows, run
 `.\scripts\run-local.ps1 browser:install` and `.\scripts\run-local.ps1 test:e2e` when changing
 navigation, responsive behavior, the employee gateway, search, or another browser-visible
 interaction. The equivalent non-Windows commands are `npm run browser:install` and

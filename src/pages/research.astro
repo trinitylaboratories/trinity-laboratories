@@ -11,9 +11,9 @@ import { CAPABILITIES } from '../lib/capabilities';
   active="research"
 >
   <PageHero
-    eyebrow="Research capabilities"
-    title="Research designed around the question."
-    intro="Some projects stay within one discipline; others combine laboratory testing, instrumentation, environmental analysis, and field methods."
+    eyebrow="Research and testing"
+    title="What do you need to find out?"
+    intro="Explore our research areas, the questions we investigate, and what each type of study can tell you."
     index="TL / RESEARCH"
   />
 
@@ -36,7 +36,7 @@ import { CAPABILITIES } from '../lib/capabilities';
             <small>{capability.index}</small>
             <div>
               <h2>{capability.title}</h2>
-              <a href={`/research/${capability.slug}/`}>View capability</a>
+              <a href={`/research/${capability.slug}/`}>Explore this area</a>
             </div>
             <p>{capability.summary}</p>
           </li>
@@ -47,16 +47,12 @@ import { CAPABILITIES } from '../lib/capabilities';
 
   <section class="section section--dark" data-reveal>
     <div class="section__heading">
-      <p class="section-label">Program method</p>
-      <h2>We choose methods to fit the question.</h2>
-      <p>
-        When a project crosses disciplines, collection, testing, analysis, and review follow one
-        coordinated plan.
-      </p>
+      <p class="section-label">Planning your project</p>
+      <h2>Let’s start with what you need to know.</h2>
+      <p>We agree on the question, the test plan, and the reporting you need before work begins.</p>
     </div>
     <div class="button-row">
-      <a class="button button--primary" href="/studies/">View participant studies</a>
-      <a class="button" href="/contact/">Discuss a project</a>
+      <a class="button button--primary" href="/contact/">Discuss a project</a>
     </div>
   </section>
 </CorporateLayout>
@@ -97,10 +93,7 @@ import { CAPABILITIES } from '../lib/capabilities';
   .capability-index h2 + a {
     display: inline-block;
     margin-top: 0.75rem;
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    font-size: 0.95rem;
   }
 
   .capability-index p {
